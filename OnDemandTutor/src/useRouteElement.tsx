@@ -2,6 +2,7 @@ import { createBrowserRouter, useRoutes } from 'react-router-dom'
 import TutorList from './pages/TutorList'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
@@ -11,11 +12,20 @@ export default function useRouteElements() {
     },
     {
       path: '/login',
-      element: <Login />
+      element: (
+        <RegisterLayout>
+          <Login />
+        </RegisterLayout>
+      )
     },
     {
       path: '/register',
-      element: <Register />
+
+      element: (
+        <RegisterLayout>
+          <Register />
+        </RegisterLayout>
+      )
     }
   ])
 
