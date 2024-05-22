@@ -2,15 +2,15 @@ import { Link } from 'react-router-dom'
 import logo from '../../assets/img/logo.png'
 export default function RegisterHeader() {
   return (
-    <header className='border-black border-2 mt-1 rounded-xl py-2'>
+    <header className='border-black border-2 mt-1 rounded-xl py-2 bg-white'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='grid grid-cols-12 gap-4 mt-4 items-end '>
           {/* logo */}
           <nav className='flex items-end col-span-2'>
             <Link to='/'>
               <div className='  justify-end items-end flex '>
-                <div className=' w-32 pt-[100%] mb-10 relative  border-red-500 border-2 '>
-                  <div className='absolute top-0 left-0 bg-black border-black border-2 w-full h-full object-cover '>
+                <div className=' w-32 pt-[100%] mb-10 relative '>
+                  <div className='absolute top-0 left-0  w-full h-full object-cover '>
                     <img src={logo} alt='logo' />
                   </div>
                 </div>
