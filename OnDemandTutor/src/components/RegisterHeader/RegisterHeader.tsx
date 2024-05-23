@@ -20,15 +20,15 @@ export default function RegisterHeader() {
           {/*  mid */}
           <div className=' h-36  col-span-6 text-2xl  '>
             <div className='pr-[50px] pt-[40px] justify-around items-center flex '>
-              <Link to='/' className='text-center font-bold hover:text-pink-600'>
+              <Link to='/' className='text-center hover:text-pink-600'>
                 Trang chủ
               </Link>
 
-              <Link to='/' className='text-center font-bold hover:text-pink-600'>
+              <Link to='/' className='text-center   hover:text-pink-600'>
                 Loại dịch vụ
               </Link>
 
-              <Link to='/' className='text-center font-bold hover:text-pink-600'>
+              <Link to='/' className='text-center   hover:text-pink-600'>
                 Hỗ trợ
               </Link>
             </div>
@@ -67,4 +67,4 @@ export default function RegisterHeader() {
       </div>
     </header>
   )
-}
+};
