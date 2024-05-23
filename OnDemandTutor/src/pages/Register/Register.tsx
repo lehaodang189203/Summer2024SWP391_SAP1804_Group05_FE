@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export default function Register() {
   return (
-    <div className='bg-white pb-10  w-full '>
+    <div className='bg-white py-10  w-full '>
       <div className='container justify-center flex'>
         <form
           style={{ background: '#F7F3F3', boxShadow: 'rgba(0, 0, 0, 0.1) -18px 20px 4px 7px' }}

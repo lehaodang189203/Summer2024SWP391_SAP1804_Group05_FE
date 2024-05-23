@@ -5,7 +5,7 @@ export default function Home() {
     <div className='bg-black top-0'>
       <div>
         <div className='h-[50rem] mb-[48rem] z-0'>
-          <div className='relative w-full h-full absolute'>
+          <div className='relative w-full h-full '>
             <img src={home} className='w-full h-full object-cover' />
             <div className='absolute top-0 left-0 w-full h-full bg-black opacity-50'></div>
             <div className='absolute top-20 left-24 w-[550px] h-[50px] '>
@@ -29,7 +29,7 @@ export default function Home() {
               />
               <div>
                 <div className='items-end flex'>
-                  <span className='text-black text-xl pl-[5rem] border-transpenrant'>
+                  <span className='text-black text-xl pl-[2rem] border-transpenrant'>
                     Lớp học ảo eTalk của tôi eTalk cung cấp khả năng video và âm thanh, lớp học ảo và tài liệu học tập
                     kỹ thuật số tương tác cho tất cả các lớp, khiến nó trở thành nền tảng lý tưởng cho gia sư và sinh
                     viên.
@@ -45,7 +45,7 @@ export default function Home() {
               />
               <div>
                 <div className='items-end flex'>
-                  <span className='text-black text-center text-xl pl-[3rem]'>
+                  <span className='text-black text-center text-xl pl-[2rem]'>
                     Học 1-1 với giáo viên riêng Nhận các bài học riêng với giáo viên trên eTalk vào thời điểm phù hợp
                     với bạn. Bạn có thể lên lịch, nhắn tin, xem lại các lớp học trước đây và nhận bài tập về nhà trên
                     nền tảng này.
@@ -61,7 +61,7 @@ export default function Home() {
               />
               <div>
                 <div className='items-end flex'>
-                  <span className='text-black text-xl pl-[3rem]'>
+                  <span className='text-black text-xl pl-[2rem]'>
                     Thời lượng bài học Học sinh nhỏ tuổi từ 5 đến 12 thường học các lớp 25 phút, trong khi học sinh lớn
                     hơn có các lớp 50 phút. Điều này cho phép sự tập trung và chú ý tối đa trong suốt bài học.
                   </span>
