@@ -1,9 +1,9 @@
 const path = {
-  home: '/home',
+  home: '/',
   login: '/login',
   register: '/register',
   logout: '/logout',
-  tutorList: ''
+  tutorList: '/tutorList'
 } as const
 
 export default path
