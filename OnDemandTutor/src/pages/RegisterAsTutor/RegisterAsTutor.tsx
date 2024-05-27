@@ -1,10 +1,10 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
-import  DatePicker  from "react-datepicker";
-import { useState } from 'react';
+
+import { useState } from 'react'
 export default function RegisterAsTutor() {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null)
   return (
     <div className='bg-white py-10  w-full '>
       <div className='container justify-center flex'>
@@ -39,7 +39,7 @@ export default function RegisterAsTutor() {
               className='p-3 w-full outline-none  border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl hover:border-black border-2'
             />
           </div>
-          
+
           <div className='mt-3'>
             <input
               type='date'
@@ -54,7 +54,7 @@ export default function RegisterAsTutor() {
               className='p-3 w-full outline-none  border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl hover:border-black border-2'
             />
           </div>
-          
+
           <div className='mt-3'>
             <input
               type='password'
@@ -71,29 +71,17 @@ export default function RegisterAsTutor() {
           </div>
           <div className='mt-4 flex justify-between pl-5 pr-5'>
             <div className='items-center flex gap-2'>
-              <input
-                type='checkbox'
-                className='cursor-pointer h-5 w-5'
-              />
+              <input type='checkbox' className='cursor-pointer h-5 w-5' />
               <span className='pt-1'>Nam</span>
             </div>
             <div className='items-center flex gap-2'>
-              <input
-                type='checkbox'
-                className='cursor-pointer h-5 w-5'
-              />
+              <input type='checkbox' className='cursor-pointer h-5 w-5' />
               <span className='pt-1'>Nữ</span>
             </div>
             <div className='items-center flex gap-2'>
-              <input
-                type='checkbox'
-                className='cursor-pointer h-5 w-5'
-              />
+              <input type='checkbox' className='cursor-pointer h-5 w-5' />
               <span className='pt-1'>Khác</span>
             </div>
-            
-            
-            
           </div>
           <div className='mt-3'>
             <button className='w-full  rounded-xl text-center bg-pink-300 py-4 px-2 uppercase  text-white text-sm hover:bg-pink-600 flex justify-center items-center'>
