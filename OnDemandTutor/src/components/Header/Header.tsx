@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
 import BUMBUM from '../../assets/img/BUMBUM.png'
-
-export default function RegisterHeader() {
+export default function Header() {
   return (
-    <header className='  h-[8rem] bg-white shadow-md z-50'>
+    <header className='sticky top-0 h-[8rem] bg-white shadow-md z-50'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='grid grid-cols-12 gap-4 items-end'>
           {/* Logo */}
@@ -33,11 +32,11 @@ export default function RegisterHeader() {
             </div>
           </div>
           {/* Login */}
-          <nav className='h-36 pt-[48px] col-span-2'>
+          {/* <nav className='h-36 pt-[48px] col-span-2'>
             <Link to='/login' className='border-black border-2 px-2 py-2 rounded-lg hover:bg-gray-200'>
               Đăng Nhập
             </Link>
-          </nav>
+          </nav> */}
         </div>
       </div>
     </header>
