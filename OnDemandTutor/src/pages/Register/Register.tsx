@@ -11,11 +11,24 @@ export default function Register() {
           style={{ background: '#F7F3F3', boxShadow: 'rgba(0, 0, 0, 0.1) -18px 20px 4px 7px' }}
           className='p-10 w-4/12  rounded-2xl shadow-neutral-950'
         >
-          <div className='text-2xl'>Đăng Ký</div>
+          <div className='text-2xl'>Đăng Ký Thành Học Sinh</div>
+          hoặc
+          <div>
+              <Link className='text-gray-500 underline hover:text-red-500' to='/registerAT'>
+                Đăng kí làm gia sư
+              </Link>
+            </div>
           <div className='mt-8'>
             <input
               type='email'
               placeholder='Email'
+              className='p-3 w-full outline-none  border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl hover:border-black border-2'
+            />
+          </div>
+          <div className='mt-3'>
+            <input
+              type='userName'
+              placeholder='User Name'
               className='p-3 w-full outline-none  border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl hover:border-black border-2'
             />
           </div>
@@ -60,6 +73,7 @@ export default function Register() {
                 Đăng Nhập
               </Link>
             </div>
+            
           </div>
         </form>
       </div>

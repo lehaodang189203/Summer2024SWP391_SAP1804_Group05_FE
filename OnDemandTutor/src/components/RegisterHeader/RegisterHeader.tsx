@@ -17,27 +17,31 @@ export default function RegisterHeader() {
             </Link>
           </nav>
           {/* Mid */}
-          <div className='h-36 col-span-7 text-2xl'>
+          <div className='h-36 col-span-6 text-2xl'>
             <div className='pr-[50px] pt-[40px] justify-around items-center flex'>
-              <Link to='/' className='text-center hover:text-pink-600'>
+              <Link to='#' className='ct-top-menu-items'>
                 Trang chủ
               </Link>
 
-              <Link to='/' className='text-center hover:text-pink-600'>
+              <Link to='/' className='ct-top-menu-items'>
                 Loại dịch vụ
               </Link>
 
-              <Link to='/' className='text-center hover:text-pink-600'>
+              <Link to='/' className='ct-top-menu-items'>
                 Hỗ trợ
               </Link>
             </div>
           </div>
           {/* Login */}
-          <nav className='h-36 pt-[48px] col-span-2'>
-            <Link to='/login' className='border-black border-2 px-2 py-2 rounded-lg hover:bg-gray-200'>
+          <nav className='h-36 pt-[48px] col-span-3'>
+            <Link to='/login' className='transition:duration-150 ease-in-out border-black border-2 px-2 py-2 rounded-lg hover:bg-gray-200 mr-1 '>
               Đăng Nhập
             </Link>
+            <Link to='/register' className='bg-pink-500 border-black border-2 px-2 py-2 rounded-lg hover:bg-pink-400'>
+              Đăng kí
+            </Link>
           </nav>
+          
         </div>
       </div>
     </header>
