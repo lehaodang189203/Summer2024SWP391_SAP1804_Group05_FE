@@ -9,15 +9,15 @@ import RegisterAsTutor from './pages/RegisterAsTutor/RegisterAsTutor'
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
-    // {
-    //   path: path.home,
-    //   index: true,
-    //   element: (
-    //     <RegisterLayout>
-    //       <Home />
-    //     </RegisterLayout>
-    //   )
-    // },
+    {
+      path: path.tutorList,
+      index: true,
+      element: (
+        <RegisterLayout>
+          <TutorList />
+        </RegisterLayout>
+      )
+    },
     {
       path: path.login,
       element: (
@@ -44,7 +44,7 @@ export default function useRouteElements() {
       )
     },
     {
-      path: path.tutorList,
+      path: path.home,
       element: (
         <RegisterLayout>
           <Home />
