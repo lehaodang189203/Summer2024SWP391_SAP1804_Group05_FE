@@ -1,26 +1,21 @@
-import { useRoutes } from 'react-router-dom'
+import { createBrowserRouter, useRoutes } from 'react-router-dom'
 import TutorList from './pages/TutorList'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
 import Home from './pages/Home'
 import path from './constant/path'
-<<<<<<< HEAD
-import MainLayout from './layout/MainLayout'
-=======
 import RegisterAsTutor from './pages/RegisterAsTutor/RegisterAsTutor'
->>>>>>> bfeaa5e73ebe225fbc64edebe7ee2de763e79d74
 
 export default function useRouteElements() {
-  //
   const routeElements = useRoutes([
     {
       path: path.tutorList,
       index: true,
       element: (
-        <MainLayout>
+        <RegisterLayout>
           <TutorList />
-        </MainLayout>
+        </RegisterLayout>
       )
     },
     {
@@ -51,9 +46,9 @@ export default function useRouteElements() {
     {
       path: path.home,
       element: (
-        <MainLayout>
+        <RegisterLayout>
           <Home />
-        </MainLayout>
+        </RegisterLayout>
       )
     }
   ])
