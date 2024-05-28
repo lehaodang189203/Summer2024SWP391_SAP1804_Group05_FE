@@ -6,6 +6,7 @@ import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
 import Home from './pages/Home'
 import path from './constant/path'
 import RegisterAsTutor from './pages/RegisterAsTutor/RegisterAsTutor'
+import DashBoard from './pages/DashBoard'
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
@@ -48,6 +49,14 @@ export default function useRouteElements() {
       element: (
         <RegisterLayout>
           <Home />
+        </RegisterLayout>
+      )
+    },
+    {
+      path: path.dashBoard,
+      element: (
+        <RegisterLayout>
+          <DashBoard />
         </RegisterLayout>
       )
     }
