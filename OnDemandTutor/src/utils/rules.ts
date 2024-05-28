@@ -1,5 +1,6 @@
-import * as yup from 'yup'
 
+import * as yup from "yup";
+//npm i -D yup if dont work
 //  này là mình xài yup của react hook form để làm validate nha fen
 //
 
