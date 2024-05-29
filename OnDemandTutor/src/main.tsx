@@ -4,6 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 // QueryCLient được sử dụng để quản lý các truy vấn dữ liệu
 const queryClient = new QueryClient({
@@ -27,6 +28,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       {/* QueryClientProvider phải bộc lại để quan sát và thực hiện mấy câu truy vấn  */}
       <QueryClientProvider client={queryClient}>
         <App />
+        {/*  thằng này giúp theo dỗi và gỡ bỏ các câu truy vấn nếu có lỗi */}
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>

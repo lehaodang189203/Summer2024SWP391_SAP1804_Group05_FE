@@ -105,7 +105,7 @@ export default function Register() {
         </div>
         <div className='my-4'>
           <div>
-            <span className='text-gray-600 mr-1'>Bạn đã có tài khoảng?</span>
+            <span className='text-gray-600 mr-1'>Bạn đã có tài khoản?</span>
             <Link
               className='text-gray-500 underline hover:text-red-500'
               to='/Login'

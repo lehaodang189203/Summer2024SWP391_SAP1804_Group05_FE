@@ -1,9 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import me from '../../assets/img/me.jpg'
-import { faPersonHalfDress, faSchool, faUserGraduate } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPersonHalfDress,
+  faSchool,
+  faUserGraduate
+} from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-
+import Pagination from '../../components/Pagination'
 export default function TutorList() {
   const [isExpanded, setIsExpanded] = useState(false)
   // const [color, setColor] = useState(false)
@@ -43,10 +47,15 @@ export default function TutorList() {
               <div className='w-[45rem] h-full py-2'>
                 <div className='justify-start flex pl-2'>
                   <div>
-                    <h1 className='text-2xl text-bold-sm text-start'>Ngô Quang Phước Thành</h1>
+                    <h1 className='text-2xl text-bold-sm text-start'>
+                      Ngô Quang Phước Thành
+                    </h1>
                     {/*  gender */}
                     <div className=' text-lg justify-start flex pl-1 pt-2'>
-                      <FontAwesomeIcon icon={faPersonHalfDress} className='pt-2 h-6' />
+                      <FontAwesomeIcon
+                        icon={faPersonHalfDress}
+                        className='pt-2 h-6'
+                      />
                       <span className='pl-2 pt-1'>Nam</span>
                     </div>
                     {/* study */}
@@ -92,13 +101,19 @@ export default function TutorList() {
               {/* Button */}
               <div className='  mb-4 w-full px-auto mx-auto'>
                 <div className='border-black border-[3px] rounded-lg w-full h-10   bg-pink-400 hover:opacity-80 mx-auto'>
-                  <Link to='/' className=' justify-center items-center flex py-2'>
+                  <Link
+                    to='/'
+                    className=' justify-center items-center flex py-2'
+                  >
                     Đặt lịch học
                   </Link>
                 </div>
 
                 <div className=' border-[3px]  rounded-lg w-full  h-10  bg-white hover:bg-slate-200 mt-2 mx-auto'>
-                  <Link to='/' className=' justify-center items-center flex py-2'>
+                  <Link
+                    to='/'
+                    className=' justify-center items-center flex py-2'
+                  >
                     Nhắn tin
                   </Link>
                 </div>
@@ -107,6 +122,8 @@ export default function TutorList() {
           </div>
         </div>
       ))}
+      {/* Phân trang */}
+      <Pagination pageSize={10} />
     </>
   )
 }
