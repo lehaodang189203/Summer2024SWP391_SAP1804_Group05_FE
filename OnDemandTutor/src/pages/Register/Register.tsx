@@ -49,7 +49,7 @@ export default function Register() {
     >
       <div className='container justify-center flex'>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className='text-2xl'>Đăng Ký </div>
+          <div className='text-2xl'>Đăng Ký</div>
 
           <Input
             name='email'

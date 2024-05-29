@@ -42,9 +42,9 @@ export default function useRouteElements() {
     {
       path: path.registerAsTutor,
       element: (
-        <RegisterLayout>
+        <MainLayout>
           <RegisterAsTutor />
-        </RegisterLayout>
+        </MainLayout>
       )
     },
     {
