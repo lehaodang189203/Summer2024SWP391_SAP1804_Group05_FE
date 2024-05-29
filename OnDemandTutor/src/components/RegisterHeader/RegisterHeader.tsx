@@ -34,7 +34,7 @@ export default function RegisterHeader() {
           </div>
           {/* Login */}
           <nav className='h-36 pt-[48px] col-span-3'>
-            <Link to='/login' className='transition:duration-150 ease-in-out border-black border-2 px-2 py-2 rounded-lg hover:bg-gray-200 mr-1 '>
+            <Link to='/login' className='transition duration-150 ease-in-out border-black border-2 px-2 py-2 rounded-lg hover:bg-gray-200 mr-1 '>
               Đăng Nhập
             </Link>
             <Link to='/register' className='bg-pink-500 border-black border-2 px-2 py-2 rounded-lg hover:bg-pink-400'>

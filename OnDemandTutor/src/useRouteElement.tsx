@@ -9,6 +9,7 @@ import path from './constant/path'
 import MainLayout from './layout/MainLayout'
 
 import RegisterAsTutor from './pages/RegisterAsTutor/RegisterAsTutor'
+import DashBoard from './pages/DashBoard'
 
 export default function useRouteElements() {
   //
@@ -53,6 +54,14 @@ export default function useRouteElements() {
         <MainLayout>
           <Home />
         </MainLayout>
+      )
+    },
+    {
+      path: path.dashBoard,
+      element: (
+        <RegisterLayout>
+          <DashBoard />
+        </RegisterLayout>
       )
     }
   ])
