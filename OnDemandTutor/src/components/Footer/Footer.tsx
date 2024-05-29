@@ -3,41 +3,6 @@ import { Link } from 'react-router-dom'
 export default function Footer() {
   return (
     <>
-      {/* <div className='Footer-container'>
-          <div className="F-content">
-            <div className='F-Left'> 
-              <div>ODT Learning</div>
-              <div>
-                  <a href=''><i className='fa fa-facebook' aria-hidden='true'></i></a>
-                  <a href=''></a>
-                  <a href=''></a>
-              </div>
-            </div> 
-            <div className='F-Right'> 
-               <ul className='F-R-C'>
-                <li>Resource</li>
-                <li><Link to={'/'}>Home</Link></li>
-                <li><Link to={'/'}>Become a tutor</Link></li>
-                <li><Link to={'/'}>Find tutor</Link></li>
-               </ul>
-               <ul className='F-R-C'>
-                <li>Tutoriton</li>
-                <li><Link to={'/'}>Featured tutor</Link></li>
-                <li><Link to={'/'}>About us</Link></li>
-                <li><Link to={'/'}>Support</Link></li>
-               </ul>
-               <ul className='F-R-C'>
-                <li>References</li>
-                <li><Link to={'/'}>Contact us</Link></li>
-                <li><Link to={'/'}>Blog</Link></li>
-                <li><Link to={'/'}>Page</Link></li>
-               </ul>
-            </div>
-          </div>
-          <div className='F-Bot'>
-          © 2024 Tutorition All rights reserved.
-          </div>
-        </div> */}
       <footer className=' bg-slate-950  mt-10'>
         <div className='mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8'>
           <div className='sm:flex sm:items-center sm:justify-between pr-16'>
@@ -100,83 +65,83 @@ export default function Footer() {
 
           <div className='grid grid-cols-1 gap-8 border-t border-gray-100 pt-8 sm:grid-cols-2 lg:grid-cols-4 lg:pt-16 pl-28 text-left'>
             <div>
-              <p className='font-bold text-green-100'>Services</p>
+              <p className='font-bold text-green-100'>Các dịch vụ</p>
 
               <ul className='mt-3 space-y-1 text-sm'>
                 <li>
                   <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
                     {' '}
-                    Turtor 1 vs 1{' '}
+                    Dạy kèm 1 1{' '}
                   </Link>
                 </li>
                 <li>
                   <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
                     {' '}
-                    Turtor follow schule{' '}
+                    Tìm gia sư theo lịch{' '}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <p className='font-bold text-green-100'>Tutoriton</p>
+              <p className='font-bold text-green-100'>Gia Sư</p>
 
               <ul className='mt-3 space-y-1 text-sm'>
                 <li>
-                  <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
-                    Become a tutor
+                  <Link to={'/registerAT'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
+                    Trở Thành Gia Sư
                   </Link>
                 </li>
                 <li>
                   <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
-                    Find tutor
+                    Tìm Gia Sư
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <p className='font-bold text-green-100'>Company</p>
+              <p className='font-bold text-green-100'>Hệ Thống</p>
 
               <ul className='mt-3 space-y-1 text-sm'>
                 <li>
-                  <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
+                  <Link to={'/'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
                     {' '}
-                    Home{' '}
+                    Trang chủ{' '}
                   </Link>
                 </li>
                 <li>
                   <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
                     {' '}
-                    About{' '}
+                    Thông Tin{' '}
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <p className='font-bold text-green-100'>Legal</p>
+              <p className='font-bold text-green-100'>Chính sách</p>
 
               <ul className='mt-3 space-y-1 text-sm'>
                 <li>
                   <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
                     {' '}
-                    Accessibility{' '}
+                    Khả năng của chúng tôi{' '}
                   </Link>
                 </li>
                 <li>
                   <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
                     {' '}
-                    Returns Policy{' '}
+                      Chính sách hoàn tiền{' '}
                   </Link>
                 </li>
                 <li>
                   <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
                     {' '}
-                    Refund Policy{' '}
+                      Chính sách giảng dạy{' '}
                   </Link>
                 </li>
                 <li>
                   <Link to={'#'} className='text-gray-400 transition hover:text-pink-500 opacity-90 '>
                     {' '}
-                    Contact us{' '}
+                    Liên hệ với chúng tôi{' '}
                   </Link>
                 </li>
               </ul>

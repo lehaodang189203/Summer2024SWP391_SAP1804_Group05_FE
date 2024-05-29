@@ -4,6 +4,7 @@ import { RegisterOptions, UseFormRegister } from 'react-hook-form'
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string
   classNameInput?: string
+  classNameInput2?: string
   classNameError?: string
   placeholer?: string
 
@@ -24,6 +25,7 @@ export default function Input({
   rules,
   register,
   classNameInput = 'p-3 w-[300px] outline-none border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl  hover:border-black border-2',
+  classNameInput2 = 'p-3 w-[150px] outline-none border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl  hover:border-black border-2',
   classNameError = 'text-start ml-[10px] mt-1 text-red-600 min-h-[1.25rem]  w-full text-[11px]',
   placeholder,
   ...rest // phần còn lại
@@ -37,7 +39,7 @@ export default function Input({
         //  tại sao bị như z
         // nó bị overwritte
         // name='email'
-        className={classNameInput}
+        className={placeholder === "Họ" || placeholder === "Tên" ?  classNameInput2 : classNameInput}
         {...registerResult}
         {...rest}
         placeholder={placeholder}
