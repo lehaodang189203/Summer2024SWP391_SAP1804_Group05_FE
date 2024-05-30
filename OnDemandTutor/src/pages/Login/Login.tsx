@@ -60,7 +60,7 @@ export default function Login() {
               type='submit'
               className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
             >
-              Đăng Ký
+              Đăng Nhập
             </button>
           </div>
         </form>
@@ -81,10 +81,10 @@ export default function Login() {
         </div>
         <div className='my-4'>
           <div>
-            <span className='text-gray-600 mr-1'>Bạn chưa có tài khoảng?</span>
+            <span className='text-gray-600 mr-1'>Bạn chưa có tài khoản? </span>
             <Link
               className='text-gray-500 underline hover:text-red-500'
-              to='/Register'
+              to='/register'
             >
               Đăng Ký
             </Link>
