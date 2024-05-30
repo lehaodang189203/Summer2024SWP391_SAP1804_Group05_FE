@@ -42,7 +42,7 @@ const Dashboard = () => {
                 theme: 'dark',
                 x: { show: false },
                 y: {
-                    formatter: function (y: number) {
+                    formatter: function (y: number) { // Đặt kiểu dữ liệu là 'number'
                         if (typeof y !== "undefined") {
                             return "$" + y.toFixed(0);
                         }
@@ -75,6 +75,11 @@ const Dashboard = () => {
         // Render revenue chart
         const revenueChart = new ApexCharts(document.querySelector('#revenue-chart'), revenueChartOptions);
         revenueChart.render();
+
+        // Cleanup function to destroy the chart instance when component unmounts
+        return () => {
+            revenueChart.destroy();
+        };
     }, []); // Run effect only once on component mount
 
     // Mock data
