@@ -81,12 +81,12 @@ export default function Login() {
         </div>
         <div className='my-4'>
           <div>
-            <span className='text-gray-600 mr-1'>Bạn đã có tài khoảng?</span>
+            <span className='text-gray-600 mr-1'>Bạn chưa có tài khoảng?</span>
             <Link
               className='text-gray-500 underline hover:text-red-500'
-              to='/Login'
+              to='/Register'
             >
-              Đăng Nhập
+              Đăng Ký
             </Link>
           </div>
         </div>
