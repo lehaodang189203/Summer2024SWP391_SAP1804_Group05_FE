@@ -19,9 +19,10 @@ export default function Login() {
     resolver: yupResolver(loginSchema)
   })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log('Form submitted:', data)
     // Xử lý logic tùy chỉnh ở đây
+    let res 
   }
 
   return (
@@ -59,6 +60,7 @@ export default function Login() {
             <button
               type='submit'
               className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
+            
             >
               Đăng Nhập
             </button>

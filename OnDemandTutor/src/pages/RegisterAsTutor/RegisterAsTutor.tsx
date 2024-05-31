@@ -129,14 +129,7 @@ type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'|'firstNam
 const registerSchema = schema.pick(['email', 'password', 'confirm_password','firstName','lastName','hotline','gender','file'])
 
 export default function RegisterAsTuTor() {
-  useEffect(() => {
-    console.log('Component mounted')
-
-    // Cleanup: Được gọi khi component unmount (tức là bị gỡ bỏ khỏi DOM)
-    return () => {
-      console.log('Component unmounted')
-    }
-  }, [])
+  
 
   const {
     register,
@@ -266,7 +259,7 @@ export default function RegisterAsTuTor() {
         </div>
         <div className='my-4'>
           <div>
-            <span className='text-gray-600 mr-1'>Bạn đã có tài khoảng?</span>
+            <span className='text-gray-600 mr-1'>Bạn đã có tài khoản?</span>
             <Link
               className='text-gray-500 underline hover:text-red-500'
               to='/Login'
