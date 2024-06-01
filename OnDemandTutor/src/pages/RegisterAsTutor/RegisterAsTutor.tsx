@@ -221,7 +221,7 @@ export default function RegisterAsTuTor() {
           
           
           
-          <span>Up load file chứng chỉ</span>
+          <span>Tải chứng chỉ lên </span>
           <Input
             name='file'
             type='file'

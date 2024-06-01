@@ -19,24 +19,28 @@ export default function Header() {
           {/* Mid */}
           <div className='h-36 col-span-6 text-2xl'>
             <div className='pr-[50px] pt-[40px] justify-around items-center flex'>
-              <Link to='/' className='ct-top-menu-items'>
+              <Link to='/' className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'>
                 Trang chủ
               </Link>
 
+             
+               
+
               <Popover
-                className='flex items-center py-1 hover:text-black cursor-pointer'
+                className='flex items-center py-1  cursor-pointer shadow-red-700'
                 renderPopover={
-                  <div className='bg-transparent relative shadow-md rounded-2xl   text-white'>
-                    <div className='text-white  w-full flex py-2  items-center justify-between text-center  text-[10px]   bg-black  px-auto rounded-2xl'>
+                  <div className='shadow-red-700'>
+                    <div className='  w-[20rem] flex mt-0.5   items-center justify-between text-center  text-[10px]  px-auto rounded-3xl'>
                       <Link
                         to='/registerAT'
-                        className='py-2 w-[10rem]  hover:text-pink-400'
+                        className='py-2 w-[10rem] h-full  bg-pink-400 border-pink-400 border-2 text-black  rounded-l-3xl   hover:text-white'
                       >
                         Đăng ký trở thành giảng viên
                       </Link>
                       <Link
                         to='/tutorList'
-                        className='py-2 w-[10rem]   hover:text-pink-400'
+                        className='py-2 w-[10rem]  h-full  text-white  bg-black border-black border-2  rounded-r-3xl  hover:text-pink-400'
                       >
                         danh sách lớp
                       </Link>
@@ -44,10 +48,14 @@ export default function Header() {
                   </div>
                 }
               >
-                <div className='ct-top-menu-items'>Loại dịch vụ</div>
+                <div className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'>
+               Loại dịch vụ</div>
               </Popover>
+              <Link to='/'className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'>
+               
 
-              <Link to='/' className='ct-top-menu-items'>
                 Hỗ trợ
               </Link>
             </div>
