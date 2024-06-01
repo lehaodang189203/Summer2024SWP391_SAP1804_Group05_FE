@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { schema, Schema } from '../../utils/rules'
 import { useEffect } from 'react'
 import { Check } from '../../components/CheckBox/Check'
+import http from '../../utils/http'
 
 type FormData = Pick<Schema, 'username'|'email' | 'password' | 'confirm_password'|'firstName'|'lastName'|'hotline'|'gender'|'birthDay'>
 const registerSchema = schema.pick(['username','email', 'password', 'confirm_password','firstName','lastName','hotline','gender','birthDay'])
@@ -41,6 +42,14 @@ export default function Register() {
   const onSubmit = (data: FormData) => {
     console.log('Form submitted:', data)
     // Xử lý logic tùy chỉnh ở đây
+   // Gửi request POST
+    http.post('/endpoint', data)
+    .then(response => {
+    console.log('Response:', response.data);
+    })
+    .catch(error => {
+    console.error('Error:', error);
+  });
   }
 
   return (
