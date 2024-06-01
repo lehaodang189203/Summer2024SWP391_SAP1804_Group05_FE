@@ -7,9 +7,9 @@ import { useForm } from 'react-hook-form'
 import { schema, Schema } from '../../utils/rules'
 import { useEffect } from 'react'
 
-type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
+type FormData = Pick<Schema, 'username' | 'password' | 'confirm_password'>
 
-const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
+const registerSchema = schema.pick(['username', 'password', 'confirm_password'])
 
 export default function Register() {
   useEffect(() => {
@@ -52,12 +52,12 @@ export default function Register() {
           <div className='text-2xl'>Đăng Ký</div>
 
           <Input
-            name='email'
-            type='email'
-            placeholder='email'
+            name='username'
+            type='text'
+            placeholder='User Name'
             className='mt-8'
             register={register}
-            errorMessage={errors.email?.message}
+            errorMessage={errors.username?.message}
           />
 
           <Input
@@ -79,6 +79,7 @@ export default function Register() {
             errorMessage={errors.confirm_password?.message}
             autoComplete='on'
           />
+          
           <div className='mt-3'>
             <button
               type='submit'

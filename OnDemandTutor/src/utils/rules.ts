@@ -14,6 +14,9 @@ import * as yup from "yup";
 // }
 const phoneFormat = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
 export const schema = yup.object({
+  username:yup
+  .string()
+  .required('User Name là bắt buộc'),
   email: yup
     .string()
     .required('Email là bắt buộc')
@@ -44,8 +47,11 @@ export const schema = yup.object({
     .string()
     .required('Số điện thoại là bắt buộc')
     .matches(phoneFormat, 'Số điện thoại không hợp lệ'),
-  gender:yup.string(),
-  file:yup.string()
+  gender:yup
+    .string(),
+  birthDay: yup
+    .string()
+    .required('Phải Nhập ngày tháng năm sinh')
 })
 
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi

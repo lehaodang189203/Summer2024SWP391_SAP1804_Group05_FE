@@ -117,17 +117,23 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
-import Input from '../../components/Input'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { schema, Schema } from '../../utils/rules'
 import { useEffect } from 'react'
 import InputGender from '../../components/InputGender/InputGender'
+import Input from '../../components/Input'
+import { Check } from '../../components/CheckBox/Check'
 
-type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'|'firstName'|'lastName'|'hotline'|'gender'|'file'>
 
-const registerSchema = schema.pick(['email', 'password', 'confirm_password','firstName','lastName','hotline','gender','file'])
+type FormData = Pick<Schema, 'username'|'email' | 'password' | 'confirm_password'|'firstName'|'lastName'|'hotline'|'gender'|'birthDay'>
 
+const registerSchema = schema.pick(['username','email', 'password', 'confirm_password','firstName','lastName','hotline','gender','birthDay'])
+const genderItems = [
+  { id: 'gender', name:'gender', title: 'Nam',value:'Nam'},
+  { id: 'gender',name:'gender', title: 'Nữ',value:'Nữ' },
+  { id: 'gender',name:'gender', title: 'Khác',value:'Khác' },
+]
 export default function RegisterAsTuTor() {
   
 
@@ -160,12 +166,39 @@ export default function RegisterAsTuTor() {
       <div className='container justify-center flex'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='text-2xl'>Đăng Ký Thành Giảng Viên</div>
-
+          <div className='flex gap-1'>
+          <Input
+            name='firstName'
+            type='text'
+            placeholder='Họ'
+            className='mt-8'
+            register={register}
+            errorMessage={errors.firstName?.message}
+            autoComplete='on'
+          />
+          <Input
+            name='lastName'
+            type='text'
+            placeholder='Tên'
+            className='mt-8 '
+            register={register}
+            errorMessage={errors.lastName?.message}
+            autoComplete='on'
+          />
+          </div>
+          <Input
+            name='username'
+            type='text'
+            placeholder='User Name'
+            className='mt-1'
+            register={register}
+            errorMessage={errors.username?.message}
+          />
           <Input
             name='email'
             type='email'
             placeholder='Email'
-            className='mt-8 '
+            className='mt-1'
             register={register}
             errorMessage={errors.email?.message}
           />
@@ -198,40 +231,22 @@ export default function RegisterAsTuTor() {
             errorMessage={errors.hotline?.message}
             autoComplete='on'
           />
-          <div className='flex gap-1'>
-          <Input
-            name='firstName'
-            type='text'
-            placeholder='Họ'
-            className='mt-1'
-            register={register}
-            errorMessage={errors.firstName?.message}
-            autoComplete='on'
-          />
-          <Input
-            name='lastName'
-            type='text'
-            placeholder='Tên'
-            className='mt-1'
-            register={register}
-            errorMessage={errors.lastName?.message}
-            autoComplete='on'
-          />
-          </div>
           
           
           
-          <span>Tải chứng chỉ lên </span>
+          
+          <span>Date </span>
           <Input
-            name='file'
-            type='file'
-            placeholder=''
+            name='birthDay'
+            type='Date'
+            placeholder='bbb'
             className='mt-1'
             register={register}
-            errorMessage={errors.file?.message}
+            errorMessage={errors.birthDay?.message}
           />
-          <InputGender
-            
+          <Check
+            items={genderItems}
+            register={register}
           />
           <div className='mt-3'>
             <button
