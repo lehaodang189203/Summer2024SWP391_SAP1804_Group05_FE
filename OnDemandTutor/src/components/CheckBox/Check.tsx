@@ -7,11 +7,11 @@ interface Props{
 export const Check=(props:Props)=>{
     const{name,register,...rest}=props;
     return(
-    <div className="flex ">
-        <div>Gender: </div>
+    <div className="flex justify-between">
+        <div>Giới tính: </div>
         {
             props.items.map((item:any)=>(
-                <div key={item.value}>
+                <div key={item.value} className="flex gap-1">
                     <div>{item.title}</div>
                     <input
                     type="radio"

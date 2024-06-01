@@ -121,7 +121,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { schema, Schema } from '../../utils/rules'
 import { useEffect } from 'react'
-import InputGender from '../../components/InputGender/InputGender'
 import Input from '../../components/Input'
 import { Check } from '../../components/CheckBox/Check'
 
@@ -235,7 +234,7 @@ export default function RegisterAsTuTor() {
           
           
           
-          <span>Date </span>
+          <span>Birth Date </span>
           <Input
             name='birthDay'
             type='Date'
