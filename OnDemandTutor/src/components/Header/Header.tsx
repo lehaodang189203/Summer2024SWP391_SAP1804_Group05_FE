@@ -35,7 +35,7 @@ export default function Header() {
                     <div className='  w-[20rem] flex mt-0.5   items-center justify-between text-center  text-[10px]  px-auto rounded-3xl'>
                       <Link
                         to='/registerAT'
-                        className='py-2 w-[9.9rem] h-8 bg-black border-2 border-black text-white rounded-l-3xl hover:bg-pink-400 hover:h-auto hover:text-center hover:shadow-3xl'
+                        className='py-2 w-[10rem] h-full  bg-pink-400 border-pink-400 border-2 text-black  rounded-l-3xl   hover:text-white'
                       >
                         Đăng ký trở thành giảng viên
                       </Link>

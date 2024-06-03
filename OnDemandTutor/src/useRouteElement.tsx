@@ -8,10 +8,11 @@ import path from './constant/path'
 
 import MainLayout from './layout/MainLayout'
 
-import RegisterAsTutor from './pages/RegisterAsTutor/RegisterAsTutor'
+// import RegisterAsTutor from './pages/RegisterAsTutor/RegisterAsTutor'
 import DashBoard from './pages/DashBoard'
 import { AppContext } from './context/app.context'
 import { useContext } from 'react'
+import RegisterAsTutor from './pages/RegisterAsTutor'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
