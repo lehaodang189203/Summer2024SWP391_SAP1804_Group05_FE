@@ -1,28 +1,57 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import Input from '../../components/Input'
 import { schema, Schema } from '../../utils/rules'
 
+import { useMutation } from '@tanstack/react-query'
+import { useContext } from 'react'
+import { authApi } from '../../api/auth.api'
+import { AppContext } from '../../context/app.context'
+import { LoginReqBody } from '../../types/user.request.type'
+
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 
 export default function Login() {
+  const { setIsAuthenticated } = useContext(AppContext)
+
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(loginSchema)
   })
 
-  const onSubmit = (data: FormData) => {
-    console.log('Form submitted:', data)
-    // Xử lý logic tùy chỉnh ở đây
-  }
+  const navigate = useNavigate()
+
+  const loginMutation = useMutation({
+    mutationFn: (body: LoginReqBody) => authApi.loginAccount(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data)
+
+    loginMutation.mutate(data, {
+      onSuccess: (data) => {
+        console.log(data)
+
+        // setIsAuthenticated(true)
+        // navigate đươc dùng để điều hướng (in case này là tới thằng /)
+
+        // dấu / đại diện trang hiện tại
+        navigate('/')
+      },
+      onError: (error) => {
+        console.log(error)
+      }
+    })
+  })
 
   return (
     <div
@@ -33,7 +62,7 @@ export default function Login() {
       className='py-10 w-[25rem] rounded-2xl shadow-neutral-950 mx-auto my-[2rem]'
     >
       <div className='container justify-center flex'>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Nhập </div>
 
           <Input
@@ -49,7 +78,7 @@ export default function Login() {
             name='password'
             type='password'
             placeholder='Mật khẩu'
-            className='mt-1s'
+            className='mt-1'
             register={register}
             errorMessage={errors.password?.message}
             autoComplete='on'

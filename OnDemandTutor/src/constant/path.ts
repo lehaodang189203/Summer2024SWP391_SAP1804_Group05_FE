@@ -1,9 +1,9 @@
-
 const path = {
   home: '/',
   login: '/login',
+  profile: '/profile',
   register: '/register',
-  registerAsTutor:'/registerAT',
+  registerAsTutor: '/registerAT',
   logout: '/logout',
   tutorList: '/tutorList',
   dashBoard: '/dashBoard'

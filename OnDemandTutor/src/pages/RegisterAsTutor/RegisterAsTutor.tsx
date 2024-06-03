@@ -124,20 +124,30 @@ import { schema, Schema } from '../../utils/rules'
 import { useEffect } from 'react'
 import InputGender from '../../components/InputGender/InputGender'
 
-type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'|'firstName'|'lastName'|'hotline'|'gender'|'file'>
+type FormData = Pick<
+  Schema,
+  | 'email'
+  | 'password'
+  | 'confirm_password'
+  | 'firstName'
+  | 'lastName'
+  | 'hotline'
+  | 'gender'
+  | 'file'
+>
 
-const registerSchema = schema.pick(['email', 'password', 'confirm_password','firstName','lastName','hotline','gender','file'])
+const registerSchema = schema.pick([
+  'email',
+  'password',
+  'confirm_password',
+  'firstName',
+  'lastName',
+  'hotline',
+  'gender',
+  'file'
+])
 
 export default function RegisterAsTuTor() {
-  useEffect(() => {
-    console.log('Component mounted')
-
-    // Cleanup: Được gọi khi component unmount (tức là bị gỡ bỏ khỏi DOM)
-    return () => {
-      console.log('Component unmounted')
-    }
-  }, [])
-
   const {
     register,
     handleSubmit,
@@ -152,7 +162,7 @@ export default function RegisterAsTuTor() {
   })
 
   const onSubmit = (data: FormData) => {
-    console.log('Form submitted:', data)//in ra formdata
+    console.log('Form submitted:', data) //in ra formdata
     // Xử lý logic tùy chỉnh ở đây
   }
 
@@ -205,29 +215,28 @@ export default function RegisterAsTuTor() {
             errorMessage={errors.hotline?.message}
             autoComplete='on'
           />
+
           <div className='flex gap-1'>
-          <Input
-            name='firstName'
-            type='text'
-            placeholder='Họ'
-            className='mt-1'
-            register={register}
-            errorMessage={errors.firstName?.message}
-            autoComplete='on'
-          />
-          <Input
-            name='lastName'
-            type='text'
-            placeholder='Tên'
-            className='mt-1'
-            register={register}
-            errorMessage={errors.lastName?.message}
-            autoComplete='on'
-          />
+            <Input
+              name='firstName'
+              type='text'
+              placeholder='Họ'
+              className='mt-1'
+              register={register}
+              errorMessage={errors.firstName?.message}
+              autoComplete='on'
+            />
+            <Input
+              name='lastName'
+              type='text'
+              placeholder='Tên'
+              className='mt-1'
+              register={register}
+              errorMessage={errors.lastName?.message}
+              autoComplete='on'
+            />
           </div>
-          
-          
-          
+
           <span>Up load file chứng chỉ</span>
           <Input
             name='file'
@@ -237,9 +246,7 @@ export default function RegisterAsTuTor() {
             register={register}
             errorMessage={errors.file?.message}
           />
-          <InputGender
-            
-          />
+          <InputGender />
           <div className='mt-3'>
             <button
               type='submit'
