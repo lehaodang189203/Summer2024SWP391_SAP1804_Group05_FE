@@ -20,13 +20,13 @@ export default function RegisterHeader() {
           {/* Mid */}
           <div className='h-36 col-span-6 text-2xl'>
             <div className='pr-[50px] pt-[40px] justify-around items-center flex'>
-              <Link to='/' className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
-                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'>
+              <Link
+                to='/'
+                className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
+              >
                 Trang chủ
               </Link>
-
-             
-               
 
               <Popover
                 className='flex items-center py-1  cursor-pointer shadow-red-700'
@@ -49,14 +49,18 @@ export default function RegisterHeader() {
                   </div>
                 }
               >
-                <div className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
-                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'>
-               Loại dịch vụ</div>
+                <div
+                  className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
+                >
+                  Loại dịch vụ
+                </div>
               </Popover>
-              <Link to='/'className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
-                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'>
-               
-
+              <Link
+                to='/'
+                className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
+              >
                 Hỗ trợ
               </Link>
             </div>

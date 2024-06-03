@@ -39,7 +39,11 @@ export default function Input({
         //  tại sao bị như z
         // nó bị overwritte
         // name='email'
-        className={placeholder === "Họ" || placeholder === "Tên" ?  classNameInput2 : classNameInput}
+        className={
+          placeholder === 'Họ' || placeholder === 'Tên'
+            ? classNameInput2
+            : classNameInput
+        }
         {...registerResult}
         {...rest}
         placeholder={placeholder}
