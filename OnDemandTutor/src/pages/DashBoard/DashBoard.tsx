@@ -42,7 +42,7 @@ const Dashboard = () => {
                 theme: 'dark',
                 x: { show: false },
                 y: {
-                    formatter: function (y: number) { // Đặt kiểu dữ liệu là 'number'
+                    formatter: function (y: number) {
                         if (typeof y !== "undefined") {
                             return "$" + y.toFixed(0);
                         }
@@ -80,7 +80,7 @@ const Dashboard = () => {
         return () => {
             revenueChart.destroy();
         };
-    }, []); // Run effect only once on component mount
+    }, []);
 
     // Mock data
     const students = ['Student 1', 'Student 2', 'Student 3', 'Student 4', 'Student 5'];
@@ -95,36 +95,56 @@ const Dashboard = () => {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-semibold mb-8">Dashboard</h1>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
-                    <h2 className="text-lg font-semibold mb-4">Students</h2>
-                    <ul className="divide-y divide-gray-200">
-                        {students.map((student, index) => (
-                            <li key={index} className="py-2">{student}</li>
-                        ))}
+            <div className="flex">
+                <div className="w-1/8 bg-blue-100 p-4">
+                    <ul className="space-y-4">
+                        <li className="nav-item">
+                            <a href="#" className="nav-link text-black hover:text-gray-700">Students</a>
+                        </li>
+                        <li className="nav-item">
+                            <a href="#" className="nav-link text-black hover:text-gray-700">Tutors</a>
+                        </li>
+                        <li className="nav-item">
+                            <a href="#" className="nav-link text-black hover:text-gray-700">Requests</a>
+                        </li>
+                        <li className="nav-item">
+                            <a href="#" className="nav-link text-black hover:text-gray-700">Revenue</a>
+                        </li>
                     </ul>
                 </div>
-                <div>
-                    <h2 className="text-lg font-semibold mb-4">Tutors</h2>
-                    <ul className="divide-y divide-gray-200">
-                        {tutors.map((tutor, index) => (
-                            <li key={index} className="py-2">{tutor}</li>
-                        ))}
-                    </ul>
+                <div className="w-3/4 p-4">
+                    <h1 className="text-3xl font-semibold mb-8">Dashboard</h1>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <h2 className="text-lg font-semibold mb-4">Students</h2>
+                            <ul className="divide-y divide-gray-200">
+                                {students.map((student, index) => (
+                                    <li key={index} className="py-2">{student}</li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-semibold mb-4">Tutors</h2>
+                            <ul className="divide-y divide-gray-200">
+                                {tutors.map((tutor, index) => (
+                                    <li key={index} className="py-2">{tutor}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="mt-8">
+                        <h2 className="text-lg font-semibold mb-4">Student Requests</h2>
+                        <ul className="divide-y divide-gray-200">
+                            {requests.map((request, index) => (
+                                <li key={index} className="py-2">{request.student} - {request.subject} ({request.status})</li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="mt-8">
+                        <h2 className="text-lg font-semibold mb-4">Revenue</h2>
+                        <div id="revenue-chart"></div>
+                    </div>
                 </div>
-            </div>
-            <div className="mt-8">
-                <h2 className="text-lg font-semibold mb-4">Student Requests</h2>
-                <ul className="divide-y divide-gray-200">
-                    {requests.map((request, index) => (
-                        <li key={index} className="py-2">{request.student} - {request.subject} ({request.status})</li>
-                    ))}
-                </ul>
-            </div>
-            <div className="mt-8">
-                <h2 className="text-lg font-semibold mb-4">Revenue</h2>
-                <div id="revenue-chart"></div>
             </div>
         </div>
     );
