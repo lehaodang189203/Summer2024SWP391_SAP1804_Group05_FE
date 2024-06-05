@@ -326,16 +326,19 @@
 // }
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { schema, Schema } from '../../utils/rules'
 import { useEffect } from 'react'
 import Input from '../../components/Input'
 import { Check } from '../../components/CheckBox/Check'
-
+import { SchemaFile, schemaFile } from '../../utils/rulesFIle'
+import { useMutation } from '@tanstack/react-query'
+import { RegisterATReqBody } from '../../types/user.request.type'
+import { regisApi } from '../../api/regis.api'
 type FormData = Pick<
-  Schema,
+  SchemaFile,
   | 'username'
   | 'email'
   | 'password'
@@ -345,9 +348,10 @@ type FormData = Pick<
   | 'hotline'
   | 'gender'
   | 'birthDay'
+  | 'file'
 >
 
-const registerSchema = schema.pick([
+const registerSchema = schemaFile.pick([
   'username',
   'email',
   'password',
@@ -356,12 +360,13 @@ const registerSchema = schema.pick([
   'lastName',
   'hotline',
   'gender',
-  'birthDay'
+  'birthDay',
+  'file'
 ])
 const genderItems = [
-  { id: 'gender', name: 'gender', title: 'Nam', value: 'Nam' },
-  { id: 'gender', name: 'gender', title: 'Nữ', value: 'Nữ' },
-  { id: 'gender', name: 'gender', title: 'Khác', value: 'Khác' }
+  { id: 'gender1', name: 'gender', title: 'Nam', value: 'Nam' },
+  { id: 'gender2', name: 'gender', title: 'Nữ', value: 'Nữ' },
+  { id: 'gender3', name: 'gender', title: 'Khác', value: 'Khác' }
 ]
 export default function RegisterAsTuTor() {
   const {
@@ -376,10 +381,28 @@ export default function RegisterAsTuTor() {
     // resolver (useForm) được dùng để chuyển kết quả validate từ yup
     resolver: yupResolver(registerSchema)
   })
+  const navigate = useNavigate()
 
+  const regisATMutation = useMutation({
+    mutationFn: (body: RegisterATReqBody) => regisApi.registerAT(body)
+  })
   const onSubmit = (data: FormData) => {
     console.log('Form submitted:', data) //in ra formdata
     // Xử lý logic tùy chỉnh ở đây
+    regisATMutation.mutate(data, {
+      onSuccess: (data) => {
+        console.log(data)
+
+        // setIsAuthenticated(true)
+        // navigate đươc dùng để điều hướng (in case này là tới thằng /)
+
+        // dấu / đại diện trang hiện tại
+        navigate('/')
+      },
+      onError: (error) => {
+        console.log(error)
+      }
+    })
   }
 
   return (
@@ -469,6 +492,13 @@ export default function RegisterAsTuTor() {
             errorMessage={errors.birthDay?.message}
           />
           <Check items={genderItems} register={register} />
+          <Input
+            name='file'
+            type='file'
+            className='mt-5'
+            register={register}
+            errorMessage={errors.file?.message}
+          />
           <div className='mt-3'>
             <button
               type='submit'
