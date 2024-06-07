@@ -70,7 +70,7 @@ export default function DateSelect({ value, onChange, errorMessage }: Props) {
           >
             <option disabled>ngày</option>
             {/* raneg này của lodash nó , nó render từ 1 đến 31 */}
-            {range(1, 32).map((item) => (
+            {range(1, 32).map((item: any ) => ( // thêm any để chạy code
               <option value={item} key={item}>
                 {item}
               </option>
@@ -83,7 +83,7 @@ export default function DateSelect({ value, onChange, errorMessage }: Props) {
             value={value?.getMonth() || date.month}
           >
             <option disabled>Tháng</option>
-            {range(0, 12).map((item) => (
+            {range(0, 12).map((item: any) => (
               <option value={item} key={item}>
                 {item + 1}
               </option>
@@ -96,7 +96,7 @@ export default function DateSelect({ value, onChange, errorMessage }: Props) {
             value={value?.getFullYear() || date.year}
           >
             <option disabled>Năm</option>
-            {range(1990, 2025).map((item) => (
+            {range(1990, 2025).map((item: any) => (
               <option value={item} key={item}>
                 {item}
               </option>

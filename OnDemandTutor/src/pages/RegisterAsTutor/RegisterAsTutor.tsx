@@ -549,7 +549,7 @@ import Input from '../../components/Input'
 import { Check } from '../../components/CheckBox/Check'
 import { SchemaFile, schemaFile } from '../../utils/rulesFIle'
 import { useMutation } from '@tanstack/react-query'
-import { RegisterATReqBody } from '../../types/user.request.type'
+import { ResReqBody} from '../../types/user.request.type'
 import { regisApi } from '../../api/regis.api'
 type FormData = Pick<
   SchemaFile,
@@ -598,7 +598,7 @@ export default function RegisterAsTuTor() {
   const navigate = useNavigate()
 
   const regisATMutation = useMutation({
-    mutationFn: (body: RegisterATReqBody) => regisApi.registerAT(body)
+    mutationFn: (body: ResReqBody) => regisApi.registerAT(body)
   })
   const onSubmit = (data: FormData) => {
     console.log('Form submitted:', data) //in ra formdata
@@ -630,7 +630,7 @@ export default function RegisterAsTuTor() {
       <div className='container justify-center flex'>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='text-2xl'>Đăng Ký Thành Giảng Viên</div>
-          <div className='flex gap-1'>
+          {/* <div className='flex gap-1'>
             <Input
               name='firstName'
               type='text'
@@ -712,7 +712,7 @@ export default function RegisterAsTuTor() {
             className='mt-5'
             register={register}
             errorMessage={errors.file?.message}
-          />
+          /> */}
           <div className='mt-3'>
             <button
               type='submit'

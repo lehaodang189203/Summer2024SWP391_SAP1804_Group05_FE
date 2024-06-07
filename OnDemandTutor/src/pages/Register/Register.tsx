@@ -1,26 +1,5 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-<<<<<<< HEAD
-import { Link, useNavigate } from 'react-router-dom'
-import Input from '../../components/Input'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
-import { schema, Schema } from '../../utils/rules'
-import { useEffect } from 'react'
-import { Check } from '../../components/CheckBox/Check'
-import http from '../../utils/http'
-import { useMutation } from '@tanstack/react-query'
-import { authApi } from '../../api/auth.api'
-import { RegisterATReqBody, RegisterReqBody } from '../../types/user.request.type'
-
-type FormData = Pick<Schema, 'username'|'email' | 'password' | 'confirm_password'|'firstName'|'lastName'|'gender'|'birthDate'>
-const registerSchema = schema.pick(['username','email', 'password', 'confirm_password','firstName','lastName','gender','birthDate'])
-const genderItems = [
-  { id: 'gender', name:'gender', title: 'Nam',value:'Nam'},
-  { id: 'gender',name:'gender', title: 'Nữ',value:'Nữ' },
-  { id: 'gender',name:'gender', title: 'Khác',value:'Khác' },
-]
-=======
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { omit } from 'lodash'
@@ -53,7 +32,6 @@ const registerSchema = schema.pick([
   'lastname',
   'gender'
 ])
->>>>>>> refs/remotes/origin/main
 export default function Register() {
   const navigate = useNavigate()
 
@@ -72,38 +50,14 @@ export default function Register() {
     resolver: yupResolver(registerSchema)
   })
 
-<<<<<<< HEAD
-  // const onSubmit = (data: FormData) => {
-  //   console.log('Form submitted:', data)
-  //   // Xử lý logic tùy chỉnh ở đây
-  //  // Gửi request POST
-  //   http.post('/endpoint', data)
-  //   .then(response => {
-  //   console.log('Response:', response.data);
-  //   })
-  //   .catch(error => {
-  //   console.error('Error:', error);
-  // });
-  
-  const navigate = useNavigate()
-
-  const registerMutation = useMutation({
-    mutationFn: (body: RegisterReqBody) => authApi.register(body)
-  })
-
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
-
-    registerMutation.mutate(data, {
-=======
   const registerAccountMutation = useMutation({
     mutationFn: (body: ResReqBody) => authApi.registerAccount(body)
   })
 
   const onSubmit = handleSubmit((data) => {
+    console.log(data)
     const body: ResReqBody = omit(data, ['confirm_password'])
     registerAccountMutation.mutate(body, {
->>>>>>> refs/remotes/origin/main
       onSuccess: (data) => {
         console.log(data)
 
@@ -111,11 +65,7 @@ export default function Register() {
         // navigate đươc dùng để điều hướng (in case này là tới thằng /)
 
         // dấu / đại diện trang hiện tại
-<<<<<<< HEAD
-        navigate('/tutorlist')
-=======
         navigate('/')
->>>>>>> refs/remotes/origin/main
       },
       onError: (error) => {
         console.log(error)
@@ -164,22 +114,6 @@ export default function Register() {
             errorMessage={errors.confirm_password?.message}
             autoComplete='on'
           />
-<<<<<<< HEAD
-          
-          
-          <div className='text-left ml-2.5'>Ngày sinh</div>
-          <Input
-            name='birthDay'
-            type='Date'
-            placeholder='bbb'
-            className='mt-1 items-start'
-            register={register}
-            errorMessage={errors.birthDate?.message}
-          />
-          <Check
-            items={genderItems}
-            register={register}
-=======
 
           <div className='flex  border-solid justify-center'>
             <Input
@@ -239,7 +173,6 @@ export default function Register() {
                 />
               )
             }}
->>>>>>> refs/remotes/origin/main
           />
 
           <div className='mt-3'>

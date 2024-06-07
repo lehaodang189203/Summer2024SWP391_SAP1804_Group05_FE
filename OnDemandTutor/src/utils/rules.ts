@@ -48,21 +48,11 @@ export const schema = yup.object({
     .required('Nhập ngày, tháng, năm sinh là bắt buộc'),
   gender: yup
     .string()
-<<<<<<< HEAD
-    .required('Số điện thoại là bắt buộc')
-    .matches(phoneFormat, 'Số điện thoại không hợp lệ'),
-  gender:yup
-    .string(),
-  birthDate: yup
-    .string()
-    .required('Phải Nhập ngày tháng năm sinh')
-=======
     .oneOf(
       ['male', 'female', 'other'],
       'Gender must be either male, female, or other'
     )
     .required('Gender is required')
->>>>>>> refs/remotes/origin/main
 })
 
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi

@@ -2,32 +2,23 @@ export interface LoginReqBody {
   email: string
   password: string
 }
-
-export interface ResReqBody {
-  email: string
-<<<<<<< HEAD
-  firstName :string
-  lastName:string
-  hotline:string
-  gender:string
-  birthDay:string
-  file:any
-}
-export interface ResReqBody {
-  username: string,
-  password: string,
-  password_confirm: string,
-  firstName: string,
-  lastName: string,
+export interface ResATReqBody {
   email:string,
-  birthDate: string,
-=======
-  password: string
-  date_of_birth: Date // Sử dụng Date để biểu diễn ngày tháng
+  password: string,
+  confirm_password: string,
+  date_of_birth: Date, // Sử dụng Date để biểu diễn ngày tháng
+  firstname: string,
+  lastname: string,
+  gender: string
+}
 
-  firstname: string
-  lastname: string
-
->>>>>>> refs/remotes/origin/main
+export interface ResReqBody {
+  email:string,
+  password: string,
+  confirm_password: string,
+  
+  firstname: string,
+  lastname: string,
+  date_of_birth: Date, // Sử dụng Date để biểu diễn ngày tháng
   gender: string
 }
