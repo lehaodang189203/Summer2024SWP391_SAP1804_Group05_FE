@@ -13,6 +13,7 @@ import DashBoard from './pages/DashBoard'
 import { AppContext } from './context/app.context'
 import { useContext } from 'react'
 import RegisterAsTutor from './pages/RegisterAsTutor'
+import ProfileTT from './pages/ProfileTT'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -100,6 +101,14 @@ export default function useRouteElements() {
         <RegisterLayout>
           <DashBoard />
         </RegisterLayout>
+      )
+    },
+    {
+      path: path.profileTT,
+      element: (
+        <MainLayout>
+          <ProfileTT/>
+        </MainLayout>
       )
     }
   ])

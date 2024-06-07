@@ -13,3 +13,13 @@ export interface RegisterATReqBody {
   birthDay:string
   file:any
 }
+export interface ResReqBody {
+  username: string,
+  password: string,
+  password_confirm: string,
+  firstName: string,
+  lastName: string,
+  email:string,
+  birthDate: string,
+  gender: string
+}

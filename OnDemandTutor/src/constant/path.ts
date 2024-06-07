@@ -1,12 +1,13 @@
 const path = {
   home: '/',
-  login: '/login',
+  login: 'LogIn',
   profile: '/profile',
   register: '/register',
   registerAsTutor: '/registerAT',
   logout: '/logout',
   tutorList: '/tutorList',
-  dashBoard: '/dashBoard'
+  dashBoard: '/dashBoard',
+  profileTT: '/profileTT',
 } as const
 
 export default path

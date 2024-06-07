@@ -1,6 +1,6 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Input from '../../components/Input'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
@@ -8,9 +8,12 @@ import { schema, Schema } from '../../utils/rules'
 import { useEffect } from 'react'
 import { Check } from '../../components/CheckBox/Check'
 import http from '../../utils/http'
+import { useMutation } from '@tanstack/react-query'
+import { authApi } from '../../api/auth.api'
+import { RegisterATReqBody, RegisterReqBody } from '../../types/user.request.type'
 
-type FormData = Pick<Schema, 'username'|'email' | 'password' | 'confirm_password'|'firstName'|'lastName'|'hotline'|'gender'|'birthDay'>
-const registerSchema = schema.pick(['username','email', 'password', 'confirm_password','firstName','lastName','hotline','gender','birthDay'])
+type FormData = Pick<Schema, 'username'|'email' | 'password' | 'confirm_password'|'firstName'|'lastName'|'gender'|'birthDate'>
+const registerSchema = schema.pick(['username','email', 'password', 'confirm_password','firstName','lastName','gender','birthDate'])
 const genderItems = [
   { id: 'gender', name:'gender', title: 'Nam',value:'Nam'},
   { id: 'gender',name:'gender', title: 'Nữ',value:'Nữ' },
@@ -39,18 +42,42 @@ export default function Register() {
     resolver: yupResolver(registerSchema)
   })
 
-  const onSubmit = (data: FormData) => {
-    console.log('Form submitted:', data)
-    // Xử lý logic tùy chỉnh ở đây
-   // Gửi request POST
-    http.post('/endpoint', data)
-    .then(response => {
-    console.log('Response:', response.data);
+  // const onSubmit = (data: FormData) => {
+  //   console.log('Form submitted:', data)
+  //   // Xử lý logic tùy chỉnh ở đây
+  //  // Gửi request POST
+  //   http.post('/endpoint', data)
+  //   .then(response => {
+  //   console.log('Response:', response.data);
+  //   })
+  //   .catch(error => {
+  //   console.error('Error:', error);
+  // });
+  
+  const navigate = useNavigate()
+
+  const registerMutation = useMutation({
+    mutationFn: (body: RegisterReqBody) => authApi.register(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data)
+
+    registerMutation.mutate(data, {
+      onSuccess: (data) => {
+        console.log(data)
+
+        // setIsAuthenticated(true)
+        // navigate đươc dùng để điều hướng (in case này là tới thằng /)
+
+        // dấu / đại diện trang hiện tại
+        navigate('/tutorlist')
+      },
+      onError: (error) => {
+        console.log(error)
+      }
     })
-    .catch(error => {
-    console.error('Error:', error);
-  });
-  }
+  })
 
   return (
     <div
@@ -148,17 +175,6 @@ export default function Register() {
             errorMessage={errors.confirm_password?.message}
             autoComplete='on'
           />
-          <Input
-            name='hotline'
-            type='text'
-            placeholder='Số Điện Thoại'
-            className='mt-1'
-            register={register}
-            errorMessage={errors.hotline?.message}
-            autoComplete='on'
-          />
-          
-          
           
           
           <div className='text-left ml-2.5'>Ngày sinh</div>
@@ -168,7 +184,7 @@ export default function Register() {
             placeholder='bbb'
             className='mt-1 items-start'
             register={register}
-            errorMessage={errors.birthDay?.message}
+            errorMessage={errors.birthDate?.message}
           />
           <Check
             items={genderItems}

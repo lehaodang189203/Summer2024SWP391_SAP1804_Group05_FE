@@ -49,7 +49,7 @@ export const schema = yup.object({
     .matches(phoneFormat, 'Số điện thoại không hợp lệ'),
   gender:yup
     .string(),
-  birthDay: yup
+  birthDate: yup
     .string()
     .required('Phải Nhập ngày tháng năm sinh')
 })
