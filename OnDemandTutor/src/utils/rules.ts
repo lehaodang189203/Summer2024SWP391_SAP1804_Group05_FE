@@ -1,5 +1,4 @@
-
-import * as yup from "yup";
+import * as yup from 'yup'
 //npm i -D yup if dont work
 //  này là mình xài yup của react hook form để làm validate nha fen
 //
@@ -12,11 +11,7 @@ import * as yup from "yup";
 //   // chúng ta lấy mấy key đó ra xài để tránh gõ sai
 //   [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions
 // }
-const phoneFormat = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/
 export const schema = yup.object({
-  username:yup
-  .string()
-  .required('User Name là bắt buộc'),
   email: yup
     .string()
     .required('Email là bắt buộc')
@@ -33,25 +28,31 @@ export const schema = yup.object({
     .min(6, 'Độ dài từ 6-160 ký tự')
     .max(160, 'Độ dài từ 6-160 ký tự')
     .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
-  firstName: yup
+  firstname: yup
     .string()
-    // .required('Xác nhận mật khẩu là bắt buộc')
-    // .min(6, 'Độ dài từ 6-160 ký tự')
-    .max(160, 'Độ dài từ 0-160 ký tự'),
-  lastName: yup
+    .min(2, 'tên phải có ít nhất 2 ký tự')
+    .max(50, 'tên không được vượt quá 50 ký tự')
+    .required('tên là bắt buộc'),
+
+  lastname: yup
     .string()
-    .required('Tên là bắt buộc')
-    .min(1, 'Độ dài từ 6-160 ký tự')
-    .max(160, 'Độ dài từ 0-160 ký tự'),  
-  hotline: yup
+    .min(2, 'Họ phải có ít nhất 2 ký tự')
+    .max(50, 'Họ không được vượt quá 50 ký tự')
+    .required('Họ là bắt buộc'),
+  phone: yup.string().max(20, 'Độ dài tối đa là 20 ký tự'),
+  avatar: yup.string().max(1000, 'Độ dài là 1000 ký tự'),
+  address: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),
+  date_of_birth: yup
+    .date()
+    .max(new Date(), 'Hãy chọn một ngày trong quá khứ')
+    .required('Nhập ngày, tháng, năm sinh là bắt buộc'),
+  gender: yup
     .string()
-    .required('Số điện thoại là bắt buộc')
-    .matches(phoneFormat, 'Số điện thoại không hợp lệ'),
-  gender:yup
-    .string(),
-  birthDay: yup
-    .string()
-    .required('Phải Nhập ngày tháng năm sinh')
+    .oneOf(
+      ['male', 'female', 'other'],
+      'Gender must be either male, female, or other'
+    )
+    .required('Gender is required')
 })
 
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi

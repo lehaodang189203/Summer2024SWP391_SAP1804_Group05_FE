@@ -6,7 +6,9 @@ const path = {
   registerAsTutor: '/registerAT',
   logout: '/logout',
   tutorList: '/tutorList',
-  dashBoard: '/dashBoard'
+  requestList: '/requestList',
+  dashBoard: '/dashBoard',
+  detailRequest: '/detailRequest'
 } as const
 
 export default path

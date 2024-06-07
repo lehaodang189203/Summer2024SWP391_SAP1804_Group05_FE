@@ -105,7 +105,7 @@ export default function TutorList() {
                     to='/'
                     className=' justify-center items-center flex py-2'
                   >
-                    Đặt lịch học
+                    Chấp nhận
                   </Link>
                 </div>
 
