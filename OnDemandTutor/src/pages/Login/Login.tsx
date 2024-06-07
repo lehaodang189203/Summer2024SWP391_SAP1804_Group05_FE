@@ -13,8 +13,8 @@ import { authApi } from '../../api/auth.api'
 import { AppContext } from '../../context/app.context'
 import { LoginReqBody } from '../../types/user.request.type'
 
-type FormData = Pick<Schema, 'username' | 'password'>
-const loginSchema = schema.pick(['username', 'password'])
+type FormData = Pick<Schema, 'email' | 'password'>
+const loginSchema = schema.pick(['email', 'password'])
 
 export default function Login() {
   const { setIsAuthenticated } = useContext(AppContext)
@@ -66,12 +66,12 @@ export default function Login() {
           <div className='text-2xl'>Đăng Nhập </div>
 
           <Input
-            name='username'
-            type='text'
-            placeholder='User Name'
+            name='email'
+            type='email'
+            placeholder='Email'
             className='mt-8'
             register={register}
-            errorMessage={errors.username?.message}
+            errorMessage={errors.email?.message}
           />
 
           <Input

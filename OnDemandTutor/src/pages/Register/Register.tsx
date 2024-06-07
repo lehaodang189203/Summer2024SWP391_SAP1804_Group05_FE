@@ -1,5 +1,6 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom'
 import Input from '../../components/Input'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -19,20 +20,49 @@ const genderItems = [
   { id: 'gender',name:'gender', title: 'Nữ',value:'Nữ' },
   { id: 'gender',name:'gender', title: 'Khác',value:'Khác' },
 ]
-export default function Register() {
-  useEffect(() => {
-    console.log('Component mounted')
+=======
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
+import { omit } from 'lodash'
+import { Controller, useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { authApi } from '../../api/auth.api'
+import DateSelect from '../../components/DateSelect/DateSelect'
+import GenderSelect from '../../components/GenderSelect'
+import Input from '../../components/Input'
+import { ResReqBody } from '../../types/user.request.type'
+import { Schema, schema } from '../../utils/rules'
 
-    // Cleanup: Được gọi khi component unmount (tức là bị gỡ bỏ khỏi DOM)
-    return () => {
-      console.log('Component unmounted')
-    }
-  }, [])
+type FormData = Pick<
+  Schema,
+  | 'email'
+  | 'password'
+  | 'confirm_password'
+  | 'date_of_birth'
+  | 'firstname'
+  | 'lastname'
+  | 'gender'
+>
+
+const registerSchema = schema.pick([
+  'email',
+  'password',
+  'confirm_password',
+  'date_of_birth',
+  'firstname',
+  'lastname',
+  'gender'
+])
+>>>>>>> refs/remotes/origin/main
+export default function Register() {
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors }
+
     // useForm tại sao định dạng như vầy
     // FormData
   } = useForm<FormData>({
@@ -42,6 +72,7 @@ export default function Register() {
     resolver: yupResolver(registerSchema)
   })
 
+<<<<<<< HEAD
   // const onSubmit = (data: FormData) => {
   //   console.log('Form submitted:', data)
   //   // Xử lý logic tùy chỉnh ở đây
@@ -64,6 +95,15 @@ export default function Register() {
     console.log(data)
 
     registerMutation.mutate(data, {
+=======
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: ResReqBody) => authApi.registerAccount(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    const body: ResReqBody = omit(data, ['confirm_password'])
+    registerAccountMutation.mutate(body, {
+>>>>>>> refs/remotes/origin/main
       onSuccess: (data) => {
         console.log(data)
 
@@ -71,7 +111,11 @@ export default function Register() {
         // navigate đươc dùng để điều hướng (in case này là tới thằng /)
 
         // dấu / đại diện trang hiện tại
+<<<<<<< HEAD
         navigate('/tutorlist')
+=======
+        navigate('/')
+>>>>>>> refs/remotes/origin/main
       },
       onError: (error) => {
         console.log(error)
@@ -87,71 +131,16 @@ export default function Register() {
       }}
       className='py-10 w-[25rem] rounded-2xl shadow-neutral-950 mx-auto my-[2rem]'
     >
-      <div className='container justify-center flex'>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <div className='container mx-auto justify-center flex'>
+        <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Ký</div>
 
-          {/* <Input
-            name='username'
-            type='text'
-            placeholder='User Name'
-            className='mt-8'
-            register={register}
-            errorMessage={errors.username?.message}
-          />
-
-          <Input
-            name='password'
-            type='password'
-            placeholder='Mật khẩu'
-            className='mt-1s'
-            register={register}
-            errorMessage={errors.password?.message}
-            autoComplete='on'
-          />
-
-          <Input
-            name='confirm_password'
-            type='password'
-            placeholder='Xác nhận mật khẩu'
-            className='mt-1'
-            register={register}
-            errorMessage={errors.confirm_password?.message}
-            autoComplete='on'
-          /> */}
-          <div className='flex gap-1'>
-          <Input
-            name='firstName'
-            type='text'
-            placeholder='Họ'
-            className='mt-8'
-            register={register}
-            errorMessage={errors.firstName?.message}
-            autoComplete='on'
-          />
-          <Input
-            name='lastName'
-            type='text'
-            placeholder='Tên'
-            className='mt-8 '
-            register={register}
-            errorMessage={errors.lastName?.message}
-            autoComplete='on'
-          />
-          </div>
-          <Input
-            name='username'
-            type='text'
-            placeholder='User Name'
-            className='mt-1'
-            register={register}
-            errorMessage={errors.username?.message}
-          />
+          {/* email */}
           <Input
             name='email'
             type='email'
             placeholder='Email'
-            className='mt-1'
+            className='mt-8'
             register={register}
             errorMessage={errors.email?.message}
           />
@@ -160,7 +149,7 @@ export default function Register() {
             name='password'
             type='password'
             placeholder='Mật khẩu'
-            className='mt-1s'
+            className='mt-0.5'
             register={register}
             errorMessage={errors.password?.message}
             autoComplete='on'
@@ -169,12 +158,13 @@ export default function Register() {
           <Input
             name='confirm_password'
             type='password'
-            placeholder='Xác nhận mật khẩu'
-            className='mt-1'
+            placeholder='Nhập lại mật khẩu'
+            className='mt-2'
             register={register}
             errorMessage={errors.confirm_password?.message}
             autoComplete='on'
           />
+<<<<<<< HEAD
           
           
           <div className='text-left ml-2.5'>Ngày sinh</div>
@@ -189,7 +179,69 @@ export default function Register() {
           <Check
             items={genderItems}
             register={register}
+=======
+
+          <div className='flex  border-solid justify-center'>
+            <Input
+              name='firstname'
+              type='text'
+              placeholder='Họ'
+              className='mt-2 mr-1'
+              register={register}
+              errorMessage={errors.firstname?.message}
+              autoComplete='on'
+            />
+
+            <Input
+              name='lastname'
+              type='text'
+              placeholder='Tên'
+              className='mt-2 '
+              register={register}
+              errorMessage={errors.lastname?.message}
+              autoComplete='on'
+            />
+          </div>
+
+          {/*  thằng controller nó giúp liên kết thằng DateSelect vs React HookForm */}
+          <Controller
+            // controlle này nó quản lý cái form này , kiểu như mà nó sự thay đổi thì nó sẽ cập nhật
+            control={control}
+            name='date_of_birth'
+            // render là cái show ra
+            // filed nó đối tượng thuộc tính mà thằng Controleer cung cấp
+            // chẳng hạn như: value, onChange, name, ....
+            render={({ field }) => {
+              return (
+                <DateSelect
+                  errorMessage={errors.date_of_birth?.message}
+                  onChange={field.onChange}
+                  value={field.value}
+                />
+              )
+            }}
           />
+
+          {/*  thằng controller nó giúp liên kết thằng DateSelect vs React HookForm */}
+          <Controller
+            // controlle này nó quản lý cái form này , kiểu như mà nó sự thay đổi thì nó sẽ cập nhật
+            control={control}
+            name='gender'
+            // render là cái show ra
+            // filed nó đối tượng thuộc tính mà thằng Controleer cung cấp
+            // chẳng hạn như: value, onChange, name, ....
+            render={({ field }) => {
+              return (
+                <GenderSelect
+                  errorMessage={errors.gender?.message}
+                  onChange={field.onChange}
+                  value={field.value}
+                />
+              )
+            }}
+>>>>>>> refs/remotes/origin/main
+          />
+
           <div className='mt-3'>
             <button
               type='submit'

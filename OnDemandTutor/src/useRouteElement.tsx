@@ -13,7 +13,11 @@ import DashBoard from './pages/DashBoard'
 import { AppContext } from './context/app.context'
 import { useContext } from 'react'
 import RegisterAsTutor from './pages/RegisterAsTutor'
+<<<<<<< HEAD
 import ProfileTT from './pages/ProfileTT'
+=======
+import RequestList from './pages/RequestList'
+>>>>>>> refs/remotes/origin/main
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -59,6 +63,15 @@ export default function useRouteElements() {
       element: (
         <MainLayout>
           <TutorList />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.requestList,
+      index: true,
+      element: (
+        <MainLayout>
+          <RequestList />
         </MainLayout>
       )
     },

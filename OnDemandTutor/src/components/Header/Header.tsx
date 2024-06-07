@@ -75,3 +75,26 @@ export default function Header() {
     </header>
   )
 }
+
+//  return (
+//    <div className='container'>
+//      <nav className='z-index-1 relative mx-auto mt-64 w-96 h-10 bg-gray-700 rounded-lg text-center shadow-md flex'>
+//        <Link to='/' className='inline-block w-24 text-white uppercase'>
+//          Home
+//        </Link>
+//        <Link to='/about' className='inline-block w-28 text-white uppercase'>
+//          About
+//        </Link>
+//        <Link to='/blog' className='inline-block w-24 text-white uppercase'>
+//          Blog
+//        </Link>
+//        <Link to='/portfolio' className='inline-block w-40 text-white uppercase'>
+//          Portfolio
+//        </Link>
+//        <Link to='/contact' className='inline-block w-30 text-white uppercase'>
+//          Contact
+//        </Link>
+//        <div className='animation start-home absolute h-full w-24 bg-teal-500 rounded-lg transition-all duration-500 ease-in-out'></div>
+//      </nav>
+//    </div>
+//  )
