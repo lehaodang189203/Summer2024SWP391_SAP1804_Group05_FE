@@ -18,6 +18,7 @@ type FormData = Pick<
   | 'password'
   | 'confirm_password'
   | 'date_of_birth'
+  | 'username'
   | 'firstname'
   | 'lastname'
   | 'gender'
@@ -26,6 +27,7 @@ type FormData = Pick<
 const registerSchema = schema.pick([
   'email',
   'password',
+  'username',
   'confirm_password',
   'date_of_birth',
   'firstname',
@@ -57,6 +59,8 @@ export default function Register() {
   const onSubmit = handleSubmit((data) => {
     console.log(data)
     const body: ResReqBody = omit(data, ['confirm_password'])
+    console.log(body)
+
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log(data)
@@ -87,10 +91,20 @@ export default function Register() {
 
           {/* email */}
           <Input
+            name='username'
+            type='text'
+            placeholder='Tên người dùng'
+            className='mt-8'
+            register={register}
+            errorMessage={errors.username?.message}
+          />
+
+          {/* email */}
+          <Input
             name='email'
             type='email'
             placeholder='Email'
-            className='mt-8'
+            className='mt-2'
             register={register}
             errorMessage={errors.email?.message}
           />

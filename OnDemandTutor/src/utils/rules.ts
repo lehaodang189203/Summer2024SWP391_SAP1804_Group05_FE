@@ -28,6 +28,10 @@ export const schema = yup.object({
     .min(6, 'Độ dài từ 6-160 ký tự')
     .max(160, 'Độ dài từ 6-160 ký tự')
     .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
+  username: yup
+    .string()
+    .required('Tên người dùng là bắt buộc')
+    .max(160, 'Độ dài tối đa là 160 ký tự'),
   firstname: yup
     .string()
     .min(2, 'tên phải có ít nhất 2 ký tự')
@@ -52,7 +56,7 @@ export const schema = yup.object({
       ['male', 'female', 'other'],
       'Gender must be either male, female, or other'
     )
-    .required('Gender is required')
+    .required('Giới tính là bắt buộc')
 })
 
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
