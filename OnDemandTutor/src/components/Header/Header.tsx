@@ -4,7 +4,7 @@ import Popover from '../Popover/Popover'
 import NavHeader from '../NavHeader'
 export default function Header() {
   return (
-    <header className='top-0 h-[8rem] bg-white shadow-md z-50 '>
+    <header className=' h-[8rem] bg-gray-100 shadow-md z-50 '>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='grid grid-cols-12 gap-4 items-end '>
           {/* Logo */}

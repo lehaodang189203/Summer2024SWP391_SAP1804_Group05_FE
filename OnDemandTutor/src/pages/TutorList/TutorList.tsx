@@ -26,11 +26,11 @@ export default function TutorList() {
   const items = Array.from({ length: 10 }, (_, index) => index)
 
   return (
-    <>
+    <div className='bg-gray-100'>
       {items.map((index) => (
         <div
           key={index}
-          className='border-black border-2 w-[1230px] rounded-lg  h-auto mx-auto  my-5 px-5 hover:border-black hover:border-[4px]'
+          className='w-[1230px] rounded-3xl border-3 bg-white  h-auto mx-auto  my-5 px-5 hover:shadow-2xl'
         >
           <div className='col-span-12 flex'>
             {/*  img */}
@@ -100,7 +100,7 @@ export default function TutorList() {
             <div className='col-span-4 w-full  items-end flex'>
               {/* Button */}
               <div className='  mb-4 w-full px-auto mx-auto'>
-                <div className='border-black border-[3px] rounded-lg w-full h-10   bg-pink-400 hover:opacity-80 mx-auto'>
+                <div className='  rounded-lg w-full h-10   bg-pink-400 hover:opacity-80 mx-auto'>
                   <Link
                     to='/'
                     className=' justify-center items-center flex py-2'
@@ -124,6 +124,6 @@ export default function TutorList() {
       ))}
       {/* Phân trang */}
       <Pagination pageSize={10} />
-    </>
+    </div>
   )
 }

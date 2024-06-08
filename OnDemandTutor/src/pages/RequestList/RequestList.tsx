@@ -22,7 +22,7 @@ export default function RequestList() {
     <div className='container'>
       {items.map((index) => (
         <div className='grid grid-cols-12 '>
-          <div className='col-span-6 border-black border-2 w-[600px] h-auto rounded-lg  mx-auto  my-5 px-5 hover:border-black hover:border-[4px]'>
+          <div className='col-span-6 border-[3px] w-[600px] h-auto rounded-3xl  mx-auto  my-5 px-5 hover:shadow-2xl'>
             <div>
               {/*  status */}
               <div className='my-2'>
@@ -113,7 +113,7 @@ export default function RequestList() {
               </div>
             </div>
           </div>
-          <div className='col-span-6 border-black border-2 w-[600px] h-auto rounded-lg  mx-auto  my-5 px-5 hover:border-black hover:border-[4px]'>
+          <div className='col-span-6 border-[3px] w-[600px] h-auto rounded-3xl  mx-auto  my-5 px-5 hover:shadow-2xl'>
             <div>
               {/*  status */}
               <div className='my-2'>
