@@ -15,6 +15,7 @@ import { useContext } from 'react'
 import RegisterAsTutor from './pages/RegisterAsTutor'
 import RequestList from './pages/RequestList'
 import ProfileTT from './pages/ProfileTT'
+import CheckOut from './pages/CheckOut'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -118,6 +119,14 @@ export default function useRouteElements() {
       element: (
         <MainLayout>
           <ProfileTT/>
+        </MainLayout>
+      )
+    },
+    {
+      path: path.checkOut,
+      element: (
+        <MainLayout>
+          <CheckOut/>
         </MainLayout>
       )
     }

@@ -9,7 +9,8 @@ const path = {
   dashBoard: '/dashBoard',
   profileTT: '/profileTT',
   requestList: '/requestList',
-  detailRequest: '/detailRequest'
+  detailRequest: '/detailRequest',
+  checkOut : '/checkout'
 } as const
 
 export default path
