@@ -5,11 +5,12 @@ const path = {
   register: '/register',
   registerAsTutor: '/registerAT',
   logout: '/logout',
-  tutorList: '/tutorList',
+  tutors: '/tutors',
   dashBoard: '/dashBoard',
   profileTT: '/profileTT',
   requestList: '/requestList',
-  detailRequest: '/detailRequest'
+  detailRequest: '/detailRequest',
+  calender: '/calender'
 } as const
 
 export default path

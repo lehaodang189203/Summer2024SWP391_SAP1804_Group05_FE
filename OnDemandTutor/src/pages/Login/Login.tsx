@@ -41,7 +41,7 @@ export default function Login() {
       onSuccess: (data) => {
         console.log(data)
 
-        // setIsAuthenticated(true)
+        setIsAuthenticated(true)
         // navigate đươc dùng để điều hướng (in case này là tới thằng /)
 
         // dấu / đại diện trang hiện tại
@@ -54,13 +54,7 @@ export default function Login() {
   })
 
   return (
-    <div
-      style={{
-        background: '#F7F3F3',
-        boxShadow: 'rgba(0, 0, 0, 0.1) -18px 20px 4px 7px'
-      }}
-      className='py-10 w-[25rem] rounded-2xl shadow-neutral-950 mx-auto my-[2rem]'
-    >
+    <div className='py-10 w-[25rem] rounded-2xl shadow-neutral-950 mx-auto my-[2rem] bg-transparent shadow-2xl'>
       <div className='container justify-center flex'>
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Nhập </div>

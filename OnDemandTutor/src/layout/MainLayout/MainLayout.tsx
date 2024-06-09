@@ -1,4 +1,4 @@
-import React, { Children } from 'react'
+import React, { useState } from 'react'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 
@@ -8,7 +8,7 @@ interface Props {
 
 export default function MainLayout({ children }: Props) {
   return (
-    <div>
+    <div className='w-full mx-auto my-auto flex flex-col items-center justify-center min-h-screen rounded-3xl'>
       <Header />
       {children}
       <Footer />
