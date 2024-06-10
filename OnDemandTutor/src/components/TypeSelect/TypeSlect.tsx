@@ -1,29 +1,34 @@
 
-import { useState } from 'react'
-
+import { useState, useEffect } from 'react'
 
 interface Props {
+  onChange?: (value: string) => void
   value: string
   errorMessage?: string
 }
-export default function TypeSelect({ value, errorMessage }: Props) {
+
+export default function TypeSelect({ value,onChange, errorMessage }: Props) {
   const [type, setType] = useState('')
 
-  const submit = () =>{
+  
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target
     setType(value)
+    onChange && onChange(value)
   }
 
   return (
-    <div className='flex flex-wrap flex-col  '>
+    <div className='flex flex-wrap flex-col content-center'>
       <select
-        onChange={submit}
-        className='h-10 w-full rounded-md border border-black/10 px-3 cursor-pointer hover:border-black'
+        onChange={handleChange}
+        className='h-10 rounded-md border w-[300px] border-black/10 px-3 cursor-pointer hover:border-black'
         value={type}
       >
         <option value=''>Chọn xếp loại bằng</option>
-        <option value='male'>Giỏi</option>
-        <option value='female'>Khá</option>
-        <option value='other'>Trung Bình</option>
+        <option value='Giỏi'>Giỏi</option>
+        <option value='Khá'>Khá</option>
+        <option value='Trung Bình'>Trung Bình</option>
       </select>
       <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm'>
         {errorMessage}
