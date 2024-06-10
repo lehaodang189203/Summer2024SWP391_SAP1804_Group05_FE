@@ -40,7 +40,7 @@ export default function Login() {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
         console.log(data)
-
+        
         // setIsAuthenticated(true)
         // navigate đươc dùng để điều hướng (in case này là tới thằng /)
 
