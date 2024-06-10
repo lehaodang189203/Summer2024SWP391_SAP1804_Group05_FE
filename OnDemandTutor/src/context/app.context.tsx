@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react'
+import { getTokenFromLS } from '../utils/auth'
 
 interface AppContextInterface {
   isAuthenticated: boolean
@@ -6,7 +7,7 @@ interface AppContextInterface {
 }
 
 const initialAppContext: AppContextInterface = {
-  isAuthenticated: Boolean(true),
+  isAuthenticated: Boolean(getTokenFromLS()),
   setIsAuthenticated: () => null
 }
 

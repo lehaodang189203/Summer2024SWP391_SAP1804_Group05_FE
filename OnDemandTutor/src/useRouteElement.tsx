@@ -15,6 +15,7 @@ import { useContext } from 'react'
 import RegisterAsTutor from './pages/RegisterAsTutor'
 import RequestList from './pages/RequestList'
 import ProfileTT from './pages/ProfileTT'
+import CheckOut from './pages/CheckOut'
 import Calendar from './pages/Calendar'
 
 export default function useRouteElements() {
@@ -127,6 +128,14 @@ export default function useRouteElements() {
       element: (
         <MainLayout>
           <Calendar />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.checkOut,
+      element: (
+        <MainLayout>
+          <CheckOut />
         </MainLayout>
       )
     }

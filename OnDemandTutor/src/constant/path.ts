@@ -1,6 +1,6 @@
 const path = {
   home: '/',
-  login: 'LogIn',
+  login: '/login',
   profile: '/profile',
   register: '/register',
   registerAsTutor: '/registerAT',
@@ -10,7 +10,8 @@ const path = {
   profileTT: '/profileTT',
   requestList: '/requestList',
   detailRequest: '/detailRequest',
-  calender: '/calender'
+  calender: '/calender',
+  checkOut: '/checkout'
 } as const
 
 export default path

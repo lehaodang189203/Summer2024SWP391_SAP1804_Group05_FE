@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <header className='  h-[8rem] bg-transparent w-full  border-2 shadow-lg  rounded-2xl mt-2 mb-5 hover:shadow-black hover:shadow-lg'>
       <div className='max-w-7xl mx-auto px-4'>
-        <div className='grid grid-cols-12 gap-4 items-end '>
+        <div className='grid grid-cols-12 gap-1 items-end '>
           {/* Logo */}
           <nav className='h-50 flex items-start col-span-3 pr-20'>
             <Link to='/'>
@@ -18,7 +18,7 @@ export default function Header() {
             </Link>
           </nav>
           {/* Mid */}
-          <div className='h-36 col-span-6 text-2xl'>
+          <div className='h-36 col-span-4 text-2xl'>
             <div className='pr-[50px] pt-[40px] justify-around items-center flex'>
               <Link
                 to='/'
@@ -67,7 +67,7 @@ export default function Header() {
           </div>
           {/* Login */}
 
-          <nav className='h-36 pt-[48px] col-span-3'>
+          <nav className='h-36 pt-[48px] col-span-5'>
             <NavHeader />
           </nav>
         </div>

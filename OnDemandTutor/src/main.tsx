@@ -17,7 +17,10 @@ const queryClient = new QueryClient({
       // mặc định sẽ là true, nhưng mình câú hình là false
       // tại sao để tránh refetch làm mới lại dữ liệu hoặc tải dữ liệu không cần thiết
 
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      // cái retry được dùng để tắt mấy cái toast khi token bị hết hanj
+      // nó gọi báo tới 3 lần lận nên là chỉ 1 lần thoi
+      retry: 0
     }
   }
 })
