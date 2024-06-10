@@ -8,7 +8,7 @@ export interface ResATReqBody {
   field: string
   experience: Number
   specializedSkills: string
-  imageDegree: any
+  imageDegree: object
 }
 
 export interface ResReqBody {

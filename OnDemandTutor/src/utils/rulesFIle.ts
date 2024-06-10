@@ -14,15 +14,17 @@ import * as yup from "yup";
 // }
 
 
-export const schemaFile = yup.object({
-  qualificationName: yup.string().required('Không được bỏ trống'),
+export const schemaResAT = yup.object({
+  qualificationName: yup
+    .string()
+    .required('Không được bỏ trống'),
   type: yup
     .string()
     .oneOf(
-      ['Giỏi', 'Khá', 'Trung Bình'],
-      'Gender must be either male, female, or other'
+      ['Giỏi', 'Khá','Trung Bình'],
+      'phải là Giỏi, Khá hoặc Trung bình'
     )
-    .required('Giới tính là bắt buộc'),
+    .required('Xếp loại bằng là bắt buộc'),
   field: yup
     .string()
     .required('Không được bỏ trống'),
@@ -33,7 +35,8 @@ export const schemaFile = yup.object({
   specializedSkills: yup
     .string()
     .required('Không được bỏ trống'),
-  imageDegree: yup.mixed()
+   imageDegree: yup
+    .mixed()
     .required('Up file để có thể đăng kí làm gia sư')
     .test('fileSize', 'Phải up File jpeg hoặc png hoặc pdf và bé hơn 10mb', (value) => {
       if (value instanceof FileList) {
@@ -46,7 +49,7 @@ export const schemaFile = yup.object({
         return value[0] && ['image/jpeg', 'image/png', 'application/pdf'].includes(value[0].type);
       }
       return false; // sai nếu như value không phải là FileList
-    }),
+    })
     
     
     
@@ -54,4 +57,4 @@ export const schemaFile = yup.object({
 })
 
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
-export type SchemaFile = yup.InferType<typeof schemaFile>
+export type SchemaResAT = yup.InferType<typeof schemaResAT>
