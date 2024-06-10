@@ -118,9 +118,9 @@ export default function NavHeader() {
               src='https://down-vn.img.susercontent.com/file/vn-11134226-7r98o-luqbzvje8weqe3_tn'
             />
           </div>
-          <div className='text-black hover:text-pink-400'>
+          <Link to={'/profile'}><div className='text-black hover:text-pink-400'>
             thanhngo.3544@gmail.com
-          </div>
+          </div></Link>
         </Popover>
       )
     }
