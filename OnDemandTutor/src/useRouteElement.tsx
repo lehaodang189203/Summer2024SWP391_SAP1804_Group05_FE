@@ -16,6 +16,7 @@ import RegisterAsTutor from './pages/RegisterAsTutor'
 import RequestList from './pages/RequestList'
 import ProfileTT from './pages/ProfileTT'
 import CheckOut from './pages/CheckOut'
+import Calendar from './pages/Calendar'
 
 export default function useRouteElements() {
   function ProtectedRoute() {
@@ -56,7 +57,7 @@ export default function useRouteElements() {
     //   ]
     // },
     {
-      path: path.tutorList,
+      path: path.tutors,
       index: true,
       element: (
         <MainLayout>
@@ -118,7 +119,15 @@ export default function useRouteElements() {
       path: path.profileTT,
       element: (
         <MainLayout>
-          <ProfileTT/>
+          <ProfileTT />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.calender,
+      element: (
+        <MainLayout>
+          <Calendar />
         </MainLayout>
       )
     },
@@ -126,7 +135,7 @@ export default function useRouteElements() {
       path: path.checkOut,
       element: (
         <MainLayout>
-          <CheckOut/>
+          <CheckOut />
         </MainLayout>
       )
     }

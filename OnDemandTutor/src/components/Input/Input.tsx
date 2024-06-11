@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useState } from 'react'
+import React, { InputHTMLAttributes, ReactHTMLElement, useState } from 'react'
 import { RegisterOptions, UseFormRegister } from 'react-hook-form'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -33,17 +33,21 @@ export default function Input({
 }: Props) {
   // thằng này dùng để check coi là user v
   const registerResult = register && name ? register(name, rules) : {}
-  const [fileName, setFileName] = React.useState<string>('Chưa có file nào được chọn');//thành Nguyễn
-  const [fileLabel,setLabel] = useState<String>('Chọn File');
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLabel('Đã Chọn')
-    const file = event.target.files;
-    if (file && file.length > 0) {
-      setFileName(file[0].name);
-    } else {
-      setFileName('Chưa có file nào được chọn');
-    }
-  };//thành Nguyễn
+    
+    const [fileName, setFileName] = useState('Chưa có file nào được chọn');
+    const [fileLabel, setFileLabel] = useState('Chọn File');
+    const handleFileChange = (event : React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files;
+      console.log(file)
+      console.log('input')
+      if (file) {
+        setFileName('ccc');
+        setFileLabel('Đã Chọn');
+      } else {
+        setFileName('Chưa có file nào được chọn');
+        setFileLabel('Chọn File');
+      }
+    };//thành Nguyễn
   return (
     <div className={className}>
       {type === 'file' ? (
@@ -66,7 +70,7 @@ export default function Input({
             <input
               
               type="file"
-              className="hidden"
+              className="hidden file:"
               onChange={handleFileChange}
               {...registerResult}
               {...rest}

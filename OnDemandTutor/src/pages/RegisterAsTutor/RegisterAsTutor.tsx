@@ -131,6 +131,7 @@ export default function RegisterAsTuTor() {
             className='mt-5'
             errorMessage={errors.experience?.message}
           />
+          <div className='bg-slate-300 m-5'>cc</div>
           <Input
             name='imageDegree'
             placeholder='=)))'

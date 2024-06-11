@@ -69,7 +69,7 @@ export default function Register() {
         // navigate đươc dùng để điều hướng (in case này là tới thằng /)
 
         // dấu / đại diện trang hiện tại
-        navigate('/')
+        navigate('/login')
       },
       onError: (error) => {
         console.log(error)

@@ -1,6 +1,9 @@
 import axios, { AxiosError } from 'axios'
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 
+// do là token hết hạn chúng ta không nên chơi reload trang chún ta dùng cách này
+export const LocalStrorageEventTarget = new EventTarget()
+
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error as any)
 }
@@ -9,8 +12,6 @@ export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
 export function isAxiosUnprocessableEntityError<FromError>(
   error: unknown
 ): error is AxiosError<FromError> {
-  console.log('error', error)
-
   return (
     isAxiosError(error) &&
     error.response?.status === HttpStatusCode.UnprocessableEntity

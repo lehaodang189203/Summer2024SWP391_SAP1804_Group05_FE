@@ -4,7 +4,7 @@ import Popover from '../Popover/Popover'
 
 export default function RegisterHeader() {
   return (
-    <header className='  h-[8rem] bg-white shadow-md z-50'>
+    <header className='  h-[8rem] bg-transparent shadow-lg rounded-2xl '>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='grid grid-cols-12 gap-4 items-end'>
           {/* Logo */}

@@ -4,7 +4,7 @@ import Popover from '../Popover/Popover'
 import NavHeader from '../NavHeader'
 export default function Header() {
   return (
-    <header className=' h-[8rem] bg-gray-100 shadow-md z-50 '>
+    <header className='  h-[8rem] bg-transparent w-full  border-2 shadow-lg  rounded-2xl mt-2 mb-5 hover:shadow-black hover:shadow-lg'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='grid grid-cols-12 gap-1 items-end '>
           {/* Logo */}
@@ -29,19 +29,19 @@ export default function Header() {
               </Link>
 
               <Popover
-                className='flex items-center py-1  cursor-pointer shadow-red-700'
+                className='flex items-center py-1  cursor-pointer  '
                 renderPopover={
-                  <div className='shadow-red-700'>
-                    <div className='  w-[20rem] flex mt-0.5   items-center justify-between text-center  text-[10px]  px-auto rounded-3xl'>
+                  <div className=' rounded-3xl shadow-black shadow-xl'>
+                    <div className='  w-[20rem] flex mt-0.5   items-center justify-between text-center  text-[10px]  px-auto rounded-sm'>
                       <Link
                         to='/registerAT'
-                        className='py-2 w-[10rem] h-full  bg-pink-400 border-pink-400 border-2 text-black  rounded-l-3xl   hover:text-white'
+                        className='py-2 w-[10rem] h-full  bg-pink-400  text-black  rounded-l-3xl   hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
                       >
                         Đăng ký trở thành giảng viên
                       </Link>
                       <Link
-                        to='/tutorList'
-                        className='py-2 w-[9.9rem]  h-[2rem]  text-white  bg-black border-black border-2  rounded-r-3xl    hover:bg-pink-400  hover:h-full hover:text-center'
+                        to='/tutors'
+                        className='py-2 w-[10rem] h-full  bg-pink-400  text-black  rounded-r-3xl   hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
                       >
                         danh sách lớp
                       </Link>
