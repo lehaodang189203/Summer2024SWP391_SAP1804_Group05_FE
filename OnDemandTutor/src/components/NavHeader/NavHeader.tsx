@@ -1,14 +1,12 @@
 import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
-import { AppContext } from '../../context/app.context'
+import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 import me from '../../assets/img/me.jpg'
-import { Link, useNavigate } from 'react-router-dom'
-import Popover from '../Popover/Popover'
 import path from '../../constant/path'
-import { toast } from 'react-toastify'
-import { getRefreshTokenFromLS } from '../../utils/auth'
+import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
+import Popover from '../Popover/Popover'
 
 export default function NavHeader() {
   const { isAuthenticated, setIsAuthenticated, refreshToken } =
@@ -40,7 +38,7 @@ export default function NavHeader() {
       <div className='flex justify-end'>
         <Popover
           as='span'
-          className='flex items-center py-1 hover:text-white/70 cursor-pointer'
+          className='flex items-center py-1 hover:text-pink-400 cursor-pointer'
           renderPopover={
             <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
               <div className='flex flex-col py-2 pr-28 pl-3'>
@@ -88,11 +86,11 @@ export default function NavHeader() {
 
         {isAuthenticated && (
           <Popover
-            className='flex items-center py-1 hover:text-white/70 cursor-pointer ml-6'
+            className='flex items-center py-1 hover:text-pink-400 cursor-pointer ml-6'
             renderPopover={
               <div className='shadow-md rounded-sm border border-gray-200'>
                 <Link
-                  to={path.profile}
+                  to={path.user}
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                 >
                   Tài khoản của tôi

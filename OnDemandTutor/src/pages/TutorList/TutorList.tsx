@@ -5,7 +5,7 @@ import {
   faSchool,
   faUserGraduate
 } from '@fortawesome/free-solid-svg-icons'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Pagination from '../../components/Pagination'
 import Popup from '../../components/Popup/Popup'
@@ -22,7 +22,6 @@ export default function TutorList() {
   const [isPopupVisible, setIsPopupVisible] = useState(false)
   const [color, setColor] = useState(false)
   const [currentTutor, setCurrentTutor] = useState<Tutor | null>(null)
-  const [hidden, setHidden] = useState(false)
 
   const longText =
     'Tôi tốt nghiệp chuyên ngành sư phạm và có nhiều năm kinh nghiệm học tập, giảng dạy tại nhiều trường trên địa bàn thành phố. Với kinh nghiệm lâu năm tôi sẽ giúp các bạn học tiếng Việt một cách nhanh nhất và hiệu quả nhất bằng phương pháp giảng dạy phù hợp với khả năng của mỗi người. Khi tham gia khóa học của tôi, bạn không chỉ được học về ngôn ngữ mà còn được tìm hiểu về văn hóa, lịch sử, ẩm thực và những điều thú vị khác ở Việt Nam.'
@@ -37,18 +36,16 @@ export default function TutorList() {
 
   const handleClosePopup = () => {
     setIsPopupVisible(false)
+    setCurrentTutor(null)
   }
 
   const handleChangeColor = () => {
-    setHidden(false)
     setColor(!color)
   }
 
-  // Hàm xử lý khi click vào một item trong danh sách tutor
   const handleItemClick = (tutor: Tutor) => {
-    setHidden(true)
-    setCurrentTutor(tutor) // Lưu thông tin về tutor hiện tại
-    setIsPopupVisible(true) // Hiển thị Popup
+    setCurrentTutor(tutor)
+    setIsPopupVisible(true)
   }
 
   return (
@@ -121,6 +118,7 @@ export default function TutorList() {
                     xmlns='http://www.w3.org/2000/svg'
                     fill={color ? 'black' : '#FF1493'}
                     className=' size-6  '
+                    viewBox='0 0 24 24'
                   >
                     <path d='M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z' />
                   </svg>
@@ -154,9 +152,56 @@ export default function TutorList() {
       <Pagination pageSize={10} />
 
       {isPopupVisible && currentTutor && (
-        <div className={hidden ? 'none' : 'hidden'}>
-          <Popup handleHidden={handleClosePopup} tutor={currentTutor} />
-        </div>
+        <Popup
+          handleHidden={handleClosePopup}
+          renderPopover={
+            <div className='overflow-y-auto p-4'>
+              {/* img */}
+              <div className='flex justify-center py-4'>
+                <img src={me} alt='Tutor' className='w-32 h-32 rounded-full' />
+              </div>
+              {/* description */}
+              <div className='mx-4 my-5'>
+                <div className='py-2'>
+                  <div className='justify-start flex pl-2'>
+                    <div>
+                      <h1 className='text-2xl font-bold text-start'>
+                        {currentTutor.name}
+                      </h1>
+                      {/* gender */}
+                      <div className='text-lg flex pl-1 pt-2'>
+                        <FontAwesomeIcon
+                          icon={faPersonHalfDress}
+                          className='pt-2 h-6'
+                        />
+                        <span className='pl-2 pt-1'>{currentTutor.gender}</span>
+                      </div>
+                      {/* study */}
+                      <div className='text-lg flex pl-1 pt-2'>
+                        <FontAwesomeIcon icon={faSchool} className='pt-2' />
+                        <span className='pl-2 pt-1'>
+                          {currentTutor.lessons}
+                        </span>
+                      </div>
+                      {/* study */}
+                      <div className='text-lg flex pl-1 pt-2'>
+                        <FontAwesomeIcon
+                          icon={faUserGraduate}
+                          className='pt-2'
+                        />
+                        <span className='pl-2 pt-1'>{currentTutor.major}</span>
+                      </div>
+                      {/* Description */}
+                      <div className='pt-2 text-left'>
+                        {currentTutor.description}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        />
       )}
     </div>
   )
