@@ -1,5 +1,11 @@
 import axios, { AxiosError, AxiosInstance, HttpStatusCode } from 'axios'
-import { clearLS, getTokenFromLS, setAccessTokenToLS } from './auth'
+import {
+  clearLS,
+  getAccessTokenFromLS,
+  getRefreshTokenFromLS,
+  setAccessTokenToLS,
+  setRefreshTokenToLS
+} from './auth'
 import path from '../constant/path'
 import { toast } from 'react-toastify'
 import { AuthResponse } from '../types/auth.type'
@@ -7,12 +13,13 @@ import { AuthResponse } from '../types/auth.type'
 class Http {
   instance: AxiosInstance
   private accessToken: string
+  private refreshToken: string
 
   constructor() {
-    this.accessToken = getTokenFromLS()
-
+    this.accessToken = getAccessTokenFromLS()
+    this.refreshToken = getRefreshTokenFromLS()
     this.instance = axios.create({
-      baseURL: 'http://localhost:4000/users',
+      baseURL: 'https://localhost:7133/api/Account/',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'
@@ -22,7 +29,7 @@ class Http {
     this.instance.interceptors.request.use(
       (config) => {
         if (this.accessToken && config.headers) {
-          config.headers.authorization = `Bearer ${this.accessToken}`
+          config.headers.Authorization = `Bearer ${this.accessToken}`
         }
         return config
       },
@@ -33,13 +40,17 @@ class Http {
 
     this.instance.interceptors.response.use(
       (response) => {
+        console.log(response)
+
         const { url } = response.config
 
         if (url === path.login || url === path.register) {
           const data = response.data as AuthResponse
 
-          this.accessToken = data.data.access_token
+          this.accessToken = data.data.accessToken
+          this.refreshToken = data.data.refreshToken
           setAccessTokenToLS(this.accessToken)
+          setRefreshTokenToLS(this.refreshToken)
         } else if (url === path.logout) {
           this.accessToken = ''
           clearLS()

@@ -57,8 +57,17 @@ export default function Register() {
   })
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
-    const body: ResReqBody = omit(data, ['confirm_password'])
+    const formattedDateOfBirth = `${data.date_of_birth.getFullYear()}-${String(
+      data.date_of_birth.getMonth() + 1
+    ).padStart(2, '0')}-${String(data.date_of_birth.getDate()).padStart(
+      2,
+      '0'
+    )}`
+
+    const body: ResReqBody = {
+      ...omit(data, ['confirm_password']),
+      date_of_birth: formattedDateOfBirth
+    }
     console.log(body)
 
     registerAccountMutation.mutate(body, {
@@ -88,7 +97,6 @@ export default function Register() {
       <div className='container mx-auto justify-center flex'>
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Ký</div>
-
           {/* email */}
           <Input
             name='username'
@@ -98,7 +106,6 @@ export default function Register() {
             register={register}
             errorMessage={errors.username?.message}
           />
-
           {/* email */}
           <Input
             name='email'
@@ -108,7 +115,6 @@ export default function Register() {
             register={register}
             errorMessage={errors.email?.message}
           />
-
           <Input
             name='password'
             type='password'
@@ -118,7 +124,6 @@ export default function Register() {
             errorMessage={errors.password?.message}
             autoComplete='on'
           />
-
           <Input
             name='confirm_password'
             type='password'
@@ -128,7 +133,6 @@ export default function Register() {
             errorMessage={errors.confirm_password?.message}
             autoComplete='on'
           />
-
           <div className='flex  border-solid justify-center'>
             <Input
               name='firstname'
@@ -151,25 +155,18 @@ export default function Register() {
             />
           </div>
 
-          {/*  thằng controller nó giúp liên kết thằng DateSelect vs React HookForm */}
+          {/* // Usage in a form component */}
           <Controller
-            // controlle này nó quản lý cái form này , kiểu như mà nó sự thay đổi thì nó sẽ cập nhật
             control={control}
             name='date_of_birth'
-            // render là cái show ra
-            // filed nó đối tượng thuộc tính mà thằng Controleer cung cấp
-            // chẳng hạn như: value, onChange, name, ....
-            render={({ field }) => {
-              return (
-                <DateSelect
-                  errorMessage={errors.date_of_birth?.message}
-                  onChange={field.onChange}
-                  value={field.value}
-                />
-              )
-            }}
+            render={({ field }) => (
+              <DateSelect
+                errorMessage={errors.date_of_birth?.message}
+                onChange={field.onChange}
+                value={field.value}
+              />
+            )}
           />
-
           {/*  thằng controller nó giúp liên kết thằng DateSelect vs React HookForm */}
           <Controller
             // controlle này nó quản lý cái form này , kiểu như mà nó sự thay đổi thì nó sẽ cập nhật
@@ -188,7 +185,6 @@ export default function Register() {
               )
             }}
           />
-
           <div className='mt-3'>
             <button
               type='submit'

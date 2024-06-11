@@ -14,13 +14,13 @@ import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import { ErrorResponse } from '../../types/utils.type'
 import { toast } from 'react-toastify'
 import path from '../../constant/path'
-import { setAccessTokenToLS } from '../../utils/auth'
+import { getRefreshTokenFromLS, setAccessTokenToLS } from '../../utils/auth'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 
 export default function Login() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setRefreshToken } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
@@ -41,14 +41,13 @@ export default function Login() {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
         console.log(data)
-
+        const refreshToken = getRefreshTokenFromLS()
+        setRefreshToken(refreshToken)
         setIsAuthenticated(true)
-        toast.success(data.data.message)
+
         navigate(path.home)
       },
       onError: (error) => {
-        console.log(error.message)
-
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
           const formError = error.response?.data.data
           if (formError) {

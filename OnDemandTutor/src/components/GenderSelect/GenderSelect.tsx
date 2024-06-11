@@ -32,10 +32,8 @@ export default function GenderSelect({ value, onChange, errorMessage }: Props) {
         className='h-10 w-full rounded-md border border-black/10 px-3 cursor-pointer hover:border-black'
         value={gender}
       >
-        <option value=''>Chọn giới tính</option>
         <option value='male'>Nam</option>
         <option value='female'>Nữ</option>
-        <option value='other'>Khác</option>
       </select>
       <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm'>
         {errorMessage}

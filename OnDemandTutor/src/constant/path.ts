@@ -1,14 +1,14 @@
 const path = {
   home: '/',
-  login: '/login',
+  login: '/LogIn',
   profile: '/profile',
   register: '/register',
   registerAsTutor: '/registerAT',
-  logout: '/logout',
+  logout: '/Logout',
   tutors: '/tutors',
   dashBoard: '/dashBoard',
   profileTT: '/profileTT',
-  requestList: '/requestList',
+  requestList: '/requests',
   detailRequest: '/detailRequest',
   calender: '/calender',
   checkOut: '/checkout'

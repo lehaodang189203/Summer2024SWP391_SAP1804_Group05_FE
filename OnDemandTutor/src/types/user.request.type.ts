@@ -4,7 +4,7 @@ export interface LoginReqBody {
 }
 export interface ResATReqBody {
   qualificationName: string
-  type:string
+  type: string
   field: string
   experience: Number
   specializedSkills: string
@@ -18,6 +18,10 @@ export interface ResReqBody {
 
   firstname: string
   lastname: string
-  date_of_birth: Date // Sử dụng Date để biểu diễn ngày tháng
+  date_of_birth: string // Sử dụng Date để biểu diễn ngày tháng
   gender: string
+}
+
+export interface LogoutReqBody {
+  refreshToken: string
 }

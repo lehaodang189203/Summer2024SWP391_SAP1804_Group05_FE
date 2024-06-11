@@ -7,37 +7,36 @@ import { Link, useNavigate } from 'react-router-dom'
 import Popover from '../Popover/Popover'
 import path from '../../constant/path'
 import { toast } from 'react-toastify'
+import { getRefreshTokenFromLS } from '../../utils/auth'
+import { LogoutReqBody } from '../../types/user.request.type'
 
 export default function NavHeader() {
-  const {
-    // thằng này dùng để check nếu người người dùng chưa đăng nhập
-    //  thì hiên đăng nhâp
-    isAuthenticated,
-    setIsAuthenticated
-  } = useContext(AppContext)
+  const { isAuthenticated, setIsAuthenticated, refreshToken } =
+    useContext(AppContext)
 
   const navigate = useNavigate()
 
-  //  đây là những thuộc tính có sẵn ở trong useForm
-  const logoutMutation = useMutation({
-    mutationFn: authApi.logoutAccount,
-    onSuccess: () => {
-      console.log('aa')
+  const refresh = refreshToken
 
-      setIsAuthenticated(false)
-      navigate(path.login)
-    }
+  const logoutMutation = useMutation({
+    mutationFn: (body: LogoutReqBody) => authApi.logoutAccount(body)
   })
 
   const handleLogout = () => {
-    console.log('aa')
+    logoutMutation.mutate(
+      { refreshToken: refresh },
+      {
+        onSuccess: (refreshToken) => {
+          navigate(path.login)
 
-    logoutMutation.mutate()
+          setIsAuthenticated(false)
+        }
+      }
+    )
   }
 
   return (
     <div className='container'>
-      {/*  qua trái */}
       <div className='flex justify-end'>
         <Popover
           as='span'
@@ -55,7 +54,6 @@ export default function NavHeader() {
             </div>
           }
         >
-          {/*  trái đất */}
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -71,9 +69,7 @@ export default function NavHeader() {
             />
           </svg>
 
-          {/*  mặc định mới vào là tiếng việt */}
           <div className='mx-1'>Tiếng Việt</div>
-          {/*  mũi tên */}
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -117,7 +113,6 @@ export default function NavHeader() {
             }
           >
             <div className='w-5 h-5 mr-2 flex-shink-0'>
-              {/*  avataer */}
               <img
                 src={me}
                 alt='avatar'
@@ -127,8 +122,6 @@ export default function NavHeader() {
             <div>thanhngo.13@gmail.com</div>
           </Popover>
         )}
-
-        {/*  cái này dùng để show tiếng việt khi hover vào */}
 
         {!isAuthenticated && (
           <div className='flex items-center'>
