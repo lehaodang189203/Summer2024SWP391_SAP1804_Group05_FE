@@ -5,10 +5,10 @@ export interface LoginReqBody {
 export interface ResATReqBody {
   qualificationName: string
   type: string
-  field: string
-  experience: Number
-  specializedSkills: string
-  imageDegree: object
+  // field: string
+  // experience: Number
+  // specializedSkills: string
+  // imageDegree: object
 }
 
 export interface ResReqBody {

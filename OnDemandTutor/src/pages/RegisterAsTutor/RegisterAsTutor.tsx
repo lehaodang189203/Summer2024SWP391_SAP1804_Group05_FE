@@ -12,22 +12,17 @@ import TypeSelect from '../../components/TypeSelect'
 import ImageUpload from '../../components/ImageUpload'
 import { SchemaResAT, schemaResAT } from '../../utils/rulesFIle'
 import { authApi } from '../../api/auth.api'
+import InputFile from '../../components/InputFile/InputFile'
 type FormData = Pick<
   SchemaResAT,
   | 'qualificationName'
   | 'type'
-  | 'field'
-  | 'experience'
-  | 'specializedSkills'
-  | 'imageDegree' 
+  | 'imageDegree'
 >
 
 const registerATSchema = schemaResAT.pick([
 'qualificationName',
 'type',
-'field',
-'experience',
-'specializedSkills',
 'imageDegree'
 ])
 
@@ -53,12 +48,13 @@ export default function RegisterAsTuTor() {
   
   const onSubmit = handleSubmit((data) => {
       console.log(data)
+      console.log('conac')
       const body: ResATReqBody = data
       
 
       registerAccountMutation.mutate(body, {
         onSuccess: (data) => {
-          
+          //console.log(data)// data này không phải là object mà mình gửi đi 
 
           // setIsAuthenticated(true)
           // navigate đươc dùng để điều hướng (in case này là tới thằng /)
@@ -83,7 +79,8 @@ export default function RegisterAsTuTor() {
       <div className='container justify-center flex'>
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Ký Thành Giảng Viên</div>
-          <Input
+          <InputFile
+            
             name='qualificationName'
             type='text'
             placeholder='Tên Bằng Cấp'
@@ -105,7 +102,7 @@ export default function RegisterAsTuTor() {
             }}
           >
           </Controller>
-          <Input
+          {/* <Input
             name='field'
             placeholder='Môn'
             type='text'
@@ -130,6 +127,15 @@ export default function RegisterAsTuTor() {
             className='mt-5'
             errorMessage={errors.experience?.message}
           />
+          */}
+          
+          <InputFile
+            name='imageDegree'
+            type='file'
+            register={register}
+            errorMessage={errors.imageDegree?.message}
+          />
+          
           <div className='bg-slate-300 m-5'>
             <div>
 
@@ -138,14 +144,7 @@ export default function RegisterAsTuTor() {
 
             </div>
           </div>
-          <Input
-            name='imageDegree'
-            placeholder='=)))'
-            type='file'
-            register={register}
-            className='mt-5'
-            errorMessage={errors.imageDegree?.message}
-          />
+          
           
           
           
