@@ -1,102 +1,3 @@
-// import React, { InputHTMLAttributes, useState } from 'react'
-// import { RegisterOptions, UseFormRegister } from 'react-hook-form'
-
-// interface Props extends InputHTMLAttributes<HTMLInputElement> {
-//   errorMessage?: string
-//   classNameInput?: string
-//   classNameInput2?: string
-//   classNameError?: string
-//   placeholer?: string
-//   type?: string // Chỉ định các loại input mà component hỗ trợ
-//   // tại sao lại any chỗ này?
-//   // đây là kỹ thuật dùng generic (tự tìm hỉu đi fen =)) )
-//   // do là UseFormRegister nó cần 1 cái typeFile mà mình chưa biết truyềnlên là gì
-
-//   // nên là minh để any, sau này minhf biết thì mình sửa =))
-
-//   register?: UseFormRegister<any>
-//   rules?: RegisterOptions
-// }
-
-// export default function Input({
-//   errorMessage,
-//   className,
-//   name,
-//   type,
-//   rules,
-//   register,
-//   classNameInput = 'p-3 w-[300px] outline-none border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl  ',
-//   classNameInput2 = 'p-3 w-[150px] outline-none border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl  hover:border-black border-2',
-//   classNameError = 'text-start ml-[10px] mt-1 text-red-600 min-h-[1.25rem]  w-full text-[11px]',
-//   placeholder,
-//   ...rest // phần còn lại
-// }: Props) {
-//   // thằng này dùng để check coi là user v
-//   const registerResult = register && name ? register(name, rules) : {}
-//   const [fileName, setFileName] = React.useState<string>(
-//     'Chưa có file nào được chọn'
-//   ) //thành Nguyễn
-//   const [fileLabel, setLabel] = useState<String>('Chọn File')
-//   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setLabel('Đã Chọn')
-//     const file = event.target.files
-//     if (file && file.length > 0) {
-//       setFileName(file[0].name)
-//     } else {
-//       setFileName('Chưa có file nào được chọn')
-//     }
-//   } //thành Nguyễn
-//   return (
-//     <div className={className}>
-//       {type === 'file' ? (
-//         <>
-//           {/* <input
-
-//             type='file'
-//             className='hidden'
-//             onChange={handleFileChange}
-//             {...registerResult}
-//             {...rest}
-//           /> */}
-//           <label className={''}>
-//             <div className='flex'>
-//               <div className='p-4 rounded-s-md cursor-pointer border border-slate-500 hover:bg-slate-400'>
-//                 {fileLabel}
-//               </div>
-//               <div className='bg-slate-300 p-4 '> {fileName} </div>
-//             </div>
-
-//             <input
-//               type='file'
-//               className='hidden'
-//               onChange={handleFileChange}
-//               {...registerResult}
-//               {...rest}
-//             />
-//           </label>
-//         </>
-//       ) : (
-//         <input
-//           //  tại sao bị như z
-//           // nó bị overwritte
-//           // name='email'
-//           type={type}
-//           className={
-//             placeholder === 'Họ' || placeholder === 'Tên'
-//               ? classNameInput2
-//               : classNameInput
-//           }
-//           {...registerResult}
-//           {...rest}
-//           placeholder={placeholder}
-//         />
-//       )}
-//       <div className={classNameError}>{errorMessage}</div>
-//     </div>
-//   )
-// }
-
-//----------------------------------------------------------------------------
 import { InputHTMLAttributes, useState } from 'react'
 import type { RegisterOptions, UseFormRegister } from 'react-hook-form'
 
@@ -116,9 +17,9 @@ export default function Input({
   name,
   rules,
   register,
-  classNameInput = 'p-3 w-[300px] outline-none border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl  ',
-  classNameError = 'mt-1 text-red-600 min-h-[1.25rem] text-sm',
-  classNameEye = 'absolute top-[8px] right-[5px] h-5 w-5 cursor-pointer',
+  classNameInput = 'p-3 w-[18rem] outline-none border border-gray-300 focus:border-gray-500 forcus:shawdow-sm rounded-xl ',
+  classNameError = 'mt-1 text-red-600 min-h-[1.25rem] text-sm text-left',
+  classNameEye = 'absolute top-[10px] right-[10px] h-5 w-5 cursor-pointer',
   placeholder,
   ...rest
 }: Props) {

@@ -238,7 +238,7 @@ export default function Profile() {
 //             </RegisterLayout>
 //           )
 //         },
-//         {
+//         {C
 //           path: path.register,
 //           element: (
 //             <RegisterLayout>
