@@ -31,117 +31,236 @@ export default function useRouteElements() {
 
   const routeElements = useRoutes([
     {
-      path: '',
-      element: <RejectedRoute />,
-      children: [
-        {
-          path: path.login,
-          element: (
-            <RegisterLayout>
-              <Login />
-            </RegisterLayout>
-          )
-        },
-        {
-          path: path.register,
-          element: (
-            <RegisterLayout>
-              <Register />
-            </RegisterLayout>
-          )
-        }
-      ]
+      path: path.login,
+      element: (
+        <RegisterLayout>
+          <Login />
+        </RegisterLayout>
+      )
     },
     {
-      path: '',
-      element: <ProtectedRoute />,
+      path: path.register,
+      element: (
+        <RegisterLayout>
+          <Register />
+        </RegisterLayout>
+      )
+    },
+    {
+      path: path.home,
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      ),
+      index: true
+    },
+
+    {
+      path: path.tutors,
+      element: (
+        <MainLayout>
+          <TutorList />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.requestList,
+      element: (
+        <MainLayout>
+          <RequestList />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.registerAsTutor,
+      element: (
+        <MainLayout>
+          <RegisterAsTutor />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.home,
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      ),
+      index: true
+    },
+    {
+      path: path.dashBoard,
+      element: (
+        <RegisterLayout>
+          <DashBoard />
+        </RegisterLayout>
+      )
+    },
+    {
+      path: path.profileTT,
+      element: (
+        <MainLayout>
+          <ProfileTT />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.calender,
+      element: (
+        <MainLayout>
+          <Calendar />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.checkOut,
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.user,
+      element: (
+        <MainLayout>
+          <UserLayout />
+        </MainLayout>
+      ),
       children: [
         {
-          path: path.tutors,
-          element: (
-            <MainLayout>
-              <TutorList />
-            </MainLayout>
-          )
+          index: true,
+          element: <Profile />
         },
         {
-          path: path.requestList,
-          element: (
-            <MainLayout>
-              <RequestList />
-            </MainLayout>
-          )
-        },
-        {
-          path: path.registerAsTutor,
-          element: (
-            <MainLayout>
-              <RegisterAsTutor />
-            </MainLayout>
-          )
-        },
-        {
-          path: path.home,
-          element: (
-            <MainLayout>
-              <Home />
-            </MainLayout>
-          ),
-          index: true
-        },
-        {
-          path: path.dashBoard,
-          element: (
-            <RegisterLayout>
-              <DashBoard />
-            </RegisterLayout>
-          )
-        },
-        {
-          path: path.profileTT,
-          element: (
-            <MainLayout>
-              <ProfileTT />
-            </MainLayout>
-          )
-        },
-        {
-          path: path.calender,
-          element: (
-            <MainLayout>
-              <Calendar />
-            </MainLayout>
-          )
-        },
-        {
-          path: path.checkOut,
-          element: (
-            <MainLayout>
-              <CheckOut />
-            </MainLayout>
-          )
-        },
-        {
-          path: path.user,
-          element: (
-            <MainLayout>
-              <UserLayout />
-            </MainLayout>
-          ),
-          children: [
-            {
-              index: true,
-              element: <Profile />
-            },
-            {
-              path: path.changePassword,
-              element: <ChangPassword />
-            }
-          ]
+          path: path.changePassword,
+          element: <ChangPassword />
         }
       ]
     }
   ])
-
   return routeElements
 }
+
+// {
+//     path: '',
+//     element: <RejectedRoute />,
+//     children: [
+//       {
+//         path: path.login,
+//         element: (
+//           <RegisterLayout>
+//             <Login />
+//           </RegisterLayout>
+//         )
+//       },
+//       {
+//         path: path.register,
+//         element: (
+//           <RegisterLayout>
+//             <Register />
+//           </RegisterLayout>
+//         )
+//       },
+//       {
+//         path: path.home,
+//         element: (
+//           <RegisterLayout>
+//             <Home />
+//           </RegisterLayout>
+//         ),
+//         index: true
+//       }
+//     ]
+//   },
+//   {
+//     path: '',
+//     element: <ProtectedRoute />,
+//     children: [
+//       {
+//         path: path.tutors,
+//         element: (
+//           <MainLayout>
+//             <TutorList />
+//           </MainLayout>
+//         )
+//       },
+//       {
+//         path: path.requestList,
+//         element: (
+//           <MainLayout>
+//             <RequestList />
+//           </MainLayout>
+//         )
+//       },
+//       {
+//         path: path.registerAsTutor,
+//         element: (
+//           <MainLayout>
+//             <RegisterAsTutor />
+//           </MainLayout>
+//         )
+//       },
+//       {
+//         path: path.home,
+//         element: (
+//           <MainLayout>
+//             <Home />
+//           </MainLayout>
+//         ),
+//         index: true
+//       },
+//       {
+//         path: path.dashBoard,
+//         element: (
+//           <RegisterLayout>
+//             <DashBoard />
+//           </RegisterLayout>
+//         )
+//       },
+//       {
+//         path: path.profileTT,
+//         element: (
+//           <MainLayout>
+//             <ProfileTT />
+//           </MainLayout>
+//         )
+//       },
+//       {
+//         path: path.calender,
+//         element: (
+//           <MainLayout>
+//             <Calendar />
+//           </MainLayout>
+//         )
+//       },
+//       {
+//         path: path.checkOut,
+//         element: (
+//           <MainLayout>
+//             <CheckOut />
+//           </MainLayout>
+//         )
+//       },
+//       {
+//         path: path.user,
+//         element: (
+//           <MainLayout>
+//             <UserLayout />
+//           </MainLayout>
+//         ),
+//         children: [
+//           {
+//             index: true,
+//             element: <Profile />
+//           },
+//           {
+//             path: path.changePassword,
+//             element: <ChangPassword />
+//           }
+//         ]
+//       }
+//     ]
+//   }
+// ])
