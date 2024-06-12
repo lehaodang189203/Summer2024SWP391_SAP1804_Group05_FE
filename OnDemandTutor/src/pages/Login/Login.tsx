@@ -66,7 +66,7 @@ export default function Login() {
   })
 
   return (
-    <div className='py-10 w-[25rem] rounded-2xl shadow-neutral-950 mx-auto my-[2rem] bg-transparent shadow-2xl'>
+    <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent  hover:shadow-xl hover:shadow-black'>
       <div className='container justify-center flex'>
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Nhập</div>
@@ -74,7 +74,7 @@ export default function Login() {
             name='email'
             type='email'
             placeholder='Email'
-            className='mt-8'
+            className='mt-8 '
             register={register}
             errorMessage={errors.email?.message}
           />
@@ -82,7 +82,7 @@ export default function Login() {
             name='password'
             type='password'
             placeholder='Mật khẩu'
-            className='mt-1'
+            className='relative'
             register={register}
             errorMessage={errors.password?.message}
             autoComplete='on'
