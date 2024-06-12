@@ -8,16 +8,10 @@ import {
 
 interface Props {
   handleHidden: () => void
-  tutor: {
-    name: string
-    gender: string
-    lessons: string
-    major: string
-    description: string
-  }
+  renderPopover: React.ReactNode
 }
 
-export default function Popup({ handleHidden, tutor }: Props) {
+export default function Popup({ handleHidden, renderPopover }: Props) {
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50'>
       <div className='bg-gray-200 w-full max-w-lg mx-auto rounded-[1.75rem] shadow-2xl shadow-black overflow-hidden relative'>

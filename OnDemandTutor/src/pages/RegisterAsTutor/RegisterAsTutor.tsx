@@ -11,7 +11,6 @@ import Input from '../../components/Input'
 import TypeSelect from '../../components/TypeSelect'
 import ImageUpload from '../../components/ImageUpload'
 import { SchemaResAT, schemaResAT } from '../../utils/rulesFIle'
-import { omit } from 'lodash'
 import { authApi } from '../../api/auth.api'
 type FormData = Pick<
   SchemaResAT,
@@ -55,11 +54,11 @@ export default function RegisterAsTuTor() {
   const onSubmit = handleSubmit((data) => {
       console.log(data)
       const body: ResATReqBody = data
-      console.log(body)
+      
 
       registerAccountMutation.mutate(body, {
         onSuccess: (data) => {
-          console.log(data)
+          
 
           // setIsAuthenticated(true)
           // navigate đươc dùng để điều hướng (in case này là tới thằng /)
@@ -131,7 +130,14 @@ export default function RegisterAsTuTor() {
             className='mt-5'
             errorMessage={errors.experience?.message}
           />
-          <div className='bg-slate-300 m-5'>cc</div>
+          <div className='bg-slate-300 m-5'>
+            <div>
+
+            </div>
+            <div className='z'>
+
+            </div>
+          </div>
           <Input
             name='imageDegree'
             placeholder='=)))'

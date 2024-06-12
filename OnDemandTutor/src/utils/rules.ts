@@ -1,16 +1,6 @@
+// Yup validation schema
 import * as yup from 'yup'
-//npm i -D yup if dont work
-//  này là mình xài yup của react hook form để làm validate nha fen
-//
 
-// type Rules = {
-//   // chỗ này là sao?
-//   //  có nghĩa là:
-//   // chúng ta định dạng được lấy từ RegisterOptions trong react hookform
-//   // bên trong thằng RegisterOptions này có các key hỗ trợ cho việc input
-//   // chúng ta lấy mấy key đó ra xài để tránh gõ sai
-//   [key in 'email' | 'password' | 'confirm_password']?: RegisterOptions
-// }
 export const schema = yup.object({
   email: yup
     .string()
@@ -37,7 +27,6 @@ export const schema = yup.object({
     .min(2, 'tên phải có ít nhất 2 ký tự')
     .max(50, 'tên không được vượt quá 50 ký tự')
     .required('tên là bắt buộc'),
-
   lastname: yup
     .string()
     .min(2, 'Họ phải có ít nhất 2 ký tự')
@@ -56,8 +45,10 @@ export const schema = yup.object({
       ['male', 'female', 'other'],
       'Gender must be either male, female, or other'
     )
-    .required('Giới tính là bắt buộc')
+    .required('Giới tính là bắt buộc'),
+  number:yup
+    .number()
+    .required('Nhập số tiền cần Nạp')  
 })
 
-// này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
 export type Schema = yup.InferType<typeof schema>
