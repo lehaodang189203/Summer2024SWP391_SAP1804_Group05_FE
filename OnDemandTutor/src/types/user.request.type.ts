@@ -16,10 +16,9 @@ export interface ResReqBody {
   username: string
   password: string
 
-  firstname: string
-  lastname: string
   date_of_birth: string // Sử dụng Date để biểu diễn ngày tháng
   gender: string
+  phone: string
 }
 
 export interface LogoutReqBody {
