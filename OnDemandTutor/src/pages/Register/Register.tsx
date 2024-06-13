@@ -12,7 +12,6 @@ import Input from '../../components/Input'
 import { ResReqBody } from '../../types/user.request.type'
 import { Schema, schema } from '../../utils/rules'
 import InputNumber from '../../components/InputNumber'
-import { NoUndefinedField } from '../../utils/utils'
 
 type FormData = Pick<
   Schema,
