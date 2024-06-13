@@ -47,19 +47,46 @@ export default function CheckOut (){
                             Select 2
                         </div>
                     </div>
-                        <div className="">Thời gian diễn ra phiên thuê</div>
-                        <div>
-                            <div>Thông tin Bill</div>
-                            <div>Thuê xxx phút</div>
-                            <div>Tổng: </div>
-                        </div>
+                    {
+                        selected === 'select1' ? (
+                            <div>
+                                <div>Thời gian diễn ra phiên thuê</div>
+                                <div>
+                                    <div>Thông tin Bill</div>
+                                    <div>Thuê 30 phút</div>
+                                    <div>Tổng:60.000 đ</div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="p-4 pr-24 pl-24 gap-6">
+                                <div>Thời gian diễn ra phiên thuê</div><br />
+                                
+                                <div>
+                                    <div>Thông tin Bill</div>
+                                    <div className="flex justify-between"> 
+                                        <div>
+                                        Thuê:
+                                        </div>
+                                        <div>60 phút</div>
+                                    </div>
+                                    <div className="flex justify-between"> 
+                                        <div>Tổng: </div>
+                                        <div>100.000 đ</div>
+                                        </div>
+                                </div>
+                                
+                            </div>
+                        )
+                    }
+                    
+                    
                     </div>
                     <div className="col-span-4 ">
                         <div className="bg-white border border-gray-600 hover:bg-slate-400 cursor-pointer p-4 rounded-md drop-shadow-lg shadow-md">Xác nhận thanh toán xxx$</div>
                     </div>
                 </div>
+                
             </div>
-            
         </>
 
     )

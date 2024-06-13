@@ -35,7 +35,7 @@ export const schemaResAT = yup.object({
   specializedSkills: yup
     .string()
     .required('Không được bỏ trống'),
-    imageDegree: yup
+    imageQualification: yup
     .mixed()
     .required('A file is required')
     // .required('Up file để có thể đăng kí làm gia sư')

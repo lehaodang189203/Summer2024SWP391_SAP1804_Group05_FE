@@ -17,13 +17,20 @@ type FormData = Pick<
   SchemaResAT,
   | 'qualificationName'
   | 'type'
-  | 'imageDegree'
+  | 'field'
+
+  | 'specializedSkills'
+  | 'experience'
+    | 'imageQualification'
 >
 
 const registerATSchema = schemaResAT.pick([
 'qualificationName',
 'type',
-'imageDegree'
+'field',
+'specializedSkills',
+'experience',
+'imageQualification'
 ])
 
 export default function RegisterAsTuTor() {
@@ -54,7 +61,7 @@ export default function RegisterAsTuTor() {
 
       registerAccountMutation.mutate(body, {
         onSuccess: (data) => {
-          //console.log(data)// data này không phải là object mà mình gửi đi 
+          console.log(data)// data này không phải là object mà mình gửi đi 
 
           // setIsAuthenticated(true)
           // navigate đươc dùng để điều hướng (in case này là tới thằng /)
@@ -84,7 +91,7 @@ export default function RegisterAsTuTor() {
             name='qualificationName'
             type='text'
             placeholder='Tên Bằng Cấp'
-            className='mt-5'
+            className='mt-3'
             register={register}
             errorMessage={errors.qualificationName?.message}
           />
@@ -96,44 +103,45 @@ export default function RegisterAsTuTor() {
                 <TypeSelect
                   errorMessage={errors.type?.message}
                   onChange={field.onChange}
+                 className=''
                   value={field.value}
                 />
               )
             }}
           >
           </Controller>
-          {/* <Input
+          <InputFile
             name='field'
             placeholder='Môn'
             type='text'
             register={register}
-            className='mt-5'
+            className='mt-3'
             errorMessage={errors.field?.message}
           />
           
-          <Input
+          <InputFile
             name='specializedSkills'
             placeholder='Kĩ Năng Chính'
             type='text'
             register={register}
-            className='mt-5'
+            className='mt-3'
             errorMessage={errors.specializedSkills?.message}
           />
-          <Input
+          <InputFile
             name='experience'
             placeholder='Số năm kinh nghiệm'
             type='text'
             register={register}
-            className='mt-5'
+            className='mt-3'
             errorMessage={errors.experience?.message}
           />
-          */}
+         
           
           <InputFile
             name='imageDegree'
             type='file'
             register={register}
-            errorMessage={errors.imageDegree?.message}
+            errorMessage={errors.imageQualification?.message}
           />
           
           <div className='bg-slate-300 m-5'>

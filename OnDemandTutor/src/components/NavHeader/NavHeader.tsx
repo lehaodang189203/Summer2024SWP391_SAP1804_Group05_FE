@@ -5,7 +5,7 @@ import { authApi } from '../../api/auth.api'
 import me from '../../assets/img/me.jpg'
 import path from '../../constant/path'
 import { toast } from 'react-toastify'
-// import { getRefreshTokenFromLS } from '../../utils/auth'
+// import { getRefreshTokeNFromLS } from '../../utils/auth'
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
 import Popover from '../Popover/Popover'
@@ -105,7 +105,7 @@ export default function NavHeader() {
                   Đơn Mua
                 </Link>
                 <Link
-                  to='/'
+                  to='/deposit'
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                 >
                   Nạp tiền

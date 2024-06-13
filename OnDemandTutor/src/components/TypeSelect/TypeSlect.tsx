@@ -5,9 +5,10 @@ interface Props {
   onChange?: (value: string) => void
   value: string
   errorMessage?: string
+  className:string
 }
 
-export default function TypeSelect({ value,onChange, errorMessage }: Props) {
+export default function TypeSelect({ value,onChange, errorMessage,className }: Props) {
   const [type, setType] = useState('')
 
   
@@ -19,7 +20,7 @@ export default function TypeSelect({ value,onChange, errorMessage }: Props) {
   }
 
   return (
-    <div className='flex flex-wrap flex-col content-center'>
+    <div className='flex flex-wrap flex-col content-center mt-3'>
       <select
         onChange={handleChange}
         className='h-10 rounded-md border w-[300px] border-black/10 px-3 cursor-pointer hover:border-black'

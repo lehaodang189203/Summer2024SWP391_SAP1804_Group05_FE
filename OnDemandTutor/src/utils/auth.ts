@@ -4,6 +4,8 @@ export const getAccessTokenFromLS = () =>
 
 export const getRefreshTokenFromLS = () =>
   localStorage.getItem('access_token') || ''
+export const getUserIDToLS = () =>
+  localStorage.getItem('id') || ''
 
 
 
@@ -18,6 +20,10 @@ export const setAccessTokenToLS = (access_token: string) =>
 
 export const setRefreshTokenToLS = (refresh_token: string) => {
   localStorage.setItem('refresh_token', refresh_token)
+}
+
+export const setUserIDToLS = (id: string) => {
+  localStorage.setItem('id', id)
 }
 export const clearLS = () => {
   localStorage.removeItem('access_token')

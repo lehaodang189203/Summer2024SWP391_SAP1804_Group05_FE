@@ -73,12 +73,12 @@ export default function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log(data)
-
+        
         // setIsAuthenticated(true)
         // navigate đươc dùng để điều hướng (in case này là tới thằng /)
 
         // dấu / đại diện trang hiện tại
-        navigate('/login')
+        navigate('/')
       },
       onError: (error) => {
         console.log(error)
