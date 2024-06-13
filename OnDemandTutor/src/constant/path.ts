@@ -4,7 +4,7 @@ const path = {
   user: '/user',
 
   register: '/register',
-  registerAsTutor: '/registerAT',
+  registerAsTutor: '/registerAsTutor',
   logout: '/Logout',
   tutors: '/tutors',
   dashBoard: '/dashBoard',

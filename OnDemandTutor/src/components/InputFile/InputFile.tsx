@@ -26,18 +26,20 @@ export default function InputFile({
   ...rest
 }: Props) {
   const registerResult = register && name ? register(name, rules) : {}
-  const [fileName, setFileName] = React.useState<string>(
+  const [fileName, setFileName] = useState<string>(
          'Chưa có file nào được chọn'
        )
        const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
             
-            const file =  event.target.files
+            const file =  event.target.files;
+            
             if (file && file.length > 0) {
               setFileName(file[0].name)
+              console.log(file[0].name)
             } else {
-              setFileName('Chưa có file nào được chọn')
+              setFileName('file null')
             }
-          }
+      }
       return (
           <div className={className}>
       {type === 'file' ? (
@@ -53,7 +55,7 @@ export default function InputFile({
          
             <input
                type='file'
-                className='hidden'
+              className='hidden'
                onChange={handleFileChange}
                {...registerResult}
                {...rest}
