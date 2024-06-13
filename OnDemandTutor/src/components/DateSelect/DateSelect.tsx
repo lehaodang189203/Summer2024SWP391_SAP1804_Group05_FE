@@ -83,7 +83,7 @@ export default function DateSelect({ value, onChange, errorMessage }: Props) {
           </select>
         </div>
         {errorMessage && (
-          <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm'>
+          <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm text-left'>
             {errorMessage}
           </div>
         )}

@@ -19,7 +19,7 @@ class Http {
     this.accessToken = getAccessTokenFromLS()
     this.refreshToken = getRefreshTokenFromLS()
     this.instance = axios.create({
-      baseURL: 'https://localhost:7133/api/',
+      baseURL: 'https://localhost:7133/api',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ class Http {
 
     this.instance.interceptors.response.use(
       (response) => {
-        console.log(response)
+        console.log('data respon',response)
 
         const { url } = response.config
         
@@ -51,9 +51,10 @@ class Http {
 
         if (url === path.login || url === path.register) {
           const data = response.data as AuthResponse
-
-          this.accessToken = data.data.accessToken
-          this.refreshToken = data.data.refreshToken
+          
+          this.accessToken = data.data.token.accessToken
+          console.log('ccc')
+          this.refreshToken = data.data.token.refreshToken
           setAccessTokenToLS(this.accessToken)
           setRefreshTokenToLS(this.refreshToken)
         } else if (url === path.logout) {

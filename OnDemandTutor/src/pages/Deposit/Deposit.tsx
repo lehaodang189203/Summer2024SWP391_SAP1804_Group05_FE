@@ -1,13 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Input from "../../components/Input";
-import { SchemaResAT, schemaResAT } from "../../utils/rulesFIle";
+
 import { Schema, schema } from "../../utils/rules";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { reqDeposit } from "../../types/user.request.type";
+import { useMutation } from "@tanstack/react-query";
+import { paymentApi } from "../../api/payment.api";
 
 
-type FormData = Pick<Schema, 'firstname' | 'lastname' |'number'>
-const depositSchema = schema.pick(['firstname', 'lastname','number'])
+type FormData = Pick<Schema, 'firstName' | 'lastName'| 'amount'>
+const depositSchema = schema.pick(['firstName', 'lastName','amount'])
 
 
 
@@ -20,8 +23,26 @@ export default function Deposit(){
       } = useForm<FormData>({
         resolver: yupResolver(depositSchema)
       })
-    const onSubmit = handleSubmit((data)=>{
+    
+    const depositMutation = useMutation({
+        mutationFn: (body: reqDeposit) => paymentApi.deposit(body)
+      })
+      const onSubmit = handleSubmit((data)=>{
         console.log(data)
+        depositMutation.mutate(data, {
+            onSuccess: (data) => {
+              console.log(data)
+              
+              // setIsAuthenticated(true)
+              // navigate đươc dùng để điều hướng (in case này là tới thằng /)
+      
+              // dấu / đại diện trang hiện tại
+             
+            },
+            onError: (error) => {
+              console.log(error)
+            }
+        })
     })
     return(
         <div className="m-10 border-2 rounded-lg border-slate-700 p-4">
@@ -30,27 +51,27 @@ export default function Deposit(){
                 <div className="m-6">
                     <div className="flex gap-2">
                         <Input
-                            name="firstname"
+                            name="firstName"
                             type="text"
                             placeholder="Họ"
                             register={register}
-                            errorMessage={errors.firstname?.message}
+                            errorMessage={errors.firstName?.message}
                         />
                         <Input
-                            name="lastname"
+                            name="lastName"
                             type="text"
                             placeholder="Tên"
                             register={register}
-                            errorMessage={errors.lastname?.message}
+                            errorMessage={errors.lastName?.message}
                         />
                     </div>
                     
                     <Input
-                        name="number"
+                        name="amount"
                         type="text"
                         placeholder="Số tiền cần Nạp"
                         register={register}
-                        errorMessage={errors.number?.message}
+                        errorMessage={errors.amount?.message}
                     />
                 </div>
                 <button 

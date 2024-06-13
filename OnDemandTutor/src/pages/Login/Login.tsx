@@ -14,7 +14,7 @@ import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import { ErrorResponse } from '../../types/utils.type'
 import { toast } from 'react-toastify'
 import path from '../../constant/path'
-import { getRefreshTokenFromLS, getUserIDToLS, setAccessTokenToLS, setUserIDToLS } from '../../utils/auth'
+ import { getRefreshTokenFromLS,  setAccessTokenToLS  } from '../../utils/auth'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -41,10 +41,10 @@ export default function Login() {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
         console.log(data)
-        const idAccount = getUserIDToLS()
+        // const idAccount = getUserIDToLS()
 
         const refreshToken = getRefreshTokenFromLS()
-        setUserIDToLS(idAccount)
+        // setUserIDToLS(idAccount)
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
 

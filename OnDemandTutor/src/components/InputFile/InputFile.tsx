@@ -29,7 +29,7 @@ export default function InputFile({
   const [fileName, setFileName] = React.useState<string>(
          'Chưa có file nào được chọn'
        )
-       const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+       const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
             
             const file =  event.target.files
             if (file && file.length > 0) {

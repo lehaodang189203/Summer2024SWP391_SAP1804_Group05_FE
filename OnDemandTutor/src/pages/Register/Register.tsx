@@ -11,6 +11,7 @@ import GenderSelect from '../../components/GenderSelect'
 import Input from '../../components/Input'
 import { ResReqBody } from '../../types/user.request.type'
 import { Schema, schema } from '../../utils/rules'
+import InputNumber from '../../components/InputNumber'
 
 type FormData = Pick<
   Schema,
@@ -19,9 +20,8 @@ type FormData = Pick<
   | 'confirm_password'
   | 'date_of_birth'
   | 'username'
-  | 'firstname'
-  | 'lastname'
   | 'gender'
+  | 'phone'
 >
 
 const registerSchema = schema.pick([
@@ -30,10 +30,10 @@ const registerSchema = schema.pick([
   'username',
   'confirm_password',
   'date_of_birth',
-  'firstname',
-  'lastname',
-  'gender'
+  'gender',
+  'phone'
 ])
+
 export default function Register() {
   const navigate = useNavigate()
 
@@ -42,13 +42,7 @@ export default function Register() {
     handleSubmit,
     control,
     formState: { errors }
-
-    // useForm tại sao định dạng như vầy
-    // FormData
   } = useForm<FormData>({
-    // này của yup nha
-    // yupResover  nhận vào 1 cái registerShema để validate sau đó trả về 1 hàm resolver
-    // resolver (useForm) được dùng để chuyển kết quả validate từ yup
     resolver: yupResolver(registerSchema)
   })
 
@@ -57,17 +51,20 @@ export default function Register() {
   })
 
   const onSubmit = handleSubmit((data) => {
-    const formattedDateOfBirth = `${data.date_of_birth.getFullYear()}-${String(
-      data.date_of_birth.getMonth() + 1
-    ).padStart(2, '0')}-${String(data.date_of_birth.getDate()).padStart(
-      2,
-      '0'
-    )}`
+    const dateOfBirth = data.date_of_birth
+      ? new Date(data.date_of_birth)
+      : new Date('1990-01-01')
+
+    const formattedDateOfBirth = `${dateOfBirth.getFullYear()}-${String(
+      dateOfBirth.getMonth() + 1
+    ).padStart(2, '0')}-${String(dateOfBirth.getDate()).padStart(2, '0')}`
 
     const body: ResReqBody = {
       ...omit(data, ['confirm_password']),
-      date_of_birth: formattedDateOfBirth
+      date_of_birth: formattedDateOfBirth,
+      gender: data.gender ?? 'male'
     }
+
     console.log(body)
 
     registerAccountMutation.mutate(body, {
@@ -97,16 +94,14 @@ export default function Register() {
       <div className='container mx-auto justify-center flex'>
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Ký</div>
-          {/* email */}
           <Input
             name='username'
-            type='text'
-            placeholder='Tên người dùng'
+            type='date'
+            placeholder='Họ và tên'
             className='mt-8'
             register={register}
             errorMessage={errors.username?.message}
           />
-          {/* email */}
           <Input
             name='email'
             type='email'
@@ -119,7 +114,7 @@ export default function Register() {
             name='password'
             type='password'
             placeholder='Mật khẩu'
-            className='mt-0.5'
+            className='mt-0.5 relative'
             register={register}
             errorMessage={errors.password?.message}
             autoComplete='on'
@@ -128,34 +123,28 @@ export default function Register() {
             name='confirm_password'
             type='password'
             placeholder='Nhập lại mật khẩu'
-            className='mt-2'
+            className='mt-2 relative'
             register={register}
             errorMessage={errors.confirm_password?.message}
             autoComplete='on'
           />
-          <div className='flex  border-solid justify-center'>
-            <Input
-              name='firstname'
-              type='text'
-              placeholder='Họ'
-              className='mt-2 mr-1'
-              register={register}
-              errorMessage={errors.firstname?.message}
-              autoComplete='on'
-            />
-
-            <Input
-              name='lastname'
-              type='text'
-              placeholder='Tên'
-              className='mt-2 '
-              register={register}
-              errorMessage={errors.lastname?.message}
-              autoComplete='on'
-            />
+          <div className='mt-2 flex flex-wrap flex-col sm:flex-row'>
+            <div className='w-full'>
+              <Controller
+                control={control}
+                name='phone'
+                render={({ field }) => (
+                  <InputNumber
+                    className='rounded-3xl w-full'
+                    placeholder='Số điện thoại'
+                    errorMessage={errors.phone?.message}
+                    {...field}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
           </div>
-
-          {/* // Usage in a form component */}
           <Controller
             control={control}
             name='date_of_birth'
@@ -167,23 +156,16 @@ export default function Register() {
               />
             )}
           />
-          {/*  thằng controller nó giúp liên kết thằng DateSelect vs React HookForm */}
           <Controller
-            // controlle này nó quản lý cái form này , kiểu như mà nó sự thay đổi thì nó sẽ cập nhật
             control={control}
             name='gender'
-            // render là cái show ra
-            // filed nó đối tượng thuộc tính mà thằng Controleer cung cấp
-            // chẳng hạn như: value, onChange, name, ....
-            render={({ field }) => {
-              return (
-                <GenderSelect
-                  errorMessage={errors.gender?.message}
-                  onChange={field.onChange}
-                  value={field.value}
-                />
-              )
-            }}
+            render={({ field }) => (
+              <GenderSelect
+                errorMessage={errors.gender?.message}
+                onChange={field.onChange}
+                value={field.value || 'male'}
+              />
+            )}
           />
           <div className='mt-3'>
             <button

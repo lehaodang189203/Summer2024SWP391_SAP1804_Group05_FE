@@ -35,22 +35,21 @@ export const schemaResAT = yup.object({
   specializedSkills: yup
     .string()
     .required('Không được bỏ trống'),
-    imageQualification: yup
+  imageQualification: yup
     .mixed()
-    .required('A file is required')
-    // .required('Up file để có thể đăng kí làm gia sư')
-    // .test('fileSize', 'Phải up File jpeg hoặc png hoặc pdf và bé hơn 10mb', (value) => {
-    //   if (value instanceof FileList) {
-    //     return value[0] && value[0].size <= 10000000; // 10MB
-    //   }
-    //   return false; //sai nếu như value không phải là FileList
-    // })
-    // .test('fileType', 'Chỉ hỗ trợ định dạng jpeg, png, pdf', (value) => {
-    //   if (value instanceof FileList) {
-    //     return value[0] && ['image/jpeg', 'image/png', 'application/pdf'].includes(value[0].type);
-    //   }
-    //   return false; // sai nếu như value không phải là FileList
-    // })
+    .required('Up file để có thể đăng kí làm gia sư')
+    .test('fileSize', 'Phải up File jpeg hoặc png hoặc pdf và bé hơn 10mb', (value) => {
+      if (value instanceof FileList) {
+        return value[0] && value[0].size <= 10000000; // 10MB
+      }
+      return false; //sai nếu như value không phải là FileList
+    })
+    .test('fileType', 'Chỉ hỗ trợ định dạng jpeg, png, pdf', (value) => {
+      if (value instanceof FileList) {
+        return value[0] && ['image/jpeg', 'image/png', 'application/pdf'].includes(value[0].type);
+      }
+      return false; // sai nếu như value không phải là FileList
+    })
     
     
     

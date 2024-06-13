@@ -138,7 +138,7 @@ export default function RegisterAsTuTor() {
          
           
           <InputFile
-            name='imageDegree'
+            name='imageQualification'
             type='file'
             register={register}
             errorMessage={errors.imageQualification?.message}

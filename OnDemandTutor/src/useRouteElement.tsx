@@ -18,6 +18,7 @@ import Deposit from './pages/Deposit'
 import Profile from './pages/User/pages/Profile'
 import UserLayout from './pages/User/layout/UserLayout'
 import ChangPassword from './pages/User/pages/ChangePassword'
+import Moderator from './pages/Moderator'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
@@ -146,6 +147,14 @@ export default function useRouteElements() {
       element: (
         <MainLayout>
           <Deposit />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.aprroveRequest,
+      element: (
+        <MainLayout>
+          <Moderator />
         </MainLayout>
       )
     }

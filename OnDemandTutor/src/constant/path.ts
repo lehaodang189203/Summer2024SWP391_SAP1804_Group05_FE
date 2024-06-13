@@ -16,7 +16,10 @@ const path = {
   payment: '/payment',
   deposit: '/deposit',
   changePassword: '/user/changePassword',
-  profile: '/user/profile'
+  profile: '/user/profile',
+  aprroveRequest: '/user/changePassword',
+  Moderator: '/mod'
+
 } as const
 
 export default path
