@@ -19,8 +19,8 @@ export const AppContext = createContext<AppContextInterface>(initialAppContext)
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    initialAppContext.isAuthenticated
-   
+    // initialAppContext.isAuthenticated
+    true //để code mấy cái sau
   )
 
   const [refreshToken, setRefreshToken] = useState<string>(

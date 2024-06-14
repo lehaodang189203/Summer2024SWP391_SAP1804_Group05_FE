@@ -61,7 +61,7 @@ export default function InputFile({
                {...rest}
              />
            </label>
-           <div className={classNameError}>{errorMessage}</div>
+          
          </>
         
       ) : (

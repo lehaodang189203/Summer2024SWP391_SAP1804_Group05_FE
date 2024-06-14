@@ -55,7 +55,6 @@ export default function RegisterAsTuTor() {
   
   const onSubmit = handleSubmit((data) => {
       console.log(data)
-      console.log('conac')
       const body: ResATReqBody = data
       
 

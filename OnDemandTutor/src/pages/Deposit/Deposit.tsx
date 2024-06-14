@@ -11,6 +11,12 @@ import { paymentApi } from "../../api/payment.api";
 
 type FormData = Pick<Schema, 'firstName' | 'lastName'| 'amount'>
 const depositSchema = schema.pick(['firstName', 'lastName','amount'])
+interface User {
+    
+}
+
+
+
 
 
 
