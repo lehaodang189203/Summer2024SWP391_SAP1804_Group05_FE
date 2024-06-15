@@ -10,12 +10,13 @@ import { useContext } from 'react'
 import { authApi } from '../../api/auth.api'
 import { AppContext } from '../../context/app.context'
 import { LoginReqBody } from '../../types/user.request.type'
-import { isAxiosUnprocessableEntityError } from '../../utils/utils'
+import { isAxiosError } from '../../utils/utils'
 import { ErrorResponse } from '../../types/utils.type'
 import { toast } from 'react-toastify'
 
 import { getRefreshTokenFromLS } from '../../utils/auth'
 import { path } from '../../constant/path'
+import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -52,7 +53,28 @@ export default function Login() {
         navigate(path.home)
       },
       onError: (error) => {
-        console.log(error.message)
+        if (
+          isAxiosError<ErrorResponse<any>>(error) &&
+          error.response?.status === HttpStatusCode.UnprocessableEntity // 422
+        ) {
+          const errorAuthen = error.response.data
+          console.log(errorAuthen)
+
+          // Hiển thị lỗi trong form
+          if (errorAuthen.data) {
+            Object.keys(errorAuthen.data).forEach((key) => {
+              setError(key as keyof FormData, {
+                type: 'server',
+                message: errorAuthen.data[key]
+              })
+            })
+          }
+
+          // Hiển thị thông báo lỗi tổng quát
+          toast.error(errorAuthen.message)
+        } else {
+          toast.error('An unexpected error occurred')
+        }
       }
     })
   })

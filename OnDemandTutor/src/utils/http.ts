@@ -22,7 +22,7 @@ class Http {
     this.refreshToken = getRefreshTokenFromLS()
     this.instance = axios.create({
       baseURL: config.baseUrl,
-      timeout: 10000,
+      timeout: 100000,
       headers: {
         'Content-Type': 'application/json'
       }
@@ -43,13 +43,13 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         console.log(response)
+        console.log('status', response.status)
+        console.log('required', response.data)
 
         const { url } = response.config
         console.log(url)
 
         if (url === pathAuth.login || url === pathAuth.register) {
-          console.log('1')
-
           console.log(response.data)
 
           const data = response.data as AuthResponse
