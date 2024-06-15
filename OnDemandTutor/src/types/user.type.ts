@@ -1,13 +1,14 @@
 type Role = 'User' | 'Admin'
 
 export interface User {
-  _id: string
+  id: string
   roles: Role[]
+  gender: string
   email: string
-  name: string
-  date_of_birth: null
+  fullName: string
+  date_of_birth: ''
   address: string
   phone: string
-  createdAt: string
-  updatedAt: string
+  avatar: string
+  accountBalance: string
 }

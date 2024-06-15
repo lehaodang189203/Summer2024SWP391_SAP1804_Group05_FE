@@ -20,9 +20,7 @@ export default function ChangePassword() {
   const {
     register,
     formState: { errors },
-    handleSubmit,
-    setError,
-    reset
+    handleSubmit
   } = useForm<FormData>({
     defaultValues: {
       password: '',

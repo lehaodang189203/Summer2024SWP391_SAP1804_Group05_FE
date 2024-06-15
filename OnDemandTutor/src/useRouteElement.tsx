@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
 import Home from './pages/Home'
-import path from './constant/path'
+
 import MainLayout from './layout/MainLayout'
 import DashBoard from './pages/DashBoard'
 import { AppContext } from './context/app.context'
@@ -17,6 +17,7 @@ import Calendar from './pages/Calendar'
 import Profile from './pages/User/pages/Profile'
 import UserLayout from './pages/User/layout/UserLayout'
 import ChangPassword from './pages/User/pages/ChangePassword'
+import { path } from './constant/path'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
@@ -45,15 +46,6 @@ export default function useRouteElements() {
           <Register />
         </RegisterLayout>
       )
-    },
-    {
-      path: path.home,
-      element: (
-        <MainLayout>
-          <Home />
-        </MainLayout>
-      ),
-      index: true
     },
 
     {

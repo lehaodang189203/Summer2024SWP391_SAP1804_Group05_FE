@@ -13,8 +13,9 @@ import { LoginReqBody } from '../../types/user.request.type'
 import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import { ErrorResponse } from '../../types/utils.type'
 import { toast } from 'react-toastify'
-import path from '../../constant/path'
-import { getRefreshTokenFromLS, setAccessTokenToLS } from '../../utils/auth'
+
+import { getRefreshTokenFromLS } from '../../utils/auth'
+import { path } from '../../constant/path'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -45,28 +46,19 @@ export default function Login() {
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
 
+        toast.success(data.data.message, {
+          icon: false
+        })
         navigate(path.home)
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
-          const formError = error.response?.data.data
-          if (formError) {
-            for (const key in formError) {
-              setError(key as keyof FormData, {
-                type: 'sever',
-                message: formError[key as keyof FormData]
-              })
-            }
-          }
-        } else {
-          toast.error(error.message)
-        }
+        console.log(error.message)
       }
     })
   })
 
   return (
-    <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent  hover:shadow-xl hover:shadow-black'>
+    <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
       <div className='container justify-center flex'>
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Nhập</div>
@@ -74,7 +66,7 @@ export default function Login() {
             name='email'
             type='email'
             placeholder='Email'
-            className='mt-8 '
+            className='mt-8'
             register={register}
             errorMessage={errors.email?.message}
           />

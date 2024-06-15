@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { Link, NavLink } from 'react-router-dom'
 import me from '../../../../assets/img/me.jpg'
-import path from '../../../../constant/path'
+import { path } from '../../../../constant/path'
 
 export default function UserSideNav() {
   return (

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Pagination from '../../components/Pagination'
-import path from '../../constant/path'
+import { path } from '../../constant/path'
 
 export default function RequestList() {
   const [isExpanded, setIsExpanded] = useState(false)

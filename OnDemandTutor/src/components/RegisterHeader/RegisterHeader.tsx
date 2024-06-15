@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import BUMBUM from '../../assets/img/BUMBUM.png'
 import Popover from '../Popover/Popover'
+import { path } from '../../constant/path'
 
 export default function RegisterHeader() {
   return (
@@ -34,13 +35,13 @@ export default function RegisterHeader() {
                   <div className='shadow-red-700'>
                     <div className='  w-[20rem] flex mt-0.5   items-center justify-between text-center  text-[10px]  px-auto rounded-3xl'>
                       <Link
-                        to='/registerAT'
+                        to={path.registerAsTutor}
                         className='py-2 w-[10rem] h-full  bg-pink-400 border-pink-400 border-2 text-black  rounded-l-3xl   hover:text-white'
                       >
                         Đăng ký trở thành giảng viên
                       </Link>
                       <Link
-                        to='/tutorList'
+                        to={path.tutors}
                         className='py-2 w-[10rem]  h-full  text-white  bg-black border-black border-2  rounded-r-3xl  hover:text-pink-400'
                       >
                         danh sách lớp
@@ -68,13 +69,13 @@ export default function RegisterHeader() {
           {/* Login */}
           <nav className='h-36 pt-[48px] col-span-3'>
             <Link
-              to='/login'
+              to={path.login}
               className='transition duration-150 ease-in-out border-black border-2 px-2 py-2 rounded-lg hover:bg-gray-200 mr-1 '
             >
               Đăng Nhập
             </Link>
             <Link
-              to='/register'
+              to={path.register}
               className='bg-pink-500 border-black border-2 px-2 py-2 rounded-lg hover:bg-pink-400'
             >
               Đăng kí

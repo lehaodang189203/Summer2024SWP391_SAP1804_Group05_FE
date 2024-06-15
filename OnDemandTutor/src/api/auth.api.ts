@@ -9,10 +9,11 @@ import http from '../utils/http'
 
 export const authApi = {
   loginAccount: async (body: LoginReqBody) =>
-    await http.post<AuthResponse>('/LogIn', body), // nhận vào một đối tượng body có kiểu LoginReqBody, hàm sử dụng phương thức post của axios gửi yêu cầu đăng nhập đến endpoint
+    await http.post<AuthResponse>('/user/login', body), // nhận vào một đối tượng body có kiểu LoginReqBody, hàm sử dụng phương thức post của axios gửi yêu cầu đăng nhập đến endpoint
 
   registerAccount: async (body: ResReqBody) =>
-    await http.post<any>('/register', body),
+    await http.post<any>('/user/register', body),
 
-  logoutAccount: async (body: LogoutReqBody) => await http.post('/Logout', body)
+  logoutAccount: async (body: LogoutReqBody) =>
+    await http.post(' /Logout', body)
 }

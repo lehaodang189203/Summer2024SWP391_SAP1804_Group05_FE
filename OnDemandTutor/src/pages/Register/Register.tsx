@@ -10,24 +10,29 @@ import DateSelect from '../../components/DateSelect/DateSelect'
 import GenderSelect from '../../components/GenderSelect'
 import Input from '../../components/Input'
 import { ResReqBody } from '../../types/user.request.type'
-import { Schema, schema } from '../../utils/rules'
+
 import InputNumber from '../../components/InputNumber'
+import { Schema, schema } from '../../utils/rules'
+import { toast } from 'react-toastify'
+import { AppContext } from '../../context/app.context'
+import { useContext } from 'react'
+import { path } from '../../constant/path'
 
 type FormData = Pick<
   Schema,
   | 'email'
   | 'password'
-  | 'confirm_password'
-  | 'date_of_birth'
-  | 'username'
   | 'gender'
+  | 'confirm_password'
   | 'phone'
+  | 'date_of_birth'
+  | 'fullName'
 >
 
 const registerSchema = schema.pick([
   'email',
   'password',
-  'username',
+  'fullName',
   'confirm_password',
   'date_of_birth',
   'gender',
@@ -36,7 +41,7 @@ const registerSchema = schema.pick([
 
 export default function Register() {
   const navigate = useNavigate()
-
+  const { setIsAuthenticated } = useContext(AppContext)
   const {
     register,
     handleSubmit,
@@ -70,7 +75,11 @@ export default function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log(data)
-        navigate('/')
+        toast.success(data.data.message, {
+          icon: false
+        })
+        setIsAuthenticated(true)
+        navigate(path.home)
       },
       onError: (error) => {
         console.log(error)
@@ -90,12 +99,12 @@ export default function Register() {
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Ký</div>
           <Input
-            name='username'
+            name='fullName'
             type='text'
             placeholder='Họ và tên'
             className='mt-8'
             register={register}
-            errorMessage={errors.username?.message}
+            errorMessage={errors.fullName?.message}
           />
           <Input
             name='email'

@@ -1,9 +1,7 @@
 import { ToastContainer } from 'react-toastify'
 import './App.css'
 import useRouteElements from './useRouteElement'
-import { useContext, useEffect } from 'react'
-import { AppContext } from './context/app.context'
-import { LocalStrorageEventTarget } from './utils/utils'
+import 'react-toastify/dist/ReactToastify.css'
 
 //test
 function App() {

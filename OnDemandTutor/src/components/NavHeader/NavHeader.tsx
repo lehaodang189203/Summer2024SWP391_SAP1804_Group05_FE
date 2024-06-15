@@ -3,10 +3,11 @@ import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 import me from '../../assets/img/me.jpg'
-import path from '../../constant/path'
+
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
 import Popover from '../Popover/Popover'
+import { path } from '../../constant/path'
 
 export default function NavHeader() {
   const { isAuthenticated, setIsAuthenticated, refreshToken } =
@@ -120,6 +121,8 @@ export default function NavHeader() {
             <div>thanhngo.13@gmail.com</div>
           </Popover>
         )}
+
+        {/* mốt xóa ! ở đây nhé */}
 
         {!isAuthenticated && (
           <div className='flex items-center'>

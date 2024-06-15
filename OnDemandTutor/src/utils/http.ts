@@ -6,9 +6,11 @@ import {
   setAccessTokenToLS,
   setRefreshTokenToLS
 } from './auth'
-import path from '../constant/path'
-import { toast } from 'react-toastify'
+
 import { AuthResponse } from '../types/auth.type'
+import config from '../constant/config'
+import { pathAuth } from '../constant/path'
+import { toast } from 'react-toastify'
 
 class Http {
   instance: AxiosInstance
@@ -19,7 +21,7 @@ class Http {
     this.accessToken = getAccessTokenFromLS()
     this.refreshToken = getRefreshTokenFromLS()
     this.instance = axios.create({
-      baseURL: 'https://localhost:7133/api/Account/',
+      baseURL: config.baseUrl,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'
@@ -43,25 +45,35 @@ class Http {
         console.log(response)
 
         const { url } = response.config
+        console.log(url)
 
-        if (url === path.login || url === path.register) {
+        if (url === pathAuth.login || url === pathAuth.register) {
+          console.log('1')
+
+          console.log(response.data)
+
           const data = response.data as AuthResponse
+          console.log(data)
+          this.accessToken = data.data.access_Token
+          console.log('accessToken', data.data.access_Token)
 
-          this.accessToken = data.data.accessToken
-          this.refreshToken = data.data.refreshToken
+          this.refreshToken = data.data.refresh_Token
           setAccessTokenToLS(this.accessToken)
           setRefreshTokenToLS(this.refreshToken)
-        } else if (url === path.logout) {
+        } else if (url === pathAuth.logout) {
           this.accessToken = ''
           clearLS()
         }
         return response
       },
       (error: AxiosError) => {
-        //  lỗi khác
         if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
           const data: any | undefined = error.response?.data
+          console.log(data)
+
           const message = data?.message || error.message
+          console.log(message)
+
           toast.error(message)
         }
         if (error.response?.status === HttpStatusCode.Unauthorized) {
