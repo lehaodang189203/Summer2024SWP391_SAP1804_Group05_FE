@@ -26,6 +26,20 @@ export const schema = yup.object({
     .min(6, 'Độ dài từ 6-160 ký tự')
     .max(160, 'Độ dài từ 6-160 ký tự')
     .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
+  username: yup
+    .string()
+    .required('Tên người dùng là bắt buộc')
+    .max(160, 'Độ dài tối đa là 160 ký tự'),
+  firstName: yup
+    .string()
+    .min(2, 'Tên phải có ít nhất 2 ký tự')
+    .max(50, 'Tên không được vượt quá 50 ký tự')
+    .required('Tên là bắt buộc'),
+  lastName: yup
+    .string()
+    .min(2, 'Họ phải có ít nhất 2 ký tự')
+    .max(50, 'Họ không được vượt quá 50 ký tự')
+    .required('Họ là bắt buộc'),
 
   phone: yup
     .string()
@@ -35,6 +49,8 @@ export const schema = yup.object({
   address: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),
   date_of_birth: yup.date().max(new Date(), 'Hãy chọn một ngày trong quá khứ'),
   gender: yup.string().oneOf(['male', 'female']),
+  amount: yup.number().required('Số tiền nạp là bắt buộc'),
+
   fullName: yup
     .string()
     .max(160, 'Độ dài tối đa là 160 ký tự')

@@ -18,14 +18,15 @@ import Deposit from './pages/Deposit'
 import Profile from './pages/User/pages/Profile'
 import UserLayout from './pages/User/layout/UserLayout'
 import ChangPassword from './pages/User/pages/ChangePassword'
-import { path } from './constant/path'
+import TutorRegisterRequest from './pages/Moderator/Slide/TutorRegis'
 import AdminLayout from './pages/Admin/AdminLayout'
 import SessionList from './pages/Admin/Components/SessionList'
 import StudentList from './pages/Admin/Components/StudentList'
+import TutorList from './pages/TutorList'
 import AdminListTutor from './pages/Admin/Components/AdminListTutor'
 import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/AdminConfirmRegister'
 import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
-import TutorList from './pages/TutorList'
+import { path } from './constant/path'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
@@ -39,14 +40,7 @@ export default function useRouteElements() {
   }
 
   const routeElements = useRoutes([
-    {
-      path: path.login,
-      element: (
-        <RegisterLayout>
-          <Login />
-        </RegisterLayout>
-      )
-    },
+    // login register
     {
       path: path.register,
       element: (
@@ -56,6 +50,14 @@ export default function useRouteElements() {
       )
     },
     {
+      path: path.login,
+      element: (
+        <RegisterLayout>
+          <Login />
+        </RegisterLayout>
+      )
+    },
+    {
       path: path.home,
       element: (
         <MainLayout>
@@ -63,23 +65,6 @@ export default function useRouteElements() {
         </MainLayout>
       ),
       index: true
-    },
-
-    {
-      path: path.tutors,
-      element: (
-        <MainLayout>
-          <TutorList />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.requestList,
-      element: (
-        <MainLayout>
-          <RequestList />
-        </MainLayout>
-      )
     },
     {
       path: path.registerAsTutor,
@@ -89,14 +74,71 @@ export default function useRouteElements() {
         </MainLayout>
       )
     },
+
+    //main session
     {
-      path: path.home,
+      path: path.requestList,
       element: (
         <MainLayout>
-          <Home />
+          <RequestList />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.tutors,
+      element: (
+        <MainLayout>
+          <TutorList />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.calender,
+      element: (
+        <MainLayout>
+          <Calendar />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.checkOut,
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.deposit,
+      element: (
+        <MainLayout>
+          <Deposit />
+        </MainLayout>
+      )
+    },
+    //moder admin
+    {
+      path: path.profileTT,
+      element: (
+        <MainLayout>
+          <ProfileTT />
+        </MainLayout>
+      )
+    },
+    //{path: path.Admin.dashBoard,element: (<><DashBoard /></>)},
+    {
+      path: path.Moderator.listReRegisterTT,
+      element: (
+        <MainLayout>
+          <TutorRegisterRequest />
         </MainLayout>
       ),
-      index: true
+      children: [
+        {
+          index: true,
+          element: <TutorRegisterRequest />
+        }
+      ]
     },
     {
       path: path.Admin.admin,

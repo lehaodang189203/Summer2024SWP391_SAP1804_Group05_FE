@@ -33,19 +33,20 @@ export const path = {
 
 export const pathAuth = {
   home: '/',
-  login: '/user/login',
+  login: 'user/login',
   user: '/user',
 
-  register: '/user/register',
+  register: 'user/register',
   registerAsTutor: '/registerAT',
-  logout: '/user/Logout',
+  logout: 'user/Logout',
   tutors: '/tutors',
-  dashBoard: '/dashBoard',
   profileTT: '/profile',
   requestList: '/requests',
   detailRequest: '/detailRequest',
   calender: '/calender',
   checkOut: '/checkout',
+  payment: '/payment',
+  deposit: '/deposit',
   changePassword: '/user/changePassword',
   profile: '/user/profile'
 } as const

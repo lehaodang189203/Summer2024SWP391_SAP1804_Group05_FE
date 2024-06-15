@@ -4,11 +4,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 import me from '../../assets/img/me.jpg'
 
+// import { getRefreshTokeNFromLS } from '../../utils/auth'
+import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
-import Popover from '../Popover/Popover'
-import { path } from '../../constant/path'
 import { clearLS } from '../../utils/auth'
+import Popover from '../Popover/Popover'
 
 export default function NavHeader() {
   const { isAuthenticated, setIsAuthenticated, refreshToken } =

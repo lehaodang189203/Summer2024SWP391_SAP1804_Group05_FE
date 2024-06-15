@@ -52,6 +52,8 @@ class Http {
         console.log(url)
 
         if (url === pathAuth.login || url === pathAuth.register) {
+          console.log(1111)
+
           console.log(response.data)
 
           const data = response.data as AuthResponse
