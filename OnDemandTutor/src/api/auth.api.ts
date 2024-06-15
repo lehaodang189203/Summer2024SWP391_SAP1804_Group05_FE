@@ -15,5 +15,5 @@ export const authApi = {
     await http.post<any>('/user/register', body),
 
   logoutAccount: async (body: LogoutReqBody) =>
-    await http.post(' /Logout', body)
+    await http.post('user/Logout', body)
 }

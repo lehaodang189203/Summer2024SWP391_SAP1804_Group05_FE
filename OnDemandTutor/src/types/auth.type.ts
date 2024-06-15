@@ -2,7 +2,7 @@ import { User } from './user.type'
 import { SuccessResponse } from './utils.type'
 
 export type AuthResponse = SuccessResponse<{
-  access_Token: string
-  refresh_Token: string
+  access_token: string
+  refresh_token: string
   user: User
 }>

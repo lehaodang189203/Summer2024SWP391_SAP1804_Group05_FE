@@ -8,6 +8,7 @@ import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
 import Popover from '../Popover/Popover'
 import { path } from '../../constant/path'
+import { clearLS } from '../../utils/auth'
 
 export default function NavHeader() {
   const { isAuthenticated, setIsAuthenticated, refreshToken } =
@@ -22,12 +23,14 @@ export default function NavHeader() {
   })
 
   const handleLogout = () => {
-    logoutMutation.mutate(
-      { refreshToken: refresh },
-      {
-        onSuccess: (refreshToken) => {
-          navigate(path.login)
+    console.log(refreshToken)
 
+    logoutMutation.mutate(
+      { refresh_token: refresh },
+      {
+        onSuccess: () => {
+          navigate(path.login)
+          clearLS()
           setIsAuthenticated(false)
         }
       }

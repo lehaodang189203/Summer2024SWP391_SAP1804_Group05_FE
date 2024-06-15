@@ -24,7 +24,7 @@ export const pathAuth = {
 
   register: '/user/register',
   registerAsTutor: '/registerAT',
-  logout: '/Logout',
+  logout: '/user/Logout',
   tutors: '/tutors',
   dashBoard: '/dashBoard',
   profileTT: '/profile',

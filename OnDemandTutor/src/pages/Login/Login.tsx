@@ -14,7 +14,11 @@ import { isAxiosError } from '../../utils/utils'
 import { ErrorResponse } from '../../types/utils.type'
 import { toast } from 'react-toastify'
 
-import { getRefreshTokenFromLS } from '../../utils/auth'
+import {
+  getRefreshTokenFromLS,
+  setAccessTokenToLS,
+  setRefreshTokenToLS
+} from '../../utils/auth'
 import { path } from '../../constant/path'
 import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
 
@@ -44,6 +48,8 @@ export default function Login() {
       onSuccess: (data) => {
         console.log(data)
         const refreshToken = getRefreshTokenFromLS()
+        console.log(refreshToken)
+
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
 

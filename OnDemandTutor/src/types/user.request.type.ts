@@ -21,5 +21,5 @@ export interface ResReqBody {
 }
 
 export interface LogoutReqBody {
-  refreshToken: string
+  refresh_token: string
 }

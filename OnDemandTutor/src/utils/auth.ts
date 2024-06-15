@@ -5,7 +5,7 @@ export const getAccessTokenFromLS = () =>
   localStorage.getItem('access_token') || ''
 
 export const getRefreshTokenFromLS = () =>
-  localStorage.getItem('access_token') || ''
+  localStorage.getItem('refresh_token') || ''
 
 export const setAccessTokenToLS = (access_token: string) =>
   localStorage.setItem('access_token', access_token)

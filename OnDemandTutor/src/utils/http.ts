@@ -54,14 +54,15 @@ class Http {
 
           const data = response.data as AuthResponse
           console.log(data)
-          this.accessToken = data.data.access_Token
-          console.log('accessToken', data.data.access_Token)
+          this.accessToken = data.data.access_token
+          console.log('accessToken', data.data.access_token)
 
-          this.refreshToken = data.data.refresh_Token
+          this.refreshToken = data.data.refresh_token
+          console.log('refreshToken', data.data.refresh_token)
+
           setAccessTokenToLS(this.accessToken)
           setRefreshTokenToLS(this.refreshToken)
         } else if (url === pathAuth.logout) {
-          this.accessToken = ''
           clearLS()
         }
         return response

@@ -17,6 +17,10 @@ import { toast } from 'react-toastify'
 import { AppContext } from '../../context/app.context'
 import { useContext } from 'react'
 import { path } from '../../constant/path'
+import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
+import { ErrorResponse } from '../../types/utils.type'
+import { isAxiosError } from '../../utils/utils'
+import { getRefreshTokenFromLS, setRefreshTokenToLS } from '../../utils/auth'
 
 type FormData = Pick<
   Schema,
@@ -46,6 +50,7 @@ export default function Register() {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(registerSchema)
@@ -75,14 +80,40 @@ export default function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log(data)
+        const refreshToken = getRefreshTokenFromLS()
+        console.log(refreshToken)
+
+        setRefreshTokenToLS(refreshToken)
+        setIsAuthenticated(true)
+
         toast.success(data.data.message, {
           icon: false
         })
-        setIsAuthenticated(true)
         navigate(path.home)
       },
       onError: (error) => {
-        console.log(error)
+        if (
+          isAxiosError<ErrorResponse<any>>(error) &&
+          error.response?.status === HttpStatusCode.UnprocessableEntity // 422
+        ) {
+          const errorAuthen = error.response.data
+          console.log(errorAuthen)
+
+          // Hiển thị lỗi trong form
+          if (errorAuthen.data) {
+            Object.keys(errorAuthen.data).forEach((key) => {
+              setError(key as keyof FormData, {
+                type: 'server',
+                message: errorAuthen.data[key]
+              })
+            })
+          }
+
+          // Hiển thị thông báo lỗi tổng quát
+          toast.error(errorAuthen.message)
+        } else {
+          toast.error('An unexpected error occurred')
+        }
       }
     })
   })
