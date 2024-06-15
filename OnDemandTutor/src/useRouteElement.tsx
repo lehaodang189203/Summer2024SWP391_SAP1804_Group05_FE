@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-import TutorList from './pages/TutorList'
+
 import Login from './pages/Login'
 import Register from './pages/Register'
 import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
@@ -14,10 +14,18 @@ import RequestList from './pages/RequestList'
 import ProfileTT from './pages/User/pages/Profile'
 import CheckOut from './pages/CheckOut'
 import Calendar from './pages/Calendar'
+import Deposit from './pages/Deposit'
 import Profile from './pages/User/pages/Profile'
 import UserLayout from './pages/User/layout/UserLayout'
 import ChangPassword from './pages/User/pages/ChangePassword'
 import { path } from './constant/path'
+import AdminLayout from './pages/Admin/AdminLayout'
+import SessionList from './pages/Admin/Components/SessionList'
+import StudentList from './pages/Admin/Components/StudentList'
+import AdminListTutor from './pages/Admin/Components/AdminListTutor'
+import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/AdminConfirmRegister'
+import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
+import TutorList from './pages/TutorList'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
@@ -46,6 +54,15 @@ export default function useRouteElements() {
           <Register />
         </RegisterLayout>
       )
+    },
+    {
+      path: path.home,
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      ),
+      index: true
     },
 
     {
@@ -82,37 +99,37 @@ export default function useRouteElements() {
       index: true
     },
     {
-      path: path.dashBoard,
-      element: (
-        <RegisterLayout>
-          <DashBoard />
-        </RegisterLayout>
-      )
+      path: path.Admin.admin,
+      element: <AdminLayout />,
+      children: [
+        {
+          index: true,
+          element: <DashBoard />
+        },
+        {
+          path: path.Admin.sessionList,
+          element: <SessionList />
+        },
+        {
+          path: path.Admin.studentlist,
+          element: <StudentList />
+        },
+        {
+          //tutor
+          path: path.Admin.tutorList,
+          element: <AdminListTutor />
+        },
+        {
+          path: path.Admin.confirmProfileRegisterTT,
+          element: <AdminConfirmRegister />
+        },
+        {
+          path: path.Admin.rejectProfileRegisterTT,
+          element: <AdminRejectRegister />
+        }
+      ]
     },
-    {
-      path: path.profileTT,
-      element: (
-        <MainLayout>
-          <ProfileTT />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.calender,
-      element: (
-        <MainLayout>
-          <Calendar />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.checkOut,
-      element: (
-        <MainLayout>
-          <CheckOut />
-        </MainLayout>
-      )
-    },
+    //account
     {
       path: path.user,
       element: (

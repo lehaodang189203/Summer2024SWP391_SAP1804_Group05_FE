@@ -8,7 +8,7 @@ export interface ResATReqBody {
   field: string
   experience: Number
   specializedSkills: string
-  imageDegree: object
+  imageQualification: object
 }
 
 export interface ResReqBody {
@@ -22,4 +22,9 @@ export interface ResReqBody {
 
 export interface LogoutReqBody {
   refresh_token: string
+}
+export interface reqDeposit{
+  firstName: string
+  lastName:string
+  amount: number
 }

@@ -21,8 +21,8 @@ export const schemaResAT = yup.object({
   type: yup
     .string()
     .oneOf(
-      ['Giỏi', 'Khá','Trung Bình'],
-      'phải là Giỏi, Khá hoặc Trung bình'
+      ['cetificate', 'bangCap'],
+      'phải là Chứng Chỉ or bằng cấp'
     )
     .required('Xếp loại bằng là bắt buộc'),
   field: yup
@@ -35,7 +35,7 @@ export const schemaResAT = yup.object({
   specializedSkills: yup
     .string()
     .required('Không được bỏ trống'),
-   imageDegree: yup
+  imageQualification: yup
     .mixed()
     .required('Up file để có thể đăng kí làm gia sư')
     .test('fileSize', 'Phải up File jpeg hoặc png hoặc pdf và bé hơn 10mb', (value) => {

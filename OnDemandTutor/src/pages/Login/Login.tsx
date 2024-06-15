@@ -84,7 +84,7 @@ export default function Login() {
       }
     })
   })
-
+  const signInGoogle = () => {}
   return (
     <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
       <div className='container justify-center flex'>
@@ -124,7 +124,10 @@ export default function Login() {
           <span>---------------------------</span>
         </div>
         <div className='justify-center flex py-2'>
-          <button className='bg-black text-white border-black border-2 w-[300px] rounded-lg justify-center items-center flex py-2 shadow-2xl hover:bg-white hover:text-black'>
+          <button
+            className='bg-black text-white border-black border-2 w-[300px] rounded-lg justify-center items-center flex py-2 shadow-2xl hover:bg-white hover:text-black'
+            onClick={signInGoogle}
+          >
             <div className='pr-2'>
               <FontAwesomeIcon icon={faGoogle} />
             </div>

@@ -99,11 +99,18 @@ export default function NavHeader() {
                 >
                   Tài khoản của tôi
                 </Link>
+
                 <Link
                   to='/'
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                 >
                   Đơn Mua
+                </Link>
+                <Link
+                  to='/deposit'
+                  className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                >
+                  Nạp tiền
                 </Link>
                 <button
                   onClick={handleLogout}
@@ -121,7 +128,11 @@ export default function NavHeader() {
                 className='w-full h-full object-cover rounded-full'
               />
             </div>
-            <div>thanhngo.13@gmail.com</div>
+            <Link to={'/profile'}>
+              <div className='text-black hover:text-pink-400'>
+                thanhngo.3544@gmail.com
+              </div>
+            </Link>
           </Popover>
         )}
 
