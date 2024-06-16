@@ -36,21 +36,26 @@ function StudentRes() {
         dataIndex: "FullName",// xác định trường nào trong interface DataType
         onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
         sorter: (a, b) => a.FullName.length - b.FullName.length,
+        width:200,
+        fixed:'left'
       }
       ,{
         title:"Môn",
         dataIndex:"SubjectName",
         defaultSortOrder: "descend",
         sorter: (a, b) => a.SubjectName.length - b.SubjectName.length,
+        width:200,
         // sorter: (a, b) => new Date(a.SubjectName).getTime() - new Date(b.SubjectName).getTime()
       },{
         title:"Mục",
         dataIndex:"title",
         // sorter: (a, b) => parseInt(a.Gender) - parseInt(b.Gender),
+        width:200
       },{
         title:"Giá",
         dataIndex:"price",
         // defaultSortOrder: "descend",
+        width:150,
         
         sorter: (a, b) => a.price - b.price
       },{
@@ -58,31 +63,39 @@ function StudentRes() {
         dataIndex:"status",
         // defaultSortOrder: "descend",
         // sorter: (a, b) => (a.status - b.status)
+        width:200,
       },{
         title:"Phương thức học",
         dataIndex:"methodLearning",
         // defaultSortOrder: "descend"
+        width:150,
       },{
         title:"Tên dịch vụ",
         dataIndex:"nameService",
         // defaultSortOrder: "descend"
+        width:200,
       },{
         title:"Ngày",
         dataIndex:"date",
         // defaultSortOrder: "descend"
+        width:150,
       },{
         title:"Giờ bắt đầu",
         dataIndex:"timeStart",
         // defaultSortOrder: "descend"
+        width:150,
       },{
         title:"Giờ kết thúc",
         dataIndex:"date",
         // defaultSortOrder: "descend"
+        width:150
       },
       {
         title: "Detail",
         dataIndex: "detail",
+        fixed : 'right',
         className: "TextAlign",
+        width:100,
         render: (text: string, record: DataType) => (<div className="flex gap-1">
           <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
           onClick={() => showDetail(record)}
@@ -105,8 +118,8 @@ function StudentRes() {
     return ( <>
         <div className="text-left">Yêu cầu đặt lịch</div>
         <ModMenu
-            list="list"
-            rej=""
+            kind="student"
+            style="Option1"
         />
         <div className="text-left border-r-black border-l-black border-t-black border-2 pt-5 h-[629px] rounded-t-xl mt-6">
             <div className="mb-5">
@@ -121,9 +134,10 @@ function StudentRes() {
                 className=""
                 columns={columns}
                 dataSource={data}
-                pagination={{ pageSize: 5 }} 
+                pagination={{ pageSize: 10 }} 
                 onChange={onChange}
                 showSorterTooltip={{ target: "sorter-icon" }}
+                scroll={{ x: 1300,y: 400}}
                 />
                 <div>
                 <Modal
@@ -142,14 +156,10 @@ function StudentRes() {
                     {selectedRecord && (
                     <div>
                         <p> Tên : {selectedRecord.FullName}</p>
-                        {/* <p> Ngày sinh : {selectedRecord.Date_Of_Birth}</p>
-                         <p> Giới tính : {selectedRecord.Gender}</p>
-                        <p> Môn : {selectedRecord.SubjectName}</p>
-                        <p>Bằng cấp(Chứng chỉ) : {selectedRecord.Type}</p>
-                        <p> Tên bằng Cấp : {selectedRecord.QualificationName}</p>
-                        <p> Kĩ năng đặc biệt : {selectedRecord.SpecializedSkill}</p>
-                     <img src={selectedRecord.Img}> : {selectedRecord.Img}</img>    // ảnh nè  
-                        <p> Kinh nghiệm dạy : {selectedRecord.Experience} Năm</p>  */}
+                        <div className="flex">
+                          <p>{selectedRecord.date} Thời gian: từ {selectedRecord.timeStart} tới { selectedRecord.timeEnd } </p>
+                        </div>
+                        <p>{selectedRecord.SubjectName}</p>
                     </div>
                     )}
                 </Modal>

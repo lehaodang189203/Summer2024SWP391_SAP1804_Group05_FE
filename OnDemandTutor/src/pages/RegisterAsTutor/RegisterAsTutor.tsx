@@ -54,12 +54,14 @@ export default function RegisterAsTuTor() {
   })
   
   const onSubmit = handleSubmit((data) => {
+      console.log("có data")
       console.log(data)
       const body: ResATReqBody = data
       
 
       registerAccountMutation.mutate(body, {
         onSuccess: (data) => {
+          console.log("thành công")
           console.log(data)// data này không phải là object mà mình gửi đi 
 
           // setIsAuthenticated(true)
@@ -69,6 +71,7 @@ export default function RegisterAsTuTor() {
           navigate('/')
         },
         onError: (error) => {
+          console.log("lỗi")
           console.log(error)
         }
       })
@@ -86,7 +89,6 @@ export default function RegisterAsTuTor() {
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Ký Thành Giảng Viên</div>
           <InputFile
-            
             name='qualificationName'
             type='text'
             placeholder='Tên Bằng Cấp'

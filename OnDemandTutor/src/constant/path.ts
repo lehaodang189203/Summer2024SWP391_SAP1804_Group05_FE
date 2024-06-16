@@ -1,12 +1,10 @@
-
-
-const path = {
+export const path = {
   home: '/',
-  login: '/login',
+  login: '/user/login',
   user: '/user',
-  register: '/register',
-  registerAsTutor: '/registerAsTutor',
-  logout: '/Logout',
+  register: '/user/register',
+  registerAsTutor: '/user/registerAsTutor',
+  logout: '/user/Logout',
   tutors: '/tutors',
   profileTT: '/profile',
   requestList: '/requests',
@@ -19,9 +17,12 @@ const path = {
   profile: '/user/profile',
   Moderator: {
     mod:'/mod',
-    listStudentRequest : '/mod/listStudentRequest',
-    tutorList: 'mod/tutorList',
-    listReRegisterTT: '/modaretor/listTutor'
+    listStudentRequest : '/mod/listStudentRequest',//danh sách học sinh tạo req session(phiên học)
+    tutorResRegis: '/mod/tutorResRegis',//danh sách giảng viên đăng kí để approved (đang làm)
+    tutorPostSession: '/mod/listTutor'// danh sách post giảng viên tạo phiên học
+    
+    //danh sách phiên học
+    //khiếu nại
   },
   Admin:{
     admin:'/admin', // phair laf /admin
@@ -31,7 +32,23 @@ const path = {
     studentlist: '/admin/student',
     sessionList: '/admin/sessionList'
   }
-
 } as const
 
-export default path
+// export const pathAuth = {
+//   home: '/',
+//   login: 'user/login',
+//   user: '/user',
+//   register: 'user/register',
+//   registerAsTutor: '/registerAT',
+//   logout: 'user/Logout',
+//   tutors: '/tutors',
+//   profileTT: '/profile',
+//   requestList: '/requests',
+//   detailRequest: '/detailRequest',
+//   calender: '/calender',
+//   checkOut: '/checkout',
+//   payment: '/payment',
+//   deposit: '/deposit',
+//   changePassword: '/user/changePassword',
+//   profile: '/user/profile'
+// } as const

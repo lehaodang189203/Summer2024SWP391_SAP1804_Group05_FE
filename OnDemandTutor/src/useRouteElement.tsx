@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
 import Home from './pages/Home'
-import path from './constant/path'
+
 import MainLayout from './layout/MainLayout'
 import DashBoard from './pages/DashBoard'
 import { AppContext } from './context/app.context'
@@ -29,12 +29,15 @@ import ModeratorLayout from './pages/Moderator/ModeratorLayout/ModeratorLayout'
 import StudentRes from './pages/Moderator/Components/StudentRes'
 
 
+import { path } from './constant/path'
+import ModListTutor from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
+import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
-  
+
   function ProtectedRoute() {
-   return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
+    return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
   }
 
   function RejectedRoute() {
@@ -43,22 +46,90 @@ export default function useRouteElements() {
 
   const routeElements = useRoutes([
     // login register
-    {path: path.register,element: ( <RegisterLayout><Register /></RegisterLayout>)},
-    {path: path.login,element: (<RegisterLayout><Login /></RegisterLayout>)},
-    {path: path.home,element: (
-                                <MainLayout><Home /></MainLayout>),
-                                index: true
+    {
+      path: path.register,
+      element: (
+        <RegisterLayout>
+          <Register />
+        </RegisterLayout>
+      )
     },
-    {path: path.registerAsTutor,element: (<MainLayout><RegisterAsTutor /></MainLayout>)},
+    {
+      path: path.login,
+      element: (
+        <RegisterLayout>
+          <Login />
+        </RegisterLayout>
+      )
+    },
+    {
+      path: path.home,
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      ),
+      index: true
+    },
+    {
+      path: path.registerAsTutor,
+      element: (
+        <MainLayout>
+          <RegisterAsTutor />
+        </MainLayout>
+      )
+    },
 
     //main session
-    {path: path.requestList,element: (<MainLayout><RequestList /></MainLayout>)},
-    {path: path.tutors,element: (<MainLayout><TutorList /></MainLayout>)},
-    {path: path.calender,element: (<MainLayout><Calendar /></MainLayout>)},
-    {path: path.checkOut,element: (<MainLayout><CheckOut /></MainLayout>)},
-    {path: path.deposit,element: (<MainLayout><Deposit /></MainLayout>)},
+    {
+      path: path.requestList,
+      element: (
+        <MainLayout>
+          <RequestList />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.tutors,
+      element: (
+        <MainLayout>
+          <TutorList />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.calender,
+      element: (
+        <MainLayout>
+          <Calendar />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.checkOut,
+      element: (
+        <MainLayout>
+          <CheckOut />
+        </MainLayout>
+      )
+    },
+    {
+      path: path.deposit,
+      element: (
+        <MainLayout>
+          <Deposit />
+        </MainLayout>
+      )
+    },
     //moder admin
-    {path: path.profileTT,element: (<MainLayout><ProfileTT /></MainLayout>)},
+    {
+      path: path.profileTT,
+      element: (
+        <MainLayout>
+          <ProfileTT />
+        </MainLayout>
+      )
+    },
     //{path: path.Admin.dashBoard,element: (<><DashBoard /></>)},
     {path: path.Moderator.mod,element: (
       <ModeratorLayout/>
@@ -68,40 +139,41 @@ export default function useRouteElements() {
             index:true,
             element:<StudentRes/>
           },{
-            path:path.Moderator.tutorList,
-            element:<SessionList/>
+            path:path.Moderator.tutorResRegis,
+            element:<ModTutorResRegis/>
           }
         ]
     },
     {
       path: path.Admin.admin,
-         element:(
-            <AdminLayout />
-         ),
-         children:[{
-            index:true,
-            element:<DashBoard/>
-          },{
-            path:path.Admin.sessionList,
-            element:<SessionList/>
-          }
-        ,{
-            path:path.Admin.studentlist,
-            element:<StudentList/>
-          }
-          ,{   //tutor                      
-            path:path.Admin.tutorList,
-            element:<AdminListTutor/>
-          },{                         
-            path:path.Admin.confirmProfileRegisterTT,
-            element:<AdminConfirmRegister/>
-          },{                         
-            path:path.Admin.rejectProfileRegisterTT,
-            element:<AdminRejectRegister/>
-          }
-        ]
-            
-      
+      element: <AdminLayout />,
+      children: [
+        {
+          index: true,
+          element: <DashBoard />
+        },
+        {
+          path: path.Admin.sessionList,
+          element: <SessionList />
+        },
+        {
+          path: path.Admin.studentlist,
+          element: <StudentList />
+        },
+        {
+          //tutor
+          path: path.Admin.tutorList,
+          element: <AdminListTutor />
+        },
+        {
+          path: path.Admin.confirmProfileRegisterTT,
+          element: <AdminConfirmRegister />
+        },
+        {
+          path: path.Admin.rejectProfileRegisterTT,
+          element: <AdminRejectRegister />
+        }
+      ]
     },
     //account
     {
@@ -122,9 +194,6 @@ export default function useRouteElements() {
         }
       ]
     }
-    ,
-    
-    
   ])
   return routeElements
 }

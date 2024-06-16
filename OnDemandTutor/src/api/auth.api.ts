@@ -17,5 +17,6 @@ export const authApi = {
   //   await http.post<any>('/signin-google'),
   // logoutAccount: () => http.post('/logout')
 
-  logoutAccount: async (body: LogoutReqBody) => await http.post('user/logout', body)
+  logoutAccount: async (body: LogoutReqBody) =>
+    await http.post('user/logout', body)
 }

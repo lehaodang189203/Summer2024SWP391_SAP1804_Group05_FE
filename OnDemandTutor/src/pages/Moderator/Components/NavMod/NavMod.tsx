@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom";
-import path from "../../../../constant/path";
 import BUMBUM from '../../../../assets/img/BUMBUM.png'
+import { path } from "../../../../constant/path";
 export default function NavMod(){
     const option = ['DashBar','StudentList','TutorList', 'SessionList']
     const [active, setAtive] = useState("");
@@ -16,27 +16,10 @@ export default function NavMod(){
                 <Link to={path.Moderator.mod}><button className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
                     onClick={()=>handleSetActive('student')}>
                         Quản lí Học sinh</button></Link>
-                <Link to={path.Moderator.listReRegisterTT}><button className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
+                <Link to={path.Moderator.tutorResRegis}><button className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
                     onClick={()=>handleSetActive('tutor')}>
                         Quản lí Gia Sư</button></Link>
-                <Link to={path.Moderator.listReRegisterTT}><button className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
-                    onClick={()=>handleSetActive('session')}>
-                        Quản lí phiên học</button>  </Link>
-                <Link to={path.Moderator.mod}><button className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
-                    onClick={()=>handleSetActive('SessionList')}>
-                        Danh sách phiên học</button></Link>
-                <Link to={path.Moderator.mod}><button className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
-                    onClick={()=>handleSetActive('SessionList')}>
-                        Danh sách phiên học</button></Link>
-                <Link to={path.Moderator.mod}><button className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
-                    onClick={()=>handleSetActive('SessionList')}>
-                        Danh sách phiên học</button></Link>
-                <Link to={path.Moderator.mod}><button className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
-                    onClick={()=>handleSetActive('SessionList')}>
-                        Danh sách phiên học</button></Link>
-                <Link to={path.Moderator.mod}><button className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
-                    onClick={()=>handleSetActive('SessionList')}>
-                        Danh sách phiên học</button></Link>        
+               
             </div>
             
 

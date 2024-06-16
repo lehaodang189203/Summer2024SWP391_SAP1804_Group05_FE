@@ -241,66 +241,92 @@ function AdminConfirmRegister() {
         title: "Tên", // tên của cột hay còn gọi là header của cột
         dataIndex: "FullName",// xác định trường nào trong interface DataType
         defaultSortOrder: "descend",
-        onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
-        sorter: (a, b) => a.FullName.length - b.FullName.length,
+        //onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
+        //sorter: (a, b) => a.FullName.length - b.FullName.length,
+        width:200,
+        fixed:"left"
       }
       ,{
         title:"Ngày sinh",
         dataIndex:"Date_Of_Birth",
         defaultSortOrder: "descend",
+        width:200,
         sorter: (a, b) => new Date(a.Date_Of_Birth).getTime() - new Date(b.Date_Of_Birth).getTime()
       },{
         title:"Giới Tính",
         dataIndex:"Gender",
+        width:200,
         sorter: (a, b) => parseInt(a.Gender) - parseInt(b.Gender),
       },{
         title:"Tên Môn Học",
         dataIndex:"SubjectName",
         defaultSortOrder: "descend",
+        width:250,
         
-        sorter: (a, b) => parseInt(a.SubjectName) - parseInt(b.SubjectName),
+        //sorter: (a, b) => parseInt(a.SubjectName) - parseInt(b.SubjectName),
       },{
         title:"Kinh Nghiệm",
         dataIndex:"Experience",
         defaultSortOrder: "descend",
+        width:200,
         sorter: (a, b) => (a.Experience - b.Experience)
       },{
         title:"Tên Bằng Cấp(Chứng chỉ)",
         dataIndex:"QualificationName",
+        width:250,
         defaultSortOrder: "descend"
+      },{
+        title: "Ảnh",
+        dataIndex: "Img",
+        className: "TextAlign",
+        width:120,
+        fixed:"right",
+        render: (text: string, record: DataType) => (<div className="flex gap-1">
+          <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
+          onClick={() => showImg(record)}
+          >Xem Bằng</button></div>
+        )
       },
       {
         title: "Detail",
         dataIndex: "detail",
         className: "TextAlign",
+        width:120,
+        fixed:"right",
         render: (text: string, record: DataType) => (<div className="flex gap-1">
-          <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
-          onClick={() => showDetail(record)}
-          >Chi tiết</button></div>
-        ),
+            <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
+            onClick={() => showDetail(record)}
+            >Hành Động</button></div>
+        )
       }
     ]
     const [searchText, setSearchText] = useState('');// liên quan đến giá trị input vào search
     const [selectedRecord, setSelectedRecord] = useState<DataType | null>(null);
     const [visible, setVisible] = useState(false);
-
+    const [isDetails, setIsDetails] = useState(false);
     const showDetail = (record: DataType) => {
         setSelectedRecord(record);
         setVisible(true);
+        setIsDetails(true);
     };
     const handleCancel = () => {
         setVisible(false);
         setSelectedRecord(null);
     };
+    const showImg =(record:DataType) =>{
+        setSelectedRecord(record);
+        setVisible(true);
+        setIsDetails(false);
+      };
     return ( <>
         <div>
-            <div className="text-left p-4 ml-7">Yêu cầu trở thành gia sư</div>
+            <div className="text-left">Yêu cầu trở thành gia sư</div>
             <TurorMenu
             list=""
             con="con"
             rej=""
             />
-            <div className="m-10 text-left border-r-black border-l-black border-t-black border-2 p-5 h-[570px] rounded-t-xl ">
+            <div className="text-left border-2 p-5 h-[600px] rounded-t-xl shadow-black rounded-2xl shadow-sm mt-5">
                 <div className="mb-5">
                     <Search
                     inputText={searchText}
@@ -315,6 +341,7 @@ function AdminConfirmRegister() {
                 pagination={{ pageSize: 6 }} 
                 onChange={onChange}
                 showSorterTooltip={{ target: "sorter-icon" }}
+                scroll={{ x: 1300,y: 400}}
                 />
                 <div>
                 <Modal
@@ -332,15 +359,22 @@ function AdminConfirmRegister() {
                     >
                     {selectedRecord && (
                     <div>
-                        <p> Tên : {selectedRecord.FullName}</p>
-                        <p> Ngày sinh : {selectedRecord.Date_Of_Birth}</p>
-                         <p> Giới tính : {selectedRecord.Gender}</p>
-                        <p> Môn : {selectedRecord.SubjectName}</p>
-                        <p>Bằng cấp(Chứng chỉ) : {selectedRecord.Type}</p>
-                        <p> Tên bằng Cấp : {selectedRecord.QualificationName}</p>
-                        <p> Kĩ năng đặc biệt : {selectedRecord.SpecializedSkill}</p>
-                        {/* <img src={selectedRecord.Img}> : {selectedRecord.Img}</img>    // ảnh nè  */}
-                        <p> Kinh nghiệm dạy : {selectedRecord.Experience} Năm</p> 
+                        {isDetails ? (
+                            <div>
+                              <p>Tên : {selectedRecord.FullName}</p>
+                              <p>Ngày sinh : {selectedRecord.Date_Of_Birth}</p>
+                              <p>Giới tính : {selectedRecord.Gender}</p>
+                              <p>Môn : {selectedRecord.SubjectName}</p>
+                              <p>Bằng cấp(Chứng chỉ) : {selectedRecord.Type}</p>
+                              <p>Tên bằng Cấp : {selectedRecord.QualificationName}</p>
+                              <p>Kĩ năng đặc biệt : {selectedRecord.SpecializedSkill}</p>
+                              {/* <img src={selectedRecord.Img} alt="ảnh" />    // ảnh nè  */}
+                              <p>Kinh nghiệm dạy : {selectedRecord.Experience} Năm</p>
+                              <p>Kĩ năng nổi bật: {selectedRecord.SpecializedSkill}</p>
+                            </div>
+                        ) : (
+                          <p>Ảnh nèk : {selectedRecord.Img}</p>
+                      )}
                     </div>
                     )}
                 </Modal>

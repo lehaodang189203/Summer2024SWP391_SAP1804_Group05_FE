@@ -13,16 +13,15 @@ export interface ResATReqBody {
 
 export interface ResReqBody {
   email: string
-  username: string
+  fullName: string
   password: string
-
   date_of_birth: string // Sử dụng Date để biểu diễn ngày tháng
   gender: string
   phone: string
 }
 
 export interface LogoutReqBody {
-  refreshToken: string
+  refresh_token: string
 }
 export interface reqDeposit{
   firstName: string

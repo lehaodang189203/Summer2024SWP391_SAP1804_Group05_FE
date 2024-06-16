@@ -10,11 +10,17 @@ import { useContext } from 'react'
 import { authApi } from '../../api/auth.api'
 import { AppContext } from '../../context/app.context'
 import { LoginReqBody } from '../../types/user.request.type'
-import { isAxiosUnprocessableEntityError } from '../../utils/utils'
+import { isAxiosError } from '../../utils/utils'
 import { ErrorResponse } from '../../types/utils.type'
 import { toast } from 'react-toastify'
-import path from '../../constant/path'
-import { getRefreshTokenFromLS, setAccessTokenToLS } from '../../utils/auth'
+
+import {
+  getRefreshTokenFromLS,
+  setAccessTokenToLS,
+  setRefreshTokenToLS
+} from '../../utils/auth'
+import { path } from '../../constant/path'
+import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -42,34 +48,45 @@ export default function Login() {
       onSuccess: (data) => {
         console.log(data)
         const refreshToken = getRefreshTokenFromLS()
-        
+        console.log(refreshToken)
+
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
 
+        toast.success(data.data.message, {
+          icon: false
+        })
         navigate(path.home)
       },
       onError: (error) => {
-        if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
-          const formError = error.response?.data.data
-          if (formError) {
-            for (const key in formError) {
+        if (
+          isAxiosError<ErrorResponse<any>>(error) &&
+          error.response?.status === HttpStatusCode.UnprocessableEntity // 422
+        ) {
+          const errorAuthen = error.response.data
+          console.log(errorAuthen)
+
+          // Hiển thị lỗi trong form
+          if (errorAuthen.data) {
+            Object.keys(errorAuthen.data).forEach((key) => {
               setError(key as keyof FormData, {
-                type: 'sever',
-                message: formError[key as keyof FormData]
+                type: 'server',
+                message: errorAuthen.data[key]
               })
-            }
+            })
           }
+
+          // Hiển thị thông báo lỗi tổng quát
+          toast.error(errorAuthen.message)
         } else {
-          toast.error(error.message)
+          toast.error('An unexpected error occurred')
         }
       }
     })
   })
-  const signInGoogle = () =>{
-    
-  }
+  const signInGoogle = () => {}
   return (
-    <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent  hover:shadow-xl hover:shadow-black'>
+    <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
       <div className='container justify-center flex'>
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Nhập</div>
@@ -77,7 +94,7 @@ export default function Login() {
             name='email'
             type='email'
             placeholder='Email'
-            className='mt-8 '
+            className='mt-8'
             register={register}
             errorMessage={errors.email?.message}
           />
@@ -107,8 +124,10 @@ export default function Login() {
           <span>---------------------------</span>
         </div>
         <div className='justify-center flex py-2'>
-          <button className='bg-black text-white border-black border-2 w-[300px] rounded-lg justify-center items-center flex py-2 shadow-2xl hover:bg-white hover:text-black'
-                  onClick={signInGoogle}>
+          <button
+            className='bg-black text-white border-black border-2 w-[300px] rounded-lg justify-center items-center flex py-2 shadow-2xl hover:bg-white hover:text-black'
+            onClick={signInGoogle}
+          >
             <div className='pr-2'>
               <FontAwesomeIcon icon={faGoogle} />
             </div>
@@ -120,7 +139,7 @@ export default function Login() {
             <span className='text-gray-600 mr-1'>Bạn chưa có tài khoản? </span>
             <Link
               className='text-gray-500 underline hover:text-red-500'
-              to='/register'
+              to={path.register}
             >
               Đăng Ký
             </Link>

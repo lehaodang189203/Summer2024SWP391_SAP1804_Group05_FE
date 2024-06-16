@@ -10,24 +10,33 @@ import DateSelect from '../../components/DateSelect/DateSelect'
 import GenderSelect from '../../components/GenderSelect'
 import Input from '../../components/Input'
 import { ResReqBody } from '../../types/user.request.type'
-import { Schema, schema } from '../../utils/rules'
+
 import InputNumber from '../../components/InputNumber'
+import { Schema, schema } from '../../utils/rules'
+import { toast } from 'react-toastify'
+import { AppContext } from '../../context/app.context'
+import { useContext } from 'react'
+import { path } from '../../constant/path'
+import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
+import { ErrorResponse } from '../../types/utils.type'
+import { isAxiosError } from '../../utils/utils'
+import { getRefreshTokenFromLS, setRefreshTokenToLS } from '../../utils/auth'
 
 type FormData = Pick<
   Schema,
   | 'email'
   | 'password'
-  | 'confirm_password'
-  | 'date_of_birth'
-  | 'username'
   | 'gender'
+  | 'confirm_password'
   | 'phone'
+  | 'date_of_birth'
+  | 'fullName'
 >
 
 const registerSchema = schema.pick([
   'email',
   'password',
-  'username',
+  'fullName',
   'confirm_password',
   'date_of_birth',
   'gender',
@@ -36,11 +45,12 @@ const registerSchema = schema.pick([
 
 export default function Register() {
   const navigate = useNavigate()
-
+  const { setIsAuthenticated } = useContext(AppContext)
   const {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(registerSchema)
@@ -70,15 +80,40 @@ export default function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log(data)
-        
-        // setIsAuthenticated(true)
-        // navigate đươc dùng để điều hướng (in case này là tới thằng /)
+        const refreshToken = getRefreshTokenFromLS()
+        console.log(refreshToken)
 
-        // dấu / đại diện trang hiện tại
-        navigate('/')
+        setRefreshTokenToLS(refreshToken)
+        setIsAuthenticated(true)
+
+        toast.success(data.data.message, {
+          icon: false
+        })
+        navigate(path.home)
       },
       onError: (error) => {
-        console.log(error)
+        if (
+          isAxiosError<ErrorResponse<any>>(error) &&
+          error.response?.status === HttpStatusCode.UnprocessableEntity // 422
+        ) {
+          const errorAuthen = error.response.data
+          console.log(errorAuthen)
+
+          // Hiển thị lỗi trong form
+          if (errorAuthen.data) {
+            Object.keys(errorAuthen.data).forEach((key) => {
+              setError(key as keyof FormData, {
+                type: 'server',
+                message: errorAuthen.data[key]
+              })
+            })
+          }
+
+          // Hiển thị thông báo lỗi tổng quát
+          toast.error(errorAuthen.message)
+        } else {
+          toast.error('An unexpected error occurred')
+        }
       }
     })
   })
@@ -95,12 +130,12 @@ export default function Register() {
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Ký</div>
           <Input
-            name='username'
-            type='date'
+            name='fullName'
+            type='text'
             placeholder='Họ và tên'
             className='mt-8'
             register={register}
-            errorMessage={errors.username?.message}
+            errorMessage={errors.fullName?.message}
           />
           <Input
             name='email'

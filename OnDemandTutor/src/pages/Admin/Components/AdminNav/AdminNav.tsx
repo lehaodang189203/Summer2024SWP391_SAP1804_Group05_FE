@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom";
-import path from "../../../../constant/path";
 import BUMBUM from '../../../../assets/img/BUMBUM.png'
+import { path } from "../../../../constant/path";
 export default function AdminNav(){
     const option = ['DashBar','StudentList','TutorList', 'SessionList']
     const [active, setAtive] = useState("");

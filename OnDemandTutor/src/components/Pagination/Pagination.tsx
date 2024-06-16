@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
-import path from '../../constant/path'
+import { path } from '../../constant/path'
 
 interface Props {
   pageSize: number
@@ -93,7 +93,7 @@ export default function Pagination({ pageSize }: Props) {
 
         return (
           <Link
-            to={path.tutorList}
+            to={path.tutors}
             key={index}
             className={classNames(
               'mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm',
@@ -117,7 +117,7 @@ export default function Pagination({ pageSize }: Props) {
         </span>
       ) : (
         <Link
-          to={path.tutorList}
+          to={path.tutors}
           className='mx-2 cursor-pointer rounded border bg-white px-3 py-2  shadow-sm'
         >
           Prev
@@ -136,7 +136,7 @@ export default function Pagination({ pageSize }: Props) {
         // or chúng ta có thể open Link in new Tab
         // còn dùng button or navigate thì không dùng đc như z
         <Link
-          to={path.tutorList}
+          to={path.tutors}
           className='mx-2 cursor-pointer rounded border bg-white px-3 py-2  shadow-sm'
         >
           Next

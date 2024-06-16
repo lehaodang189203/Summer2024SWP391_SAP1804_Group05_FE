@@ -1,9 +1,11 @@
+import { User } from '../types/user.type'
+
 //  phương thức nèa
 export const getAccessTokenFromLS = () =>
   localStorage.getItem('access_token') || ''
 
 export const getRefreshTokenFromLS = () =>
-  localStorage.getItem('access_token') || ''
+  localStorage.getItem('refresh_token') || ''
 
 
 
@@ -24,4 +26,16 @@ export const setRefreshTokenToLS = (refresh_token: string) => {
 export const clearLS = () => {
   localStorage.removeItem('access_token')
   localStorage.removeItem('refresh_token')
+}
+
+export const getProfileFromLS = () => {
+  //  lấy xuống là string
+  const result = localStorage.getItem('profile')
+  // parse thành obj để xài
+  return result ? JSON.parse(result) : null
+}
+
+// lưu ở localStroge
+export const setProfileToLS = (profile: User) => {
+  localStorage.setItem('profile', JSON.stringify(profile))
 }

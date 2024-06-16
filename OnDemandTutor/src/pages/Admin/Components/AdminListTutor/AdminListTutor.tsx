@@ -1,7 +1,8 @@
 import { useState } from "react";
-import Search from "../../../../components/Search/Search";
+
 import TurorMenu from "../AdminMenu/TutorMenu";
-import { Button, Modal, Table, TableColumnsType } from "antd";
+import { Button, Modal, Table, TableColumnsType} from "antd";
+import Search from "antd/es/transfer/search";
 interface DataType{
     AccountID: string,
     FullName:string,
@@ -158,58 +159,66 @@ function AdminListTutor () {
         defaultSortOrder: "descend",
         onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
         sorter: (a, b) => a.FullName.length - b.FullName.length,
-        
+        width:200,
+        fixed:"left"
       }
       ,{
         title:"Ngày sinh",
         dataIndex:"Date_Of_Birth",
         defaultSortOrder: "descend",
+        width:200,
         sorter: (a, b) => new Date(a.Date_Of_Birth).getTime() - new Date(b.Date_Of_Birth).getTime()
       },{
         title:"Giới Tính",
         dataIndex:"Gender",
         sorter: (a, b) => parseInt(a.Gender) - parseInt(b.Gender),
+        width:200
       },{
         title:"Tên Môn Học",
         dataIndex:"SubjectName",
         defaultSortOrder: "descend",
-        
+        width:200
       },{
         title:"Kinh Nghiệm",
         dataIndex:"Experience",
         defaultSortOrder: "descend",
+        width:200,
         sorter: (a, b) => (a.Experience - b.Experience)
       },{
         title:"Tên Bằng Cấp(Chứng chỉ)",
         dataIndex:"QualificationName",
-        defaultSortOrder: "descend"
+        defaultSortOrder: "descend",
+        width:400
       },
       {
         title: "Detail",
         dataIndex: "detail",
         className: "TextAlign",
+        width:100,
         render: (text: string, record: DataType) => (<div className="flex gap-1">
           <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
           onClick={() => showDetail(record)}
           >Chi tiết</button></div>
-        )
+        ),
+        fixed:"right"
       }
     ]
     return (<>
         <div>
-            <div className="text-left p-4 ml-7">Quản lí gia sư</div>
+            <div className="text-left ">Quản lí gia sư</div>
             <TurorMenu
             list="list"
             con=""
             rej=""
             />
-            <div className="m-10 text-left border-r-black border-l-black border-t-black border-2 p-5 h-[570px] rounded-t-xl ">
+            <div className=" text-left border-2 p-5 h-[600px] rounded-t-xl shadow-black rounded-2xl shadow-sm mt-5">
                 <div className="mb-5">
                     <Search
-                    inputText={searchText}
-                    placeHolder="Search đi nè"
-                    setInputValue={setSearchText}
-                    label="Q"/>
+                    // inputText={searchText}
+                    // placeHolder="Search đi nè"
+                    // setInputValue={setSearchText}
+                    // label="Q"
+                    />
                 </div> 
                 <Table
                 className=""
@@ -218,6 +227,7 @@ function AdminListTutor () {
                 pagination={{ pageSize: 6 }} 
                 onChange={onChange}
                 showSorterTooltip={{ target: "sorter-icon" }}
+                scroll={{ x: 1300,y: 400}}
                 />
             </div>
             <div>

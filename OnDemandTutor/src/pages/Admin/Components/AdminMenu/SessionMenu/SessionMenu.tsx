@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import path from "../../../../../constant/path";
+import { path } from "../../../../../constant/path";
 
 interface props{
     list:string;

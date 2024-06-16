@@ -3,11 +3,12 @@ import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 import me from '../../assets/img/me.jpg'
-import path from '../../constant/path'
-import { toast } from 'react-toastify'
+
 // import { getRefreshTokeNFromLS } from '../../utils/auth'
+import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
+import { clearLS } from '../../utils/auth'
 import Popover from '../Popover/Popover'
 
 export default function NavHeader() {
@@ -23,12 +24,14 @@ export default function NavHeader() {
   })
 
   const handleLogout = () => {
-    logoutMutation.mutate(
-      { refreshToken: refresh },
-      {
-        onSuccess: (refreshToken) => {
-          navigate(path.login)
+    console.log(refreshToken)
 
+    logoutMutation.mutate(
+      { refresh_token: refresh },
+      {
+        onSuccess: () => {
+          navigate(path.login)
+          clearLS()
           setIsAuthenticated(false)
         }
       }
@@ -126,11 +129,15 @@ export default function NavHeader() {
                 className='w-full h-full object-cover rounded-full'
               />
             </div>
-            <Link to={'/profile'}><div className='text-black hover:text-pink-400'>
-            thanhngo.3544@gmail.com
-          </div></Link>
+            <Link to={'/profile'}>
+              <div className='text-black hover:text-pink-400'>
+                thanhngo.3544@gmail.com
+              </div>
+            </Link>
           </Popover>
         )}
+
+        {/* mốt xóa ! ở đây nhé */}
 
         {!isAuthenticated && (
           <div className='flex items-center'>
