@@ -1,7 +1,7 @@
 import Search from "../../../../components/Search/Search";
 import TurorMenu from "../AdminMenu/TutorMenu";
 import { useState } from "react";
-import { Table, TableColumnsType } from "antd"; // thêm thg db table props để set
+import { Button, Modal, Table, TableColumnsType } from "antd"; // thêm thg db table props để set
 interface DataType{
     AccountID: string,
     FullName:string,
@@ -10,188 +10,304 @@ interface DataType{
     SubjectName:string,
     Experience:number,
     SpecializedSkill:string,
-    QualificationName:string,
+    QualificationName:string[],// có nhhiều nhen
     Img:string,
     Type:string
     // statuses: string[];
 }
-const columns: TableColumnsType<DataType> = [{// định nghĩa từng cột
-    title: "Tên", // tên của cột hay còn gọi là header của cột
-    dataIndex: "FullName",// xác định trường nào trong interface DataType
-    defaultSortOrder: "descend",
-    onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
-    sorter: (a, b) => a.FullName.length - b.FullName.length,
-    
-  }
-  ,{
-    title:"Ngày sinh",
-    dataIndex:"Date_Of_Birth",
-    defaultSortOrder: "descend",
-    sorter: (a, b) => new Date(a.Date_Of_Birth).getTime() - new Date(b.Date_Of_Birth).getTime()
-  },{
-    title:"Giới Tính",
-    dataIndex:"Gender",
-    sorter: (a, b) => parseInt(a.Gender) - parseInt(b.Gender),
-  },{
-    title:"Tên Môn Học",
-    dataIndex:"SubjectName",
-    defaultSortOrder: "descend",
-    sorter: (a, b) => parseInt(a.SubjectName) - parseInt(b.SubjectName),
-  },{
-    title:"Kinh Nghiệm",
-    dataIndex:"Experience",
-    defaultSortOrder: "descend",
-    sorter: (a, b) => (a.Experience - b.Experience)
-  },{
-    title:"Tên Bằng Cấp(Chứng chỉ)",
-    dataIndex:"QualificationName",
-    defaultSortOrder: "descend",
-    sorter: (a, b) => parseInt(a.QualificationName) - parseInt(b.QualificationName),
-  },
-  {
-    title: "Detail",
-    dataIndex: "detail",
-    className: "TextAlign",
-    render: () => (
-      <div>Chi tiết</div>
-    ),
-  }
-]
-const data = [
+const data  = [
     {
-        AccountID: "12",
-        FullName: "Nguyễn Trí Thành",
-        Date_Of_Birth: "2003-11-27",
-        Gender: "Nam",
-        SubjectName: "Toán",
-        Experience: 4,
-        SpecializedSkill: "Đọc Hiểu tiếng Việt",
-        QualificationName: "Bằng Cử nhân FPT",
-        Img: "url1",
-        Type: "Bằng"
+        "AccountID": "21",
+        "FullName": "Trịnh Quốc Khánh",
+        "Date_Of_Birth": "2000-01-19",
+        "Gender": "Nam",
+        "SubjectName": "Thể Dục",
+        "Experience": 6,
+        "SpecializedSkill": ["Huấn Luyện Thể Thao", "Dạy toán"],
+        "QualificationName": "Bằng Tiến sĩ",
+        "Img": "url10",
+        "Type": "Bằng"
     },
     {
-        AccountID: "13",
-        FullName: "Lê Văn An",
-        Date_Of_Birth: "2002-05-15",
-        Gender: "Nam",
-        SubjectName: "Vật Lý",
-        Experience: 3,
-        SpecializedSkill: "Giải Tích",
-        QualificationName: "Bằng Thạc sĩ",
-        Img: "url2",
-        Type: "Bằng"
+        "AccountID": "22",
+        "FullName": "Nguyễn Văn A",
+        "Date_Of_Birth": "1985-03-15",
+        "Gender": "Nam",
+        "SubjectName": "Toán",
+        "Experience": 10,
+        "SpecializedSkill": ["Dạy Toán", "Toán cao cấp"],
+        "QualificationName": "Thạc sĩ",
+        "Img": "url11",
+        "Type": "Bằng"
     },
     {
-        AccountID: "14",
-        FullName: "Trần Thị Hoa",
-        Date_Of_Birth: "2001-08-09",
-        Gender: "Nữ",
-        SubjectName: "Hóa Học",
-        Experience: 5,
-        SpecializedSkill: "Phân Tích Hóa Học",
-        QualificationName: "Bằng Tiến sĩ",
-        Img: "url3",
-        Type: "Bằng"
+        "AccountID": "23",
+        "FullName": "Lê Thị B",
+        "Date_Of_Birth": "1990-07-22",
+        "Gender": "Nữ",
+        "SubjectName": "Văn",
+        "Experience": 8,
+        "SpecializedSkill": ["Dạy Văn", "Viết Sáng Tạo"],
+        "QualificationName": "Cử nhân",
+        "Img": "url12",
+        "Type": "Bằng"
     },
     {
-        AccountID: "15",
-        FullName: "Phạm Ngọc Minh",
-        Date_Of_Birth: "2000-12-22",
-        Gender: "Nam",
-        SubjectName: "Sinh Học",
-        Experience: 6,
-        SpecializedSkill: "Nghiên Cứu Sinh Học",
-        QualificationName: "Bằng Cử nhân",
-        Img: "url4",
-        Type: "Bằng"
+        "AccountID": "24",
+        "FullName": "Phạm Quốc C",
+        "Date_Of_Birth": "1978-12-05",
+        "Gender": "Nam",
+        "SubjectName": "Lịch Sử",
+        "Experience": 15,
+        "SpecializedSkill": ["Nghiên Cứu Lịch Sử", "Dạy Lịch Sử"],
+        "QualificationName": "Tiến sĩ",
+        "Img": "url13",
+        "Type": "Bằng"
     },
     {
-        AccountID: "16",
-        FullName: "Đỗ Hồng Quân",
-        Date_Of_Birth: "2004-04-18",
-        Gender: "Nam",
-        SubjectName: "Tiếng Anh",
-        Experience: 2,
-        SpecializedSkill: "Dịch Thuật",
-        QualificationName: "Bằng Cử nhân",
-        Img: "url5",
-        Type: "Chứng Chỉ"
+        "AccountID": "25",
+        "FullName": "Trần Thị D",
+        "Date_Of_Birth": "1995-09-10",
+        "Gender": "Nữ",
+        "SubjectName": "Địa Lý",
+        "Experience": 5,
+        "SpecializedSkill": ["Nghiên Cứu Địa Lý", "Dạy Địa Lý"],
+        "QualificationName": "Thạc sĩ",
+        "Img": "url14",
+        "Type": "Bằng"
     },
     {
-        AccountID: "17",
-        FullName: "Ngô Thanh Hương",
-        Date_Of_Birth: "1999-09-30",
-        Gender: "Nữ",
-        SubjectName: "Lịch Sử",
-        Experience: 7,
-        SpecializedSkill: "Phân Tích Lịch Sử",
-        QualificationName: "Bằng Thạc sĩ",
-        Img: "url6",
-        Type: "Bằng"
+        "AccountID": "26",
+        "FullName": "Hoàng Văn E",
+        "Date_Of_Birth": "1983-04-23",
+        "Gender": "Nam",
+        "SubjectName": "Hóa Học",
+        "Experience": 12,
+        "SpecializedSkill": ["Nghiên Cứu Hóa Học", "Dạy Hóa Học"],
+        "QualificationName": "Tiến sĩ",
+        "Img": "url15",
+        "Type": "Bằng"
     },
     {
-        AccountID: "18",
-        FullName: "Bùi Văn Phúc",
-        Date_Of_Birth: "2003-11-27",
-        Gender: "Nam",
-        SubjectName: "Địa Lý",
-        Experience: 4,
-        SpecializedSkill: "Phân Tích Địa Lý",
-        QualificationName: "Bằng Tiến sĩ",
-        Img: "url7",
-        Type: "Chứng Chỉ"
+        "AccountID": "27",
+        "FullName": "Đỗ Thị F",
+        "Date_Of_Birth": "1987-08-19",
+        "Gender": "Nữ",
+        "SubjectName": "Sinh Học",
+        "Experience": 9,
+        "SpecializedSkill": ["Nghiên Cứu Sinh Học", "Dạy Sinh Học"],
+        "QualificationName": "Tiến sĩ",
+        "Img": "url16",
+        "Type": "Bằng"
     },
     {
-        AccountID: "19",
-        FullName: "Lý Phương Mai",
-        Date_Of_Birth: "2002-03-14",
-        Gender: "Nữ",
-        SubjectName: "Tin Học",
-        Experience: 3,
-        SpecializedSkill: "Lập Trình",
-        QualificationName: "Bằng Cử nhân",
-        Img: "url8",
-        Type: "Bằng"
+        "AccountID": "28",
+        "FullName": "Ngô Văn G",
+        "Date_Of_Birth": "1992-02-28",
+        "Gender": "Nam",
+        "SubjectName": "Vật Lý",
+        "Experience": 7,
+        "SpecializedSkill": ["Nghiên Cứu Vật Lý", "Dạy Vật Lý"],
+        "QualificationName": "Thạc sĩ",
+        "Img": "url17",
+        "Type": "Bằng"
     },
     {
-        AccountID: "20",
-        FullName: "Dương Ngọc Lan",
-        Date_Of_Birth: "2001-07-07",
-        Gender: "Nữ",
-        SubjectName: "Văn Học",
-        Experience: 5,
-        SpecializedSkill: "Phân Tích Văn Học",
-        QualificationName: "Bằng Thạc sĩ",
-        Img: "url9",
-        Type: "Chứng Chỉ"
+        "AccountID": "29",
+        "FullName": "Lý Thị H",
+        "Date_Of_Birth": "1998-11-11",
+        "Gender": "Nữ",
+        "SubjectName": "Tin Học",
+        "Experience": 3,
+        "SpecializedSkill": ["Lập Trình", "Dạy Tin Học"],
+        "QualificationName": "Cử nhân",
+        "Img": "url18",
+        "Type": "Bằng"
     },
     {
-        AccountID: "21",
-        FullName: "Trịnh Quốc Khánh",
-        Date_Of_Birth: "2000-01-19",
-        Gender: "Nam",
-        SubjectName: "Thể Dục",
-        Experience: 6,
-        SpecializedSkill: "Huấn Luyện Thể Thao",
-        QualificationName: "Bằng Tiến sĩ",
-        Img: "url10",
-        Type: "Bằng"
+        "AccountID": "30",
+        "FullName": "Đặng Văn I",
+        "Date_Of_Birth": "1975-06-30",
+        "Gender": "Nam",
+        "SubjectName": "Thể Dục",
+        "Experience": 20,
+        "SpecializedSkill": ["Huấn Luyện Thể Thao", "Giáo Dục Thể Chất"],
+        "QualificationName": "Tiến sĩ",
+        "Img": "url19",
+        "Type": "Bằng"
+    },
+    {
+        "AccountID": "31",
+        "FullName": "Mai Thị J",
+        "Date_Of_Birth": "1981-05-08",
+        "Gender": "Nữ",
+        "SubjectName": "Ngoại Ngữ",
+        "Experience": 14,
+        "SpecializedSkill": ["Dạy Tiếng Anh", "Dịch Thuật"],
+        "QualificationName": "Thạc sĩ",
+        "Img": "url20",
+        "Type": "Bằng"
+    },
+    {
+        "AccountID": "32",
+        "FullName": "Phan Văn K",
+        "Date_Of_Birth": "1991-03-17",
+        "Gender": "Nam",
+        "SubjectName": "Toán",
+        "Experience": 6,
+        "SpecializedSkill": ["Toán Ứng Dụng", "Dạy Toán"],
+        "QualificationName": "Thạc sĩ",
+        "Img": "url21",
+        "Type": "Bằng"
+    },
+    {
+        "AccountID": "33",
+        "FullName": "Tô Thị L",
+        "Date_Of_Birth": "1984-12-14",
+        "Gender": "Nữ",
+        "SubjectName": "Văn",
+        "Experience": 11,
+        "SpecializedSkill": ["Phê Bình Văn Học", "Dạy Văn"],
+        "QualificationName": "Tiến sĩ",
+        "Img": "url22",
+        "Type": "Bằng"
+    },
+    {
+        "AccountID": "34",
+        "FullName": "Vũ Văn M",
+        "Date_Of_Birth": "1996-10-02",
+        "Gender": "Nam",
+        "SubjectName": "Lịch Sử",
+        "Experience": 4,
+        "SpecializedSkill": ["Nghiên Cứu Lịch Sử", "Dạy Lịch Sử"],
+        "QualificationName": "Cử nhân",
+        "Img": "url23",
+        "Type": "Bằng"
+    },
+    {
+        "AccountID": "35",
+        "FullName": "Cao Thị N",
+        "Date_Of_Birth": "1980-07-07",
+        "Gender": "Nữ",
+        "SubjectName": "Địa Lý",
+        "Experience": 18,
+        "SpecializedSkill": ["Nghiên Cứu Địa Lý", "Dạy Địa Lý"],
+        "QualificationName": "Tiến sĩ",
+        "Img": "url24",
+        "Type": "Bằng"
+    },
+    {
+        "AccountID": "36",
+        "FullName": "Đinh Văn O",
+        "Date_Of_Birth": "1986-09-21",
+        "Gender": "Nam",
+        "SubjectName": "Hóa Học",
+        "Experience": 9,
+        "SpecializedSkill": ["Nghiên Cứu Hóa Học", "Dạy Hóa Học"],
+        "QualificationName": "Thạc sĩ",
+        "Img": "url25",
+        "Type": "Bằng"
+    },
+    {
+        "AccountID": "37",
+        "FullName": "Nguyễn Thị P",
+        "Date_Of_Birth": "1993-11-19",
+        "Gender": "Nữ",
+        "SubjectName": "Sinh Học",
+        "Experience": 5,
+        "SpecializedSkill": ["Nghiên Cứu Sinh Học", "Dạy Sinh Học"],
+        "QualificationName": "Thạc sĩ",
+        "Img": "url26",
+        "Type": "Bằng"
+    },
+    {
+        "AccountID": "38",
+        "FullName": "Lê Văn Q",
+        "Date_Of_Birth": "1997-01-13",
+        "Gender": "Nam",
+        "SubjectName": "Vật Lý",
+        "Experience": 3,
+        "SpecializedSkill": ["Nghiên Cứu Vật Lý", "Dạy Vật Lý"],
+        "QualificationName": "Cử nhân",
+        "Img": "url27",
+        "Type": "Bằng"
     }
 ];
-const onChange = () =>{}
+
+const onChange = () =>{}// chưa bk làm dì
+
 function AdminConfirmRegister() {
-    const [searchText, setSearchText] = useState('');
+    const columns: TableColumnsType<DataType> = [{// định nghĩa từng cột
+        title: "Tên", // tên của cột hay còn gọi là header của cột
+        dataIndex: "FullName",// xác định trường nào trong interface DataType
+        defaultSortOrder: "descend",
+        onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
+        sorter: (a, b) => a.FullName.length - b.FullName.length,
+      }
+      ,{
+        title:"Ngày sinh",
+        dataIndex:"Date_Of_Birth",
+        defaultSortOrder: "descend",
+        sorter: (a, b) => new Date(a.Date_Of_Birth).getTime() - new Date(b.Date_Of_Birth).getTime()
+      },{
+        title:"Giới Tính",
+        dataIndex:"Gender",
+        sorter: (a, b) => parseInt(a.Gender) - parseInt(b.Gender),
+      },{
+        title:"Tên Môn Học",
+        dataIndex:"SubjectName",
+        defaultSortOrder: "descend",
+        
+        sorter: (a, b) => parseInt(a.SubjectName) - parseInt(b.SubjectName),
+      },{
+        title:"Kinh Nghiệm",
+        dataIndex:"Experience",
+        defaultSortOrder: "descend",
+        sorter: (a, b) => (a.Experience - b.Experience)
+      },{
+        title:"Tên Bằng Cấp(Chứng chỉ)",
+        dataIndex:"QualificationName",
+        defaultSortOrder: "descend"
+      },
+      {
+        title: "Detail",
+        dataIndex: "detail",
+        className: "TextAlign",
+        render: (text: string, record: DataType) => (<div className="flex gap-1">
+          <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
+          onClick={() => showDetail(record)}
+          >Chi tiết</button></div>
+        ),
+      }
+    ]
+    const [searchText, setSearchText] = useState('');// liên quan đến giá trị input vào search
+    const [selectedRecord, setSelectedRecord] = useState<DataType | null>(null);
+    const [visible, setVisible] = useState(false);
+
+    const showDetail = (record: DataType) => {
+        setSelectedRecord(record);
+        setVisible(true);
+    };
+    const handleCancel = () => {
+        setVisible(false);
+        setSelectedRecord(null);
+    };
     return ( <>
         <div>
-            <div className="text-left">Quản lí đơn trở thành gia sư</div>
-            <TurorMenu/>
-            <div className="m-10 text-left">
-                <Search
-                inputText={searchText}
-                placeHolder="Search đi nè"
-                setInputValue={setSearchText}
-                label="Q"/>
+            <div className="text-left p-4 ml-7">Yêu cầu trở thành gia sư</div>
+            <TurorMenu
+            list=""
+            con="con"
+            rej=""
+            />
+            <div className="m-10 text-left border-r-black border-l-black border-t-black border-2 p-5 h-[570px] rounded-t-xl ">
+                <div className="mb-5">
+                    <Search
+                    inputText={searchText}
+                    placeHolder="Search đi nè"
+                    setInputValue={setSearchText}
+                    label="Q"/>
+                </div> 
                 <Table
                 className=""
                 columns={columns}
@@ -200,6 +316,35 @@ function AdminConfirmRegister() {
                 onChange={onChange}
                 showSorterTooltip={{ target: "sorter-icon" }}
                 />
+                <div>
+                <Modal
+                    title="Chi tiết"
+                    visible={visible}
+                    onCancel={handleCancel}
+                    footer={[
+                    <Button key="back" onClick={handleCancel}>
+                        Xác nhận
+                    </Button>,
+                    <Button key="back" onClick={handleCancel}>
+                        Từ chối
+                    </Button>,
+                    ]}
+                    >
+                    {selectedRecord && (
+                    <div>
+                        <p> Tên : {selectedRecord.FullName}</p>
+                        <p> Ngày sinh : {selectedRecord.Date_Of_Birth}</p>
+                         <p> Giới tính : {selectedRecord.Gender}</p>
+                        <p> Môn : {selectedRecord.SubjectName}</p>
+                        <p>Bằng cấp(Chứng chỉ) : {selectedRecord.Type}</p>
+                        <p> Tên bằng Cấp : {selectedRecord.QualificationName}</p>
+                        <p> Kĩ năng đặc biệt : {selectedRecord.SpecializedSkill}</p>
+                        {/* <img src={selectedRecord.Img}> : {selectedRecord.Img}</img>    // ảnh nè  */}
+                        <p> Kinh nghiệm dạy : {selectedRecord.Experience} Năm</p> 
+                    </div>
+                    )}
+                </Modal>
+                </div>
             </div>
             
         </div>

@@ -19,15 +19,15 @@ const path = {
   profile: '/user/profile',
   Moderator: {
     mod:'/mod',
-    listReRegisterTT: '/modaretor/listTutor',
-    confirmProfileRegisterTT: '/modaretor/confirmProfile',
-    confirmReRegisterTT : '/modaretor/confirmRequest'
+    listStudentRequest : '/mod/listStudentRequest',
+    tutorList: 'mod/tutorList',
+    listReRegisterTT: '/modaretor/listTutor'
   },
   Admin:{
     admin:'/admin', // phair laf /admin
     tutorList:'/admin/tutorList',
     confirmProfileRegisterTT:'/admin/tutorList/confirmProfileRegisterTT',
-    rejectProfileRegisterTT: '/admin/tutorList/rejectProfileRegisterTT',
+    rejectProfileRegisterTT: '/admin/tutorList/rejectProfileRegisterTT',// chưa làm 
     studentlist: '/admin/student',
     sessionList: '/admin/sessionList'
   }
