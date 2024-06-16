@@ -275,7 +275,7 @@ function ModTutorResRegis() {
   },{
     title:"Kĩ Năng Nổi bật",
     dataIndex:"SpecializedSkill",
-    width:400
+    width:200
   },{
     title: "Ảnh",
     dataIndex: "Img",
@@ -350,7 +350,7 @@ function ModTutorResRegis() {
                 <div>
                 <Modal
                     title= {title}
-                      
+                    visible={visible}
                     onCancel={handleCancel}
                     footer={[
                     <Button key="back" onClick={handleCancel}>
