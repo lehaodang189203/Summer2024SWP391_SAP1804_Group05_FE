@@ -329,7 +329,7 @@ function ModTutorResRegis() {
             kind="tutor"
             style="Option1"
             />
-            <div className="text-left border-2 mt-4 p-5 h-[600px] rounded-t-xl shadow-black rounded-2xl shadow-sm">
+            <div className="text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6">
                 <div className="mb-5">
                     <Search
                     // inputText={searchText}

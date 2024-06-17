@@ -54,7 +54,7 @@ function StudentRes() {
       },{
         title:"Giá",
         dataIndex:"price",
-        // defaultSortOrder: "descend",
+        // defaultSortOrder: "descend"
         width:150,
         
         sorter: (a, b) => a.price - b.price
@@ -86,7 +86,7 @@ function StudentRes() {
         width:150,
       },{
         title:"Giờ kết thúc",
-        dataIndex:"date",
+        dataIndex:"timeEnd",
         // defaultSortOrder: "descend"
         width:150
       },
@@ -96,9 +96,9 @@ function StudentRes() {
         fixed : 'right',
         className: "TextAlign",
         width:100,
-        render: (text: string, record: DataType) => (<div className="flex gap-1">
+        render: (text: string, record: DataType) => (<div className="flex gap-1"> 
           <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
-          onClick={() => showDetail(record)}
+          onClick={() => showDetail(record)} //data của nguyên cả cái hàng là record
           >Chi tiết</button></div>
         ),
       }
@@ -121,7 +121,7 @@ function StudentRes() {
             kind="student"
             style="Option1"
         />
-        <div className="text-left border-r-black border-l-black border-t-black border-2 pt-5 h-[629px] rounded-t-xl mt-6">
+        <div className="text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6">
             <div className="mb-5">
                         <Search
                         // inputText={searchText}
