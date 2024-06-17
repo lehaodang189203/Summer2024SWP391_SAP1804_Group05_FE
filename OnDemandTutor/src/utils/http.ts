@@ -4,6 +4,7 @@ import {
   getAccessTokenFromLS,
   getRefreshTokenFromLS,
   setAccessTokenToLS,
+  setProfileToLS,
   setRefreshTokenToLS
 } from './auth'
 
@@ -65,7 +66,11 @@ class Http {
           console.log('refreshToken', data.data.refresh_token)
 
           setAccessTokenToLS(this.accessToken)
+
+          console.log('User', data.data.user)
+
           setRefreshTokenToLS(this.refreshToken)
+          setProfileToLS(data.data.user)
         } else if (url === pathAuth.logout) {
           clearLS()
         }
@@ -77,6 +82,7 @@ class Http {
           console.log(data)
 
           const message = data?.message || error.message
+
           console.log(message)
 
           toast.error(message)

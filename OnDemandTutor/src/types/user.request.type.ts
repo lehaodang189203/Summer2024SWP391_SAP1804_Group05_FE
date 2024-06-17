@@ -23,8 +23,20 @@ export interface ResReqBody {
 export interface LogoutReqBody {
   refresh_token: string
 }
-export interface reqDeposit{
+export interface reqDeposit {
   firstName: string
-  lastName:string
+  lastName: string
   amount: number
+}
+
+export interface RequestBody {
+  class: string
+  date: string
+  description: string
+  LearningMethod: string
+  price: number
+  subject: string
+  timeStart: string
+  timeEnd: string
+  title: string
 }

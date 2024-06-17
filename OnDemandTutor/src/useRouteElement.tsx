@@ -6,7 +6,7 @@ import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
 import Home from './pages/Home'
 
 import MainLayout from './layout/MainLayout'
-import DashBoard from './pages/DashBoard'
+// import DashBoard from './pages/DashBoard'
 import { AppContext } from './context/app.context'
 import { useContext } from 'react'
 import RegisterAsTutor from './pages/RegisterAsTutor'
@@ -144,10 +144,10 @@ export default function useRouteElements() {
       path: path.Admin.admin,
       element: <AdminLayout />,
       children: [
-        {
-          index: true,
-          element: <DashBoard />
-        },
+        // {
+        //   index: true,
+        //   element: <DashBoard />
+        // },
         {
           path: path.Admin.sessionList,
           element: <SessionList />

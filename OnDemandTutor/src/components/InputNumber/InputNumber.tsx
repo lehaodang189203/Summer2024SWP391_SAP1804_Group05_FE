@@ -1,64 +1,94 @@
 import { InputHTMLAttributes, forwardRef, useState } from 'react'
-//  185
+
 export interface InputNumberProps
   extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string
   classNameInput?: string
   classNameError?: string
-  placeholer?: string
+  placeholder?: string
+  inputType?: 'number' | 'price' | 'phone'
 }
 
-//  do là mih không cần extends Input này
-//  do là mìn hong có nhận thẳng props register
-//  nên la mình hong cần lắm
 export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
   function InputNumberInner(
     {
       errorMessage,
       className,
-      placeholer,
-      classNameInput = 'p-3 w-full outline-none border border-gray-300 forcus:border-gray-500 forcus:shawdow-sm rounded-xl',
+      placeholder,
+      classNameInput = 'p-3 w-full outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl',
       classNameError = 'mt-1 text-red-600 min-h-[1.25rem] text-sm text-left',
       onChange,
       value = '',
+      inputType = 'number',
       ...rest
     },
     ref
   ) {
-    // khi giá trị khởi tạo bị thay đổi thì cái local Value cũn kh bị thay đổi
-    // 1 chút thay đổi này chóng luôn nhập kí tự
-    //  nó chỉ bị thay đổi ở lần đầu tiên khởi tạo thui
     const [localValue, setLocalValue] = useState<string>(value as string)
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value
-      //  đây là cách test về kiểm tra số
-      if (/^\d+$/.test(value) || value === '') {
-        //  Thục thi onChange callBack từ bên ngoài truyền vào props
-        //  có nghĩa là khi người dùng truyền vào số thì onChange mới chạy
-        onChange && onChange(event)
-        // cập nhật localValue State
+      let value = event.target.value
+
+      if (inputType === 'price') {
+        // Remove commas from the input value
+        value = value.replace(/,/g, '')
+      }
+
+      const numberRegex = /^\d*$/
+      const moneyRegex = /^(\d{1,3}(,\d{3})*|(\d+))(\.\d{0,2})?$/
+      const phoneRegex = /^[0-9-+() ]*$/
+
+      if (
+        (inputType === 'number' && numberRegex.test(value)) ||
+        (inputType === 'price' && moneyRegex.test(value)) ||
+        (inputType === 'phone' && phoneRegex.test(value)) ||
+        value === ''
+      ) {
+        // Update local state
         setLocalValue(value)
+
+        // Call onChange callback if provided
+        onChange && onChange(event)
       }
     }
+
+    const formatMoney = (value: string) => {
+      if (!value) return ''
+      const parts = value.split('.')
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      return parts.join('.')
+    }
+
+    const handleBlur = () => {
+      if (inputType === 'price') {
+        // Format the value with commas before blur
+        setLocalValue((prev) => formatMoney(prev))
+      }
+    }
+
+    // Parse the final value based on inputType before submitting
+    const parseFinalValue = () => {
+      if (inputType === 'price') {
+        // Remove commas before parsing
+        return parseFloat(localValue.replace(/,/g, ''))
+      }
+      return parseFloat(localValue)
+    }
+
     return (
       <div className={className}>
         <input
-          placeholder={placeholer}
-          //  tại sao bị như z
-          // nó bị overwritte
-          // name='email'
+          placeholder={placeholder}
           className={classNameInput}
           {...rest}
           onChange={handleChange}
-          value={value || localValue}
+          onBlur={handleBlur}
+          value={localValue}
           ref={ref}
         />
         <div className={classNameError}>{errorMessage}</div>
+        {errorMessage && <div className={classNameError}>{errorMessage}</div>}
       </div>
     )
   }
 )
-
-//  taị sao mình không extends thằng input cho đỡ phải code
-//  do là mình sẽ phải handle lại 1 số thứ nên thật sự không cần phải làm  như z

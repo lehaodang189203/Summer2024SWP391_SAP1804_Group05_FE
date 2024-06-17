@@ -1,5 +1,19 @@
 import * as yup from 'yup'
 
+function testDate(this: yup.TestContext<yup.AnyObject>) {
+  const { timeStart, timeEnd } = this.parent as {
+    timeStart: string
+    timeEnd: string
+  }
+  if (timeStart && timeEnd) {
+    const start = new Date(`1970-01-01T${timeStart}:00Z`) // Adding reference date
+    const end = new Date(`1970-01-01T${timeEnd}:00Z`) // Adding reference date
+
+    return start < end
+  }
+  return timeStart === '' || timeEnd === ''
+}
+
 const handleConfirmPasswordYup = (refString: string) => {
   return yup
     .string()
@@ -26,20 +40,6 @@ export const schema = yup.object({
     .min(6, 'Độ dài từ 6-160 ký tự')
     .max(160, 'Độ dài từ 6-160 ký tự')
     .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
-  username: yup
-    .string()
-    .required('Tên người dùng là bắt buộc')
-    .max(160, 'Độ dài tối đa là 160 ký tự'),
-  firstName: yup
-    .string()
-    .min(2, 'Tên phải có ít nhất 2 ký tự')
-    .max(50, 'Tên không được vượt quá 50 ký tự')
-    .required('Tên là bắt buộc'),
-  lastName: yup
-    .string()
-    .min(2, 'Họ phải có ít nhất 2 ký tự')
-    .max(50, 'Họ không được vượt quá 50 ký tự')
-    .required('Họ là bắt buộc'),
 
   phone: yup
     .string()
@@ -63,7 +63,6 @@ export const userSchema = yup.object({
     .required('Email là bắt buộc')
     .min(5, 'Độ dài từ 5-160 ký tự')
     .max(160, 'Độ dài từ 5-160 ký tự'),
-
   phone: yup.string().max(20, 'Độ dài tối đa là 20 ký tự'),
   avatar: yup.string().max(1000, 'Độ dài tối đa là 1000 ký tự'),
   address: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),
@@ -71,8 +70,53 @@ export const userSchema = yup.object({
   password: schema.fields['password'],
   new_password: schema.fields['password'],
   confirm_password: handleConfirmPasswordYup('new_password'),
-  gender: yup.string().oneOf(['male', 'female'])
+  gender: yup.string().oneOf(['male', 'female']),
+  fullName: yup
+    .string()
+    .max(160, 'Độ dài tối đa là 160 ký tự')
+    .required('Họ và tên là bắt buộc')
 })
 
+export const requestSchema = yup.object({
+  title: yup.string().required('Tựa đề là bắt buộc'),
+  date: yup.string().required('Ngày học là bắt buộc'),
+  LearningMethod: yup
+    .string()
+    .oneOf(
+      ['Dạy trực tiếp(offline)', 'Dạy trực tuyến (online)'],
+      'Phương thức học không hợp lệ'
+    )
+    .required('Hãy chọn phương thức học'),
+  class: yup.string().oneOf(['10', '11', '12']).required('Chọn lớp'),
+  price: yup
+    .number()
+    .required('Giá là bắt buộc')
+    .positive('Giá không thể là số âm'),
+  subject: yup
+    .string()
+    .required('Môn học là bắt buộc')
+    .oneOf(
+      [
+        'Ngữ văn',
+        'Toán học',
+        'Vật lý',
+        'Hóa học',
+        'Sinh học',
+        'Lịch sử',
+        'Địa lý',
+        'Giáo dục công dân',
+        'Ngoại ngữ',
+        'Tin học'
+      ],
+      'Môn học không hợp lệ'
+    ),
+  timeEnd: yup.string().required('Thời gian kết thúc là bắt buộc'),
+  timeStart: yup.string().required('Thời gian bắt đầu là bắt buộc'),
+  description: yup
+    .string()
+    .required('Mô tả là bắt buộc')
+    .max(1000, 'Độ dài tối đa 1000 ký tự')
+})
+export type RequiredSchema = yup.InferType<typeof requestSchema>
 export type UserSchema = yup.InferType<typeof userSchema>
 export type Schema = yup.InferType<typeof schema>

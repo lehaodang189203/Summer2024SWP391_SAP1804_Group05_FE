@@ -4,10 +4,16 @@ import { useEffect, useState } from 'react'
 interface Props {
   onChange?: (value: Date) => void
   value?: Date
+  name: string
   errorMessage?: string
 }
 
-export default function DateSelect({ value, onChange, errorMessage }: Props) {
+export default function DateSelect({
+  value,
+  onChange,
+  errorMessage,
+  name
+}: Props) {
   const [date, setDate] = useState({
     date: value?.getDate() || 1,
     month: value?.getMonth() || 0,
@@ -36,7 +42,7 @@ export default function DateSelect({ value, onChange, errorMessage }: Props) {
 
   return (
     <div className='flex flex-col'>
-      <div className='pt-3 mb-2 text-left text-gray-400 text-sm'>Ngày sinh</div>
+      <div className='pt-3 mb-2 text-left text-gray-400 text-sm'>{name}</div>
       <div>
         <div className='flex justify-between'>
           <select

@@ -1,26 +1,22 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
-import Input from '../../components/Input'
-import { schema, Schema } from '../../utils/rules'
 import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { authApi } from '../../api/auth.api'
+import Input from '../../components/Input'
 import { AppContext } from '../../context/app.context'
 import { LoginReqBody } from '../../types/user.request.type'
-import { isAxiosError } from '../../utils/utils'
 import { ErrorResponse } from '../../types/utils.type'
-import { toast } from 'react-toastify'
+import { Schema, schema } from '../../utils/rules'
+import { isAxiosError } from '../../utils/utils'
 
-import {
-  getRefreshTokenFromLS,
-  setAccessTokenToLS,
-  setRefreshTokenToLS
-} from '../../utils/auth'
-import { path } from '../../constant/path'
 import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
+import { path } from '../../constant/path'
+import { getRefreshTokenFromLS } from '../../utils/auth'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])

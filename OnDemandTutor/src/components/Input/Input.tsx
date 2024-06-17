@@ -21,6 +21,7 @@ export default function Input({
   classNameError = 'mt-1 text-red-600 min-h-[1.25rem] text-sm text-left',
   classNameEye = 'absolute top-[10px] right-[10px] h-5 w-5 cursor-pointer',
   placeholder,
+  type = 'text', // Default type is text
   ...rest
 }: Props) {
   const [openEye, setOpenEye] = useState(false)
@@ -28,6 +29,8 @@ export default function Input({
   const toggleEye = () => {
     setOpenEye((prev) => !prev)
   }
+
+  const inputType = type === 'password' && !openEye ? 'password' : type
 
   const registerResult = register && name ? register(name, rules) : {}
   return (
@@ -40,11 +43,11 @@ export default function Input({
         {...registerResult}
         {...rest}
         // nêu mà cái type là password và con mắt đóng thì là password
-        type={rest.type === 'password' && !openEye ? 'password' : 'text'}
+        type={inputType}
         placeholder={placeholder}
       />
       {/*  mắt mở và mắt nhắm */}
-      {rest.type === 'password' && openEye && (
+      {type === 'password' && openEye && (
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
@@ -67,7 +70,7 @@ export default function Input({
         </svg>
       )}
 
-      {rest.type === 'password' && !openEye && (
+      {type === 'password' && !openEye && (
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'

@@ -15,13 +15,13 @@ import { UserSchema, userSchema } from '../../../../utils/rules'
 
 type FormData = Pick<
   UserSchema,
-  'username' | 'phone' | 'date_of_birth' | 'avatar'
+  'fullName' | 'phone' | 'date_of_birth' | 'avatar'
 >
 type FormDataError = Omit<FormData, 'date_of_birth'> & {
   date_of_birth?: string
 }
 const profileSchema = userSchema.pick([
-  'username',
+  'fullName',
 
   'phone',
   'date_of_birth',
@@ -53,7 +53,7 @@ export default function Profile() {
     control
   } = useForm<FormData>({
     defaultValues: {
-      username: '',
+      fullName: '',
       phone: '',
       avatar: '',
       date_of_birth: new Date(1990, 0, 1)
@@ -149,7 +149,7 @@ export default function Profile() {
                 classNameInput='rounded-xl border-2 w-full h-10 text-left  hover:shadow-black hover:shadow-sm pl-2'
                 name='Họ và Tên'
                 placeholder='Họ và Tên'
-                errorMessage={errors.username?.message}
+                errorMessage={errors.fullName?.message}
               />
             </div>
           </div>

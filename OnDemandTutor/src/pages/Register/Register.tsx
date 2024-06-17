@@ -185,6 +185,7 @@ export default function Register() {
             name='date_of_birth'
             render={({ field }) => (
               <DateSelect
+                name='Ngày sinh'
                 errorMessage={errors.date_of_birth?.message}
                 onChange={field.onChange}
                 value={field.value}
