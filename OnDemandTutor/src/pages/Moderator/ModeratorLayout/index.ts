@@ -1,2 +1,2 @@
-import ModeratorLayout from "./ModeratorLayout";
-export default ModeratorLayout;
+import AdminLayout from "./ModeratorLayout";
+export default AdminLayout

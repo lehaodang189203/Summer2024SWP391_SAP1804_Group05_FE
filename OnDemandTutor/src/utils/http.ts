@@ -10,8 +10,9 @@ import {
 
 import { AuthResponse } from '../types/auth.type'
 import config from '../constant/config'
-import { pathAuth } from '../constant/path'
+
 import { toast } from 'react-toastify'
+import { path, pathAuth } from '../constant/path'
 
 class Http {
   instance: AxiosInstance

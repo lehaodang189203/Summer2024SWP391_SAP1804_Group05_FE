@@ -18,7 +18,6 @@ import Deposit from './pages/Deposit'
 import Profile from './pages/User/pages/Profile'
 import UserLayout from './pages/User/layout/UserLayout'
 import ChangPassword from './pages/User/pages/ChangePassword'
-import TutorRegisterRequest from './pages/Moderator/Slide/TutorRegis'
 import AdminLayout from './pages/Admin/AdminLayout'
 import SessionList from './pages/Admin/Components/SessionList'
 import StudentList from './pages/Admin/Components/StudentList'
@@ -26,7 +25,13 @@ import TutorList from './pages/TutorList'
 import AdminListTutor from './pages/Admin/Components/AdminListTutor'
 import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/AdminConfirmRegister'
 import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
+import ModeratorLayout from './pages/Moderator/ModeratorLayout/ModeratorLayout'
+import StudentRes from './pages/Moderator/Components/StudentRes'
+
+
 import { path } from './constant/path'
+import ModListTutor from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
+import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
@@ -126,19 +131,18 @@ export default function useRouteElements() {
       )
     },
     //{path: path.Admin.dashBoard,element: (<><DashBoard /></>)},
-    {
-      path: path.Moderator.listReRegisterTT,
-      element: (
-        <MainLayout>
-          <TutorRegisterRequest />
-        </MainLayout>
-      ),
-      children: [
-        {
-          index: true,
-          element: <TutorRegisterRequest />
-        }
-      ]
+    {path: path.Moderator.mod,element: (
+      <ModeratorLayout/>
+        ),
+        children:[
+          {
+            index:true,
+            element:<StudentRes/>
+          },{
+            path:path.Moderator.tutorResRegis,
+            element:<ModTutorResRegis/>
+          }
+        ]
     },
     {
       path: path.Admin.admin,

@@ -135,7 +135,7 @@ export default function Login() {
             <span className='text-gray-600 mr-1'>Bạn chưa có tài khoản? </span>
             <Link
               className='text-gray-500 underline hover:text-red-500'
-              to='/register'
+              to={path.register}
             >
               Đăng Ký
             </Link>
