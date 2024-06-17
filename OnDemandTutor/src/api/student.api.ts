@@ -1,9 +1,9 @@
-import { AuthResponse } from '../types/auth.type'
+import { DataType } from '../pages/Moderator/Components/StudentRes/StudentRes'
+import { StudentResponse } from '../types/auth.type'
 import {
-  LoginReqBody,
   LogoutReqBody,
   RequestBody,
-  ResReqBody
+  RequestResult
 } from '../types/user.request.type'
 import { User } from '../types/user.type'
 import { SuccessResponse } from '../types/utils.type'
@@ -21,12 +21,20 @@ if (user) {
 export const studentApi = {
   createRequest: async (body: RequestBody) =>
     await http.post(`student/createRequest?IDAccount=${user.id}`, body),
-  registerAccount: async (body: ResReqBody) =>
-    await http.post<AuthResponse>('user/register', body),
-  // loginGoogle : async () =>
-  //   await http.post<any>('/signin-google'),
-  // logoutAccount: () => http.post('/logout')
 
-  logoutAccount: async (body: LogoutReqBody) =>
-    await http.post('user/logout', body)
+  getRequest: async (): Promise<DataType[]> => {
+    try {
+      const response = await http.get<SuccessResponse<DataType[]>>(
+        'modaretor/viewRequest'
+      )
+      if (response.status === 200) {
+        return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      // Handle network or API errors
+      throw new Error('Failed to fetch data')
+    }
+  }
 }

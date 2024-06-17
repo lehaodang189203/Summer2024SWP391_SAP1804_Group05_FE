@@ -7,6 +7,12 @@ export interface ErrorResponse<Data> {
   data?: Data
 }
 
+export interface SuccessResponseReq<T> {
+  success: boolean
+  message: string
+  data: T
+}
+
 // cú pháp `-?` sẽ loại bỏ undefiend của key optional
 
 export type NoUndefinedField<T> = {

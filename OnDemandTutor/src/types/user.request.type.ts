@@ -40,3 +40,17 @@ export interface RequestBody {
   timeEnd: string
   title: string
 }
+
+export interface RequestResult {
+  id: string
+  fullName: string
+  subject: string
+  title: string
+  price: 0
+  description: string
+
+  methodLearning: string
+  date: string
+  timeStart: string
+  timeEnd: string
+}

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 import me from '../../assets/img/me.jpg'
@@ -8,12 +8,14 @@ import me from '../../assets/img/me.jpg'
 import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
-import { clearLS } from '../../utils/auth'
+import { clearLS, getProfileFromLS } from '../../utils/auth'
 import Popover from '../Popover/Popover'
-
+import { User } from '../../types/user.type'
 export default function NavHeader() {
   const { isAuthenticated, setIsAuthenticated, refreshToken } =
     useContext(AppContext)
+
+  const [profile, setProfile] = useState<User>(getProfileFromLS())
 
   const navigate = useNavigate()
 
@@ -131,7 +133,7 @@ export default function NavHeader() {
             </div>
             <Link to={'/profile'}>
               <div className='text-black hover:text-pink-400'>
-                thanhngo.3544@gmail.com
+                {profile.fullName}
               </div>
             </Link>
           </Popover>
