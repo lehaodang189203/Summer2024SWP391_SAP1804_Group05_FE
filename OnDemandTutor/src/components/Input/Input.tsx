@@ -5,7 +5,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string
   classNameInput?: string
   classNameError?: string
-  placeholer?: string
+  placeholder?: string
   register?: UseFormRegister<any>
   rules?: RegisterOptions
   classNameEye?: string
@@ -17,8 +17,8 @@ export default function Input({
   name,
   rules,
   register,
-  classNameInput = 'p-3 w-[18rem] outline-none border border-gray-300 focus:border-gray-500 forcus:shawdow-sm rounded-xl ',
-  classNameError = 'mt-1 text-red-600 min-h-[1.25rem] text-sm text-left',
+  classNameInput = 'p-3 w-[18rem] outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl ',
+  classNameError = 'mt-1 text-red-600 min-h-[1rem] text-sm text-left', // Reduced min-height to fit better
   classNameEye = 'absolute top-[10px] right-[10px] h-5 w-5 cursor-pointer',
   placeholder,
   type = 'text', // Default type is text
@@ -36,17 +36,12 @@ export default function Input({
   return (
     <div className={className}>
       <input
-        //  tại sao bị như z
-        // nó bị overwritte
-        // name='email'
         className={classNameInput}
         {...registerResult}
         {...rest}
-        // nêu mà cái type là password và con mắt đóng thì là password
         type={inputType}
         placeholder={placeholder}
       />
-      {/*  mắt mở và mắt nhắm */}
       {type === 'password' && openEye && (
         <svg
           xmlns='http://www.w3.org/2000/svg'

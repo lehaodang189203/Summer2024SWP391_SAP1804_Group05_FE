@@ -1,36 +1,35 @@
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 
-import Login from './pages/Login'
-import Register from './pages/Register'
 import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
 import Home from './pages/Home'
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 import MainLayout from './layout/MainLayout'
 // import DashBoard from './pages/DashBoard'
-import { AppContext } from './context/app.context'
 import { useContext } from 'react'
-import RegisterAsTutor from './pages/RegisterAsTutor'
-import RequestList from './pages/RequestList'
-import ProfileTT from './pages/User/pages/Profile'
-import CheckOut from './pages/CheckOut'
-import Calendar from './pages/Calendar'
-import Deposit from './pages/Deposit'
-import Profile from './pages/User/pages/Profile'
-import UserLayout from './pages/User/layout/UserLayout'
-import ChangPassword from './pages/User/pages/ChangePassword'
+import { AppContext } from './context/app.context'
 import AdminLayout from './pages/Admin/AdminLayout'
+import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/AdminConfirmRegister'
+import AdminListTutor from './pages/Admin/Components/AdminListTutor'
+import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
 import SessionList from './pages/Admin/Components/SessionList'
 import StudentList from './pages/Admin/Components/StudentList'
-import TutorList from './pages/TutorList'
-import AdminListTutor from './pages/Admin/Components/AdminListTutor'
-import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/AdminConfirmRegister'
-import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
+import Calendar from './pages/Calendar'
+import CheckOut from './pages/CheckOut'
+import Deposit from './pages/Deposit'
 import ModeratorLayout from './pages/Moderator/ModeratorLayout/ModeratorLayout'
-import StudentRes from './pages/Moderator/Components/StudentRes'
-
+import RegisterAsTutor from './pages/RegisterAsTutor'
+import RequestList from './pages/RequestList'
+import TutorList from './pages/TutorList'
+import UserLayout from './pages/User/layout/UserLayout'
+import ChangPassword from './pages/User/pages/ChangePassword'
+import {
+  default as Profile,
+  default as ProfileTT
+} from './pages/User/pages/Profile'
 
 import { path } from './constant/path'
-import ModListTutor from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
 import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
 
 export default function useRouteElements() {
@@ -131,18 +130,19 @@ export default function useRouteElements() {
       )
     },
     //{path: path.Admin.dashBoard,element: (<><DashBoard /></>)},
-    {path: path.Moderator.mod,element: (
-      <ModeratorLayout/>
-        ),
-        children:[
-          {
-            index:true,
-            element:<StudentRes/>
-          },{
-            path:path.Moderator.tutorResRegis,
-            element:<ModTutorResRegis/>
-          }
-        ]
+    {
+      path: path.Moderator.mod,
+      element: <ModeratorLayout />,
+      children: [
+        {
+          index: true
+          // element: <StudentRes />
+        },
+        {
+          path: path.Moderator.tutorResRegis,
+          element: <ModTutorResRegis />
+        }
+      ]
     },
     {
       path: path.Admin.admin,

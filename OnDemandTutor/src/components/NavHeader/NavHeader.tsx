@@ -132,9 +132,7 @@ export default function NavHeader() {
               />
             </div>
             <Link to={'/profile'}>
-              <div className='text-black hover:text-pink-400'>
-                {profile.fullName}
-              </div>
+              <div className='text-black hover:text-pink-400'>Thành</div>
             </Link>
           </Popover>
         )}

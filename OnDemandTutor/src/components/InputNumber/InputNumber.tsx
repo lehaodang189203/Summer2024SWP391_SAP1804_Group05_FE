@@ -87,7 +87,7 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
           ref={ref}
         />
         <div className={classNameError}>{errorMessage}</div>
-        {errorMessage && <div className={classNameError}>{errorMessage}</div>}
+        {/* {errorMessage && <div className={classNameError}>{errorMessage}</div>} */}
       </div>
     )
   }
