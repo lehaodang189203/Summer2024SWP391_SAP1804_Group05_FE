@@ -79,7 +79,15 @@ export const userSchema = yup.object({
 
 export const requestSchema = yup.object({
   title: yup.string().required('Tựa đề là bắt buộc'),
-  date: yup.string().required('Ngày học là bắt buộc'),
+  date: yup
+    .string()
+    .required('Ngày học là bắt buộc')
+    .test('is-future-date', 'Ngày học không được ở trong quá khứ', (value) => {
+      const selectedDate = new Date(value)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0) // Set time to the start of the day
+      return selectedDate >= today
+    }),
   LearningMethod: yup
     .string()
     .oneOf(
@@ -110,8 +118,16 @@ export const requestSchema = yup.object({
       ],
       'Môn học không hợp lệ'
     ),
-  timeEnd: yup.string().required('Thời gian kết thúc là bắt buộc'),
-  timeStart: yup.string().required('Thời gian bắt đầu là bắt buộc'),
+  timeEnd: yup.string().required('Thời gian kết thúc là bắt buộc').test({
+    name: 'time-not-allowed',
+    message: 'thời gian không phù hợp',
+    test: testDate
+  }),
+  timeStart: yup.string().required('Thời gian bắt đầu là bắt buộc').test({
+    name: 'time-not-allowed',
+    message: 'thời gian không phù hợp',
+    test: testDate
+  }),
   description: yup
     .string()
     .required('Mô tả là bắt buộc')

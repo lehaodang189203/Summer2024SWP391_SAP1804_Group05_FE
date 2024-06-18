@@ -1,4 +1,4 @@
-import { faBook,  faCalendarDays, faGraduationCap, faSchool } from "@fortawesome/free-solid-svg-icons";
+import { faBook,  faCalendarDays, faClock, faGraduationCap, faSchool} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Select } from "antd";
 import Search from "antd/es/transfer/search";
@@ -22,7 +22,7 @@ const options1 = [
     { value: 'banana', label: 'Tiếng Việt' },
     { value: 'cherry', label: 'Tiếng Anh' },
   ];
-const data = Array.from({ length: 10 }, (_, index) => ({
+const data = Array.from({ length: 10 }, () => ({
     idRequest:"1",
     title:"Học vãi luôn",
   date:"24-05-2024",
@@ -39,7 +39,7 @@ function RequestStudentPending() {
     const [selectedOption1, setSelectedOption1] = useState(null);// component lọc// sẽ chia nhỏ thành components sau nhen fen
     const [selectedOption2, setSelectedOption2] = useState(null);
     const [selectedOption3, setSelectedOption3] = useState(null);
-   // const [searchTerm, setSearchTerm] = useState('');// component lọc
+    //const [searchTerm, setSearchTerm] = useState('');// component lọc
     const handleSelectChange = (option:any) => {
         setSelectedOption1(option)
     };
@@ -113,6 +113,7 @@ function RequestStudentPending() {
                                 </div>
                             </div>
                         </div>
+                        <div><FontAwesomeIcon icon={faClock}/> {request.timeStart} tới {request.timeEnd}</div>
                         <div> Mong muốn:  {request.description}</div>
                     </div>
                     <div className="bg-pink-100 shadow-md w-1/6 flex items-center justify-center text-center">
@@ -127,4 +128,4 @@ function RequestStudentPending() {
     </div>  );
 }
 
-export default RequestStudentPending ;
+export default RequestStudentPending;

@@ -1,10 +1,9 @@
 interface Props {
   handleHidden: () => void
   renderPopover: React.ReactNode
-  inital?: boolean
 }
 
-export default function Popup({ handleHidden, renderPopover, inital }: Props) {
+export default function Popup({ handleHidden, renderPopover }: Props) {
   return (
     true && (
       <div className='fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50'>

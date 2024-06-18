@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import NavStudentRequestList from "../Nav/NavStudentRequestList";
-import { Footer, Header } from "antd/es/layout/layout";
 
 function StudentViewRequestListLOut() {
     return ( <>

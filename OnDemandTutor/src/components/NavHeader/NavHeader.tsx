@@ -145,7 +145,7 @@ export default function NavHeader() {
                   Xem đơn của bạn(Học Sinh)
                 </Link>
                 <Link
-                  to={path.studentViewRequestList}
+                  to={path.home}
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                 >
                   Xem đơn của bạn(Tutor)
@@ -167,9 +167,7 @@ export default function NavHeader() {
               />
             </div>
             <Link to={'/profile'}>
-              <div className='text-black hover:text-pink-400'>
-                {profile.fullName}
-              </div>
+              <div className='text-black hover:text-pink-400'>Thành</div>
             </Link>
           </Popover>
         )}
