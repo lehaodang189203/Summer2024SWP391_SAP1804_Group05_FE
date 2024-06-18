@@ -27,11 +27,11 @@ import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/
 import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
 import ModeratorLayout from './pages/Moderator/ModeratorLayout/ModeratorLayout'
 import StudentRes from './pages/Moderator/Components/StudentRes'
-
-
 import { path } from './constant/path'
-import ModListTutor from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
 import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
+import RequestStudentPending from './pages/StudentViewRequestList/RequestStudentPending/RequestStudentPending'
+import StudentViewRequestListLOut from './pages/StudentViewRequestList/Layout/StudentViewRequestListLOut'
+import RequestStudentCurrent from './pages/StudentViewRequestList/RequestStudentCurrent/RequestStudentCurrent'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
@@ -191,6 +191,24 @@ export default function useRouteElements() {
         {
           path: path.changePassword,
           element: <ChangPassword />
+        }
+      ]
+    },
+    {// trang học sinh kiểm tra đơn của mình
+      path: path.studentViewRequestList,
+      element: (
+        <MainLayout>
+          <StudentViewRequestListLOut />
+        </MainLayout> 
+      ),children:[
+        {
+          index:true,
+          element:<RequestStudentPending/>
+        }
+        ,
+        {
+          path: path.RequestStudentCurrent,
+          element:<RequestStudentCurrent/>
         }
       ]
     }

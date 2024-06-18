@@ -15,6 +15,8 @@ export const path = {
   deposit: '/deposit',
   changePassword: '/user/changePassword',
   profile: '/user/profile',
+  studentViewRequestList:'/studentViewRequestList',
+  RequestStudentCurrent:'RequestStudentCurrent',
   Moderator: {
     mod: '/mod',
     listStudentRequest: '/mod/listStudentRequest', //danh sách học sinh tạo req session(phiên học)

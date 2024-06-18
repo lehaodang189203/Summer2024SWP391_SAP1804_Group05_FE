@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import BUMBUM from '../../assets/img/BUMBUM.png'
 import Popover from '../Popover/Popover'
 import NavHeader from '../NavHeader'
+import { path } from '../../constant/path'
 export default function Header() {
   return (
     <header className='  h-[8rem] bg-transparent w-full  border-2 shadow-lg  rounded-2xl mt-2 mb-5 hover:shadow-black hover:shadow-lg'>
@@ -34,10 +35,10 @@ export default function Header() {
                   <div className=' rounded-3xl shadow-black shadow-xl'>
                     <div className='  w-[20rem] flex mt-0.5   items-center justify-between text-center  text-[10px]  px-auto rounded-sm'>
                       <Link
-                        to='/registerAsTutor'
+                        to={path.requestList}
                         className='py-2 w-[10rem] h-full  bg-pink-400  text-black  rounded-l-3xl   hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
                       >
-                        Đăng ký trở thành giảng viên
+                        Đăng ký yêu cầu
                       </Link>
                       <Link
                         to='/tutors'
