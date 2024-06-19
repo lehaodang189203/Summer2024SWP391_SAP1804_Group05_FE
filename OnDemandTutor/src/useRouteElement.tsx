@@ -19,6 +19,7 @@ import Calendar from './pages/Calendar'
 import CheckOut from './pages/CheckOut'
 import Deposit from './pages/Deposit'
 import ModeratorLayout from './pages/Moderator/ModeratorLayout/ModeratorLayout'
+import StudentRes from './pages/Moderator/Components/StudentRes'
 import RegisterAsTutor from './pages/RegisterAsTutor'
 import RequestList from './pages/RequestList'
 import TutorList from './pages/TutorList'
@@ -31,7 +32,9 @@ import {
 
 import { path } from './constant/path'
 import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
-import StudentRes from './pages/Moderator/Components/StudentRes'
+import RequestStudentPending from './pages/StudentViewRequestList/RequestStudentPending/RequestStudentPending'
+import StudentViewRequestListLOut from './pages/StudentViewRequestList/Layout/StudentViewRequestListLOut'
+import RequestStudentCurrent from './pages/StudentViewRequestList/RequestStudentCurrent/RequestStudentCurrent'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
@@ -192,6 +195,25 @@ export default function useRouteElements() {
         {
           path: path.changePassword,
           element: <ChangPassword />
+        }
+      ]
+    },
+    {
+      // trang học sinh kiểm tra đơn của mình
+      path: path.studentViewRequestList,
+      element: (
+        <MainLayout>
+          <StudentViewRequestListLOut />
+        </MainLayout>
+      ),
+      children: [
+        {
+          index: true,
+          element: <RequestStudentPending />
+        },
+        {
+          path: path.RequestStudentCurrent,
+          element: <RequestStudentCurrent />
         }
       ]
     }
