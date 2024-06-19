@@ -1,5 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
+import config from '../constant/config'
+import userImage from '../assets/img/user.svg'
 
 // do là token hết hạn chúng ta không nên chơi reload trang chún ta dùng cách này
 export const LocalStrorageEventTarget = new EventTarget()
@@ -23,3 +25,6 @@ export function isAxiosUnprocessableEntityError<FromError>(
 export type NoUndefinedField<T> = {
   [P in keyof T]-?: NoUndefinedField<NonNullable<T>[P]>
 }
+
+export const getAvatarUrl = (avatarName?: string) =>
+  avatarName ? `${config.baseUrl}images/${avatarName}` : userImage

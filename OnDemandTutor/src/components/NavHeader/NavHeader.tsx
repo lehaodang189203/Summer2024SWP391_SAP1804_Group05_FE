@@ -13,6 +13,7 @@ import Popover from '../Popover/Popover'
 import { User } from '../../types/user.type'
 import { BellOutlined, BellTwoTone } from '@ant-design/icons'
 import { Badge } from 'antd'
+import { getAvatarUrl } from '../../utils/utils'
 export default function NavHeader() {
   const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
   const receiveNotification = () => {
@@ -41,7 +42,7 @@ export default function NavHeader() {
       {
         onSuccess: () => {
           navigate(path.login)
-          clearLS()
+
           setIsAuthenticated(false)
         }
       }
@@ -163,9 +164,9 @@ export default function NavHeader() {
           >
             <div className='w-5 h-5 mr-2 flex-shink-0'>
               <img
-                src={me}
+                src={getAvatarUrl(profile?.avatar)}
                 alt='avatar'
-                className='w-full h-full object-cover rounded-full'
+                className='h-full w-full rounded-full object-cover'
               />
             </div>
             <Link to={'/profile'}>

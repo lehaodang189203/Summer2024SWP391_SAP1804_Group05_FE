@@ -70,23 +70,28 @@ export default function FormRequest({ onClose }: FormRequestProps) {
   const onSubmit = (data: FormData) => {
     const date = data.date ? new Date(data.date) : new Date()
 
-    const formattedDateOfBirth = `${date.getFullYear()}-${String(
+    const formattedDate = `${date.getFullYear()}-${String(
       date.getMonth() + 1
     ).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 
     console.log('form', {
       ...data,
-      date: formattedDateOfBirth
+      date: formattedDate
     })
+
+    console.log('data', data)
 
     ReqMutation.mutate(data, {
       onSuccess: () => {
+        console.log('11')
+
         toast.success('Yêu cầu của bạn đang chờ để xét duyệt')
         // Đóng thông báo xác nhận sau khi submit
         setShowConfirmation(false)
         onClose()
       },
       onError: (error) => {
+        toast.error(error.message)
         console.log(error)
         // Đóng thông báo xác nhận sau khi submit
         setShowConfirmation(false)

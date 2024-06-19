@@ -4,7 +4,6 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { useMutation } from '@tanstack/react-query'
 import userApi from '../../../../api/user.api'
-import me from '../../../../assets/img/me.jpg'
 import Button from '../../../../components/Button'
 import DateSelect from '../../../../components/DateSelect/DateSelect'
 import Input from '../../../../components/Input'
@@ -12,17 +11,18 @@ import InputFile from '../../../../components/InputFile'
 import InputNumber from '../../../../components/InputNumber'
 import { AppContext } from '../../../../context/app.context'
 import { UserSchema, userSchema } from '../../../../utils/rules'
+import { getAvatarUrl } from '../../../../utils/utils'
 
 type FormData = Pick<
   UserSchema,
-  'fullName' | 'phone' | 'date_of_birth' | 'avatar'
+  'fullName' | 'phone' | 'date_of_birth' | 'avatar' | 'address'
 >
 type FormDataError = Omit<FormData, 'date_of_birth'> & {
   date_of_birth?: string
 }
 const profileSchema = userSchema.pick([
   'fullName',
-
+  'address',
   'phone',
   'date_of_birth',
   'avatar'
@@ -33,8 +33,7 @@ export default function Profile() {
 
   const [file, setFile] = useState<File>()
 
-  const preViewImage = useMemo(() => {
-    //  tạo đường dẫn
+  const previewImage = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
 
@@ -147,7 +146,7 @@ export default function Profile() {
               <Input
                 className='px-3   py-auto  w-full focus:border-gray-500 focus:shawdow-sm rounded-xl my-auto'
                 classNameInput='rounded-xl border-2 w-full h-10 text-left  hover:shadow-black hover:shadow-sm pl-2'
-                name='Họ và Tên'
+                name='fullName'
                 placeholder='Họ và Tên'
                 errorMessage={errors.fullName?.message}
               />
@@ -175,20 +174,35 @@ export default function Profile() {
                 )}
               />
             </div>
+
+            <div className=' mt-6 flex flex-wrap flex-col sm:flex-row'>
+              <div className='sm:w-[20%] truncate pt-3 sm:text-right  capitalize'>
+                Địa chỉ
+              </div>
+              <div className='sm:w-[80%]  sm:pl-5'>
+                <Input
+                  className='px-3 py-auto  w-full focus:border-gray-500 focus:shawdow-sm rounded-xl my-auto'
+                  classNameInput='rounded-xl border-2 w-full h-10 text-left  hover:shadow-black hover:shadow-sm pl-2'
+                  name='address'
+                  placeholder='Địa chỉ'
+                  errorMessage={errors.address?.message}
+                />
+              </div>
+            </div>
           </div>
           <Controller
             control={control}
             name='date_of_birth'
-            render={({ field }) => {
-              return (
-                <DateSelect
-                  errorMessage={errors.date_of_birth?.message}
-                  onChange={field.onChange}
-                  value={field.value}
-                />
-              )
-            }}
+            render={({ field }) => (
+              <DateSelect
+                name='Ngày sinh'
+                errorMessage={errors.date_of_birth?.message}
+                onChange={field.onChange}
+                value={field.value}
+              />
+            )}
           />
+
           <div className='mt-5 flex flex-wrap flex-col sm:flex-row'>
             <div className='sm:w-[20%] truncate pt-6 sm:text-right capitalize' />
             <div className='sm:w-[80%] sm:pl-5 flex items-center justify-center  '>
@@ -206,8 +220,8 @@ export default function Profile() {
           <div className='flex flex-col items-center'>
             <div className='my-5 h-24 w-24'>
               <img
-                src={me}
-                alt='Avatar'
+                src={previewImage || getAvatarUrl(avatar)}
+                alt=''
                 className='h-full w-full rounded-full object-cover'
               />
             </div>

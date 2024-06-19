@@ -2,8 +2,12 @@ import classNames from 'classnames'
 import { Link, NavLink } from 'react-router-dom'
 import me from '../../../../assets/img/me.jpg'
 import { path } from '../../../../constant/path'
+import { getAvatarUrl } from '../../../../utils/utils'
+import { useContext } from 'react'
+import { AppContext } from '../../../../context/app.context'
 
 export default function UserSideNav() {
+  const { profile } = useContext(AppContext)
   return (
     <div className='ml-5 '>
       <div className='flex items-center border-b border-b-gray-200 py-4'>
@@ -11,11 +15,15 @@ export default function UserSideNav() {
           to={path.user}
           className='h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-black/10'
         >
-          <img src={me} alt='' className='h-full w-full object-cover' />
+          <img
+            src={getAvatarUrl(profile?.avatar)}
+            alt=''
+            className='h-full w-full object-cover'
+          />
         </Link>
         <div className='flex-grow pl-4'>
           <div className='mb-1 truncate font-semibold text-gray-600'>
-            thanh!@gmail.com
+            {profile?.email}
           </div>
           <Link
             to={path.user}

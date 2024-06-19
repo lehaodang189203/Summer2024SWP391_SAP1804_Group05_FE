@@ -20,12 +20,22 @@ export interface DataType {
 }
 
 export default function RequestList() {
-  // Lấy danh sách yêu cầu từ API
   const { data: RequestData } = useQuery<DataType[]>({
     queryKey: ['Request'],
     queryFn: () => tutorApi.viewRequest(),
     placeholderData: []
   })
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const items = RequestData || []
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
 
   const [showForm, setShowForm] = useState(false)
 
@@ -37,14 +47,12 @@ export default function RequestList() {
     setShowForm(false)
   }
 
-  const items = RequestData || [] // Đảm bảo items là một mảng, nếu RequestData chưa có dữ liệu
-
   return (
     <>
-      <div className='container grid grid-cols-2 gap-5'>
-        {items.map((data) => (
-          <div className='col-span-6 md:col-span-12 lg:col-span-6 xl:col-span-6'>
-            <div className='w-full h-auto rounded-3xl mx-5 my-5 px-5 hover:shadow-2xl hover:shadow-black border border-gray-300'>
+      <div className='container grid grid-cols-1 md:grid-cols-2 gap-5'>
+        {currentItems.map((data) => (
+          <div key={data.id} className='col-span-1'>
+            <div className='w-[35rem] h-auto rounded-3xl mx-5 my-5 px-5 hover:shadow-2xl hover:shadow-black border border-gray-300'>
               <div className='my-2'>
                 <h2 className='text-red-600 text-2xl'>{data.title}</h2>
               </div>
@@ -61,7 +69,6 @@ export default function RequestList() {
                     {data.class}
                   </span>
                 </div>
-
                 <div className='my-1'>
                   Mức lương:{' '}
                   <span className='text-red-400 font-bold text-md'>
@@ -86,14 +93,12 @@ export default function RequestList() {
                     {data.timeEnd}
                   </span>
                 </div>
-
                 <div className='my-1'>
                   Hình thức:{' '}
                   <span className='text-black font-bold text-md'>
                     {data.learningMethod}
                   </span>
                 </div>
-
                 <div className='my-1'>
                   Mô tả:{' '}
                   <span className='text-black font-bold text-md'>
@@ -117,6 +122,7 @@ export default function RequestList() {
           </div>
         ))}
       </div>
+
       <div className='fixed bottom-6 right-6'>
         <button
           onClick={handleOpenPopup}
@@ -129,7 +135,13 @@ export default function RequestList() {
         </button>
         {showForm && <FormRequest onClose={handleCloseForm} />}
       </div>
-      <Pagination pageSize={10} />
+
+      <Pagination
+        totalItems={items.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </>
   )
 }
