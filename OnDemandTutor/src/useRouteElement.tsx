@@ -31,6 +31,7 @@ import {
 
 import { path } from './constant/path'
 import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
+import StudentRes from './pages/Moderator/Components/StudentRes'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
@@ -135,8 +136,8 @@ export default function useRouteElements() {
       element: <ModeratorLayout />,
       children: [
         {
-          index: true
-          // element: <StudentRes />
+          index: true,
+          element: <StudentRes />
         },
         {
           path: path.Moderator.tutorResRegis,
