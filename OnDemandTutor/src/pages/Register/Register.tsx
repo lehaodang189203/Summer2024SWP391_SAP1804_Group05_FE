@@ -119,13 +119,7 @@ export default function Register() {
   })
 
   return (
-    <div
-      style={{
-        background: '#F7F3F3',
-        boxShadow: 'rgba(0, 0, 0, 0.1) -18px 20px 4px 7px'
-      }}
-      className='py-10 w-[25rem] rounded-2xl shadow-neutral-950 mx-auto my-[2rem]'
-    >
+    <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
       <div className='container mx-auto justify-center flex'>
         <form onSubmit={onSubmit}>
           <div className='text-2xl'>Đăng Ký</div>

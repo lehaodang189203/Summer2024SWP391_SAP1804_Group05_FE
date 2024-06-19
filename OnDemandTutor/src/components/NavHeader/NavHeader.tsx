@@ -11,14 +11,14 @@ import { LogoutReqBody } from '../../types/user.request.type'
 import { clearLS, getProfileFromLS } from '../../utils/auth'
 import Popover from '../Popover/Popover'
 import { User } from '../../types/user.type'
-import {BellOutlined, BellTwoTone} from '@ant-design/icons'
+import { BellOutlined, BellTwoTone } from '@ant-design/icons'
 import { Badge } from 'antd'
 export default function NavHeader() {
-  
-  const [count, setCount] = useState(0);// State để quản lý số lượng thông báo
-  const receiveNotification = () => {//  hàm để nhận thông báo mới, vd sử dụng button onclick bằng hàm này
-    setCount(count + 1);
-  };
+  const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
+  const receiveNotification = () => {
+    //  hàm để nhận thông báo mới, vd sử dụng button onclick bằng hàm này
+    setCount(count + 1)
+  }
 
   const { isAuthenticated, setIsAuthenticated, refreshToken } =
     useContext(AppContext)
@@ -99,14 +99,16 @@ export default function NavHeader() {
           </svg>
         </Popover> */}
         {/*Chuông  */}
-        <button onClick={receiveNotification}>
-            <Badge count={count} dot className='align-bottom'>  {/*khi có thông báo thì hiện ra chấm  */}
-              <BellOutlined   
-                  className='hover:scale-150 transition-transform duration-300 cursor-pointer scale-125'
-                />
+        {isAuthenticated && (
+          <button onClick={receiveNotification}>
+            <Badge count={count} dot className='align-bottom'>
+              {' '}
+              {/*khi có thông báo thì hiện ra chấm  */}
+              <BellOutlined className='hover:scale-150 transition-transform duration-300 cursor-pointer scale-125' />
             </Badge>
-        </button>
-        
+          </button>
+        )}
+
         {isAuthenticated && (
           <Popover
             className='flex items-center py-1 hover:text-pink-400 cursor-pointer ml-6'
@@ -175,19 +177,19 @@ export default function NavHeader() {
         {/* mốt xóa ! ở đây nhé */}
 
         {!isAuthenticated && (
-          <div className='flex items-center'>
+          <div className='flex items-center ml-[2rem]'>
             <Link
-              to={path.register}
-              className='mx-3 capitalize hover:text-white/70'
+              to={path.login}
+              className='transition duration-150 ease-in-out border-black border-2 px-2 py-2 rounded-lg hover:bg-gray-200 mr-1 '
             >
-              Đăng ký
+              Đăng Nhập
             </Link>
             <div className='border-r-[1px] border-r-white/40 h-4' />
             <Link
-              to={path.login}
-              className='mx-3 capitalize hover:text-white/70'
+              to={path.register}
+              className='bg-pink-500 border-black border-2 px-2 py-2 rounded-lg hover:bg-pink-400'
             >
-              Đăng Nhập
+              Đăng kí
             </Link>
           </div>
         )}

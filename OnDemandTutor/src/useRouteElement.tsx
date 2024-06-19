@@ -50,170 +50,193 @@ export default function useRouteElements() {
   const routeElements = useRoutes([
     // login register
     {
-      path: path.register,
-      element: (
-        <RegisterLayout>
-          <Register />
-        </RegisterLayout>
-      )
-    },
-    {
-      path: path.login,
-      element: (
-        <RegisterLayout>
-          <Login />
-        </RegisterLayout>
-      )
-    },
-    {
-      path: path.home,
-      element: (
-        <MainLayout>
-          <Home />
-        </MainLayout>
-      ),
-      index: true
-    },
-    {
-      path: path.registerAsTutor,
-      element: (
-        <MainLayout>
-          <RegisterAsTutor />
-        </MainLayout>
-      )
+      path: '',
+      element: <RejectedRoute />,
+      children: [
+        {
+          path: path.register,
+          element: (
+            <RegisterLayout>
+              <Register />
+            </RegisterLayout>
+          )
+        },
+        {
+          path: path.login,
+          element: (
+            <RegisterLayout>
+              <Login />
+            </RegisterLayout>
+          )
+        },
+        {
+          path: path.home,
+          element: (
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          ),
+          index: true
+        }
+      ]
     },
 
-    //main session
     {
-      path: path.requestList,
-      element: (
-        <MainLayout>
-          <RequestList />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.tutors,
-      element: (
-        <MainLayout>
-          <TutorList />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.calender,
-      element: (
-        <MainLayout>
-          <Calendar />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.checkOut,
-      element: (
-        <MainLayout>
-          <CheckOut />
-        </MainLayout>
-      )
-    },
-    {
-      path: path.deposit,
-      element: (
-        <MainLayout>
-          <Deposit />
-        </MainLayout>
-      )
-    },
-    //moder admin
-    {
-      path: path.profileTT,
-      element: (
-        <MainLayout>
-          <ProfileTT />
-        </MainLayout>
-      )
-    },
-    //{path: path.Admin.dashBoard,element: (<><DashBoard /></>)},
-    {
-      path: path.Moderator.mod,
-      element: <ModeratorLayout />,
+      path: '',
+      element: <ProtectedRoute />,
       children: [
         {
-          index: true,
-          element: <StudentRes />
+          path: path.home,
+          element: (
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          ),
+          index: true
+        },
+
+        {
+          path: path.registerAsTutor,
+          element: (
+            <MainLayout>
+              <RegisterAsTutor />
+            </MainLayout>
+          )
+        },
+
+        //main session
+        {
+          path: path.requestList,
+          element: (
+            <MainLayout>
+              <RequestList />
+            </MainLayout>
+          )
         },
         {
-          path: path.Moderator.tutorResRegis,
-          element: <ModTutorResRegis />
-        }
-      ]
-    },
-    {
-      path: path.Admin.admin,
-      element: <AdminLayout />,
-      children: [
-        // {
-        //   index: true,
-        //   element: <DashBoard />
-        // },
-        {
-          path: path.Admin.sessionList,
-          element: <SessionList />
+          path: path.tutors,
+          element: (
+            <MainLayout>
+              <TutorList />
+            </MainLayout>
+          )
         },
         {
-          path: path.Admin.studentlist,
-          element: <StudentList />
+          path: path.calender,
+          element: (
+            <MainLayout>
+              <Calendar />
+            </MainLayout>
+          )
         },
         {
-          //tutor
-          path: path.Admin.tutorList,
-          element: <AdminListTutor />
+          path: path.checkOut,
+          element: (
+            <MainLayout>
+              <CheckOut />
+            </MainLayout>
+          )
         },
         {
-          path: path.Admin.confirmProfileRegisterTT,
-          element: <AdminConfirmRegister />
+          path: path.deposit,
+          element: (
+            <MainLayout>
+              <Deposit />
+            </MainLayout>
+          )
+        },
+        //moder admin
+        {
+          path: path.profileTT,
+          element: (
+            <MainLayout>
+              <ProfileTT />
+            </MainLayout>
+          )
+        },
+        //{path: path.Admin.dashBoard,element: (<><DashBoard /></>)},
+        {
+          path: path.Moderator.mod,
+          element: <ModeratorLayout />,
+          children: [
+            {
+              index: true,
+              element: <StudentRes />
+            },
+            {
+              path: path.Moderator.tutorResRegis,
+              element: <ModTutorResRegis />
+            }
+          ]
         },
         {
-          path: path.Admin.rejectProfileRegisterTT,
-          element: <AdminRejectRegister />
-        }
-      ]
-    },
-    //account
-    {
-      path: path.user,
-      element: (
-        <MainLayout>
-          <UserLayout />
-        </MainLayout>
-      ),
-      children: [
+          path: path.Admin.admin,
+          element: <AdminLayout />,
+          children: [
+            // {
+            //   index: true,
+            //   element: <DashBoard />
+            // },
+            {
+              path: path.Admin.sessionList,
+              element: <SessionList />
+            },
+            {
+              path: path.Admin.studentlist,
+              element: <StudentList />
+            },
+            {
+              //tutor
+              path: path.Admin.tutorList,
+              element: <AdminListTutor />
+            },
+            {
+              path: path.Admin.confirmProfileRegisterTT,
+              element: <AdminConfirmRegister />
+            },
+            {
+              path: path.Admin.rejectProfileRegisterTT,
+              element: <AdminRejectRegister />
+            }
+          ]
+        },
+        //account
         {
-          index: true,
-          element: <Profile />
+          path: path.user,
+          element: (
+            <MainLayout>
+              <UserLayout />
+            </MainLayout>
+          ),
+          children: [
+            {
+              index: true,
+              element: <Profile />
+            },
+            {
+              path: path.changePassword,
+              element: <ChangPassword />
+            }
+          ]
         },
         {
-          path: path.changePassword,
-          element: <ChangPassword />
-        }
-      ]
-    },
-    {
-      // trang học sinh kiểm tra đơn của mình
-      path: path.studentViewRequestList,
-      element: (
-        <MainLayout>
-          <StudentViewRequestListLOut />
-        </MainLayout>
-      ),
-      children: [
-        {
-          index: true,
-          element: <RequestStudentPending />
-        },
-        {
-          path: path.RequestStudentCurrent,
-          element: <RequestStudentCurrent />
+          // trang học sinh kiểm tra đơn của mình
+          path: path.studentViewRequestList,
+          element: (
+            <MainLayout>
+              <StudentViewRequestListLOut />
+            </MainLayout>
+          ),
+          children: [
+            {
+              index: true,
+              element: <RequestStudentPending />
+            },
+            {
+              path: path.RequestStudentCurrent,
+              element: <RequestStudentCurrent />
+            }
+          ]
         }
       ]
     }
