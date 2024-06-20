@@ -1,13 +1,17 @@
-import NavStudentRequestList from "../Nav/NavStudentRequestList";
-import RequestStudentCurrent from "../RequestStudentCurrent/RequestStudentCurrent";
+import NavStudentRequestList from '../Nav/NavStudentRequestList'
+import RequestStudentCurrent from '../RequestStudentCurrent/RequestStudentCurrent'
 
 function ReStuCurrentPage() {
-    return ( <>
-        <div className="w-4/5">
-            <NavStudentRequestList/>
-            <div className=" border-2 shadow-xl"><RequestStudentCurrent/></div>
+  return (
+    <>
+      <div className='w-4/5'>
+        <NavStudentRequestList />
+        <div className=' border-2 shadow-xl'>
+          <RequestStudentCurrent />
         </div>
-    </> );
+      </div>
+    </>
+  )
 }
 
-export default ReStuCurrentPage;
+export default ReStuCurrentPage

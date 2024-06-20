@@ -3,9 +3,10 @@ import ModMenu from '../ModMenu/ModMenu'
 import { useEffect, useState } from 'react'
 import { Button, Modal, Table, TableColumnsType } from 'antd'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { moderatorApi } from '../../../../api/moderator.api'
+
 import { toast } from 'react-toastify'
 import { DataType } from '../../../../types/request.type'
+import { moderatorApi } from '../../../../api/moderator.api'
 
 export default function StudentRes() {
   // Lấy danh sách yêu cầu từ API
@@ -13,6 +14,8 @@ export default function StudentRes() {
     queryKey: ['Request'],
     queryFn: () => moderatorApi.getRequest()
   })
+
+  console.log(RequestData)
 
   // Khởi tạo các mutation cho việc phê duyệt và từ chối yêu cầu
   const approveMutation = useMutation({

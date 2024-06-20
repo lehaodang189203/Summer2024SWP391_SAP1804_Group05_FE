@@ -6,12 +6,15 @@ import {
   faSchool
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useQuery } from '@tanstack/react-query'
 import { Select } from 'antd'
 import Search from 'antd/es/transfer/search'
 import { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
+import { DataType } from '../../RequestList/RequestList'
+import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
-import { getProfileFromLS } from '../../../utils/auth'
+
 const options1 = [
   { label: 'Lọc theo thời gian' },
   { value: 'apple', label: 'Thời gian' },
@@ -30,20 +33,41 @@ const options3 = [
   { value: 'banana', label: 'Tiếng Việt' },
   { value: 'cherry', label: 'Tiếng Anh' }
 ]
-const data = Array.from({ length: 10 }, () => ({
-  idRequest: '1',
-  title: 'Học vãi luôn',
-  date: '24-05-2024',
-  LearningMethod: 'Học Trực Tiếp',
-  class: 'Lớp 7',
-  price: '12.000.000đ',
-  subject: 'Toán',
-  timeEnd: '10:30',
-  timeStart: '9:30',
-  description: 'Vừa học vừa chơi nhaa',
-  status: 'processing'
-}))
-function RequestStudentCurrent() {
+// const data = Array.from({ length: 10 }, () => ({
+//   idRequest: '1',
+//   title: 'Học vãi luôn',
+//   date: '24-05-2024',
+//   LearningMethod: 'Học Trực Tiếp',
+//   class: 'Lớp 7',
+//   price: '12.000.000đ',
+//   subject: 'Toán',
+//   timeEnd: '10:30',
+//   timeStart: '9:30',
+//   description: 'Vừa học vừa chơi nhaa',
+//   status: 'processing'
+// }))
+
+//  trang hiện hành
+export default function RequestStudentCurrent() {
+  const { data: RequestData = [] } = useQuery<DataType[]>({
+    queryKey: ['Request'],
+    queryFn: () => studentApi.appoovedequest(),
+    placeholderData: []
+  })
+
+  console.log('RequestData', RequestData)
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const items = RequestData || []
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
+
   const [selectedOption1, setSelectedOption1] = useState(null) // component lọc// sẽ chia nhỏ thành components sau nhen fen
   const [selectedOption2, setSelectedOption2] = useState(null)
   const [selectedOption3, setSelectedOption3] = useState(null)
@@ -98,66 +122,77 @@ function RequestStudentCurrent() {
       <div className='p-3'>
         {' '}
         {/* quản lí thẻ request ở đây nha fen */}
-        <div className='flex justify-between mr-20 ml-32'>
+        <div className='flex justify-between font-bold mr-20 ml-32'>
           <div>Thông tin đơn</div>
           <div>Tình Trạng</div>
         </div>
-        <div className='pt-5 bg-gray-100 around'>
-          {data.map((request, key) => (
-            <div
-              className='m-5 p-3 flex border shadow-md hover:shadow-2xl rounded-md'
-              key={key}
-            >
-              <div className=' w-10/12 bg-slate-100 text-left justify-between text-base p-5 border shadow-md'>
-                <div className='text-lg font-bold text-center pr-56 '>
-                  {request.title}
-                </div>
-                <div className='flex justify-between'>
-                  <div className='trái'>
-                    <div>
-                      <FontAwesomeIcon icon={faCalendarDays} className='mr-2' />
-                      {request.date}
+        <div className='pt-5 bg-transparent rounded-lg around w-full'>
+          {currentItems.length > 0 &&
+            currentItems.map((request, key) => (
+              <>
+                <div
+                  className='m-5 p-3 flex border shadow-md hover:shadow-2xl hover:shadow-black rounded-md'
+                  key={key}
+                >
+                  <div className=' w-10/12 bg-slate-100 rounded-xl text-left justify-between text-base p-5 border shadow-md'>
+                    <div className='text-lg font-bold text-center pr-56 '>
+                      {request.title}
+                    </div>
+                    <div className='flex justify-between'>
+                      <div className='trái'>
+                        <div>
+                          <FontAwesomeIcon
+                            icon={faCalendarDays}
+                            className='mr-2'
+                          />
+                          {request.date}
+                        </div>
+                        <div>
+                          <FontAwesomeIcon icon={faSchool} className='mr-2' />
+                          {request.learningMethod}
+                        </div>
+                        <div>
+                          <FontAwesomeIcon
+                            icon={faGraduationCap}
+                            className='mr-2'
+                          />
+                          {request.class}
+                        </div>
+                        <div>
+                          <FontAwesomeIcon icon={faBook} className='mr-2' />
+                          {request.subject}
+                        </div>
+                      </div>
+                      <div className='flex '>
+                        <div>
+                          <div className='font-bold text-lg'>
+                            {' '}
+                            Giá mong muốn{' '}
+                          </div>
+                          <div>{request.price}</div>
+                        </div>
+                      </div>
                     </div>
                     <div>
-                      <FontAwesomeIcon icon={faSchool} className='mr-2' />
-                      {request.LearningMethod}{' '}
+                      <FontAwesomeIcon icon={faClock} /> {request.timeStart} tới{' '}
+                      {request.timeEnd}
                     </div>
-                    <div>
-                      <FontAwesomeIcon
-                        icon={faGraduationCap}
-                        className='mr-2'
-                      />
-                      {request.class}
-                    </div>
-                    <div>
-                      <FontAwesomeIcon icon={faBook} className='mr-2' />
-                      {request.subject}
-                    </div>
+                    <div> Mong muốn: {request.description}</div>
                   </div>
-                  <div className='flex '>
-                    <div>
-                      <div className='font-bold text-lg'> Giá mong muốn </div>
-                      <div>{request.price}</div>
-                    </div>
+                  <div className='bg-green-600 shadow-md w-1/6 flex items-center justify-center text-center font-bold rounded-lg ml-2'>
+                    Đã duyệt
                   </div>
                 </div>
-                <div>
-                  <FontAwesomeIcon icon={faClock} /> {request.timeStart} tới{' '}
-                  {request.timeEnd}
-                </div>
-                <div> Mong muốn: {request.description}</div>
-              </div>
-              <div className='bg-lime-200 shadow-md w-1/6 flex items-center justify-center text-center'>
-                Đã đăng
-              </div>
-            </div>
-          ))}
+              </>
+            ))}
         </div>
       </div>
-      {/* =))) này là pagination của tutor thì phải =)) để đó từ từ sửa sau */}
-      {/* <Pagination pageSize={10} /> */}
+      <Pagination
+        totalItems={items.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   )
 }
-
-export default RequestStudentCurrent

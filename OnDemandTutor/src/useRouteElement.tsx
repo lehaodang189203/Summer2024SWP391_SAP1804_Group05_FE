@@ -110,14 +110,7 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-        {
-          path: path.calender,
-          element: (
-            <MainLayout>
-              <Calendar />
-            </MainLayout>
-          )
-        },
+
         {
           path: path.checkOut,
           element: (

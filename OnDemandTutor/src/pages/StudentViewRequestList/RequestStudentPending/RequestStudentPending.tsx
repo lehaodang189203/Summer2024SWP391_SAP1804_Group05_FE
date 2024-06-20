@@ -14,6 +14,8 @@ import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { DataType } from '../../RequestList/RequestList'
 import { tutorApi } from '../../../api/tutor.api'
+import { studentApi } from '../../../api/student.api'
+import Pagination from '../../../components/Pagination'
 
 const options1 = [
   { label: 'Lọc theo thời gian' },
@@ -46,7 +48,26 @@ const data = Array.from({ length: 10 }, () => ({
   description: 'Vừa học vừa chơi nhaa',
   status: 'processing'
 }))
+
+//  trang này đang chờ xét duyết
 export function RequestStudentPending() {
+  const { data: RequestData = [] } = useQuery<DataType[]>({
+    queryKey: ['Request'],
+    queryFn: () => studentApi.pedingRequest(),
+    placeholderData: []
+  })
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
+
+  const items = RequestData || []
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
+
   const [selectedOption1, setSelectedOption1] = useState(null) // component lọc// sẽ chia nhỏ thành components sau nhen fen
   const [selectedOption2, setSelectedOption2] = useState(null)
   const [selectedOption3, setSelectedOption3] = useState(null)
@@ -64,12 +85,6 @@ export function RequestStudentPending() {
   const profile = getProfileFromLS()
 
   console.log('profile', profile)
-
-  const { data: RequestData } = useQuery<DataType[]>({
-    queryKey: ['Request'],
-    queryFn: () => tutorApi.viewRequest(),
-    placeholderData: []
-  })
 
   console.log('RequestData', RequestData)
 
@@ -113,17 +128,17 @@ export function RequestStudentPending() {
       <div className='p-3'>
         {' '}
         {/* quản lí thẻ request ở đây nha fen */}
-        <div className='flex justify-between mr-20 ml-32'>
+        <div className='flex justify-between font-bold mr-20 ml-32'>
           <div>Thông tin đơn</div>
           <div>Tình Trạng</div>
         </div>
-        <div className='pt-5 bg-gray-100 around'>
-          {data.map((request, key) => (
+        <div className='pt-5 bg-transparent rounded-lg around w-full'>
+          {currentItems.map((request, key) => (
             <div
-              className='m-5 p-3 flex border shadow-md hover:shadow-2xl rounded-md'
+              className='m-5 p-3 flex border shadow-md hover:shadow-2xl hover:shadow-black rounded-md'
               key={key}
             >
-              <div className=' w-10/12 bg-slate-100 text-left justify-between text-base p-5 border shadow-md'>
+              <div className=' w-10/12 bg-slate-100 rounded-xl text-left justify-between text-base p-5 border shadow-md'>
                 <div className='text-lg font-bold text-center pr-56 '>
                   {request.title}
                 </div>
@@ -135,7 +150,7 @@ export function RequestStudentPending() {
                     </div>
                     <div>
                       <FontAwesomeIcon icon={faSchool} className='mr-2' />
-                      {request.LearningMethod}{' '}
+                      {request.learningMethod}
                     </div>
                     <div>
                       <FontAwesomeIcon
@@ -162,13 +177,19 @@ export function RequestStudentPending() {
                 </div>
                 <div> Mong muốn: {request.description}</div>
               </div>
-              <div className='bg-pink-100 shadow-md w-1/6 flex items-center justify-center text-center'>
-                Đang Duyệt
+              <div className='bg-yellow-500 shadow-md w-1/6 flex items-center justify-center text-center font-bold rounded-lg ml-2'>
+                Đang duyệt
               </div>
             </div>
           ))}
         </div>
       </div>
+      <Pagination
+        totalItems={items.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </div>
   )
 }

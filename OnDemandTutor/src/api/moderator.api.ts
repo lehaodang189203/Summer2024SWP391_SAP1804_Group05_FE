@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { DataType } from '../types/request.type'
 import { User } from '../types/user.type'
 import { SuccessResponse } from '../types/utils.type'
@@ -24,7 +25,7 @@ export const moderatorApi = {
       const response = await http.get<SuccessResponse<DataType[]>>(
         'modaretor/viewRequest'
       )
-      if (response.status === 200) {
+      if (response.status === HttpStatusCode.Ok) {
         return response.data.data
       } else {
         throw new Error('Danh sách trống')
