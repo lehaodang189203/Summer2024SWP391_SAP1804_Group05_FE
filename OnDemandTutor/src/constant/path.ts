@@ -3,7 +3,7 @@ export const path = {
   login: '/login',
   user: '/user',
   register: '/register',
-  registerAsTutor: '/user/registerAsTutor',
+  registerAsTutor: '/registerAsTutor',
   logout: '/Logout',
   tutors: '/tutors',
   profileTT: '/profile',

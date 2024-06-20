@@ -149,7 +149,7 @@ export default function TutorList() {
         </div>
       ))}
       {/* Phân trang */}
-      <Pagination pageSize={10} />
+      {/* <Pagination pageSize={10} /> */}
 
       {isPopupVisible && currentTutor && (
         <Popup

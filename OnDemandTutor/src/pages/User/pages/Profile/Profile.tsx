@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useContext, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import userApi from '../../../../api/user.api'
 import Button from '../../../../components/Button'
 import DateSelect from '../../../../components/DateSelect/DateSelect'
@@ -10,22 +10,30 @@ import Input from '../../../../components/Input'
 import InputFile from '../../../../components/InputFile'
 import InputNumber from '../../../../components/InputNumber'
 import { AppContext } from '../../../../context/app.context'
-import { UserSchema, userSchema } from '../../../../utils/rules'
+import {
+  UpdateSchema,
+  UserSchema,
+  updateSchema,
+  userSchema
+} from '../../../../utils/rules'
 import { getAvatarUrl } from '../../../../utils/utils'
+import GenderSelect from '../../../../components/GenderSelect'
+import { UpdateReqBody } from '../../../../types/user.request.type'
 
 type FormData = Pick<
-  UserSchema,
-  'fullName' | 'phone' | 'date_of_birth' | 'avatar' | 'address'
+  UpdateSchema,
+  'fullName' | 'phone' | 'date_of_birth' | 'address' | 'gender' | 'email'
 >
 type FormDataError = Omit<FormData, 'date_of_birth'> & {
   date_of_birth?: string
 }
-const profileSchema = userSchema.pick([
+const profileSchema = updateSchema.pick([
   'fullName',
   'address',
   'phone',
   'date_of_birth',
-  'avatar'
+  'gender',
+  'email'
 ])
 
 export default function Profile() {
@@ -36,6 +44,21 @@ export default function Profile() {
   const previewImage = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
+
+  const { data: ProfileData } = useQuery({
+    queryKey: ['Account'],
+    // thằng này cũng như vậy mà cách viết khác
+    // queryFn: () => userApi.getProfile(),
+    queryFn: userApi.getProfile // thằng này cũng là 1 call bakc
+  })
+
+  useEffect(() => {
+    if (ProfileData) {
+      console.log('ProfileData', ProfileData)
+    }
+  }, [ProfileData])
+
+  const profile = ProfileData?.data.data
 
   const updateProfileMutation = useMutation({
     mutationFn: userApi.updateProfile
@@ -49,61 +72,82 @@ export default function Profile() {
     watch,
     setError,
     setValue,
+    register,
     control
   } = useForm<FormData>({
     defaultValues: {
       fullName: '',
       phone: '',
-      avatar: '',
+      gender: '',
+      // avatar: '',
       date_of_birth: new Date(1990, 0, 1)
     },
     resolver: yupResolver(profileSchema)
   })
 
   // đọc xem thử giá trị avaratar nó là gì
-  const avatar = watch('avatar')
-  console.log('avatar', avatar)
+  // const avatar = watch('avatar')
+  // console.log('avatar', avatar)
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data)
+    const dateOfBirth = data.date_of_birth
+      ? new Date(data.date_of_birth)
+      : new Date('1990-01-01')
 
-    // try {
-    //   let avatarName = avatar
-    //   if (file) {
-    //     const form = new FormData()
-    //     form.append('avatar', file)
-    //     const upLoadRes = await updateProfileMutation.mutateAsync(form)
-    //     console.log(upLoadRes.data.data)
+    const formattedDateOfBirth = `${dateOfBirth.getFullYear()}-${String(
+      dateOfBirth.getMonth() + 1
+    ).padStart(2, '0')}-${String(dateOfBirth.getDate()).padStart(2, '0')}`
 
-    //     //
-    //     avatarName = upLoadRes.data.data
-    //     setValue('avatar', avatarName)
-    //   }
-    //   const res = await updateProfileMutation.mutateAsync({
-    //     ...data,
-    //     date_of_birth: data.date_of_birth?.toISOString(),
-    //     avatar: avatarName
-    //   })
-    //   setProfile(res.data.data)
-    //   setProfileToLS(res.data.data)
+    if (profile) {
+      const body: UpdateReqBody = {
+        ...data,
+        date_of_birth: formattedDateOfBirth ?? profile.date_of_birth,
+        gender: data.gender ?? profile.gender,
+        address: data.address ?? profile.address,
+        fullName: data.fullName ?? profile.fullName,
+        email: profile.email || profile.email,
+        phone: data.phone ?? profile.phone
+      }
+      console.log(body)
 
-    //   toast.success(res.data.message)
-    // } catch (error) {
-    //   console.log(error)
-    //   if (
-    //     isAxiosUnprocessableEntityError<ErrorResponse<FormDataError>>(error)
-    //   ) {
-    //     const formError = error.response?.data.data
-    //     if (formError) {
-    //       Object.keys(formError).forEach((key) => {
-    //         setError(key as keyof FormDataError, {
-    //           message: formError[key as keyof FormDataError],
-    //           type: 'Server'
-    //         })
-    //       })
-    //     }
-    //   }
-    // }
+      // try {
+      //   let avatarName = avatar
+      //   if (file) {
+      //     const form = new FormData()
+      //     form.append('avatar', file)
+      //     const upLoadRes = await updateProfileMutation.mutateAsync(form)
+      //     console.log(upLoadRes.data.data)
+
+      //     //
+      //     avatarName = upLoadResr.data.data
+      //     setValue('avatar', avatarName)
+      //   }
+      //   const res = await updateProfileMutation.mutateAsync({
+      //     ...data,
+      //     date_of_birth: data.date_of_birth?.toISOString(),
+      //     avatar: avatarName
+      //   })
+      //   setProfile(res.data.data)
+      //   setProfileToLS(res.data.data)
+
+      //   toast.success(res.data.message)
+      // } catch (error) {
+      //   console.log(error)
+      //   if (
+      //     isAxiosUnprocessableEntityError<ErrorResponse<FormDataError>>(error)
+      //   ) {
+      //     const formError = error.response?.data.data
+      //     if (formError) {
+      //       Object.keys(formError).forEach((key) => {
+      //         setError(key as keyof FormDataError, {
+      //           message: formError[key as keyof FormDataError],
+      //           type: 'Server'
+      //         })
+      //       })
+      //     }
+      //   }
+      // }
+    }
   })
 
   const handleChangeFile = (file: File) => {
@@ -133,7 +177,7 @@ export default function Profile() {
             </div>
             <div className='sm:w-[80%] sm:pl-5'>
               <div className='pt-3 text-gray-700 sm:text-left ml-3'>
-                thanhngo.13@gmail.com
+                {profile?.email}
               </div>
             </div>
           </div>
@@ -147,8 +191,25 @@ export default function Profile() {
                 className='px-3   py-auto  w-full focus:border-gray-500 focus:shawdow-sm rounded-xl my-auto'
                 classNameInput='rounded-xl border-2 w-full h-10 text-left  hover:shadow-black hover:shadow-sm pl-2'
                 name='fullName'
+                register={register}
                 placeholder='Họ và Tên'
                 errorMessage={errors.fullName?.message}
+              />
+            </div>
+          </div>
+
+          <div className=' mt-2 flex flex-wrap flex-col sm:flex-row'>
+            <div className='sm:w-[20%] truncate pt-3 sm:text-right  capitalize'>
+              Địa chỉ
+            </div>
+            <div className='sm:w-[80%]  sm:pl-5'>
+              <Input
+                className='px-3 py-auto  w-full focus:border-gray-500 focus:shawdow-sm rounded-xl my-auto'
+                classNameInput='rounded-xl border-2 w-full h-10 text-left  hover:shadow-black hover:shadow-sm pl-2'
+                name='address'
+                register={register}
+                placeholder='Địa chỉ'
+                errorMessage={errors.address?.message}
               />
             </div>
           </div>
@@ -174,22 +235,8 @@ export default function Profile() {
                 )}
               />
             </div>
-
-            <div className=' mt-6 flex flex-wrap flex-col sm:flex-row'>
-              <div className='sm:w-[20%] truncate pt-3 sm:text-right  capitalize'>
-                Địa chỉ
-              </div>
-              <div className='sm:w-[80%]  sm:pl-5'>
-                <Input
-                  className='px-3 py-auto  w-full focus:border-gray-500 focus:shawdow-sm rounded-xl my-auto'
-                  classNameInput='rounded-xl border-2 w-full h-10 text-left  hover:shadow-black hover:shadow-sm pl-2'
-                  name='address'
-                  placeholder='Địa chỉ'
-                  errorMessage={errors.address?.message}
-                />
-              </div>
-            </div>
           </div>
+
           <Controller
             control={control}
             name='date_of_birth'
@@ -199,6 +246,18 @@ export default function Profile() {
                 errorMessage={errors.date_of_birth?.message}
                 onChange={field.onChange}
                 value={field.value}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name='gender'
+            render={({ field }) => (
+              <GenderSelect
+                errorMessage={errors.gender?.message}
+                onChange={field.onChange}
+                value={field.value || 'male'}
               />
             )}
           />
@@ -220,7 +279,7 @@ export default function Profile() {
           <div className='flex flex-col items-center'>
             <div className='my-5 h-24 w-24'>
               <img
-                src={previewImage || getAvatarUrl(avatar)}
+                // src={previewImage || getAvatarUrl(avatar)}
                 alt=''
                 className='h-full w-full rounded-full object-cover'
               />
@@ -237,95 +296,3 @@ export default function Profile() {
     </div>
   )
 }
-
-// import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-// import TutorList from './pages/TutorList'
-// import Login from './pages/Login'
-// import Register from './pages/Register'
-// import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
-// import Home from './pages/Home'
-// import path from './constant/path'
-
-// import MainLayout from './layout/MainLayout'
-
-// import RegisterAsTutor from './pages/RegisterAsTutor/RegisterAsTutor'
-// import DashBoard from './pages/DashBoard'
-// import { useContext } from 'react'
-// import { AppContext } from './context/app.context'
-
-// export default function useRouteElements() {
-//   function ProtectedRoute() {
-//     const { isAuthenticated } = useContext(AppContext)
-//     //  nếu có token thì khỏi phải login
-//     return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
-//   }
-
-//   function RejectedRoute() {
-//     //  hàm này dùng cho là khi đã login rồi thì không cho login| regis nưa
-//     const { isAuthenticated } = useContext(AppContext)
-
-//     return !isAuthenticated ? <Outlet /> : <Navigate to='/' />
-//   }
-//   //
-//   const routeElements = useRoutes([
-//     {
-//       path: path.tutorList,
-//       index: true,
-//       element: (
-//         <MainLayout>
-//           <TutorList />
-//         </MainLayout>
-//       )
-//     },
-//     {
-//       path: '',
-//       element: <RejectedRoute />,
-//       // kiểu như mún vào con thì phải đi qua cha
-//       children: [
-//         {
-//           path: path.login,
-//           element: (
-//             <RegisterLayout>
-//               <Login />
-//             </RegisterLayout>
-//           )
-//         },
-//         {C
-//           path: path.register,
-//           element: (
-//             <RegisterLayout>
-//               <Register />
-//             </RegisterLayout>
-//           )
-//         },
-//         {
-//           path: path.registerAsTutor,
-//           element: (
-//             <MainLayout>
-//               <RegisterAsTutor />
-//             </MainLayout>
-//           )
-//         }
-//       ]
-//     },
-
-//     {
-//       path: path.home,
-//       element: (
-//         <MainLayout>
-//           <Home />
-//         </MainLayout>
-//       )
-//     },
-//     {
-//       path: path.dashBoard,
-//       element: (
-//         <RegisterLayout>
-//           <DashBoard />
-//         </RegisterLayout>
-//       )
-//     }
-//   ])
-
-//   return routeElements
-// }

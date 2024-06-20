@@ -15,7 +15,7 @@ import RequestList from './pages/RequestList'
 import TutorList from './pages/TutorList'
 import Calendar from './pages/Calendar'
 import CheckOut from './pages/CheckOut'
-import Deposit from './pages/Deposit'
+// import Deposit from './pages/Deposit'
 import ChangPassword from './pages/User/pages/ChangePassword'
 import Profile, { default as ProfileTT } from './pages/User/pages/Profile'
 import SessionList from './pages/Admin/Components/SessionList'
@@ -25,9 +25,9 @@ import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/
 import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
 import StudentRes from './pages/Moderator/Components/StudentRes'
 import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
-import StudentViewRequestListLOut from './pages/StudentViewRequestList/Layout/StudentViewRequestListLOut'
-import RequestStudentCurrent from './pages/StudentViewRequestList/RequestStudentCurrent/RequestStudentCurrent'
-import { RequestStudentPending } from './pages/StudentViewRequestList/RequestStudentPending/RequestStudentPending'
+
+// import RequestStudentCurrent from './pages/StudentViewRequestList/RequestStudentCurrent/RequestStudentCurrent'
+// import { RequestStudentPending } from './pages/StudentViewRequestList/RequestStudentPending/RequestStudentPending'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -60,6 +60,14 @@ export default function useRouteElements() {
               <Login />
             </RegisterLayout>
           )
+        },
+        {
+          path: path.home,
+          element: (
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          )
         }
       ]
     },
@@ -76,23 +84,14 @@ export default function useRouteElements() {
           ),
           index: true
         },
-        {
-          path: path.home,
-          element: (
-            <MainLayout>
-              <Home />
-            </MainLayout>
-          ),
-          index: true
-        },
-        {
-          path: path.registerAsTutor,
-          element: (
-            <MainLayout>
-              <RegisterAsTutor />
-            </MainLayout>
-          )
-        },
+        // {
+        //   path: path.registerAsTutor,
+        //   element: (
+        //     <MainLayout>
+        //       <RegisterAsTutor />
+        //     </MainLayout>
+        //   )
+        // },
         {
           path: path.requestList,
           element: (
@@ -125,14 +124,14 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-        {
-          path: path.deposit,
-          element: (
-            <MainLayout>
-              <Deposit />
-            </MainLayout>
-          )
-        },
+        // {
+        //   path: path.deposit,
+        //   element: (
+        //     <MainLayout>
+        //       <Deposit />
+        //     </MainLayout>
+        //   )
+        // },
         {
           path: path.profileTT,
           element: (
@@ -180,22 +179,22 @@ export default function useRouteElements() {
             { index: true, element: <Profile /> },
             { path: path.changePassword, element: <ChangPassword /> }
           ]
-        },
-        {
-          path: path.studentViewRequestList,
-          element: (
-            <MainLayout>
-              <StudentViewRequestListLOut />
-            </MainLayout>
-          ),
-          children: [
-            { index: true, element: <RequestStudentPending /> },
-            {
-              path: path.requestStudentCurrent,
-              element: <RequestStudentCurrent />
-            }
-          ]
         }
+        // {
+        //   path: path.studentViewRequestList,
+        //   element: (
+        //     <MainLayout>
+        //       <StudentViewRequestListLOut />
+        //     </MainLayout>
+        //   ),
+        //   children: [
+        //     { index: true, element: <RequestStudentPending /> },
+        //     {
+        //       path: path.requestStudentCurrent,
+        //       element: <RequestStudentCurrent />
+        //     }
+        //   ]
+        // }
       ]
     }
   ])

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext, useState } from 'react'
 import { tutorApi } from '../../api/tutor.api'
 import Pagination from '../../components/Pagination'
+import { AppContext } from '../../context/app.context'
 import FormRequest from '../FormRequest/FormRequest'
 
 export interface DataType {
@@ -20,6 +20,8 @@ export interface DataType {
 }
 
 export default function RequestList() {
+  // const [profile] = useContext(AppContext)
+
   const { data: RequestData } = useQuery<DataType[]>({
     queryKey: ['Request'],
     queryFn: () => tutorApi.viewRequest(),
@@ -46,6 +48,14 @@ export default function RequestList() {
   const handleCloseForm = () => {
     setShowForm(false)
   }
+
+  //  handle nhận lớp
+
+  // const handleAcceptClass = (id: string) => {
+  //   if()
+  //   console.log('Nhận lớp với ID:', id)
+  //   // Thực hiện các hành động khác như gọi API để nhận lớp
+  // }
 
   return (
     <>
@@ -108,13 +118,12 @@ export default function RequestList() {
               </div>
               <div className='w-full items-end flex'>
                 <div className='my-4 w-full px-auto mx-auto'>
-                  <div className='border-black border-[3px] rounded-lg w-full h-10 bg-pink-400 hover:opacity-80 mx-auto'>
-                    <Link
-                      to='/'
-                      className='justify-center items-center flex py-2'
-                    >
-                      Nhận Lớp
-                    </Link>
+                  <div
+                    role='button'
+                    //onClick={() => handleAcceptClass(data.id)}
+                    className=' rounded-lg w-full h-10 bg-pink-400 hover:opacity-80 mx-auto justify-center  items-center flex'
+                  >
+                    Nhận Lớp
                   </div>
                 </div>
               </div>

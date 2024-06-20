@@ -77,6 +77,20 @@ export const userSchema = yup.object({
     .required('Họ và tên là bắt buộc')
 })
 
+export const updateSchema = yup.object({
+  phone: yup.string().max(20, 'Độ dài tối đa là 20 ký tự'),
+  avatar: yup.string().max(1000, 'Độ dài tối đa là 1000 ký tự'),
+  address: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),
+  date_of_birth: yup.date().max(new Date(), 'Hãy chọn một ngày trong quá khứ'),
+  email: yup.string(),
+
+  gender: yup.string().oneOf(['male', 'female']),
+  fullName: yup
+    .string()
+    .max(160, 'Độ dài tối đa là 160 ký tự')
+    .required('Họ và tên là bắt buộc')
+})
+
 export const requestSchema = yup.object({
   title: yup.string().required('Tựa đề là bắt buộc'),
   date: yup
@@ -133,6 +147,46 @@ export const requestSchema = yup.object({
     .required('Mô tả là bắt buộc')
     .max(1000, 'Độ dài tối đa 1000 ký tự')
 })
+
+export const schemaResAT = yup.object({
+  qualificationName: yup.string().required('Không được bỏ trống'),
+
+  type: yup
+    .string()
+    .required()
+    .oneOf(['Chứng Chỉ', 'Bằng Cắp'], 'phải là Chứng Chỉ hoặc bằng cấp'),
+
+  subject: yup
+    .string()
+    .required('Môn học là bắt buộc')
+    .oneOf(
+      [
+        'Ngữ văn',
+        'Toán học',
+        'Vật lý',
+        'Hóa học',
+        'Sinh học',
+        'Lịch sử',
+        'Địa lý',
+        'Giáo dục công dân',
+        'Ngoại ngữ',
+        'Tin học'
+      ],
+      'Môn học không hợp lệ'
+    ),
+  experience: yup
+    .number()
+    .typeError('Chỉ được nhập số (năm giảng dạy, dạy thêm,...)')
+    .required('Trường này là bắt buộc')
+    .positive('Giá không thể là số âm'),
+  specializedSkills: yup.string().required('Không được bỏ trống'),
+  imageQualification: yup.string().required('Ảnh còn thiếu')
+})
+
+// này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
+export type SchemaResAT = yup.InferType<typeof schemaResAT>
+
 export type RequiredSchema = yup.InferType<typeof requestSchema>
 export type UserSchema = yup.InferType<typeof userSchema>
 export type Schema = yup.InferType<typeof schema>
+export type UpdateSchema = yup.InferType<typeof updateSchema>

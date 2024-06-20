@@ -8,13 +8,23 @@ export interface ResATReqBody {
   field: string
   experience: Number
   specializedSkills: string
-  imageQualification: object
+  imageQualification: string
 }
 
 export interface ResReqBody {
   email: string
   fullName: string
   password: string
+  date_of_birth: string // Sử dụng Date để biểu diễn ngày tháng
+  gender: string
+  phone: string
+}
+
+export interface UpdateReqBody {
+  email: string
+  fullName: string
+  address: string
+
   date_of_birth: string // Sử dụng Date để biểu diễn ngày tháng
   gender: string
   phone: string

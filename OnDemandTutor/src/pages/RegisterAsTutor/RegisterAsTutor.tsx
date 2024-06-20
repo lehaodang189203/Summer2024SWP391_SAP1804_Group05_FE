@@ -1,212 +1,125 @@
-
-import { faGoogle } from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link, useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Controller, useForm } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
-import { ResATReqBody} from '../../types/user.request.type'
-import { regisApi } from '../../api/regis.api'
-import Input from '../../components/Input'
-import TypeSelect from '../../components/TypeSelect'
-import ImageUpload from '../../components/ImageUpload'
-import { SchemaResAT, schemaResAT } from '../../utils/rulesFIle'
-import { authApi } from '../../api/auth.api'
-import InputFile from '../../components/InputFile/InputFile'
+import { SchemaResAT, schemaResAT } from '../../utils/rules'
+import Input from 'antd/es/input/Input'
+import InputNumber from '../../components/InputNumber'
+
 type FormData = Pick<
   SchemaResAT,
-  | 'qualificationName'
-  | 'type'
-  | 'field'
-
-  | 'specializedSkills'
   | 'experience'
-    | 'imageQualification'
+  | 'subject'
+  | 'imageQualification'
+  | 'qualificationName'
+  | 'specializedSkills'
+  | 'type'
 >
 
 const registerATSchema = schemaResAT.pick([
-'qualificationName',
-'type',
-'field',
-'specializedSkills',
-'experience',
-'imageQualification'
+  'experience',
+  'subject',
+  'imageQualification',
+  'qualificationName',
+  'specializedSkills',
+  'type'
 ])
 
 export default function RegisterAsTuTor() {
-  const navigate = useNavigate()
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors }
-    // useForm tại sao định dạng như vầy
-    // FormData
-  } = useForm<FormData>({
-    // này của yup nha
-    // yupResover  nhận vào 1 cái registerShema để validate sau đó trả về 1 hàm resolver
-    // resolver (useForm) được dùng để chuyển kết quả validate từ yup
-    resolver: yupResolver(registerATSchema)
-  })
-
-  const registerAccountMutation = useMutation({
-    mutationFn: (body: ResATReqBody) => regisApi.registerAT(body)
-  })
-  
-  const onSubmit = handleSubmit((data) => {
-      console.log("có data")
-      console.log(data)
-      const body: ResATReqBody = data
-      
-
-      registerAccountMutation.mutate(body, {
-        onSuccess: (data) => {
-          console.log("thành công")
-          console.log(data)// data này không phải là object mà mình gửi đi 
-
-          // setIsAuthenticated(true)
-          // navigate đươc dùng để điều hướng (in case này là tới thằng /)
-
-          // dấu / đại diện trang hiện tại
-          navigate('/')
-        },
-        onError: (error) => {
-          console.log("lỗi")
-          console.log(error)
-        }
-      })
-  })
-
-  return (
-    <div
-      style={{
-        background: '#F7F3F3',
-        boxShadow: 'rgba(0, 0, 0, 0.1) -18px 20px 4px 7px'
-      }}
-      className='py-10 w-[25rem] rounded-2xl shadow-neutral-950 mx-auto my-[2rem]'
-    >
-      <div className='container justify-center flex'>
-        <form onSubmit={onSubmit}>
-          <div className='text-2xl'>Đăng Ký Thành Giảng Viên</div>
-          <InputFile
-            name='qualificationName'
-            type='text'
-            placeholder='Tên Bằng Cấp'
-            className='mt-3'
-            register={register}
-            errorMessage={errors.qualificationName?.message}
-          />
-          <Controller
-            control={control}
-            name='type'
-            render={({ field }) => {
-              return (
-                <TypeSelect
-                  errorMessage={errors.type?.message}
-                  onChange={field.onChange}
-                 className=''
-                  value={field.value}
-                />
-              )
-            }}
-          >
-          </Controller>
-          <InputFile
-            name='field'
-            placeholder='Môn'
-            type='text'
-            register={register}
-            className='mt-3'
-            errorMessage={errors.field?.message}
-          />
-          
-          <InputFile
-            name='specializedSkills'
-            placeholder='Kĩ Năng Chính'
-            type='text'
-            register={register}
-            className='mt-3'
-            errorMessage={errors.specializedSkills?.message}
-          />
-          <InputFile
-            name='experience'
-            placeholder='Số năm kinh nghiệm'
-            type='text'
-            register={register}
-            className='mt-3'
-            errorMessage={errors.experience?.message}
-          />
-         
-          
-          <InputFile
-            name='imageQualification'
-            type='file'
-            register={register}
-            errorMessage={errors.imageQualification?.message}
-          />
-          
-          <div className='bg-slate-300 m-5'>
-            <div>
-
-            </div>
-            <div className='z'>
-
-            </div>
-          </div>
-          
-          
-          
-          
-          {/* <Controller
-            control={control}
-            name='type'
-            render={({ field }) => {
-              return (
-                <TypeSelect
-                  errorMessage={errors.imageDegree?.message}
-                  onChange={field.onChange}
-                  value={field.value}
-                />
-              )
-            }}
-          >
-          </Controller> */}
-          <div className='mt-3'>
-            <button
-              type='submit'
-              className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
-            >
-              Đăng Ký
-            </button>
-          </div>
-        </form>
-      </div>
-      <div>
-        <div>
-          <span>---------------------------</span>
-          <span>hoặc</span>
-          <span>---------------------------</span>
-        </div>
-        <div className='justify-center flex py-2'>
-          <button className='bg-black text-white border-black border-2 w-[300px] rounded-lg justify-center items-center flex py-2 shadow-2xl hover:bg-white hover:text-black'>
-            <div className='pr-2'>
-              <FontAwesomeIcon icon={faGoogle} />
-            </div>
-            <div>Google</div>
-          </button>
-        </div>
-        <div className='my-4'>
-          <div>
-            <span className='text-gray-600 mr-1'>Bạn đã có tài khoản?</span>
-            <Link
-              className='text-gray-500 underline hover:text-red-500'
-              to='/Login'
-            >
-              Đăng Nhập
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   control,
+  //   setError,
+  //   formState: { errors }
+  // } = useForm<FormData>({
+  //   resolver: yupResolver(registerATSchema)
+  // })
+  // const onSubmit = handleSubmit((data: any) => {
+  //   console.log(111)
+  // })
+  // return (
+  //   <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
+  //     <div className='container mx-auto justify-center flex'>
+  //       <form onSubmit={onSubmit}>
+  //         <div className='text-2xl'>Đăng Ký Trở thành gia sư</div>
+  //         <Input
+  //           name='qualificationName'
+  //           type='text'
+  //           placeholder='Tên chứng chỉ'
+  //           className='mt-8'
+  //           register={register}
+  //           errorMessage={errors.qualificationName?.message}
+  //         />
+  //         <div className=' mt-2 flex flex-wrap flex-col sm:flex-row '>
+  //           <div className='sm:w-[20%] truncate sm:text-right capitalize'>
+  //             Số năm kinh nghiệm
+  //           </div>
+  //           <div className='sm:w-[80%]  sm:pl-5'>
+  //             <Controller
+  //               control={control}
+  //               name='experience'
+  //               render={({ field }) => (
+  //                 <InputNumber
+  //                   className='px-3  w-full outline-none   focus:border-gray-500 focus:shawdow-sm rounded-sm'
+  //                   placeholder='Số năm kinh nghiệm'
+  //                   classNameInput='rounded-xl border-2 w-full h-10 text-left pl-2 hover:shadow-black hover:shadow-sm'
+  //                   errorMessage={errors.experience?.message}
+  //                   {...field}
+  //                   onChange={field.onChange}
+  //                 />
+  //               )}
+  //             />
+  //           </div>
+  //         </div>
+  //         <div className='flex flex-col'>
+  //           <label className='block text-sm font-medium'>Môn học</label>
+  //           <select
+  //             {...register('subject')}
+  //             className='ml-10 w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
+  //           >
+  //             <option value=''>Chọn môn học</option>
+  //             <option value='Ngữ văn'>Ngữ văn</option>
+  //             <option value='Toán học'>Toán học</option>
+  //             <option value='Vật lý'>Vật lý</option>
+  //             <option value='Hóa học'>Hóa học</option>
+  //             <option value='Sinh học'>Sinh học</option>
+  //             <option value='Lịch sử'>Lịch sử</option>
+  //             <option value='Địa lý'>Địa lý</option>
+  //             <option value='Giáo dục công dân'>Giáo dục công dân</option>
+  //             <option value='Ngoại ngữ'>Ngoại ngữ</option>
+  //             <option value='Tin học'>Tin học</option>
+  //           </select>
+  //           {errors.subject && (
+  //             <p className='text-red-600 mt-1 text-[0.75rem]'>
+  //               {errors.subject.message}
+  //             </p>
+  //           )}
+  //         </div>
+  //         {/* <div className='flex flex-col'>
+  //           <label className='block text-sm font-medium'>Loại</label>
+  //           <select
+  //             {...register('type')}
+  //             className='ml-10 w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
+  //           >
+  //             <option value=''>Chọn loại</option>
+  //             <option value='Bằng Cấp'>Bằng Cấp</option>
+  //             <option value='Chứng Chỉ'>Chứng Chỉ</option>
+  //           </select>
+  //           {errors.type && (
+  //             <p className='text-red-600 mt-1 text-[0.75rem]'>
+  //               {errors.type.message}
+  //             </p>
+  //           )}
+  //         </div> */}
+  //         <div className='mt-3'>
+  //           <button
+  //             type='submit'
+  //             className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
+  //           >
+  //             Đăng Ký
+  //           </button>
+  //         </div>
+  //       </form>
+  //     </div>
+  //  </div>
+  //)
 }

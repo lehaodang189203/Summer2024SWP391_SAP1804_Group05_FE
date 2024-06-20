@@ -108,7 +108,7 @@ export default function Login() {
               type='submit'
               className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
             >
-              Đăng Nhập
+              Đăng Nhậpt
             </button>
           </div>
         </form>
