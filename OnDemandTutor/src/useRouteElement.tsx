@@ -32,10 +32,12 @@ import {
 
 import { path } from './constant/path'
 
-import StudentViewRequestListLOut from './pages/StudentViewRequestList/Layout/StudentViewRequestListLOut'
+
 import RequestStudentCurrent from './pages/StudentViewRequestList/RequestStudentCurrent/RequestStudentCurrent'
 import { RequestStudentPending } from './pages/StudentViewRequestList/RequestStudentPending/RequestStudentPending'
 import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
+import ReStuPending from './pages/StudentViewRequestList/Layout/ReStuPending'
+import ReStuCurrentPage from './pages/StudentViewRequestList/Layout/ReStuCurrentPage'
 
 export default function useRouteElements() {
   const { isAuthenticated } = useContext(AppContext)
@@ -207,19 +209,18 @@ export default function useRouteElements() {
       path: path.studentViewRequestList,
       element: (
         <MainLayout>
-          <StudentViewRequestListLOut />
+          <ReStuPending />
         </MainLayout>
-      ),
-      children: [
-        {
-          index: true,
-          element: <RequestStudentPending />
-        },
-        {
-          path: path.RequestStudentCurrent,
-          element: <RequestStudentCurrent />
-        }
-      ]
+      )
+    },
+    {
+      // trang học sinh kiểm tra đơn của mình
+      path: path.requestStudentCurrent,
+      element: (
+        <MainLayout>
+          <ReStuCurrentPage />
+        </MainLayout>
+      )
     }
   ])
   return routeElements

@@ -17,7 +17,7 @@ export const path = {
   profile: '/user/profile',
 
   studentViewRequestList: '/studentViewRequestList',
-  RequestStudentCurrent: 'requestStudentCurrent',
+  requestStudentCurrent: '/requestStudentCurrent',
   Moderator: {
     mod: '/mod',
     listStudentRequest: '/mod/listStudentRequest', //danh sách học sinh tạo req session(phiên học)
