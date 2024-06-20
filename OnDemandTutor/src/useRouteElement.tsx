@@ -25,9 +25,6 @@ import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/
 import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
 import StudentRes from './pages/Moderator/Components/StudentRes'
 import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
-
-import RequestStudentCurrent from './pages/StudentViewRequestList/RequestStudentCurrent/RequestStudentCurrent'
-import { RequestStudentPending } from './pages/StudentViewRequestList/RequestStudentPending/RequestStudentPending'
 import ReStuPending from './pages/StudentViewRequestList/Layout/ReStuPending'
 import ReStuCurrentPage from './pages/StudentViewRequestList/Layout/ReStuCurrentPage'
 
@@ -48,7 +45,7 @@ export default function useRouteElements() {
       element: <RejectedRoute />,
       children: [
         {
-          path: path.register,
+          path: path.register,// user
           element: (
             <RegisterLayout>
               <Register />
@@ -56,7 +53,7 @@ export default function useRouteElements() {
           )
         },
         {
-          path: path.login,
+          path: path.login,// user
           element: (
             <RegisterLayout>
               <Login />
@@ -64,7 +61,7 @@ export default function useRouteElements() {
           )
         },
         {
-          path: path.home,
+          path: path.home,//auth user
           element: (
             <MainLayout>
               <Home />
@@ -95,7 +92,19 @@ export default function useRouteElements() {
         //   )
         // },
         {
-          path: path.requestList,
+          path: path.user,//user-----------------------------------------------------------------------------------
+          element: (
+            <MainLayout>
+              <UserLayout />
+            </MainLayout>
+          ),
+          children: [
+            { index: true, element: <Profile /> },
+            { path: path.changePassword, element: <ChangPassword /> }
+          ]
+        },
+        {
+          path: path.requestList,//tutor and student-------------------------------------------------------------------------
           element: (
             <MainLayout>
               <RequestList />
@@ -103,6 +112,7 @@ export default function useRouteElements() {
           )
         },
         {
+<<<<<<< HEAD
           path: path.tutors,
           element: (
             <MainLayout>
@@ -129,6 +139,9 @@ export default function useRouteElements() {
         // },
         {
           path: path.profileTT,
+=======
+          path: path.profileTT,//tutor
+>>>>>>> b01a56522fd845870b8bcee520cabdc5e35d37c1
           element: (
             <MainLayout>
               <ProfileTT />
@@ -136,7 +149,41 @@ export default function useRouteElements() {
           )
         },
         {
-          path: path.Moderator.mod,
+          path: path.tutors,//student--------------------------------------------------------------------------
+          element: (
+            <MainLayout>
+              <TutorList />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.requestStudentCurrent,//student
+          element: (
+            <MainLayout>
+              <ReStuCurrentPage />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.checkOut,// student
+          element: (
+            <MainLayout>
+              <CheckOut />
+            </MainLayout>
+          )
+        }
+        ,
+        {
+          path: path.studentViewRequestList,//student
+          element: (
+            <MainLayout>
+              <ReStuPending />
+            </MainLayout>
+          )
+        }
+        ,
+        {
+          path: path.Moderator.mod, //mod-------------------------------------------------------------------------------
           element: <ModeratorLayout />,
           children: [
             { index: true, element: <StudentRes /> },
@@ -147,7 +194,7 @@ export default function useRouteElements() {
           ]
         },
         {
-          path: path.Admin.admin,
+          path: path.Admin.admin,//admin--------------------------------------------------------
           element: <AdminLayout />,
           children: [
             { path: path.Admin.sessionList, element: <SessionList /> },
@@ -164,33 +211,26 @@ export default function useRouteElements() {
           ]
         },
         {
-          path: path.user,
+          path: path.calender,//dell bk
           element: (
             <MainLayout>
-              <UserLayout />
-            </MainLayout>
-          ),
-          children: [
-            { index: true, element: <Profile /> },
-            { path: path.changePassword, element: <ChangPassword /> }
-          ]
-        },
-        {
-          path: path.requestStudentCurrent,
-          element: (
-            <MainLayout>
-              <ReStuCurrentPage />
-            </MainLayout>
-          )
-        },
-        {
-          path: path.studentViewRequestList,
-          element: (
-            <MainLayout>
-              <ReStuPending />
+              <Calendar />
             </MainLayout>
           )
         }
+        // {
+        //   path: path.deposit,
+        //   element: (
+        //     <MainLayout>
+        //       <Deposit />
+        //     </MainLayout>
+        //   )
+        // },
+        
+        
+        
+        
+        
       ]
     }
   ])

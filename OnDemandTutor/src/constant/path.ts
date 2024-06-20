@@ -3,22 +3,22 @@ export const path = {
   login: '/login',
   user: '/user',
   register: '/register',
-  registerAsTutor: '/registerAsTutor',
   logout: '/Logout',
-  tutors: '/tutors',
-  profileTT: '/profile',
-  requestList: '/requests',
-  detailRequest: '/detailRequest',
-  calender: '/calender',
-  checkOut: '/checkout',
-  payment: '/payment',
-  deposit: '/deposit',
-  changePassword: '/user/changePassword',
-  profile: '/user/profile',
-
-  studentViewRequestList: '/studentViewRequestList',
-  requestStudentCurrent: '/requestStudentCurrent',
-  Moderator: {
+  changePassword: '/user/changePassword',//user
+  profile: '/user/profile',//user
+  registerAsTutor: '/registerAsTutor',//student
+  tutors: '/tutors',//student
+  checkOut: '/checkout',//student
+  payment: '/payment',//student
+  deposit: '/deposit',//student
+  studentViewRequestList: '/studentViewRequestList',//student
+  requestStudentCurrent: '/requestStudentCurrent',//student
+  requestList: '/requests',//tutor and student 
+  profileTT: '/profile',//tutor
+  
+  detailRequest: '/detailRequest',//chưa được sử dụng
+  calender: '/calender',                                      //calender nèk
+  Moderator: {//                                                      mod-------------------------------------
     mod: '/mod',
     listStudentRequest: '/mod/listStudentRequest', //danh sách học sinh tạo req session(phiên học)
     tutorResRegis: '/mod/tutorResRegis', //danh sách giảng viên đăng kí để approved (đang làm)
@@ -27,7 +27,7 @@ export const path = {
     //danh sách phiên học
     //khiếu nại
   },
-  Admin: {
+  Admin: {                                                           //admin-------------------------------------
     admin: '/admin', // phair laf /admin
     tutorList: '/admin/tutorList',
     confirmProfileRegisterTT: '/admin/tutorList/confirmProfileRegisterTT',
