@@ -27,11 +27,11 @@ function NavStudentRequestList() {
           Xem danh sách bị từ chối
         </div>
       </Link> */}
-      <Link to={path.RequestStudentCurrent}>
+      <Link to={path.requestStudentCurrent}>
         <div
-          onClick={() => setSelected(path.RequestStudentCurrent)}
+          onClick={() => setSelected(path.requestStudentCurrent)}
           className={`text-base font-bold cursor-pointer py-1 relative after:absolute after:bottom-0 after:left-0 after:bg-pink-600 after:h-0.5 ${
-            selected === path.RequestStudentCurrent ? 'text-pink-600 after:w-full' : 'hover:text-pink-600 after:w-0 hover:after:w-full'
+            selected === path.requestStudentCurrent ? 'text-pink-600 after:w-full' : 'hover:text-pink-600 after:w-0 hover:after:w-full'
           } after:transition-all after:ease-in-out after:duration-100`}
         >
           Xem danh sách đang hiện hành

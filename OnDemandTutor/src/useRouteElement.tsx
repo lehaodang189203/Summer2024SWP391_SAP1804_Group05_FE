@@ -191,7 +191,7 @@ export default function useRouteElements() {
           children: [
             { index: true, element: <RequestStudentPending /> },
             {
-              path: path.RequestStudentCurrent,
+              path: path.requestStudentCurrent,
               element: <RequestStudentCurrent />
             }
           ]
