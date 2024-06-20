@@ -1,10 +1,10 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
+import { User } from '../types/user.type'
 import {
   getAccessTokenFromLS,
   getProfileFromLS,
   getRefreshTokenFromLS
 } from '../utils/auth'
-import { User } from '../types/user.type'
 
 interface AppContextInterface {
   isAuthenticated: boolean
@@ -13,6 +13,7 @@ interface AppContextInterface {
   setRefreshToken: React.Dispatch<React.SetStateAction<string>>
   profile: User | null
   setProfile: React.Dispatch<React.SetStateAction<User | null>>
+  reset: () => void
 }
 
 const initialAppContext: AppContextInterface = {
@@ -21,22 +22,25 @@ const initialAppContext: AppContextInterface = {
   profile: getProfileFromLS(),
   setProfile: () => null,
   refreshToken: getRefreshTokenFromLS() || '',
-  setRefreshToken: () => null
+  setRefreshToken: () => null,
+  reset: () => null
 }
 
 export const AppContext = createContext<AppContextInterface>(initialAppContext)
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    // initialAppContext.isAuthenticated
-    true //để code mấy cái sau
+    initialAppContext.isAuthenticated
   )
-
   const [refreshToken, setRefreshToken] = useState<string>(
     initialAppContext.refreshToken
   )
-
   const [profile, setProfile] = useState<User | null>(initialAppContext.profile)
+
+  const reset = () => {
+    setIsAuthenticated(false)
+    setProfile(null)
+  }
 
   return (
     <AppContext.Provider
@@ -46,7 +50,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         profile,
         setProfile,
         refreshToken,
-        setRefreshToken
+        setRefreshToken,
+        reset
       }}
     >
       {children}

@@ -46,18 +46,10 @@ class Http {
 
     this.instance.interceptors.response.use(
       (response) => {
-        console.log(response)
-        console.log('status', response.status)
-        console.log('required', response.data)
-
         const { url } = response.config
         console.log(url)
 
         if (url === pathAuth.login || url === pathAuth.register) {
-          console.log(1111)
-
-          console.log(response.data)
-
           const data = response.data as AuthResponse
           console.log(data)
           this.accessToken = data.data.access_token

@@ -1,19 +1,18 @@
 import { useMutation } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
-import me from '../../assets/img/me.jpg'
 
 // import { getRefreshTokeNFromLS } from '../../utils/auth'
+import { BellOutlined } from '@ant-design/icons'
+import { Badge } from 'antd'
 import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
-import { clearLS, getProfileFromLS } from '../../utils/auth'
-import Popover from '../Popover/Popover'
 import { User } from '../../types/user.type'
-import { BellOutlined, BellTwoTone } from '@ant-design/icons'
-import { Badge } from 'antd'
+import { clearLS, getProfileFromLS } from '../../utils/auth'
 import { getAvatarUrl } from '../../utils/utils'
+import Popover from '../Popover/Popover'
 export default function NavHeader() {
   const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
   const receiveNotification = () => {
@@ -41,8 +40,10 @@ export default function NavHeader() {
       { refresh_token: refresh },
       {
         onSuccess: () => {
-          navigate(path.login)
+          console.log(isAuthenticated)
 
+          navigate(path.login)
+          clearLS()
           setIsAuthenticated(false)
         }
       }
@@ -174,9 +175,7 @@ export default function NavHeader() {
             </Link>
           </Popover>
         )}
-
         {/* mốt xóa ! ở đây nhé */}
-
         {!isAuthenticated && (
           <div className='flex items-center ml-[2rem]'>
             <Link
