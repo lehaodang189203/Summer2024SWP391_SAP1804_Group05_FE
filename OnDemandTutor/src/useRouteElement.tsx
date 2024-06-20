@@ -10,7 +10,7 @@ import UserLayout from './pages/User/layout/UserLayout'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import RegisterAsTutor from './pages/RegisterAsTutor'
+
 import RequestList from './pages/RequestList'
 import TutorList from './pages/TutorList'
 import Calendar from './pages/Calendar'
@@ -26,8 +26,10 @@ import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
 import StudentRes from './pages/Moderator/Components/StudentRes'
 import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
 
-// import RequestStudentCurrent from './pages/StudentViewRequestList/RequestStudentCurrent/RequestStudentCurrent'
-// import { RequestStudentPending } from './pages/StudentViewRequestList/RequestStudentPending/RequestStudentPending'
+import RequestStudentCurrent from './pages/StudentViewRequestList/RequestStudentCurrent/RequestStudentCurrent'
+import { RequestStudentPending } from './pages/StudentViewRequestList/RequestStudentPending/RequestStudentPending'
+import ReStuPending from './pages/StudentViewRequestList/Layout/ReStuPending'
+import ReStuCurrentPage from './pages/StudentViewRequestList/Layout/ReStuCurrentPage'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -179,22 +181,23 @@ export default function useRouteElements() {
             { index: true, element: <Profile /> },
             { path: path.changePassword, element: <ChangPassword /> }
           ]
+        },
+        {
+          path: path.requestStudentCurrent,
+          element: (
+            <MainLayout>
+              <ReStuCurrentPage />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.studentViewRequestList,
+          element: (
+            <MainLayout>
+              <ReStuPending />
+            </MainLayout>
+          )
         }
-        // {
-        //   path: path.studentViewRequestList,
-        //   element: (
-        //     <MainLayout>
-        //       <StudentViewRequestListLOut />
-        //     </MainLayout>
-        //   ),
-        //   children: [
-        //     { index: true, element: <RequestStudentPending /> },
-        //     {
-        //       path: path.requestStudentCurrent,
-        //       element: <RequestStudentCurrent />
-        //     }
-        //   ]
-        // }
       ]
     }
   ])
