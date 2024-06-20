@@ -25,9 +25,10 @@ import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/
 import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
 import StudentRes from './pages/Moderator/Components/StudentRes'
 import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
-import StudentViewRequestListLOut from './pages/StudentViewRequestList/Layout/StudentViewRequestListLOut'
 import RequestStudentCurrent from './pages/StudentViewRequestList/RequestStudentCurrent/RequestStudentCurrent'
 import { RequestStudentPending } from './pages/StudentViewRequestList/RequestStudentPending/RequestStudentPending'
+import ReStuCurrentPage from './pages/StudentViewRequestList/Layout/ReStuCurrentPage'
+import ReStuPending from './pages/StudentViewRequestList/Layout/ReStuPending'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -182,19 +183,20 @@ export default function useRouteElements() {
           ]
         },
         {
+          path: path.requestStudentCurrent,
+          element: (
+            <MainLayout>
+              <ReStuCurrentPage />
+            </MainLayout>
+          )
+        },
+        {
           path: path.studentViewRequestList,
           element: (
             <MainLayout>
-              <StudentViewRequestListLOut />
+              <ReStuPending />
             </MainLayout>
-          ),
-          children: [
-            { index: true, element: <RequestStudentPending /> },
-            {
-              path: path.requestStudentCurrent,
-              element: <RequestStudentCurrent />
-            }
-          ]
+          )
         }
       ]
     }
