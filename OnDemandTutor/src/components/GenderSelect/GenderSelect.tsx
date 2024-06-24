@@ -1,4 +1,3 @@
-import { range } from 'lodash'
 import React, { useEffect, useState } from 'react'
 
 interface Props {
@@ -7,8 +6,13 @@ interface Props {
   errorMessage?: string
 }
 
-export default function GenderSelect({ value, onChange, errorMessage }: Props) {
-  const [gender, setGender] = useState(value || 'male')
+export default function rGenderSelect({
+  value,
+  onChange,
+  errorMessage
+}: Props) {
+  // Initialize gender state with 'nam'
+  const [gender, setGender] = useState(value || 'nam')
 
   useEffect(() => {
     if (value) {
@@ -30,8 +34,8 @@ export default function GenderSelect({ value, onChange, errorMessage }: Props) {
         className='h-10 w-full rounded-md border border-black/10 px-3 cursor-pointer hover:border-black'
         value={gender}
       >
-        <option value='male'>Nam</option>
-        <option value='female'>Nữ</option>
+        <option value='nam'>Nam</option>
+        <option value='nữ'>Nữ</option>
       </select>
       {errorMessage && (
         <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm text-left'>

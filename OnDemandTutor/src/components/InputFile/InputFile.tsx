@@ -1,3 +1,4 @@
+// InputFile.tsx
 import { Fragment, useRef } from 'react'
 import { toast } from 'react-toastify'
 import config from '../../constant/config'
@@ -11,17 +12,17 @@ export default function InputFile({ onChange }: Props) {
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileFromLocal = event.target.files?.[0]
-    fileInputRef.current?.setAttribute('value', '')
+
     if (
       fileFromLocal &&
       (fileFromLocal.size >= config.maxSizeUpLoadAvatar ||
         !fileFromLocal.type.includes('image'))
     ) {
-      toast.error(`Dụng lượng file tối đa 1 MB. Định dạng:.JPEG, .PNG`, {
+      toast.error(`Dung lượng file tối đa 1 MB. Định dạng:.JPEG, .PNG`, {
         position: 'top-center'
       })
     } else {
-      // nếu mà hợp lý thì cho set ảnh
+      // If file is valid, set the file
       onChange && onChange(fileFromLocal)
     }
   }
@@ -39,8 +40,7 @@ export default function InputFile({ onChange }: Props) {
         ref={fileInputRef}
         onChange={onFileChange}
         onClick={(event) => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ;(event.target as any).value = null
+          ;(event.target as HTMLInputElement).value = '' // Reset value to allow re-selecting the same file
         }}
       />
       <button

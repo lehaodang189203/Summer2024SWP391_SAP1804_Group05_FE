@@ -48,7 +48,7 @@ export const schema = yup.object({
   avatar: yup.string().max(1000, 'Độ dài tối đa là 1000 ký tự'),
   address: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),
   date_of_birth: yup.date().max(new Date(), 'Hãy chọn một ngày trong quá khứ'),
-  gender: yup.string().oneOf(['male', 'female']),
+  gender: yup.string().oneOf(['nam', 'nữ']),
   amount: yup.number().required('Số tiền nạp là bắt buộc'),
 
   fullName: yup
@@ -84,7 +84,7 @@ export const updateSchema = yup.object({
   date_of_birth: yup.date().max(new Date(), 'Hãy chọn một ngày trong quá khứ'),
   email: yup.string(),
 
-  gender: yup.string().oneOf(['male', 'female']),
+  gender: yup.string().oneOf(['nam', 'nữ']),
   fullName: yup
     .string()
     .max(160, 'Độ dài tối đa là 160 ký tự')
@@ -93,6 +93,7 @@ export const updateSchema = yup.object({
 
 export const requestSchema = yup.object({
   title: yup.string().required('Tựa đề là bắt buộc'),
+
   date: yup
     .string()
     .required('Ngày học là bắt buộc')
@@ -149,8 +150,8 @@ export const requestSchema = yup.object({
 })
 
 export const schemaResAT = yup.object({
+  introduction: yup.string().required('Giới thiệu bản thân là bắt buộc'),
   qualificationName: yup.string().required('Không được bỏ trống'),
-
   type: yup
     .string()
     .required()
@@ -179,7 +180,8 @@ export const schemaResAT = yup.object({
     .typeError('Chỉ được nhập số (năm giảng dạy, dạy thêm,...)')
     .required('Trường này là bắt buộc')
     .positive('Giá không thể là số âm'),
-  specializedSkills: yup.string().required('Không được bỏ trống'),
+
+  specializedSkills: yup.string().required('Kỹ năng chuyên môn là bắt buộc'),
   imageQualification: yup.string().required('Ảnh còn thiếu')
 })
 

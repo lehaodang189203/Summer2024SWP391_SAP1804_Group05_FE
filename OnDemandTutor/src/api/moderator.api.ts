@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { DataType } from '../types/request.type'
 import { User } from '../types/user.type'
-import { SuccessResponse } from '../types/utils.type'
+import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -22,7 +22,7 @@ export const moderatorApi = {
 
   getRequest: async (): Promise<DataType[]> => {
     try {
-      const response = await http.get<SuccessResponse<DataType[]>>(
+      const response = await http.get<SuccessResponseReq<DataType[]>>(
         'modaretor/viewRequest'
       )
       if (response.status === HttpStatusCode.Ok) {

@@ -3,10 +3,22 @@ import ModMenu from '../ModMenu/ModMenu'
 import { useEffect, useState } from 'react'
 import { Button, Modal, Table, TableColumnsType } from 'antd'
 import { useMutation, useQuery } from '@tanstack/react-query'
-
-import { toast } from 'react-toastify'
-import { DataType } from '../../../../types/request.type'
 import { moderatorApi } from '../../../../api/moderator.api'
+import { toast } from 'react-toastify'
+
+interface DataType {
+  idRequest: string
+  fullName: string
+  subject: string
+  title: string
+  price: number
+  description: string
+  class: string
+  learningMethod: string
+  date: string
+  timeStart: string
+  timeEnd: string
+}
 
 export default function StudentRes() {
   // Lấy danh sách yêu cầu từ API
@@ -14,8 +26,6 @@ export default function StudentRes() {
     queryKey: ['Request'],
     queryFn: () => moderatorApi.getRequest()
   })
-
-  console.log(RequestData)
 
   // Khởi tạo các mutation cho việc phê duyệt và từ chối yêu cầu
   const approveMutation = useMutation({
@@ -44,13 +54,13 @@ export default function StudentRes() {
 
   const handleApprove = () => {
     if (selectedRecord) {
-      approveMutation.mutate(selectedRecord.id)
+      approveMutation.mutate(selectedRecord.idRequest)
     }
   }
 
   const handleReject = () => {
     if (selectedRecord) {
-      rejectMutation.mutate(selectedRecord.id)
+      rejectMutation.mutate(selectedRecord.idRequest)
     }
   }
 
@@ -111,7 +121,7 @@ export default function StudentRes() {
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
-            onClick={() => showDetail(record.id)}
+            onClick={() => showDetail(record.idRequest)} // Ensure the id is passed correctly
           >
             Chi tiết
           </button>
@@ -126,7 +136,7 @@ export default function StudentRes() {
   const [visible, setVisible] = useState(false)
 
   const showDetail = (id: string) => {
-    const record = RequestData?.find((item) => item.id === id) || null
+    const record = RequestData?.find((item) => item.idRequest === id) || null
     console.log('id', id)
     setSelectedRecord(record)
     setVisible(true)

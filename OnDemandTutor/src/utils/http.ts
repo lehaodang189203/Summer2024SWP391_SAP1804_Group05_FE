@@ -81,6 +81,7 @@ class Http {
           toast.error(message)
         }
         if (error.response?.status === HttpStatusCode.Unauthorized) {
+          // 401
           clearLS()
         }
         return Promise.reject(error)

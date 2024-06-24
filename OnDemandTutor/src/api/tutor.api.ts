@@ -17,7 +17,8 @@ export const tutorApi = {
       // Handle network or API errors
       throw new Error('Failed to fetch data')
     }
-  }
+  },
   //  tham gia lớp
-  // joinClass: async () => await http.post('
+  joinClass: async ({ Rid, id }: { Rid: string; id: string }) =>
+    await http.post(`tutor/join-request?requestId=${Rid}&tutorId=${id}`)
 }

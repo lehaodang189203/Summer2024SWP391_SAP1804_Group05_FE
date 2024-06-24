@@ -11,9 +11,10 @@ import { Select } from 'antd'
 import Search from 'antd/es/transfer/search'
 import { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
-import { DataType } from '../../RequestList/RequestList'
+
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
+import { DataType } from '../../../types/request.type'
 
 const options1 = [
   { label: 'Lọc theo thời gian' },

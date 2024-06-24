@@ -4,9 +4,9 @@ import { SuccessResponseReq } from './../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
-import { DataType } from '../pages/RequestList/RequestList'
 import { User } from '../types/user.type'
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
+import { DataType } from '../types/request.type'
 const user = <User>getProfileFromLS()
 
 export const studentApi = {

@@ -1,32 +1,40 @@
-import { useQuery } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useContext, useEffect, useState } from 'react'
 import { tutorApi } from '../../api/tutor.api'
 import Pagination from '../../components/Pagination'
-import { AppContext } from '../../context/app.context'
 import FormRequest from '../FormRequest/FormRequest'
-
-export interface DataType {
-  id: string
-  fullName: string
-  subject: string
-  title: string
-  price: number
-  description: string
-  class: string
-  learningMethod: string
-  date: string
-  timeStart: string
-  timeEnd: string
-}
+import { DataType } from '../../types/request.type'
+import { AppContext } from '../../context/app.context'
+import { getProfileFromLS } from '../../utils/auth'
+import { User } from '../../types/user.type'
+import { toast } from 'react-toastify'
 
 export default function RequestList() {
-  // const [profile] = useContext(AppContext)
+  const user: User = getProfileFromLS()
+
+  console.log(user.roles)
 
   const { data: RequestData } = useQuery<DataType[]>({
     queryKey: ['Request'],
     queryFn: () => tutorApi.viewRequest(),
     placeholderData: []
   })
+
+  const joinMutation = useMutation({
+    mutationFn: ({ Rid, id }: { Rid: string; id: string }) => {
+      const body = { Rid, id }
+      return tutorApi.joinClass(body)
+    },
+    onSuccess: (data) => {
+      toast.success('Tham gia lớp thành công')
+    }
+  })
+
+  useEffect(() => {
+    if (RequestData) {
+      console.log(RequestData)
+    }
+  }, [RequestData])
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
@@ -49,19 +57,21 @@ export default function RequestList() {
     setShowForm(false)
   }
 
-  //  handle nhận lớp
-
-  // const handleAcceptClass = (id: string) => {
-  //   if()
-  //   console.log('Nhận lớp với ID:', id)
-  //   // Thực hiện các hành động khác như gọi API để nhận lớp
-  // }
+  // Handle nhận lớp
+  const handleAcceptClass = (Rid: string, id: string) => {
+    if (Rid) {
+      console.log('Nhận lớp với ID:', Rid)
+      console.log('User ID:', id)
+      // Call the mutation
+      joinMutation.mutate({ Rid, id })
+    }
+  }
 
   return (
     <>
       <div className='container grid grid-cols-1 md:grid-cols-2 gap-5'>
         {currentItems.map((data) => (
-          <div key={data.id} className='col-span-1'>
+          <div key={data.idRequest} className='col-span-1'>
             <div className='w-[35rem] h-auto rounded-3xl mx-5 my-5 px-5 hover:shadow-2xl hover:shadow-black border border-gray-300'>
               <div className='my-2'>
                 <h2 className='text-red-600 text-2xl'>{data.title}</h2>
@@ -120,7 +130,7 @@ export default function RequestList() {
                 <div className='my-4 w-full px-auto mx-auto'>
                   <div
                     role='button'
-                    //onClick={() => handleAcceptClass(data.id)}
+                    onClick={() => handleAcceptClass(data.idRequest, user.id)}
                     className=' rounded-lg w-full h-10 bg-pink-400 hover:opacity-80 mx-auto justify-center  items-center flex'
                   >
                     Nhận Lớp

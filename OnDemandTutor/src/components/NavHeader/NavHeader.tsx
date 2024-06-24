@@ -9,8 +9,7 @@ import { Badge } from 'antd'
 import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
-import { User } from '../../types/user.type'
-import { clearLS, getProfileFromLS } from '../../utils/auth'
+import { clearLS } from '../../utils/auth'
 import { getAvatarUrl } from '../../utils/utils'
 import Popover from '../Popover/Popover'
 export default function NavHeader() {
@@ -20,10 +19,13 @@ export default function NavHeader() {
     setCount(count + 1)
   }
 
-  const { isAuthenticated, setIsAuthenticated, refreshToken } =
-    useContext(AppContext)
-
-  const [profile, setProfile] = useState<User>(getProfileFromLS())
+  const {
+    isAuthenticated,
+    setIsAuthenticated,
+    refreshToken,
+    profile,
+    setProfile
+  } = useContext(AppContext)
 
   const navigate = useNavigate()
 
@@ -44,6 +46,7 @@ export default function NavHeader() {
 
           navigate(path.login)
           clearLS()
+          setProfile(null)
           setIsAuthenticated(false)
         }
       }
@@ -171,7 +174,9 @@ export default function NavHeader() {
               />
             </div>
             <Link to={'/profile'}>
-              <div className='text-black hover:text-pink-400'>Thành</div>
+              <div className='text-black hover:text-pink-400'>
+                {profile?.fullName}
+              </div>
             </Link>
           </Popover>
         )}

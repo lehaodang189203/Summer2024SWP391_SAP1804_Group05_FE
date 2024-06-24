@@ -3,6 +3,12 @@ import { useForm } from 'react-hook-form'
 import Button from '../../../../components/Button'
 import Input from '../../../../components/Input'
 import { UserSchema, userSchema } from '../../../../utils/rules'
+import { useMutation } from '@tanstack/react-query'
+import userApi from '../../../../api/user.api'
+import { omit } from 'lodash'
+
+import { toast } from 'react-toastify'
+import { ChangePasswordReqBody } from '../../../../types/user.request.type'
 
 type FormData = Pick<
   UserSchema,
@@ -19,7 +25,9 @@ export default function ChangePassword() {
 
   const {
     register,
+    setError,
     formState: { errors },
+    reset,
     handleSubmit
   } = useForm<FormData>({
     defaultValues: {
@@ -30,9 +38,28 @@ export default function ChangePassword() {
     resolver: yupResolver(passwordSchema)
   })
 
-  const onSubmit = handleSubmit(async (data) => {
-    console.log(data)
+  const changePasswordMutation = useMutation({
+    mutationFn: userApi.changePassword
   })
+
+  const onSubmit = handleSubmit(async (data) => {
+    const body: ChangePasswordReqBody = omit(data, [
+      'confirm_password'
+    ]) as ChangePasswordReqBody
+
+    try {
+      const res = await changePasswordMutation.mutateAsync(body, {
+        onSuccess: () => {
+          toast.success('Đổi mật khẩu thành công')
+        }
+      })
+
+      reset()
+    } catch (error) {
+      console.error(error)
+    }
+  })
+
   return (
     <div className=' w-[60rem] rounded-sm bg-transparent pb-10 shadow md:px-7 md:pb-20 mx-2 pl-[50rem]'>
       <div className='border-b border-b-gray-200 py-6'>

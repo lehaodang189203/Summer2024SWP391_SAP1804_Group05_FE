@@ -2,67 +2,86 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { authApi } from '../../api/auth.api'
 import Input from '../../components/Input'
 import { AppContext } from '../../context/app.context'
-import { LoginReqBody } from '../../types/user.request.type'
+import {
+  ForgotPasswordReqBody,
+  LoginReqBody
+} from '../../types/user.request.type'
 import { ErrorResponse } from '../../types/utils.type'
 import { Schema, schema } from '../../utils/rules'
 import { isAxiosError } from '../../utils/utils'
 
 import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
 import { path } from '../../constant/path'
-import { getRefreshTokenFromLS } from '../../utils/auth'
+import { getProfileFromLS, getRefreshTokenFromLS } from '../../utils/auth'
+import Button from '../../components/Button'
+import userApi from '../../api/user.api'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
 
 export default function Login() {
-  const { setIsAuthenticated, setRefreshToken } = useContext(AppContext)
+  const { setIsAuthenticated, setRefreshToken, setProfile } =
+    useContext(AppContext)
   const navigate = useNavigate()
+  const profile = getProfileFromLS()
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
+
   const {
     register,
     handleSubmit,
     setError,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<FormData>({
     resolver: yupResolver(loginSchema)
   })
+
+  const forgotPasswordMutation = useMutation({
+    mutationFn: (body: ForgotPasswordReqBody) => userApi.forgotPassword(body)
+  })
+
+  const onSubmitForgotPassword = (data: FormData) => {
+    console.log(data)
+
+    forgotPasswordMutation.mutate(data, {
+      onSuccess: () => {
+        toast.success('Đã gửi')
+        setShowForgotPassword(false)
+        reset() // Reset form after successful submission
+      },
+      onError: (error) => {
+        console.log(error)
+      }
+    })
+  }
 
   const loginMutation = useMutation({
     mutationFn: (body: LoginReqBody) => authApi.loginAccount(body)
   })
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
-
     loginMutation.mutate(data, {
       onSuccess: (data) => {
-        console.log(data)
         const refreshToken = getRefreshTokenFromLS()
-        console.log(refreshToken)
-
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
-
-        toast.success(data.data.message, {
-          icon: false
-        })
+        setProfile(profile)
+        toast.success(data.data.message)
         navigate(path.home)
       },
       onError: (error) => {
         if (
           isAxiosError<ErrorResponse<any>>(error) &&
-          error.response?.status === HttpStatusCode.UnprocessableEntity // 422
+          error.response?.status === HttpStatusCode.UnprocessableEntity
         ) {
           const errorAuthen = error.response.data
-          console.log(errorAuthen)
-
-          // Hiển thị lỗi trong form
           if (errorAuthen.data) {
             Object.keys(errorAuthen.data).forEach((key) => {
               setError(key as keyof FormData, {
@@ -71,8 +90,6 @@ export default function Login() {
               })
             })
           }
-
-          // Hiển thị thông báo lỗi tổng quát
           toast.error(errorAuthen.message)
         } else {
           toast.error('An unexpected error occurred')
@@ -80,38 +97,87 @@ export default function Login() {
       }
     })
   })
+
   const signInGoogle = () => {}
+
   return (
     <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
       <div className='container justify-center flex'>
-        <form onSubmit={onSubmit}>
-          <div className='text-2xl'>Đăng Nhập</div>
-          <Input
-            name='email'
-            type='email'
-            placeholder='Email'
-            className='mt-8'
-            register={register}
-            errorMessage={errors.email?.message}
-          />
-          <Input
-            name='password'
-            type='password'
-            placeholder='Mật khẩu'
-            className='relative'
-            register={register}
-            errorMessage={errors.password?.message}
-            autoComplete='on'
-          />
-          <div className='mt-3'>
-            <button
-              type='submit'
-              className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
-            >
-              Đăng Nhậpt
-            </button>
-          </div>
-        </form>
+        {!showForgotPassword ? (
+          <form onSubmit={onSubmit} action='submit'>
+            <div className='text-2xl'>Đăng Nhập</div>
+            <Input
+              name='email'
+              type='email'
+              placeholder='Email'
+              className='mt-8'
+              register={register}
+              errorMessage={errors.email?.message}
+            />
+            <Input
+              name='password'
+              type='password'
+              placeholder='Mật khẩu'
+              className='relative'
+              register={register}
+              errorMessage={errors.password?.message}
+              autoComplete='on'
+            />
+            <div className='mt-3'>
+              <Button
+                type='submit'
+                className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
+                isLoading={loginMutation.isPending}
+                disabled={loginMutation.isPending}
+              >
+                Đăng Nhập
+              </Button>
+            </div>
+            <div className='mt-3'>
+              <button
+                type='button'
+                className='w-full text-center text-blue-500'
+                onClick={() => setShowForgotPassword(true)}
+              >
+                Quên mật khẩu?
+              </button>
+            </div>
+          </form>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmitForgotPassword)} action='submit'>
+            <div className='text-2xl'>Quên mật khẩu</div>
+            <Input
+              name='email'
+              type='email'
+              placeholder='Nhập email'
+              className='mt-8'
+              register={register}
+              errorMessage={errors.email?.message}
+            />
+            <div className='mt-3'>
+              <Button
+                type='submit'
+                className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
+                isLoading={forgotPasswordMutation.isPending}
+                disabled={forgotPasswordMutation.isPending}
+              >
+                Gửi
+              </Button>
+            </div>
+            <div className='mt-3'>
+              <button
+                type='button'
+                className='w-full text-center text-blue-500'
+                onClick={() => {
+                  setShowForgotPassword(false)
+                  reset() // Reset the login form
+                }}
+              >
+                Quay lại
+              </button>
+            </div>
+          </form>
+        )}
       </div>
       <div>
         <div>

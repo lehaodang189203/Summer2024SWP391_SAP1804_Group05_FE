@@ -10,12 +10,13 @@ import { Select } from 'antd'
 import Search from 'antd/es/transfer/search'
 import { FaSearch } from 'react-icons/fa'
 import { getProfileFromLS } from '../../../utils/auth'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { DataType } from '../../RequestList/RequestList'
+
 import { tutorApi } from '../../../api/tutor.api'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
+import { DataType } from '../../../types/request.type'
 
 const options1 = [
   { label: 'Lọc theo thời gian' },
@@ -35,19 +36,19 @@ const options3 = [
   { value: 'banana', label: 'Tiếng Việt' },
   { value: 'cherry', label: 'Tiếng Anh' }
 ]
-const data = Array.from({ length: 10 }, () => ({
-  idRequest: '1',
-  title: 'Học vãi luôn',
-  date: '24-05-2024',
-  LearningMethod: 'Học Trực Tiếp',
-  class: 'Lớp 7',
-  price: '12.000.000đ',
-  subject: 'Toán',
-  timeEnd: '10:30',
-  timeStart: '9:30',
-  description: 'Vừa học vừa chơi nhaa',
-  status: 'processing'
-}))
+// const data = Array.from({ length: 10 }, () => ({
+//   idRequest: '1',
+//   title: 'Học vãi luôn',
+//   date: '24-05-2024',
+//   LearningMethod: 'Học Trực Tiếp',
+//   class: 'Lớp 7',
+//   price: '12.000.000đ',
+//   subject: 'Toán',
+//   timeEnd: '10:30',
+//   timeStart: '9:30',
+//   description: 'Vừa học vừa chơi nhaa',
+//   status: 'processing'
+// }))
 
 //  trang này đang chờ xét duyết
 export function RequestStudentPending() {
@@ -56,6 +57,8 @@ export function RequestStudentPending() {
     queryFn: () => studentApi.pedingRequest(),
     placeholderData: []
   })
+
+  useEffect(() => {}, [RequestData])
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4

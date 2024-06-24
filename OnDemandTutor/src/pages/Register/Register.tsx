@@ -21,6 +21,7 @@ import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
 import { ErrorResponse } from '../../types/utils.type'
 import { isAxiosError } from '../../utils/utils'
 import { getRefreshTokenFromLS, setRefreshTokenToLS } from '../../utils/auth'
+import Button from '../../components/Button'
 
 type FormData = Pick<
   Schema,
@@ -53,6 +54,13 @@ export default function Register() {
     setError,
     formState: { errors }
   } = useForm<FormData>({
+    defaultValues: {
+      fullName: '',
+      phone: '',
+      gender: 'nam',
+
+      date_of_birth: new Date(1990, 0, 1)
+    },
     resolver: yupResolver(registerSchema)
   })
 
@@ -194,17 +202,19 @@ export default function Register() {
               <GenderSelect
                 errorMessage={errors.gender?.message}
                 onChange={field.onChange}
-                value={field.value || 'male'}
+                value={field.value || 'nam'}
               />
             )}
           />
           <div className='mt-3'>
-            <button
+            <Button
               type='submit'
               className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
+              isLoading={registerAccountMutation.isPending}
+              disabled={registerAccountMutation.isPending}
             >
-              Đăng Ký
-            </button>
+              Đăng Nhập
+            </Button>
           </div>
         </form>
       </div>

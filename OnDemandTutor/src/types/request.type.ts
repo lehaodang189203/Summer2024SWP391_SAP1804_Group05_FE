@@ -1,5 +1,5 @@
 export interface DataType {
-  id: string
+  idRequest: string
   fullName: string
   subject: string
   title: string

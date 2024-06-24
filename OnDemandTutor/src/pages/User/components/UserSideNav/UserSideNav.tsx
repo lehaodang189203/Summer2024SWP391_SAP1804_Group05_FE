@@ -15,6 +15,7 @@ export default function UserSideNav() {
           to={path.user}
           className='h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-black/10'
         >
+          {/* ảnh đại diện */}
           <img
             src={getAvatarUrl(profile?.avatar)}
             alt=''
