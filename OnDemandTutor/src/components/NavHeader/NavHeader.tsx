@@ -9,10 +9,11 @@ import { Badge } from 'antd'
 import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
-import { clearLS } from '../../utils/auth'
+import { clearLS, getProfileFromLS } from '../../utils/auth'
 import { getAvatarUrl } from '../../utils/utils'
 import Popover from '../Popover/Popover'
 export default function NavHeader() {
+  const user = getProfileFromLS();// tạo user để in ra số dư trên header
   const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
   const receiveNotification = () => {
     //  hàm để nhận thông báo mới, vd sử dụng button onclick bằng hàm này
@@ -55,7 +56,7 @@ export default function NavHeader() {
 
   return (
     <div className='container'>
-      <div className='flex justify-end'>
+      <div className='flex justify-end gap-3'>
         {/* <Popover
           as='span'
           className='flex items-center py-1 hover:text-pink-400 cursor-pointer'
@@ -103,6 +104,20 @@ export default function NavHeader() {
             />
           </svg>
         </Popover> */}
+        
+        {isAuthenticated && (
+          <div className='flex justify-center text-center'>
+            <div>Số dư: 
+                
+            </div>
+            {user && (
+                    <div>
+                        {user.accountBalance !== null ? user.accountBalance : 0}
+                    </div>
+                )}
+            <div>VNĐ</div>
+          </div>
+        )}
         {/*Chuông  */}
         {isAuthenticated && (
           <button onClick={receiveNotification}>
@@ -116,7 +131,7 @@ export default function NavHeader() {
 
         {isAuthenticated && (
           <Popover
-            className='flex items-center py-1 hover:text-pink-400 cursor-pointer ml-6'
+            className='flex items-center  hover:text-pink-400 cursor-pointer'
             renderPopover={
               <div className='shadow-md rounded-sm border border-gray-200'>
                 <Link

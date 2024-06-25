@@ -9,7 +9,7 @@ export const path = {
   registerAsTutor: '/registerAsTutor', //student
   tutors: '/tutors', //student
   checkOut: '/checkout', //student
-  payment: '/payment', //student
+  paymentcallback: '/paymentcallback', //student
   deposit: '/deposit', //student
   studentViewRequestList: '/studentViewRequestList', //student
   requestStudentCurrent: '/requestStudentCurrent', //student
