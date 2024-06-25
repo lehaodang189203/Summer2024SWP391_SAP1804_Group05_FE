@@ -29,6 +29,7 @@ import ReStuPending from './pages/StudentViewRequestList/Layout/ReStuPending'
 import ReStuCurrentPage from './pages/StudentViewRequestList/Layout/ReStuCurrentPage'
 import { getProfileFromLS } from './utils/auth'
 import { User } from './types/user.type'
+import RegisterAsTuTor from './pages/RegisterAsTutor/RegisterAsTutor'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -91,14 +92,14 @@ export default function useRouteElements() {
           ),
           index: true
         },
-        // {
-        //   path: path.registerAsTutor, //student
-        //   element: (
-        //     <MainLayout>
-        //       <RegisterAsTutor />
-        //     </MainLayout>
-        //   )
-        // },
+        {
+          path: path.registerAsTutor, //student
+          element: (
+            <MainLayout>
+              <RegisterAsTuTor />
+            </MainLayout>
+          )
+        },
         {
           path: path.user, //user-----------------------------------------------------------------------------------
           element: (

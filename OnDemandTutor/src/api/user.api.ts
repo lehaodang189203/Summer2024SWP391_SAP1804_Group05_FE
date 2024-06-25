@@ -51,7 +51,7 @@ const userApi = {
   },
 
   async forgotPassword(body: ForgotPasswordReqBody) {
-    return await http.put(`user/ForgotPassword?Email=${body}`)
+    return await http.put(`user/ForgotPassword?Email=${body.email}`)
   }
 }
 

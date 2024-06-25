@@ -25,36 +25,47 @@ import userApi from '../../api/user.api'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
+const forgotPasswordSchema = schema.pick(['email'])
 
 export default function Login() {
   const { setIsAuthenticated, setRefreshToken, setProfile } =
     useContext(AppContext)
   const navigate = useNavigate()
-  const profile = getProfileFromLS()
+
   const [showForgotPassword, setShowForgotPassword] = useState(false)
 
   const {
-    register,
-    handleSubmit,
-    setError,
-    formState: { errors },
-    reset
+    register: loginRegister,
+    handleSubmit: handleLoginSubmit,
+    setError: setLoginError,
+    formState: { errors: loginErrors },
+    reset: resetLoginForm
   } = useForm<FormData>({
     resolver: yupResolver(loginSchema)
+  })
+
+  const {
+    register: forgotPasswordRegister,
+    handleSubmit: handleForgotPasswordSubmit,
+
+    formState: { errors: forgotPasswordErrors },
+    reset: resetForgotPasswordForm
+  } = useForm<Pick<FormData, 'email'>>({
+    resolver: yupResolver(forgotPasswordSchema)
   })
 
   const forgotPasswordMutation = useMutation({
     mutationFn: (body: ForgotPasswordReqBody) => userApi.forgotPassword(body)
   })
 
-  const onSubmitForgotPassword = (data: FormData) => {
-    console.log(data)
+  const onSubmitForgotPassword = (data: Pick<FormData, 'email'>) => {
+    console.log('email', data)
 
     forgotPasswordMutation.mutate(data, {
       onSuccess: () => {
         toast.success('Đã gửi')
         setShowForgotPassword(false)
-        reset() // Reset form after successful submission
+        resetForgotPasswordForm() // Reset form after successful submission
       },
       onError: (error) => {
         console.log(error)
@@ -66,13 +77,15 @@ export default function Login() {
     mutationFn: (body: LoginReqBody) => authApi.loginAccount(body)
   })
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmitLogin = (data: FormData) => {
+    console.log(data)
+
     loginMutation.mutate(data, {
       onSuccess: (data) => {
         const refreshToken = getRefreshTokenFromLS()
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
-        setProfile(profile)
+        setProfile(data.data.data.user)
         toast.success(data.data.message)
         navigate(path.home)
       },
@@ -84,7 +97,7 @@ export default function Login() {
           const errorAuthen = error.response.data
           if (errorAuthen.data) {
             Object.keys(errorAuthen.data).forEach((key) => {
-              setError(key as keyof FormData, {
+              setLoginError(key as keyof FormData, {
                 type: 'server',
                 message: errorAuthen.data[key]
               })
@@ -96,7 +109,7 @@ export default function Login() {
         }
       }
     })
-  })
+  }
 
   const signInGoogle = () => {}
 
@@ -104,23 +117,23 @@ export default function Login() {
     <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
       <div className='container justify-center flex'>
         {!showForgotPassword ? (
-          <form onSubmit={onSubmit} action='submit'>
+          <form onSubmit={handleLoginSubmit(onSubmitLogin)} action='submit'>
             <div className='text-2xl'>Đăng Nhập</div>
             <Input
               name='email'
               type='email'
               placeholder='Email'
               className='mt-8'
-              register={register}
-              errorMessage={errors.email?.message}
+              register={loginRegister}
+              errorMessage={loginErrors.email?.message}
             />
             <Input
               name='password'
               type='password'
               placeholder='Mật khẩu'
               className='relative'
-              register={register}
-              errorMessage={errors.password?.message}
+              register={loginRegister}
+              errorMessage={loginErrors.password?.message}
               autoComplete='on'
             />
             <div className='mt-3'>
@@ -144,15 +157,18 @@ export default function Login() {
             </div>
           </form>
         ) : (
-          <form onSubmit={handleSubmit(onSubmitForgotPassword)} action='submit'>
+          <form
+            onSubmit={handleForgotPasswordSubmit(onSubmitForgotPassword)}
+            action='submit'
+          >
             <div className='text-2xl'>Quên mật khẩu</div>
             <Input
               name='email'
               type='email'
               placeholder='Nhập email'
               className='mt-8'
-              register={register}
-              errorMessage={errors.email?.message}
+              register={forgotPasswordRegister}
+              errorMessage={forgotPasswordErrors.email?.message}
             />
             <div className='mt-3'>
               <Button
@@ -170,7 +186,7 @@ export default function Login() {
                 className='w-full text-center text-blue-500'
                 onClick={() => {
                   setShowForgotPassword(false)
-                  reset() // Reset the login form
+                  resetLoginForm() // Reset the login form
                 }}
               >
                 Quay lại

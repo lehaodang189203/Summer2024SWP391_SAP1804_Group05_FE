@@ -94,6 +94,7 @@ export const updateSchema = yup.object({
 export const requestSchema = yup.object({
   title: yup.string().required('Tựa đề là bắt buộc'),
 
+  timetable: yup.string().required('Ngày học là bắt buộc'),
   date: yup
     .string()
     .required('Ngày học là bắt buộc')

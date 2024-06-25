@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 
@@ -139,12 +139,15 @@ export default function NavHeader() {
                   Nạp tiền
                 </Link>
 
-                <Link
-                  to={path.Moderator.mod}
-                  className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                >
-                  thông báo
-                </Link>
+                {profile?.roles === 'Dieu hanh vien' && (
+                  <Link
+                    to={path.Moderator.mod}
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    thông báo
+                  </Link>
+                )}
+
                 <Link
                   to={path.studentViewRequestList}
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
@@ -173,11 +176,10 @@ export default function NavHeader() {
                 className='h-full w-full rounded-full object-cover'
               />
             </div>
-            <Link to={'/profile'}>
-              <div className='text-black hover:text-pink-400'>
-                {profile?.fullName}
-              </div>
-            </Link>
+
+            <div className='text-black hover:text-pink-400'>
+              {profile?.fullName}
+            </div>
           </Popover>
         )}
         {/* mốt xóa ! ở đây nhé */}

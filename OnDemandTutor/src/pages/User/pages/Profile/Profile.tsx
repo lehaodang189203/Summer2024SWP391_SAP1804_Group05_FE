@@ -282,7 +282,7 @@ export default function Profile() {
           <div className='flex flex-col items-center'>
             <div className='my-5 h-24 w-24'>
               <img
-                src={previewImage || getAvatarUrl(avatar)}
+                src='D:\back\Summer2024SWP391_SAP1804_Group05_BE\OnDemandTuTor\ODTLearning/wwwroot/Images/?nh ch?p màn hình 2024-06-03 081237.png'
                 className='h-full w-full rounded-full object-cover'
               />
             </div>

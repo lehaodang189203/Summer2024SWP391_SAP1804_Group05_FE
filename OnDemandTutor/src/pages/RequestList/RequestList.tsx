@@ -59,12 +59,14 @@ export default function RequestList() {
 
   // Handle nhận lớp
   const handleAcceptClass = (Rid: string, id: string) => {
-    if (Rid) {
-      console.log('Nhận lớp với ID:', Rid)
-      console.log('User ID:', id)
-      // Call the mutation
-      joinMutation.mutate({ Rid, id })
-    }
+    toast.success('bạn nhận lớp thành công')
+
+    // if (Rid) {
+    //   console.log('Nhận lớp với ID:', Rid)
+    //   console.log('User ID:', id)
+    //   // Call the mutation
+    //   joinMutation.mutate({ Rid, id })
+    // }
   }
 
   return (
@@ -128,13 +130,19 @@ export default function RequestList() {
               </div>
               <div className='w-full items-end flex'>
                 <div className='my-4 w-full px-auto mx-auto'>
-                  <div
-                    role='button'
-                    onClick={() => handleAcceptClass(data.idRequest, user.id)}
-                    className=' rounded-lg w-full h-10 bg-pink-400 hover:opacity-80 mx-auto justify-center  items-center flex'
-                  >
-                    Nhận Lớp
-                  </div>
+                  {user?.roles === 'Gia sư' ? (
+                    <div
+                      role='button'
+                      onClick={() => handleAcceptClass(data.idRequest, user.id)}
+                      className='rounded-lg w-full h-10 bg-pink-400 hover:opacity-80 mx-auto justify-center items-center flex'
+                    >
+                      Nhận Lớp
+                    </div>
+                  ) : (
+                    <div className='w-full h-10 bg-gray-300 mx-auto justify-center items-center flex'>
+                      Bạn phải là gia sư
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -145,7 +153,7 @@ export default function RequestList() {
       <div className='fixed bottom-6 right-6'>
         <button
           onClick={handleOpenPopup}
-          className='mb-10 bg-black text-white rounded-full p-4 shadow-lg hover:bg-transparent transition-all duration-300 hover:text-black shadow-black hover: relative group'
+          className='mb-10 bg-slate-500 text-white rounded-full p-4 shadow-lg hover:bg-transparent transition-all duration-300 hover:text-black shadow-black hover: relative group'
         >
           +
           <span className='absolute bottom-full right-1/2 transform translate-x-1/2 mb-2 w-[3rem] p-2 text-white bg-black rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
