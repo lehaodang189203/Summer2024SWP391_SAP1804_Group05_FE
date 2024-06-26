@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { paymentApi } from '../../api/payment.api';
@@ -32,24 +32,24 @@ const PaymentCallback: React.FC = () => {
     return formattedAmount;
   };
 
-  // const paymentCallback = useMutation({
-  //   mutationFn: (user: User) => paymentApi.paymentcallback(user),
-  //   onSuccess: (data) => {
-  //     toast.success('Payment callback success');
-  //     console.log('Payment callback success:', data);
-  //   },
-  //   onError: (error) => {
-  //     toast.error('Payment callback error');
-  //     console.error('Payment callback error:', error);
-  //   }
-  // });
+  const paymentCallback = useMutation({
+    mutationFn: (user: User) => paymentApi.paymentcallback(user),
+    onSuccess: (data) => {
+      toast.success('Payment callback success');
+      console.log('Payment callback success:', data);
+    },
+    onError: (error) => {
+      toast.error('Payment callback error');
+      console.error('Payment callback error:', error);
+    }
+  });
 
-  // useEffect(() => {
-    
-  //     paymentCallback.mutate(user);
-  //     setIsApiCalled(true); // Đánh dấu API đã được gọi
-    
-  // }, [ user, paymentCallback]);
+  useEffect(() => {
+    if (!isApiCalled) {
+      paymentCallback.mutate(user);
+      setIsApiCalled(true); // Đánh dấu API đã được gọi
+    }
+  }, [user, isApiCalled, paymentCallback]);
 
   return (
     <div className='bg-gray-100 border rounded-md shadow-md p-4 text-left'>

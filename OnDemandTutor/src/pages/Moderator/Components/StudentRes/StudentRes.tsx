@@ -149,8 +149,9 @@ export default function StudentRes() {
 
   return (
     <>
-      <div className='text-left'>Yêu cầu đặt lịch</div>
+      
       <ModMenu kind='student' style='Option1' />
+      <div className='text-left'>Yêu cầu đặt lịch</div>
       <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
         <div className='mb-5'>
           <Search />

@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { DataType } from '../types/request.type'
 import { User } from '../types/user.type'
-import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
+import { SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -27,6 +27,21 @@ export const moderatorApi = {
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      // Handle network or API errors
+      throw new Error('Failed to fetch data')
+    }
+  },
+  getAccount: async (): Promise<User[]> => {
+    try {
+      const response = await http.get<User[]>(
+        'user/getAllUser'
+      )
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data
       } else {
         throw new Error('Danh sách trống')
       }

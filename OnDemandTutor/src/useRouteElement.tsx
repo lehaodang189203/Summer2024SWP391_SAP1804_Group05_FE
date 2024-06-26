@@ -31,6 +31,7 @@ import { getProfileFromLS } from './utils/auth'
 import { User } from './types/user.type'
 import RegisterAsTuTor from './pages/RegisterAsTutor/RegisterAsTutor'
 import PaymentCallback from './pages/PaymentCallBack'
+import ModAccountStudent from './pages/Moderator/Components/ModAccountStudent'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -203,6 +204,10 @@ export default function useRouteElements() {
             {
               path: path.Moderator.tutorResRegis,
               element: <ModTutorResRegis />
+            }
+            ,{
+              path: path.Moderator.listAccountStudent,
+              element: <ModAccountStudent />
             }
           ]
         },

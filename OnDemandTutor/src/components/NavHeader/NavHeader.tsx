@@ -37,7 +37,7 @@ export default function NavHeader() {
   })
 
   const handleLogout = () => {
-    console.log(refreshToken)
+    console.log('refreshToken',refreshToken)
 
     logoutMutation.mutate(
       { refresh_token: refresh },
@@ -56,7 +56,7 @@ export default function NavHeader() {
 
   return (
     <div className='container'>
-      <div className='flex justify-end gap-3'>
+      <div className='flex justify-end gap-5'>
         {/* <Popover
           as='span'
           className='flex items-center py-1 hover:text-pink-400 cursor-pointer'
@@ -107,15 +107,25 @@ export default function NavHeader() {
         
         {isAuthenticated && (
           <div className='flex justify-center text-center'>
-            <div>Số dư: 
-                
-            </div>
+            
             {user && (
-                    <div>
-                        {user.accountBalance !== null ? user.accountBalance : 0}
-                    </div>
-                )}
-            <div>VNĐ</div>
+              user.roles.includes('admin') || user.roles.includes('mod') ? (
+                <div>
+                  <Link to={user.roles.includes('admin') ? path.Admin.admin : path.Moderator.mod}>
+                    <button className='btn btn-primary shadow-md rounded-md p-3 hover:bg-pink-500'>
+                      {user.roles.includes('admin') ? 'Admin' : 'Mod'}
+                    </button>
+                  </Link>
+                </div>
+              ) : (
+                <div>
+                  <div>Số dư: </div>
+                  {user.accountBalance !== null ? user.accountBalance : 0}
+                  <div>VNĐ</div>
+                </div>
+              )
+            )}
+            
           </div>
         )}
         {/*Chuông  */}

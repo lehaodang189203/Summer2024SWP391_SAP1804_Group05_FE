@@ -12,7 +12,7 @@ import { toast } from 'react-toastify'
 export default function RequestList() {
   const user: User = getProfileFromLS()
 
-  console.log(user.roles)
+  //console.log(user.roles)
 
   const { data: RequestData } = useQuery<DataType[]>({
     queryKey: ['Request'],
@@ -71,7 +71,7 @@ export default function RequestList() {
 
   return (
     <>
-      <div className='container grid grid-cols-1 md:grid-cols-2 gap-5'>
+      <div className='container grid grid-cols-1 md:grid-cols-2 gap-5 h-[1000px]'>
         {currentItems.map((data) => (
           <div key={data.idRequest} className='col-span-1'>
             <div className='w-[35rem] h-auto rounded-3xl mx-5 my-5 px-5 hover:shadow-2xl hover:shadow-black border border-gray-300'>
