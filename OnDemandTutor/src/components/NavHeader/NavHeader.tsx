@@ -14,13 +14,14 @@ import { getAvatarUrl } from '../../utils/utils'
 import Popover from '../Popover/Popover'
 import userImage from '../../assets/img/user.svg'
 
+const user = getProfileFromLS();// tạo user để in ra số dư trên header
 export default function NavHeader() {
-  const user = getProfileFromLS();// tạo user để in ra số dư trên header
-  const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
-  const receiveNotification = () => {
-    //  hàm để nhận thông báo mới, vd sử dụng button onclick bằng hàm này
-    setCount(count + 1)
-  }
+  
+  //const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
+  // const receiveNotification = () => {
+  //   //  hàm để nhận thông báo mới, vd sử dụng button onclick bằng hàm này
+  //   setCount(count + 1)
+  // }
 
   const {
     isAuthenticated,
@@ -111,11 +112,11 @@ export default function NavHeader() {
           <div className='flex justify-center text-center'>
             
             {user && (
-              user.roles.includes('admin') || user.roles.includes('mod') ? (
+              (user.roles === 'admin' || user.roles === 'mod') ? (
                 <div>
-                  <Link to={user.roles.includes('admin') ? path.Admin.admin : path.Moderator.mod}>
+                  <Link to={(user.roles === 'admin') ? path.Admin.admin : path.Moderator.mod}>
                     <button className='btn btn-primary shadow-md rounded-md p-3 hover:bg-pink-500'>
-                      {user.roles.includes('admin') ? 'Admin' : 'Mod'}
+                      {user.roles === 'admin' ? 'Admin' : 'Mod'}
                     </button>
                   </Link>
                 </div>
@@ -131,15 +132,14 @@ export default function NavHeader() {
           </div>
         )}
         {/*Chuông  */}
-        {isAuthenticated && (
+        {/* {isAuthenticated && (
           <button onClick={receiveNotification}>
             <Badge count={count} dot className='align-bottom'>
               {' '}
-              {/*khi có thông báo thì hiện ra chấm  */}
               <BellOutlined className='hover:scale-150 transition-transform duration-300 cursor-pointer scale-125' />
             </Badge>
           </button>
-        )}
+        )} */}
 
         {isAuthenticated && (
           <Popover

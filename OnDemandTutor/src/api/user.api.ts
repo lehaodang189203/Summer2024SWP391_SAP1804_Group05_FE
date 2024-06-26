@@ -8,7 +8,7 @@ import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
-const user = <User>getProfileFromLS()
+const user = getProfileFromLS()
 
 interface BodyUpdateProfile
   extends Omit<User, 'id' | 'roles' | 'accountBalance' | 'email'> {}
@@ -29,6 +29,9 @@ const userApi = {
     return http.get<SuccessResponseReq<User>>(`user/getProfile?id=${user.id}`)
   },
   async updateProfile(body: UpdateReqBody) {
+    // console.log('body của res khi call api',body)
+    // console.log('người dùng user là',user)
+    // console.log(' id người dùng user là',user.id)
     return await http.put<SuccessResponseReq<User>>(
       `user/updateProfile?id=${user.id}`,
       body
