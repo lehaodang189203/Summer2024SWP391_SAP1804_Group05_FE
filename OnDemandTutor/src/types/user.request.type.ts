@@ -25,7 +25,6 @@ export interface ResReqBody {
 }
 
 export interface UpdateReqBody {
-  email: string
   fullName: string
   address: string
   avatar: string
@@ -45,7 +44,7 @@ export interface reqDeposit {
 
 export interface RequestBody {
   class: string
-  date: string
+  timetable: string
   description: string
   LearningMethod: string
   price: number
@@ -53,6 +52,7 @@ export interface RequestBody {
   timeStart: string
   timeEnd: string
   title: string
+  totalSessions: string
 }
 
 export interface RequestResult {

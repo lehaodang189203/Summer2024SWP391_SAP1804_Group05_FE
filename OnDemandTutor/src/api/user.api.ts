@@ -1,6 +1,7 @@
 import {
   ChangePasswordReqBody,
-  ForgotPasswordReqBody
+  ForgotPasswordReqBody,
+  UpdateReqBody
 } from './../types/user.request.type'
 import { User } from '../types/user.type'
 import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
@@ -27,21 +28,17 @@ const userApi = {
   getProfile() {
     return http.get<SuccessResponseReq<User>>(`user/getProfile?id=${user.id}`)
   },
-  async updateProfile(body: BodyUpdateProfile) {
-    return await http.put<SuccessResponse<User>>(
+  async updateProfile(body: UpdateReqBody) {
+    return await http.put<SuccessResponseReq<User>>(
       `user/updateProfile?id=${user.id}`,
       body
     )
   },
-  async uploadAvatar(body: FormData) {
+
+  async uploadAvatar(avatar: string) {
     return await http.put<SuccessResponse<string>>(
       `user/UpdateAvatar?id=${user.id}`,
-      body,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
+      avatar
     )
   },
 

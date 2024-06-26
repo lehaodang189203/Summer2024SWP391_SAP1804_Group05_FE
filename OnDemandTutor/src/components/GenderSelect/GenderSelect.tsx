@@ -6,11 +6,7 @@ interface Props {
   errorMessage?: string
 }
 
-export default function rGenderSelect({
-  value,
-  onChange,
-  errorMessage
-}: Props) {
+export default function GenderSelect({ value, onChange, errorMessage }: Props) {
   // Initialize gender state with 'nam'
   const [gender, setGender] = useState(value || 'nam')
 

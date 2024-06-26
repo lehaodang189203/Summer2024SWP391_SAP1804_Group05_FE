@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import userApi from '../../../../api/user.api'
@@ -14,7 +13,12 @@ import InputNumber from '../../../../components/InputNumber'
 import { AppContext } from '../../../../context/app.context'
 import { setProfileToLS } from '../../../../utils/auth'
 import { UpdateSchema, updateSchema } from '../../../../utils/rules'
-import { getAvatarUrl } from '../../../../utils/utils'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { storage } from '../../../../utils/firebase'
+import { v4 } from 'uuid'
+import userImage from '../../../../assets/img/user.svg'
+import { User } from '../../../../types/user.type'
+import { UpdateReqBody } from '../../../../types/user.request.type'
 
 type FormData = Pick<
   UpdateSchema,
@@ -31,6 +35,8 @@ const profileSchema = updateSchema.pick([
 ])
 
 export default function Profile() {
+  const [urlImage, setUrlImage] = useState<string | null>(null)
+
   const {
     handleSubmit,
     watch,
@@ -50,10 +56,10 @@ export default function Profile() {
   })
   const { setProfile } = useContext(AppContext)
 
-  const [file, setFile] = useState<File>()
+  const [file, setFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const previewImage = useMemo(() => {
-    // Tạo URL từ file
     return file ? URL.createObjectURL(file) : ''
   }, [file])
 
@@ -66,35 +72,39 @@ export default function Profile() {
 
   useEffect(() => {
     if (profile) {
-      setValue('fullName', profile.fullName || ''),
-        setValue('avatar', profile.avatar || ''),
-        setValue('phone', profile.phone || ''),
-        setValue('address', profile.address || ''),
-        setValue('gender', profile.gender || ''),
-        setValue(
-          'date_of_birth',
-          profile.date_of_birth
-            ? new Date(profile.date_of_birth)
-            : new Date(1990, 0, 1)
-        )
+      setValue('fullName', profile.fullName || '')
+      setValue('avatar', profile.avatar || '')
+      setValue('phone', profile.phone || '')
+      setValue('address', profile.address || '')
+      setValue('gender', profile.gender || '')
+      setValue(
+        'date_of_birth',
+        profile.date_of_birth
+          ? new Date(profile.date_of_birth)
+          : new Date(1990, 0, 1)
+      )
       setValue('phone', profile.phone || '')
     }
   }, [profile, setValue])
 
   console.log(ProfileData)
-
   console.log(profile)
 
   const updateProfileMutation = useMutation({
     mutationFn: userApi.updateProfile
   })
 
-  const uploadAvatarMutation = useMutation({ mutationFn: userApi.uploadAvatar })
+  const uploadAvatar = async (file: File): Promise<string> => {
+    const imageRef = ref(storage, `avatarUser/${file.name + v4()}`)
+    const snapshot = await uploadBytes(imageRef, file)
+    const url = await getDownloadURL(snapshot.ref)
+    return url
+  }
 
   const avatar = watch('avatar')
   console.log('avatar', avatar)
 
-  function converDateOfBirth(date_of_birth: string): string {
+  function convertDateOfBirth(date_of_birth: string): string {
     const dateOfBirth = date_of_birth
       ? new Date(date_of_birth)
       : new Date('1990-01-01')
@@ -104,55 +114,71 @@ export default function Profile() {
     ).padStart(2, '0')}-${String(dateOfBirth.getDate()).padStart(2, '0')}`
   }
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data: FormData) => {
+    console.log(data)
+
     try {
-      let avatarName = avatar
       if (file) {
-        console.log(1111)
+        const url = await uploadAvatar(file)
+        console.log('url', url)
+        setUrlImage(url)
 
-        // cái formData này là của JS nha =))
-        const form = new FormData()
-        form.append('file', file)
-
-        const uploadRes = await uploadAvatarMutation.mutateAsync(form, {
-          onSuccess: (data) => {
-            toast.success(data.data.message)
-          },
-          onError: (data) => {
-            toast.error(data.message)
-          }
-        })
-        console.log(uploadRes.data.data)
-
-        setValue('avatar', avatarName)
-        console.log(avatarName)
+        setValue('avatar', url) // Update the avatar URL in form data
+        setFile(null)
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''
+        }
       }
 
-      const res = await updateProfileMutation.mutateAsync(
-        {
-          ...data,
-          date_of_birth: converDateOfBirth(data.date_of_birth?.toString() || '')
+      const avatarUrl = typeof urlImage === 'string' ? urlImage : ''
+
+      const formData: UpdateReqBody = {
+        fullName:
+          data.fullName !== profile?.fullName
+            ? data.fullName
+            : profile?.fullName || '',
+        phone:
+          data.phone !== profile?.phone ? data.phone! : profile?.phone || '',
+        address:
+          data.address !== profile?.address
+            ? data.address || ''
+            : profile?.address || '',
+        gender:
+          data.gender !== profile?.gender
+            ? data.gender || ''
+            : profile?.gender || '',
+        date_of_birth:
+          convertDateOfBirth(data.date_of_birth?.toString() || '') !==
+          profile?.date_of_birth
+            ? convertDateOfBirth(data.date_of_birth?.toString() || '')
+            : profile?.date_of_birth || '',
+        avatar: file ? await uploadAvatar(file) : profile?.avatar || ''
+      }
+      console.log('11111111111')
+
+      console.log('res', formData)
+
+      const updateRes = await updateProfileMutation.mutateAsync(formData, {
+        onSuccess: (data) => {
+          toast.success(data.data.message)
+          setProfile(data.data.data)
+          setProfileToLS(data.data.data)
+          refetch()
         },
-        {
-          onSuccess: () => {
-            toast.success(res.data.message)
-          }
+        onError: (error) => {
+          toast.error(error.message)
+          console.error(error)
         }
-      )
+      })
 
-      console.log(res)
-
-      setProfile(res.data.data)
-      setProfileToLS(res.data.data)
-      // refresh lại API
-      refetch()
+      console.log(updateRes)
     } catch (error) {
       console.log(error)
     }
   })
 
   const handleChangeFile = (file?: File) => {
-    setFile(file)
+    setFile(file || null)
   }
 
   return (
@@ -282,7 +308,7 @@ export default function Profile() {
           <div className='flex flex-col items-center'>
             <div className='my-5 h-24 w-24'>
               <img
-                src='D:\back\Summer2024SWP391_SAP1804_Group05_BE\OnDemandTuTor\ODTLearning/wwwroot/Images/?nh ch?p màn hình 2024-06-03 081237.png'
+                src={urlImage ? urlImage : userImage}
                 className='h-full w-full rounded-full object-cover'
               />
             </div>

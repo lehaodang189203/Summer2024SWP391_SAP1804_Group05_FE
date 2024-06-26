@@ -12,6 +12,8 @@ import { LogoutReqBody } from '../../types/user.request.type'
 import { clearLS } from '../../utils/auth'
 import { getAvatarUrl } from '../../utils/utils'
 import Popover from '../Popover/Popover'
+import userImage from '../../assets/img/user.svg'
+
 export default function NavHeader() {
   const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
   const receiveNotification = () => {
@@ -171,7 +173,7 @@ export default function NavHeader() {
           >
             <div className='w-5 h-5 mr-2 flex-shink-0'>
               <img
-                src={getAvatarUrl(profile?.avatar)}
+                src={profile?.avatar ? profile.avatar : userImage}
                 alt='avatar'
                 className='h-full w-full rounded-full object-cover'
               />

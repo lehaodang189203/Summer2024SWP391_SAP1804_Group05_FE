@@ -82,6 +82,8 @@ export default function Login() {
 
     loginMutation.mutate(data, {
       onSuccess: (data) => {
+        console.log('login', data)
+
         const refreshToken = getRefreshTokenFromLS()
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)

@@ -94,16 +94,9 @@ export const updateSchema = yup.object({
 export const requestSchema = yup.object({
   title: yup.string().required('Tựa đề là bắt buộc'),
 
-  timetable: yup.string().required('Ngày học là bắt buộc'),
-  date: yup
-    .string()
-    .required('Ngày học là bắt buộc')
-    .test('is-future-date', 'Ngày học không được ở trong quá khứ', (value) => {
-      const selectedDate = new Date(value)
-      const today = new Date()
-      today.setHours(0, 0, 0, 0) // Set time to the start of the day
-      return selectedDate >= today
-    }),
+  timetable: yup.array().of(yup.string()).required(), // Expect an array of strings for timetable
+
+  totalSessions: yup.number().required('số buổi học là bắt buộc'),
   LearningMethod: yup
     .string()
     .oneOf(
@@ -111,11 +104,13 @@ export const requestSchema = yup.object({
       'Phương thức học không hợp lệ'
     )
     .required('Hãy chọn phương thức học'),
+
   class: yup.string().oneOf(['10', '11', '12']).required('Chọn lớp'),
   price: yup
     .number()
     .required('Giá là bắt buộc')
     .positive('Giá không thể là số âm'),
+
   subject: yup
     .string()
     .required('Môn học là bắt buộc')
@@ -139,6 +134,7 @@ export const requestSchema = yup.object({
     message: 'thời gian không phù hợp',
     test: testDate
   }),
+
   timeStart: yup.string().required('Thời gian bắt đầu là bắt buộc').test({
     name: 'time-not-allowed',
     message: 'thời gian không phù hợp',
