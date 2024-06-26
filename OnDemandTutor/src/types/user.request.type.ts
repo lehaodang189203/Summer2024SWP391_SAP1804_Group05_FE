@@ -37,8 +37,7 @@ export interface LogoutReqBody {
   refresh_token: string
 }
 export interface reqDeposit {
-  firstName: string
-  lastName: string
+  fullName:string
   amount: number
 }
 

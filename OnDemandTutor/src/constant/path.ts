@@ -9,7 +9,7 @@ export const path = {
   registerAsTutor: '/registerAsTutor', //student
   tutors: '/tutors', //student
   checkOut: '/checkout', //student
-  payment: '/payment', //student
+  paymentcallback: '/paymentcallback', //student
   deposit: '/deposit', //student
   studentViewRequestList: '/studentViewRequestList', //student
   requestStudentCurrent: '/requestStudentCurrent', //student
@@ -23,8 +23,8 @@ export const path = {
     mod: '/mod',
     listStudentRequest: '/mod/listStudentRequest', //danh sách học sinh tạo req session(phiên học)
     tutorResRegis: '/mod/tutorResRegis', //danh sách giảng viên đăng kí để approved (đang làm)
-    tutorPostSession: '/mod/listTutor' // danh sách post giảng viên tạo phiên học
-
+    tutorPostSession: '/mod/listTutor', // danh sách post giảng viên tạo phiên học
+    listAccountStudent:'/mod/listAccountStudent'
     //danh sách phiên học
     //khiếu nại
   },
