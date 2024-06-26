@@ -70,6 +70,8 @@ export default function Profile() {
 
   const profile = ProfileData?.data.data
 
+  console.log(profile)
+
   useEffect(() => {
     if (profile) {
       setValue('fullName', profile.fullName || '')
