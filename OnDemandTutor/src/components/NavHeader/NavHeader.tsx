@@ -1,146 +1,68 @@
-import { useMutation } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { authApi } from '../../api/auth.api'
+import { useMutation } from '@tanstack/react-query';
+import { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { authApi } from '../../api/auth.api';
+import { path } from '../../constant/path';
+import { AppContext } from '../../context/app.context';
+import { clearLS, getProfileFromLS } from '../../utils/auth';
+import userImage from '../../assets/img/user.svg';
+import Popover from '../Popover/Popover';
 
-// import { getRefreshTokeNFromLS } from '../../utils/auth'
-import { BellOutlined } from '@ant-design/icons'
-import { Badge } from 'antd'
-import { path } from '../../constant/path'
-import { AppContext } from '../../context/app.context'
-import { LogoutReqBody } from '../../types/user.request.type'
-import { clearLS, getProfileFromLS } from '../../utils/auth'
-import { getAvatarUrl } from '../../utils/utils'
-import Popover from '../Popover/Popover'
-import userImage from '../../assets/img/user.svg'
-
-const user = getProfileFromLS();// tạo user để in ra số dư trên header
 export default function NavHeader() {
-  
-  //const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
-  // const receiveNotification = () => {
-  //   //  hàm để nhận thông báo mới, vd sử dụng button onclick bằng hàm này
-  //   setCount(count + 1)
-  // }
+  const { isAuthenticated, setIsAuthenticated, refreshToken, profile, setProfile } = useContext(AppContext);
+  const navigate = useNavigate();
+  const user = getProfileFromLS();
 
-  const {
-    isAuthenticated,
-    setIsAuthenticated,
-    refreshToken,
-    profile,
-    setProfile
-  } = useContext(AppContext)
+  useEffect(() => {
+    const profile = localStorage.getItem('profile');
+    const access_token = localStorage.getItem('access_token');
+    const refresh_token = localStorage.getItem('refresh_token');
 
-  const navigate = useNavigate()
-
-  const refresh = refreshToken
+    if (profile && access_token && refresh_token) {
+      const user = JSON.parse(profile);
+      setProfile(user);
+      setIsAuthenticated(true);
+    }
+  }, [setIsAuthenticated, setProfile]);
 
   const logoutMutation = useMutation({
-    mutationFn: (body: LogoutReqBody) => authApi.logoutAccount(body)
-  })
+    mutationFn: (body:any) => authApi.logoutAccount(body)
+  });
 
   const handleLogout = () => {
-    console.log('refreshToken',refreshToken)
-
     logoutMutation.mutate(
-      { refresh_token: refresh },
+      { refresh_token: refreshToken },
       {
         onSuccess: () => {
-          console.log(isAuthenticated)
-
-          navigate(path.login)
-          clearLS()
-          setProfile(null)
-          setIsAuthenticated(false)
+          navigate(path.login);
+          clearLS();
+          setProfile(null);
+          setIsAuthenticated(false);
         }
       }
-    )
-  }
+    );
+  };
 
   return (
     <div className='container'>
       <div className='flex justify-end gap-5'>
-        {/* <Popover
-          as='span'
-          className='flex items-center py-1 hover:text-pink-400 cursor-pointer'
-          renderPopover={
-            <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
-              <div className='flex flex-col py-2 pr-28 pl-3'>
-                <button className='button py-2 px-3 hover:text-orange'>
-                  Tiếng Việt
-                </button>
-                <button className='button py-2 px-3 hover:text-orange mt-2'>
-                  English
-                </button>
-              </div>
-            </div>
-          }
-        >
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='w-6 h-6'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418'
-            />
-          </svg>
-          
-          <div className='mx-1'>Tiếng Việt</div>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='w-6 h-6'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='m19.5 8.25-7.5 7.5-7.5-7.5'
-            />
-          </svg>
-        </Popover> */}
-        
         {isAuthenticated && (
           <div className='flex justify-center text-center'>
-            
-            {user && (
-              (user.roles === 'admin' || user.roles === 'mod') ? (
-                <div>
-                  <Link to={(user.roles === 'admin') ? path.Admin.admin : path.Moderator.mod}>
-                    <button className='btn btn-primary shadow-md rounded-md p-3 hover:bg-pink-500'>
-                      {user.roles === 'admin' ? 'Admin' : 'Mod'}
-                    </button>
-                  </Link>
-                </div>
-              ) : (
-                <div>
-                  <div>Số dư: </div>
-                  {user.accountBalance !== null ? user.accountBalance : 0}
-                  <div>VNĐ</div>
-                </div>
-              )
+            {user && (user.roles === 'admin' || user.roles === 'Mod') ? (
+              <div>
+                <Link to={user.roles === 'admin' ? path.Admin.admin : path.Moderator.mod}>
+                  <button className='btn btn-primary shadow-md rounded-md p-3 hover:bg-pink-500'>
+                    {user.roles === 'admin' ? 'Admin' : 'Mod'}
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <div>Số dư: {user.accountBalance !== null ? user.accountBalance : 0} VNĐ</div>
+              </div>
             )}
-            
           </div>
         )}
-        {/*Chuông  */}
-        {/* {isAuthenticated && (
-          <button onClick={receiveNotification}>
-            <Badge count={count} dot className='align-bottom'>
-              {' '}
-              <BellOutlined className='hover:scale-150 transition-transform duration-300 cursor-pointer scale-125' />
-            </Badge>
-          </button>
-        )} */}
-
         {isAuthenticated && (
           <Popover
             className='flex items-center  hover:text-pink-400 cursor-pointer'
@@ -152,20 +74,18 @@ export default function NavHeader() {
                 >
                   Tài khoản của tôi
                 </Link>
-
                 <Link
                   to='/'
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                 >
                   Đơn Mua
                 </Link>
-                <Link
+<Link
                   to='/deposit'
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                 >
                   Nạp tiền
                 </Link>
-
                 {profile?.roles === 'Dieu hanh vien' && (
                   <Link
                     to={path.Moderator.mod}
@@ -174,7 +94,6 @@ export default function NavHeader() {
                     thông báo
                   </Link>
                 )}
-
                 <Link
                   to={path.studentViewRequestList}
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
@@ -203,13 +122,11 @@ export default function NavHeader() {
                 className='h-full w-full rounded-full object-cover'
               />
             </div>
-
             <div className='text-black hover:text-pink-400'>
               {profile?.fullName}
             </div>
           </Popover>
         )}
-        {/* mốt xóa ! ở đây nhé */}
         {!isAuthenticated && (
           <div className='flex items-center ml-[2rem]'>
             <Link
@@ -229,5 +146,5 @@ export default function NavHeader() {
         )}
       </div>
     </div>
-  )
+  );
 }

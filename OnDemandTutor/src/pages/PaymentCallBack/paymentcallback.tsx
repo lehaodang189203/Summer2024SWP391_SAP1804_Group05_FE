@@ -32,7 +32,7 @@ const PaymentCallback: React.FC = () => {
     return formattedAmount;
   };
 
-  const paymentCallback = useMutation({
+  const paymentCallback = useMutation({         
     mutationFn: (user: User) => paymentApi.paymentcallback(user),
     onSuccess: (data) => {
       toast.success('Payment callback success');

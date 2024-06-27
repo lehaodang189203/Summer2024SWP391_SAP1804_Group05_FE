@@ -34,7 +34,27 @@ export const moderatorApi = {
       // Handle network or API errors
       throw new Error('Failed to fetch data')
     }
+  }
+  ,
+  getRequestTutorReg: async (): Promise<DataType[]> => {
+    try {
+      const response = await http.get<SuccessResponseReq<DataType[]>>(
+        'modaretor/viewListTutor'
+      )
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      // Handle network or API errors
+      throw new Error('Failed to fetch data')
+    }
   },
+  approvedTutorReg: async (tutorReqID: string) =>
+    await http.put(`modaretor/approveProfile?id=${tutorReqID}`),
+  rejectTutorReg: async (tutorReqID: string) =>
+    await http.put(`modaretor/rejectProfile?id=${tutorReqID}`),
   getAccount: async (): Promise<User[]> => {
     try {
       const response = await http.get<User[]>(
