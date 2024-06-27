@@ -1,67 +1,67 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react'
-import { tutorApi } from '../../api/tutor.api'
-import Pagination from '../../components/Pagination'
-import FormRequest from '../FormRequest/FormRequest'
-import { DataType } from '../../types/request.type'
-import { AppContext } from '../../context/app.context'
-import { getProfileFromLS } from '../../utils/auth'
-import { User } from '../../types/user.type'
-import { toast } from 'react-toastify'
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { tutorApi } from '../../api/tutor.api';
+import Pagination from '../../components/Pagination';
+import FormRequest from '../FormRequest/FormRequest';
+import { DataType } from '../../types/request.type';
+import { getProfileFromLS } from '../../utils/auth';
+import { User } from '../../types/user.type';
+import { toast } from 'react-toastify';
 
-export default function RequestList() {
-  const user: User = getProfileFromLS()
-
+const RequestList: React.FC = () => {
+  const user: User = getProfileFromLS();
+  const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
   const { data: RequestData } = useQuery<DataType[]>({
     queryKey: ['Request'],
     queryFn: () => tutorApi.viewRequest(),
     placeholderData: []
-  })
+  });
 
   const joinMutation = useMutation({
     mutationFn: ({ Rid, id }: { Rid: string; id: string }) => {
-      const body = { Rid, id }
-      return tutorApi.joinClass(body)
+      const body = { Rid, id };
+      return tutorApi.joinClass(body);
     },
-    onSuccess: (data) => {
-      toast.success('Tham gia lớp thành công')
+    onSuccess: () => {
+      toast.success('Tham gia lớp thành công');
     }
-  })
+  });
 
   useEffect(() => {
     if (RequestData) {
-      console.log(RequestData)
+      console.log(RequestData);
     }
-  }, [RequestData])
+  }, [RequestData]);
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 4
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
+    setCurrentPage(page);
+  };
 
-  const items = RequestData || []
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
+  const items = RequestData || [];
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = items.slice(startIndex, startIndex + itemsPerPage);
 
-  const [showForm, setShowForm] = useState(false)
+  const [showForm, setShowForm] = useState(false);
 
   const handleOpenPopup = () => {
-    setShowForm(true)
-  }
+    setShowForm(true);
+  };
 
   const handleCloseForm = () => {
-    setShowForm(false)
-  }
+    setShowForm(false);
+  };
 
   const handleAcceptClass = (Rid: string, id: string) => {
-    toast.success('bạn nhận lớp thành công')
+    toast.success('Bạn nhận lớp thành công');
+    setSelectedClasses((prevSelected) => [...prevSelected, Rid]);
     // Uncomment to perform mutation
     // if (Rid) {
-    //   joinMutation.mutate({ Rid, id })
+    //   joinMutation.mutate({ Rid, id });
     // }
-  }
+  };
 
   return (
     <>
@@ -94,7 +94,7 @@ export default function RequestList() {
                 <div className='my-1'>
                   Ngày học:{' '}
                   <span className='text-black font-bold text-md'>
-                    {data.date}
+                    {data.timeTable}
                   </span>
                 </div>
                 <div className='my-1'>
@@ -128,9 +128,16 @@ export default function RequestList() {
                     <div
                       role='button'
                       onClick={() => handleAcceptClass(data.idRequest, user.id)}
-                      className='rounded-lg w-full h-10 bg-pink-400 hover:opacity-80 mx-auto justify-center items-center flex'
+                      className={`rounded-lg w-full h-10 mx-auto justify-center items-center flex ${
+                        selectedClasses.includes(data.idRequest)
+                          ? 'bg-gray-700 cursor-not-allowed'
+                          : 'bg-pink-400 hover:opacity-80'
+                      }`}
+                      style={{
+                        pointerEvents: selectedClasses.includes(data.idRequest) ? 'none' : 'auto',
+                      }}
                     >
-                      Nhận Lớp
+                      {selectedClasses.includes(data.idRequest) ? 'Đã nhận lớp' : 'Nhận Lớp'}
                     </div>
                   ) : (
                     <div className='w-full h-10 bg-gray-300 mx-auto justify-center items-center flex'>
@@ -164,5 +171,7 @@ export default function RequestList() {
         onPageChange={handlePageChange}
       />
     </>
-  )
-}
+  );
+};
+
+export default RequestList;

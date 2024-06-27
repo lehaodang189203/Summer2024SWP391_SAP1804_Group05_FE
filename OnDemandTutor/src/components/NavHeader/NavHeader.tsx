@@ -108,7 +108,7 @@ export default function NavHeader() {
         {isAuthenticated && (
           <div className='flex justify-center text-center'>
             {user &&
-              (user.roles === 'admin' || user.roles === 'mod' ? (
+              (user.roles === 'admin' || user.roles === 'Mod' ? (
                 <div>
                   <Link
                     to={
@@ -123,11 +123,13 @@ export default function NavHeader() {
                   </Link>
                 </div>
               ) : (
-                <div>
+                <Link to={path.deposit}>
+                <div className='flex gap-4 rounded-md shadow-lg p-3 pr-4 hover:bg-pink-300'>
                   <div>Số dư: </div>
                   {user.accountBalance !== null ? user.accountBalance : 0}
                   <div>VNĐ</div>
                 </div>
+                </Link>
               ))}
           </div>
         )}

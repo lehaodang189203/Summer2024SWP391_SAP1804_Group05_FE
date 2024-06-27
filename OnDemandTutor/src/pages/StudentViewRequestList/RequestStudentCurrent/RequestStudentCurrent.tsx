@@ -146,7 +146,7 @@ export default function RequestStudentCurrent() {
                             icon={faCalendarDays}
                             className='mr-2'
                           />
-                          {request.date}
+                          {request.timeTable}
                         </div>
                         <div>
                           <FontAwesomeIcon icon={faSchool} className='mr-2' />

@@ -7,7 +7,7 @@ export interface DataType {
   description: string
   class: string
   learningMethod: string
-  date: string
+  timeTable: string
   timeStart: string
   timeEnd: string
 }

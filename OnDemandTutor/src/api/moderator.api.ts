@@ -12,7 +12,7 @@ if (user) {
 } else {
   console.log('Không có')
 }
-
+//DataType[]
 export const moderatorApi = {
   approvedRequest: async (ReqID: string) =>
     await http.put(`modaretor/approvedRequest?requestId=${ReqID}`),
@@ -20,9 +20,9 @@ export const moderatorApi = {
   rejectRequest: async (ReqID: string) =>
     await http.put(`modaretor/rejectRequest?requestId=${ReqID}`),
 
-  getRequest: async (): Promise<DataType[]> => {
+  getRequest: async (): Promise<any> => {
     try {
-      const response = await http.get<SuccessResponseReq<DataType[]>>(
+      const response = await http.get<SuccessResponseReq<any>>(
         'modaretor/viewRequest'
       )
       if (response.status === HttpStatusCode.Ok) {

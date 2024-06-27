@@ -2,7 +2,10 @@ import { useState } from "react"
 import { Link } from "react-router-dom";
 import BUMBUM from '../../../../assets/img/BUMBUM.png'
 import { path } from "../../../../constant/path";
+import { getProfileFromLS } from "../../../../utils/auth";
+
 export default function NavMod(){
+    const user = getProfileFromLS();
     const option = ['DashBar','StudentList','TutorList', 'SessionList']
     const [active, setAtive] = useState("");
     const handleSetActive = (data:string)=> {
@@ -23,7 +26,7 @@ export default function NavMod(){
             </div>
             
 
-            <div className="row-span-1 text-center">Điều hành viên: Thành Phạm</div>
+            <div className="row-span-1 text-center">Điều hành viên: {user.fullName}</div>
         </div>
     )
 }

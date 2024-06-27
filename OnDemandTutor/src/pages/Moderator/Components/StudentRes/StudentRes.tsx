@@ -11,6 +11,7 @@ interface DataType {
   fullName: string
   subject: string
   title: string
+  timeTable:string
   price: number
   description: string
   class: string
@@ -81,7 +82,7 @@ export default function StudentRes() {
       width: 200
     },
     {
-      title: 'Mục',
+      title: 'Tựa Đề',
       dataIndex: 'title',
       width: 200
     },
@@ -98,7 +99,7 @@ export default function StudentRes() {
     },
     {
       title: 'Ngày',
-      dataIndex: 'date',
+      dataIndex: 'timeTable',
       width: 150
     },
     {

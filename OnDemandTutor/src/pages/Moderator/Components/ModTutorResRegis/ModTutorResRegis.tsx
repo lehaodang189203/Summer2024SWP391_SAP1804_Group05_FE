@@ -208,28 +208,28 @@ export default function ModTutorResRegis() {
                 </Button>
               ]}
             >
-              {/* {selectedRecord && (
+              {selectedRecord && (
                 <div>
                   {isDetails ? (
                     <div>
-                      <p>Tên : {selectedRecord.FullName}</p>
-                      <p>Ngày sinh : {selectedRecord.Date_Of_Birth}</p>
-                      <p>Giới tính : {selectedRecord.Gender}</p>
-                      <p>Môn : {selectedRecord.SubjectName}</p>
-                      <p>Bằng cấp(Chứng chỉ) : {selectedRecord.Type}</p>
-                      <p>Tên bằng Cấp : {selectedRecord.QualificationName}</p>
+                      <p>Tên : {selectedRecord.fullName}</p>
+                      <p>Ngày sinh : {selectedRecord.date_of_birth}</p>
+                      <p>Giới tính : {selectedRecord.gender}</p>
+                      <p>Môn : {selectedRecord.subject}</p>
+                      <p>Bằng cấp(Chứng chỉ) : {selectedRecord.type}</p>
+                      <p>Tên bằng Cấp : {selectedRecord.qualificationName}</p>
                       <p>
-                        Kĩ năng đặc biệt : {selectedRecord.SpecializedSkill}
+                        Kĩ năng đặc biệt : {selectedRecord.specializedSkills}
                       </p>
-                       <img src={selectedRecord.Img} alt="ảnh" />    // ảnh nè  
-                      <p>Kinh nghiệm dạy : {selectedRecord.Experience} Năm</p>
-                      <p>Kĩ năng nổi bật: {selectedRecord.SpecializedSkill}</p>
+                       {/* <img src={selectedRecord.imageQualification} alt="ảnh" />    // ảnh nè   */}
+                      <p>Kinh nghiệm dạy : {selectedRecord.experience} Năm</p>
+                      <p>Kĩ năng nổi bật: {selectedRecord.specializedSkills}</p>
                     </div>
                   ) : (
-                    <p>Ảnh nèk : {selectedRecord.Img}</p>
+                    <p>Ảnh nèk : {selectedRecord.imageQualification}</p>
                   )}
                 </div>
-              )} */}
+              )}
             </Modal>
           </div>
         </div>

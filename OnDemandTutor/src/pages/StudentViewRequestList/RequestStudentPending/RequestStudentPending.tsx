@@ -12,8 +12,6 @@ import { FaSearch } from 'react-icons/fa'
 import { getProfileFromLS } from '../../../utils/auth'
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-
-import { tutorApi } from '../../../api/tutor.api'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
 import { DataType } from '../../../types/request.type'
@@ -36,21 +34,6 @@ const options3 = [
   { value: 'banana', label: 'Tiếng Việt' },
   { value: 'cherry', label: 'Tiếng Anh' }
 ]
-// const data = Array.from({ length: 10 }, () => ({
-//   idRequest: '1',
-//   title: 'Học vãi luôn',
-//   date: '24-05-2024',
-//   LearningMethod: 'Học Trực Tiếp',
-//   class: 'Lớp 7',
-//   price: '12.000.000đ',
-//   subject: 'Toán',
-//   timeEnd: '10:30',
-//   timeStart: '9:30',
-//   description: 'Vừa học vừa chơi nhaa',
-//   status: 'processing'
-// }))
-
-//  trang này đang chờ xét duyết
 export function RequestStudentPending() {
   const { data: RequestData = [] } = useQuery<DataType[]>({
     queryKey: ['Request'],
@@ -149,7 +132,7 @@ export function RequestStudentPending() {
                   <div className='trái'>
                     <div>
                       <FontAwesomeIcon icon={faCalendarDays} className='mr-2' />
-                      {request.date}
+                      {request.timeTable}
                     </div>
                     <div>
                       <FontAwesomeIcon icon={faSchool} className='mr-2' />

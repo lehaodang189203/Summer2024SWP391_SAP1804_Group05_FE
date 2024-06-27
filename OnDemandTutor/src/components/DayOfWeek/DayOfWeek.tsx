@@ -7,13 +7,13 @@ interface Props {
 }
 
 const daysOfWeek = [
-  { key: 'thứ hai', label: 'Thứ hai' },
-  { key: 'thứ ba', label: 'Thứ ba' },
-  { key: 'thứ tư', label: 'Thứ tư' },
-  { key: 'thứ năm', label: 'Thứ năm' },
-  { key: 'thứ sáu', label: 'Thứ sáu' },
-  { key: 'thứ bảy', label: 'Thứ bảy' },
-  { key: 'chủ nhật', label: 'Chủ nhật' }
+  { key: 'Thứ hai', label: 'Thứ hai' },
+  { key: ' Thứ ba', label: 'Thứ ba' },
+  { key: ' Thứ tư', label: 'Thứ tư' },
+  { key: ' Thứ năm', label: 'Thứ năm' },
+  { key: ' Thứ sáu', label: 'Thứ sáu' },
+  { key: 'Thứ bảy', label: 'Thứ bảy' },
+  { key: 'Chủ nhật', label: 'Chủ nhật' }
 ]
 
 export default function DateOfWeek({
