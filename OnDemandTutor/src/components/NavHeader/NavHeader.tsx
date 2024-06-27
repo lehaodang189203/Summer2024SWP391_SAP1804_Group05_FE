@@ -1,15 +1,18 @@
 import { useMutation } from '@tanstack/react-query'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 
 // import { getRefreshTokeNFromLS } from '../../utils/auth'
-import userImage from '../../assets/img/user.svg'
+import { BellOutlined } from '@ant-design/icons'
+import { Badge } from 'antd'
 import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
 import { clearLS, getProfileFromLS } from '../../utils/auth'
+import { getAvatarUrl } from '../../utils/utils'
 import Popover from '../Popover/Popover'
+import userImage from '../../assets/img/user.svg'
 
 const user = getProfileFromLS() // tạo user để in ra số dư trên header
 export default function NavHeader() {
@@ -32,18 +35,16 @@ export default function NavHeader() {
   const refresh = refreshToken
 
   const logoutMutation = useMutation({
-    mutationFn: (body: LogoutReqBody) => authApi.logoutAccount(body)
+    mutationFn: (body: any) => authApi.logoutAccount(body)
   })
 
   const handleLogout = () => {
     console.log('refreshToken', refreshToken)
 
     logoutMutation.mutate(
-      { refresh_token: refresh },
+      { refresh_token: refreshToken },
       {
         onSuccess: () => {
-          console.log(isAuthenticated)
-
           navigate(path.login)
           clearLS()
           setProfile(null)
@@ -130,16 +131,6 @@ export default function NavHeader() {
               ))}
           </div>
         )}
-        {/*Chuông  */}
-        {/* {isAuthenticated && (
-          <button onClick={receiveNotification}>
-            <Badge count={count} dot className='align-bottom'>
-              {' '}
-              <BellOutlined className='hover:scale-150 transition-transform duration-300 cursor-pointer scale-125' />
-            </Badge>
-          </button>
-        )} */}
-
         {isAuthenticated && (
           <Popover
             className='flex items-center  hover:text-pink-400 cursor-pointer'
@@ -151,7 +142,6 @@ export default function NavHeader() {
                 >
                   Tài khoản của tôi
                 </Link>
-
                 <Link
                   to='/'
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
@@ -164,7 +154,6 @@ export default function NavHeader() {
                 >
                   Nạp tiền
                 </Link>
-
                 {profile?.roles === 'Dieu hanh vien' && (
                   <Link
                     to={path.Moderator.mod}
@@ -173,7 +162,6 @@ export default function NavHeader() {
                     thông báo
                   </Link>
                 )}
-
                 <Link
                   to={path.studentViewRequestList}
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
@@ -202,13 +190,11 @@ export default function NavHeader() {
                 className='h-full w-full rounded-full object-cover'
               />
             </div>
-
             <div className='text-black hover:text-pink-400'>
               {profile?.fullName}
             </div>
           </Popover>
         )}
-        {/* mốt xóa ! ở đây nhé */}
         {!isAuthenticated && (
           <div className='flex items-center ml-[2rem]'>
             <Link

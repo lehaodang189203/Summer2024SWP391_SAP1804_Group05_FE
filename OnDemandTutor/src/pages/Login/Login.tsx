@@ -2,7 +2,7 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -113,8 +113,37 @@ export default function Login() {
     })
   }
 
-  const signInGoogle = () => {}
+  // useEffect(() => {
+  //     handleGoogleCallback();
+  // }, []);
 
+  // const handleGoogleCallback = async () => {
+  //   loginGGMutation.mutate(undefined, {
+  //     onSuccess: (data) => {
+  //       const refreshToken = getRefreshTokenFromLS()
+  //       setRefreshToken(refreshToken)
+  //       setIsAuthenticated(true)
+  //       setProfile(data.data.data.user)
+  //       toast.success(data.data.message)
+  //       navigate(path.home)
+  //     },
+  //     onError: (error) => {
+  //       toast.error('An unexpected error occurred')
+  //     }
+  //   })
+  // }
+
+  // const loginGGMutation = useMutation({
+  //   mutationFn: () => authApi.loginGG()
+  // })
+  const signInGoogle = () => {
+    const googleAuthWindow = window.open('http://localhost:7133/api/user/signin-google', '_blank', 'width=500,height=600');
+
+    // Optional: You can add some code to check if the window was blocked by the browser.
+    if (!googleAuthWindow) {
+        alert('Popup blocked. Please allow popups for this website.');
+    }
+};
   return (
     <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
       <div className='container justify-center flex'>
