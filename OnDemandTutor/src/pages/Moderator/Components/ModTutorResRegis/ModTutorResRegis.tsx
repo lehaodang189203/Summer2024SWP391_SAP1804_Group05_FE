@@ -7,14 +7,14 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 interface DataType {
   id: string
-  fullName: string
+  fullname: string
   date_of_birth: string
   gender: string
   subject: string
   experience: number
-  specializedSkills: string
-  qualificationName: string // có nhhiều nhen
-  imageQualification: string
+  specializedskills: string
+  qualificationname: string // có nhhiều nhen
+  imagequalification: string
   type: string
   // statuses: string[];
 }
@@ -73,7 +73,7 @@ export default function ModTutorResRegis() {
     {
       // định nghĩa từng cột
       title: 'Tên', // tên của cột hay còn gọi là header của cột
-      dataIndex: 'fullName', // xác định trường nào trong interface DataType
+      dataIndex: 'fullname', // xác định trường nào trong interface DataType
       //defaultSortOrder: "descend",
       //onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
       //sorter: (a, b) => a.FullName.length - b.FullName.length,
@@ -109,13 +109,13 @@ export default function ModTutorResRegis() {
     },
     {
       title: 'Tên Bằng Cấp(Chứng chỉ)',
-      dataIndex: 'qualificationName',
+      dataIndex: 'qualificationname',
       //defaultSortOrder: "descend"
       width: 200
     },
     {
       title: 'Kĩ Năng Nổi bật',
-      dataIndex: 'specializedSkills',
+      dataIndex: 'specializedskills',
       width: 200
     },
     {
@@ -212,21 +212,21 @@ export default function ModTutorResRegis() {
                 <div>
                   {isDetails ? (
                     <div>
-                      <p>Tên : {selectedRecord.fullName}</p>
+                      <p>Tên : {selectedRecord.fullname}</p>
                       <p>Ngày sinh : {selectedRecord.date_of_birth}</p>
                       <p>Giới tính : {selectedRecord.gender}</p>
                       <p>Môn : {selectedRecord.subject}</p>
                       <p>Bằng cấp(Chứng chỉ) : {selectedRecord.type}</p>
-                      <p>Tên bằng Cấp : {selectedRecord.qualificationName}</p>
+                      <p>Tên bằng Cấp : {selectedRecord.qualificationname}</p>
                       <p>
-                        Kĩ năng đặc biệt : {selectedRecord.specializedSkills}
+                        Kĩ năng đặc biệt : {selectedRecord.specializedskills}
                       </p>
                        {/* <img src={selectedRecord.imageQualification} alt="ảnh" />    // ảnh nè   */}
                       <p>Kinh nghiệm dạy : {selectedRecord.experience} Năm</p>
-                      <p>Kĩ năng nổi bật: {selectedRecord.specializedSkills}</p>
+                      <p>Kĩ năng nổi bật: {selectedRecord.specializedskills}</p>
                     </div>
                   ) : (
-                    <p>Ảnh nèk : {selectedRecord.imageQualification}</p>
+                    <p>Ảnh nèk : <img src={selectedRecord.imagequalification} alt="ảnh" /></p>
                   )}
                 </div>
               )}

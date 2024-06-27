@@ -1,17 +1,17 @@
 import * as yup from 'yup'
 
 function testDate(this: yup.TestContext<yup.AnyObject>) {
-  const { timeStart, timeEnd } = this.parent as {
-    timeStart: string
-    timeEnd: string
+  const { timestart, timeend } = this.parent as {
+    timestart: string
+    timeend: string
   }
-  if (timeStart && timeEnd) {
-    const start = new Date(`1970-01-01T${timeStart}:00Z`) // Adding reference date
-    const end = new Date(`1970-01-01T${timeEnd}:00Z`) // Adding reference date
+  if (timestart && timeend) {
+    const start = new Date(`1970-01-01T${timestart}:00Z`) // Adding reference date
+    const end = new Date(`1970-01-01T${timeend}:00Z`) // Adding reference date
 
     return start < end
   }
-  return timeStart === '' || timeEnd === ''
+  return timestart === '' || timeend === ''
 }
 
 const handleConfirmPasswordYup = (refString: string) => {
@@ -96,8 +96,8 @@ export const requestSchema = yup.object({
 
   timetable: yup.string().required('Chọn buổi học là bắt buộc'), // Expect an array of strings for timetable
 
-  totalSessions: yup.number(),
-  LearningMethod: yup
+  totalsessions: yup.number(),
+  learningmethod: yup
     .string()
     .oneOf(
       ['Dạy trực tiếp(offline)', 'Dạy trực tuyến (online)'],
@@ -129,13 +129,13 @@ export const requestSchema = yup.object({
       ],
       'Môn học không hợp lệ'
     ),
-  timeEnd: yup.string().required('Thời gian kết thúc là bắt buộc').test({
+  timeend: yup.string().required('Thời gian kết thúc là bắt buộc').test({
     name: 'time-not-allowed',
     message: 'thời gian không phù hợp',
     test: testDate
   }),
 
-  timeStart: yup.string().required('Thời gian bắt đầu là bắt buộc').test({
+  timestart: yup.string().required('Thời gian bắt đầu là bắt buộc').test({
     name: 'time-not-allowed',
     message: 'thời gian không phù hợp',
     test: testDate

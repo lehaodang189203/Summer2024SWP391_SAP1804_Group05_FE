@@ -16,27 +16,27 @@ interface FormRequestProps {
 type FormData = Pick<
   Requestchema,
   | 'class'
-  | 'LearningMethod'
+  | 'learningmethod'
   | 'description'
   | 'price'
   | 'subject'
-  | 'timeEnd'
-  | 'timeStart'
+  | 'timeend'
+  | 'timestart'
   | 'timetable'
   | 'title'
-  | 'totalSessions'
+  | 'totalsessions'
 >
 const schema = requestSchema.pick([
   'title',
   'timetable',
-  'LearningMethod',
+  'learningmethod',
   'class',
   'price',
   'subject',
-  'timeEnd',
-  'timeStart',
+  'timeend',
+  'timestart',
   'description',
-  'totalSessions'
+  'totalsessions'
 ])
 
 interface FormRequestProps {
@@ -73,7 +73,7 @@ export default function FormRequest({ onClose }: FormRequestProps) {
     // Tạo một đối tượng mới với totalSessions được gán vào
     const newData = {
       ...data,
-      totalSessions: totalSessions
+      totalsessions: totalSessions
     }
 
     console.log(newData) // In ra đối tượng mới với totalSessions
@@ -155,7 +155,7 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     Phương thức học
                   </label>
                   <select
-                    {...register('LearningMethod')}
+                    {...register('learningmethod')}
                     className='ml-8 text-sm w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
                   >
                     <option value=''>Chọn phương thức học</option>
@@ -166,9 +166,9 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                       Dạy trực tuyến (online)
                     </option>
                   </select>
-                  {errors.LearningMethod && (
+                  {errors.learningmethod && (
                     <p className='text-red-600 mt-1 text-[0.75rem]'>
-                      {errors.LearningMethod.message}
+                      {errors.learningmethod.message}
                     </p>
                   )}
                 </div>
@@ -230,12 +230,12 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     Thời gian bắt đầu
                   </label>
                   <Input
-                    name='timeStart'
+                    name='timestart'
                     type='time'
                     register={register}
                     classNameInput='ml-10 w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
                     classNameError='text-red-600 mt-1 text-[0.75rem]'
-                    errorMessage={errors.timeStart?.message}
+                    errorMessage={errors.timestart?.message}
                     // onChange={() => {
                     //   trigger('timeEnd')
                     // }}
@@ -247,14 +247,14 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     Thời gian kết thúc
                   </label>
                   <Input
-                    name='timeEnd'
+                    name='timeend'
                     type='time'
                     register={register}
                     classNameInput='ml-10 w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
                     classNameError='text-red-600 mt-1 text-[0.75rem]'
-                    errorMessage={errors.timeEnd?.message}
+                    errorMessage={errors.timeend?.message}
                     onChange={() => {
-                      trigger('timeStart')
+                      trigger('timestart')
                     }}
                   />
                 </div>

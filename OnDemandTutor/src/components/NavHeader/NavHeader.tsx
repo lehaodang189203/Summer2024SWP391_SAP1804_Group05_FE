@@ -126,7 +126,7 @@ export default function NavHeader() {
                 <Link to={path.deposit}>
                 <div className='flex gap-4 rounded-md shadow-lg p-3 pr-4 hover:bg-pink-300'>
                   <div>Số dư: </div>
-                  {user.accountBalance !== null ? user.accountBalance : 0}
+                  {user.accountbalance !== null ? user.accountbalance : 0}
                   <div>VNĐ</div>
                 </div>
                 </Link>

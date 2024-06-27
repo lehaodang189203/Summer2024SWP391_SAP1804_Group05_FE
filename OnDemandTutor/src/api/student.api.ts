@@ -1,4 +1,4 @@
-import { RequestBody } from '../types/user.request.type'
+import { RequestBody, acceptTutorBody } from '../types/user.request.type'
 import { SuccessResponseReq } from './../types/utils.type'
 
 import { getProfileFromLS } from '../utils/auth'
@@ -12,7 +12,7 @@ const user = <User>getProfileFromLS()
 export const studentApi = {
   //  tạo
   createRequest: async (body: RequestBody) =>
-    await http.post(`student/createRequest?IDAccount=${user.id}`, body),
+    await http.post(`student/createRequest?id=${user.id}`, body),
 
   async pedingRequest() {
     try {
@@ -33,7 +33,7 @@ export const studentApi = {
   async appoovedequest() {
     try {
       const response = await http.get(
-        `student/appovedRequest?IDAccount=${user.id}`
+        `student/appovedRequest?id=${user.id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -47,6 +47,8 @@ export const studentApi = {
   },
 
   viewAllTutorsJoinRequests(idReq: string) {
-    return http.get(`student/appovedRequest?IDAccount=${idReq}`)
-  }
+    return http.get<any>(`Student/viewAllTutorsJoinRequest?requestId=${idReq}`)
+  },
+  acceptTutor: async (body:any) =>
+    await http.post(`student/SelectTutor?idrequest=${body.idre}&idaccounttutor=${body.idtu}`, body),
 }

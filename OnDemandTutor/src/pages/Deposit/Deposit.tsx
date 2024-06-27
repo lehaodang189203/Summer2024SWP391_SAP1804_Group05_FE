@@ -32,7 +32,7 @@ export default function Deposit() {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         const data: reqDeposit = {
-            idAccount : User.id,
+            id : User.id,
             amount: amount
         };
         console.log('data gửi vào ', data)

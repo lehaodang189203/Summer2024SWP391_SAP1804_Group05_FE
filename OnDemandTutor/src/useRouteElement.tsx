@@ -32,6 +32,8 @@ import { User } from './types/user.type'
 import RegisterAsTuTor from './pages/RegisterAsTutor/RegisterAsTutor'
 import PaymentCallback from './pages/PaymentCallBack'
 import ModAccountStudent from './pages/Moderator/Components/ModAccountStudent'
+import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
+import PaymentFail from './pages/PaymentCallBack/PaymentFail'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -94,14 +96,14 @@ export default function useRouteElements() {
           ),
           index: true
         },
-        {
-          path: path.registerAsTutor, //student
-          element: (
-            <MainLayout>
-              <RegisterAsTuTor />
-            </MainLayout>
-          )
-        },
+        // {
+        //   path: path.registerAsTutor, //student
+        //   element: (
+        //     <MainLayout>
+        //       <RegisterAsTuTor />
+        //     </MainLayout>
+        //   )
+        // },
         {
           path: path.user, //user-----------------------------------------------------------------------------------
           element: (
@@ -185,6 +187,22 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <PaymentCallback />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.paymentSucsess,// student // này là hiển thị thông báo nạp tiền thành công nha fen
+          element: (
+            <MainLayout>
+              <PaymentSuccess />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.paymentFail,// student // này là hiển thị thông báo nạp tiền thành công nha fen
+          element: (
+            <MainLayout>
+              <PaymentFail />
             </MainLayout>
           )
         },
