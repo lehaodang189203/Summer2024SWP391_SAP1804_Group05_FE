@@ -10,9 +10,6 @@ import http from '../utils/http'
 
 const user = getProfileFromLS()
 
-interface BodyUpdateProfile
-  extends Omit<User, 'id' | 'roles' | 'accountBalance' | 'email'> {}
-
 //  id: string
 //  roles: string
 //  gender: string

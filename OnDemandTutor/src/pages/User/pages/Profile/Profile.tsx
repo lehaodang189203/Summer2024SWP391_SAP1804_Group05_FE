@@ -1,9 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
+import { v4 as uuidv4 } from 'uuid'
 import userApi from '../../../../api/user.api'
+import userImage from '../../../../assets/img/user.svg'
 import Button from '../../../../components/Button'
 import DateSelect from '../../../../components/DateSelect/DateSelect'
 import GenderSelect from '../../../../components/GenderSelect'
@@ -12,12 +15,9 @@ import InputFile from '../../../../components/InputFile'
 import InputNumber from '../../../../components/InputNumber'
 import { AppContext } from '../../../../context/app.context'
 import { setProfileToLS } from '../../../../utils/auth'
-import { UpdateSchema, updateSchema } from '../../../../utils/rules'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { storage } from '../../../../utils/firebase'
-import { v4 } from 'uuid'
-import userImage from '../../../../assets/img/user.svg'
-import { User } from '../../../../types/user.type'
+import { UpdateSchema, updateSchema } from '../../../../utils/rules'
+
 import { UpdateReqBody } from '../../../../types/user.request.type'
 
 type FormData = Pick<
@@ -68,8 +68,9 @@ export default function Profile() {
     queryFn: userApi.getProfile
   })
 
-  const profile = ProfileData?.data.data
+  console.log(ProfileData)
 
+  const profile = ProfileData?.data.data
   console.log(profile)
 
   useEffect(() => {
@@ -97,14 +98,13 @@ export default function Profile() {
   })
 
   const uploadAvatar = async (file: File): Promise<string> => {
-    const imageRef = ref(storage, `avatarUser/${file.name + v4()}`)
+    const imageRef = ref(storage, `avatarUser/${file.name + uuidv4()}`)
     const snapshot = await uploadBytes(imageRef, file)
     const url = await getDownloadURL(snapshot.ref)
     return url
   }
 
   const avatar = watch('avatar')
-  console.log('avatar', avatar)
 
   function convertDateOfBirth(date_of_birth: string): string {
     const dateOfBirth = date_of_birth
@@ -122,7 +122,7 @@ export default function Profile() {
     try {
       if (file) {
         const url = await uploadAvatar(file)
-        console.log('url', url)
+
         setUrlImage(url)
 
         setValue('avatar', url) // Update the avatar URL in form data
@@ -131,8 +131,6 @@ export default function Profile() {
           fileInputRef.current.value = ''
         }
       }
-
-      const avatarUrl = typeof urlImage === 'string' ? urlImage : ''
 
       const formData: UpdateReqBody = {
         fullName:
@@ -156,9 +154,6 @@ export default function Profile() {
             : profile?.date_of_birth || '',
         avatar: file ? await uploadAvatar(file) : profile?.avatar || ''
       }
-      console.log('11111111111')
-
-      console.log('res', formData)
 
       const updateRes = await updateProfileMutation.mutateAsync(formData, {
         onSuccess: (data) => {
@@ -309,8 +304,15 @@ export default function Profile() {
         <div className='flex justify-center md:w-72 md:border-l md:border-l-gray-200'>
           <div className='flex flex-col items-center'>
             <div className='my-5 h-24 w-24'>
+              {/* ảnh đại diện */}
               <img
-                src={urlImage ? urlImage : userImage}
+                src={
+                  file
+                    ? previewImage
+                    : profile?.avatar
+                    ? profile.avatar
+                    : userImage
+                }
                 className='h-full w-full rounded-full object-cover'
               />
             </div>

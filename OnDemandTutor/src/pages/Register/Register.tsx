@@ -46,7 +46,7 @@ const registerSchema = schema.pick([
 
 export default function Register() {
   const navigate = useNavigate()
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const {
     register,
     handleSubmit,
@@ -88,9 +88,10 @@ export default function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log(data)
+
         const refreshToken = getRefreshTokenFromLS()
         console.log(refreshToken)
-
+        setProfile(data.data.data.user)
         setRefreshTokenToLS(refreshToken)
         setIsAuthenticated(true)
 

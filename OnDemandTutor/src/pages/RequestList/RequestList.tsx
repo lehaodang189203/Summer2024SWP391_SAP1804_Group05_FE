@@ -12,8 +12,6 @@ import { toast } from 'react-toastify'
 export default function RequestList() {
   const user: User = getProfileFromLS()
 
-  //console.log(user.roles)
-
   const { data: RequestData } = useQuery<DataType[]>({
     queryKey: ['Request'],
     queryFn: () => tutorApi.viewRequest(),
@@ -57,14 +55,10 @@ export default function RequestList() {
     setShowForm(false)
   }
 
-  // Handle nhận lớp
   const handleAcceptClass = (Rid: string, id: string) => {
     toast.success('bạn nhận lớp thành công')
-
+    // Uncomment to perform mutation
     // if (Rid) {
-    //   console.log('Nhận lớp với ID:', Rid)
-    //   console.log('User ID:', id)
-    //   // Call the mutation
     //   joinMutation.mutate({ Rid, id })
     // }
   }

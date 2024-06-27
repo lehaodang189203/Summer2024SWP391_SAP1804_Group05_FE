@@ -1,30 +1,34 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
+import { Requestchema, requestSchema } from '../../utils/rules'
 import Input from '../../components/Input'
 import InputNumber from '../../components/InputNumber'
-import { RequiredSchema, requestSchema as Schema } from '../../utils/rules'
+import DateOfWeek from '../../components/DayOfWeek/DayOfWeek'
+import { studentApi } from '../../api/student.api'
 import { useMutation } from '@tanstack/react-query'
 import { RequestBody } from '../../types/user.request.type'
-import { studentApi } from '../../api/student.api'
-
+import { toast } from 'react-toastify'
+interface FormRequestProps {
+  onClose: () => void
+}
 type FormData = Pick<
-  RequiredSchema,
-  | 'title'
-  | 'timetable'
-  | 'LearningMethod'
+  Requestchema,
   | 'class'
+  | 'LearningMethod'
+  | 'description'
   | 'price'
   | 'subject'
   | 'timeEnd'
   | 'timeStart'
-  | 'description'
+  | 'timetable'
+  | 'title'
   | 'totalSessions'
 >
-const requestSchema = Schema.pick([
+const schema = requestSchema.pick([
   'title',
-  'totalSessions',
+  'timetable',
   'LearningMethod',
   'class',
   'price',
@@ -32,16 +36,15 @@ const requestSchema = Schema.pick([
   'timeEnd',
   'timeStart',
   'description',
-  'timetable'
+  'totalSessions'
 ])
 
 interface FormRequestProps {
   onClose: () => void
 }
-
 export default function FormRequest({ onClose }: FormRequestProps) {
-  const [showConfirmation, setShowConfirmation] = useState(false)
-  // Sử dụng useForm để quản lý form và validation
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
+
   const {
     register,
     handleSubmit,
@@ -49,52 +52,56 @@ export default function FormRequest({ onClose }: FormRequestProps) {
     control,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(requestSchema)
+    defaultValues: {
+      class: '10'
+    },
+
+    resolver: yupResolver(schema)
   })
+
   const ReqMutation = useMutation({
     mutationFn: (body: RequestBody) => studentApi.createRequest(body)
   })
-  const daysOfWeek = [
-    'Thứ 2',
-    'Thứ 3',
-    'Thứ 4 ',
-    'Thứ 5',
-    'Thứ 6',
-    'Thứ 7',
-    'Chủ Nhật'
-  ]
-  // Hàm xử lý khi submit form
-  const onSubmit = handleSubmit((data) => {
-    console.log(1111)
 
-    console.log(data)
-    // Join timetable array into a comma-separated string
-    const joinedTimetable = data.timetable.join(',')
-    // Update formattedData with joinedTimetable and totalSessions
-    const formattedData = {
+  const onSubmit = handleSubmit((data) => {
+    // Lấy chuỗi timetable từ dữ liệu form
+    const { timetable } = data
+
+    // Đếm số lượng mục trong chuỗi timetable
+    const totalSessions = timetable.split(',').length
+
+    // Tạo một đối tượng mới với totalSessions được gán vào
+    const newData = {
       ...data,
-      timetable: joinedTimetable,
-      totalSessions: data.timetable.length // Calculate totalSessions based on timetable length
+      totalSessions: totalSessions
     }
-    console.log('Formatted data:', formattedData)
-    // Uncomment this section to perform mutation
-    // ReqMutation.mutate(formattedData, {
-    //   onSuccess: () => {
-    //     toast.success('Your request is awaiting approval')
-    //     setShowConfirmation(false)
-    //     onClose()
-    //   },
-    //   onError: (error) => {
-    //     toast.error(error.message)
-    //     setShowConfirmation(false)
-    //     onClose()
-    //   }
-    // })
+
+    console.log(newData) // In ra đối tượng mới với totalSessions
+
+    ReqMutation.mutate(newData, {
+      onSuccess: () => {
+        console.log('11')
+
+        toast.success('Yêu cầu của bạn đang chờ để xét duyệt')
+        // Đóng thông báo xác nhận sau khi submit
+        setShowConfirmation(false)
+        onClose()
+      },
+      onError: (error) => {
+        toast.error(error.message)
+        console.log(error)
+        // Đóng thông báo xác nhận sau khi submit
+        setShowConfirmation(false)
+        onClose()
+      }
+    })
   })
+
   const handleConfirmCancel = () => {
     setShowConfirmation(false)
     onClose()
   }
+
   return (
     <div className='container mx-auto p-4'>
       <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
@@ -106,7 +113,7 @@ export default function FormRequest({ onClose }: FormRequestProps) {
             >
               <div className='grid grid-cols-2 gap-4'>
                 <div className='flex flex-col'>
-                  <span className='block text-sm font-medium'>Tựa đề</span>
+                  <label className='block text-sm font-medium'>Tựa đề</label>
                   <Input
                     name='title'
                     type='text'
@@ -117,8 +124,9 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     errorMessage={errors.title?.message}
                   />
                 </div>
+
                 <div className='flex flex-col'>
-                  <span className='block text-sm font-medium'>Môn học</span>
+                  <label className='block text-sm font-medium'>Môn học</label>
                   <select
                     {...register('subject')}
                     className='ml-10 w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
@@ -141,10 +149,11 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     </p>
                   )}
                 </div>
+
                 <div className='flex flex-col'>
-                  <span className='block text-lg font-medium'>
+                  <label className='block text-lg font-medium'>
                     Phương thức học
-                  </span>
+                  </label>
                   <select
                     {...register('LearningMethod')}
                     className='ml-8 text-sm w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
@@ -164,7 +173,8 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                   )}
                 </div>
                 <div className='flex flex-col'>
-                  <span className='block text-lg font-medium'>Giá</span>
+                  <label className='block text-lg font-medium'>Giá</label>
+
                   <Controller
                     control={control}
                     name='price'
@@ -182,8 +192,9 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     }}
                   />
                 </div>
+
                 <div className='flex flex-col'>
-                  <span className='block text-lg font-medium'>Chọn lớp</span>
+                  <label className='block text-lg font-medium'>Chọn lớp</label>
                   <select
                     {...register('class')}
                     className='ml-10 w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
@@ -198,31 +209,26 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     </p>
                   )}
                 </div>
-                <div className='flex flex-col'>
-                  <span className='block text-lg font-medium'>Timetable</span>
-                  <div className='ml-10 w-[20rem]'>
-                    {daysOfWeek.map((day) => (
-                      <div key={day} className='flex items-center'>
-                        <input
-                          type='checkbox'
-                          {...register('timetable')}
-                          value={day}
-                          className='mr-2'
-                        />
-                        <span>{day}</span>
-                      </div>
-                    ))}
-                    {errors.timetable && (
-                      <p className='text-red-600 mt-1 text-[0.75rem]'>
-                        {errors.timetable.message}
-                      </p>
+                {/* Các trường khác của form */}
+                <div>
+                  <label>Thời khóa biểu</label>
+                  <Controller
+                    control={control}
+                    name='timetable'
+                    render={({ field }) => (
+                      <DateOfWeek
+                        value={field.value} // Sử dụng field.value thay vì value trực tiếp
+                        onChange={field.onChange} // Sử dụng field.onChange thay vì onChange trực tiếp
+                        errorMessage={errors.timetable?.message}
+                      />
                     )}
-                  </div>
+                  />
                 </div>
+
                 <div className='flex flex-col'>
-                  <span className='block text-lg font-medium'>
+                  <label className='block text-lg font-medium'>
                     Thời gian bắt đầu
-                  </span>
+                  </label>
                   <Input
                     name='timeStart'
                     type='time'
@@ -235,10 +241,11 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     // }}
                   />
                 </div>
+
                 <div className='flex flex-col'>
-                  <span className='block text-lg font-medium'>
+                  <label className='block text-lg font-medium'>
                     Thời gian kết thúc
-                  </span>
+                  </label>
                   <Input
                     name='timeEnd'
                     type='time'
@@ -252,8 +259,14 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                   />
                 </div>
               </div>
+
               <div className='flex flex-col space-y-2'>
-                <span className='font-medium text-gray-700'>Mô tả môn học</span>
+                <label
+                  className='font-medium text-gray-700'
+                  htmlFor='Description'
+                >
+                  Mô tả môn học
+                </label>
                 <textarea
                   placeholder='Nhập mô tả môn học của bạn'
                   {...register('description')}
@@ -265,6 +278,7 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                   </span>
                 )}
               </div>
+
               <div className='mt-6 justify-around flex'>
                 <div className='w-[49%]'>
                   <button

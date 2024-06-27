@@ -1,22 +1,18 @@
 import { useMutation } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 
 // import { getRefreshTokeNFromLS } from '../../utils/auth'
-import { BellOutlined } from '@ant-design/icons'
-import { Badge } from 'antd'
+import userImage from '../../assets/img/user.svg'
 import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
 import { LogoutReqBody } from '../../types/user.request.type'
 import { clearLS, getProfileFromLS } from '../../utils/auth'
-import { getAvatarUrl } from '../../utils/utils'
 import Popover from '../Popover/Popover'
-import userImage from '../../assets/img/user.svg'
 
-const user = getProfileFromLS();// tạo user để in ra số dư trên header
+const user = getProfileFromLS() // tạo user để in ra số dư trên header
 export default function NavHeader() {
-  
   //const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
   // const receiveNotification = () => {
   //   //  hàm để nhận thông báo mới, vd sử dụng button onclick bằng hàm này
@@ -40,7 +36,7 @@ export default function NavHeader() {
   })
 
   const handleLogout = () => {
-    console.log('refreshToken',refreshToken)
+    console.log('refreshToken', refreshToken)
 
     logoutMutation.mutate(
       { refresh_token: refresh },
@@ -107,14 +103,19 @@ export default function NavHeader() {
             />
           </svg>
         </Popover> */}
-        
+
         {isAuthenticated && (
           <div className='flex justify-center text-center'>
-            
-            {user && (
-              (user.roles === 'admin' || user.roles === 'mod') ? (
+            {user &&
+              (user.roles === 'admin' || user.roles === 'mod' ? (
                 <div>
-                  <Link to={(user.roles === 'admin') ? path.Admin.admin : path.Moderator.mod}>
+                  <Link
+                    to={
+                      user.roles === 'admin'
+                        ? path.Admin.admin
+                        : path.Moderator.mod
+                    }
+                  >
                     <button className='btn btn-primary shadow-md rounded-md p-3 hover:bg-pink-500'>
                       {user.roles === 'admin' ? 'Admin' : 'Mod'}
                     </button>
@@ -126,9 +127,7 @@ export default function NavHeader() {
                   {user.accountBalance !== null ? user.accountBalance : 0}
                   <div>VNĐ</div>
                 </div>
-              )
-            )}
-            
+              ))}
           </div>
         )}
         {/*Chuông  */}

@@ -94,9 +94,9 @@ export const updateSchema = yup.object({
 export const requestSchema = yup.object({
   title: yup.string().required('Tựa đề là bắt buộc'),
 
-  timetable: yup.array().of(yup.string()).required(), // Expect an array of strings for timetable
+  timetable: yup.string().required('Chọn buổi học là bắt buộc'), // Expect an array of strings for timetable
 
-  totalSessions: yup.number().required('số buổi học là bắt buộc'),
+  totalSessions: yup.number(),
   LearningMethod: yup
     .string()
     .oneOf(
@@ -185,7 +185,7 @@ export const schemaResAT = yup.object({
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
 export type SchemaResAT = yup.InferType<typeof schemaResAT>
 
-export type RequiredSchema = yup.InferType<typeof requestSchema>
+export type Requestchema = yup.InferType<typeof requestSchema>
 export type UserSchema = yup.InferType<typeof userSchema>
 export type Schema = yup.InferType<typeof schema>
 export type UpdateSchema = yup.InferType<typeof updateSchema>

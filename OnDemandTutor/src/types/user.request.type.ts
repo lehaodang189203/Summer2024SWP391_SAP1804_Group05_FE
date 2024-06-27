@@ -37,7 +37,7 @@ export interface LogoutReqBody {
   refresh_token: string
 }
 export interface reqDeposit {
-  fullName:string
+  fullName: string
   amount: number
 }
 
@@ -51,7 +51,7 @@ export interface RequestBody {
   timeStart: string
   timeEnd: string
   title: string
-  totalSessions: string
+  totalSessions: number
 }
 
 export interface RequestResult {

@@ -17,7 +17,7 @@ export default function UserSideNav() {
         >
           {/* ảnh đại diện */}
           <img
-            src={getAvatarUrl(profile?.avatar)}
+            src={profile?.avatar ? profile.avatar : userImage}
             alt=''
             className='h-full w-full object-cover'
           />
@@ -60,7 +60,7 @@ export default function UserSideNav() {
         >
           <div className='mr-3 h-[22px] w-[22px] hover:text-pink-400'>
             <img
-              src={profile?.avatar ? profile.avatar : userImage}
+              src='https://down-vn.img.susercontent.com/file/ba61750a46794d8847c3f463c5e71cc4'
               alt=''
               className='h-full w-full'
             />
