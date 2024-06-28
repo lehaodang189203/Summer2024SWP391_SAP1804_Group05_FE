@@ -6,7 +6,7 @@ import {
   faUserGraduate
 } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Pagination from '../../components/Pagination'
 import Popup from '../../components/Popup/Popup'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -14,6 +14,7 @@ import { tutorApi } from '../../api/tutor.api'
 import { studentApi } from '../../api/student.api'
 import queryString from 'query-string';
 import { acceptTutorBody } from '../../types/user.request.type'
+import { toast } from 'react-toastify'
 interface Tutor {
   id:string
   experience: number
@@ -29,7 +30,7 @@ export default function TutorList() {
   const [color, setColor] = useState(false)
   const [currentTutor, setCurrentTutor] = useState<Tutor | null>(null)
   const [tutors, setTutors] = useState<Tutor[]>([]);
-  
+  const navigator = useNavigate();
   const location = useLocation();
   const { idRe } = queryString.parse(location.search);
 
@@ -60,6 +61,8 @@ export default function TutorList() {
     };
     // Replace with the actual API call to accept the tutor
     const response = await studentApi.acceptTutor(body);
+    toast.success('Thành công đăng kí ')
+    navigator('/')
     return response.data;
   },
   onSuccess: () => {
