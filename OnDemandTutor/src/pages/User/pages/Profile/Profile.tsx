@@ -104,8 +104,6 @@ export default function Profile() {
     return url
   }
 
-  const avatar = watch('avatar')
-
   function convertDateOfBirth(date_of_birth: string): string {
     const dateOfBirth = date_of_birth
       ? new Date(date_of_birth)

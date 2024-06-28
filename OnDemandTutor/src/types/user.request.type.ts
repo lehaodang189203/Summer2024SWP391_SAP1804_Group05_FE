@@ -54,6 +54,16 @@ export interface RequestBody {
   totalSessions: number
 }
 
+export interface RequestTutorBody {
+  specializedSkills: string
+  experience: number
+  subject: string
+  qualificationName: string
+  type: string
+  introduction: string
+  imageQualification: string
+}
+
 export interface RequestResult {
   id: string
   fullName: string
@@ -61,7 +71,6 @@ export interface RequestResult {
   title: string
   price: 0
   description: string
-
   methodLearning: string
   date: string
   timeStart: string

@@ -151,8 +151,7 @@ export const schemaResAT = yup.object({
   qualificationName: yup.string().required('Không được bỏ trống'),
   type: yup
     .string()
-    .required()
-    .oneOf(['Chứng Chỉ', 'Bằng Cắp'], 'phải là Chứng Chỉ hoặc bằng cấp'),
+    .oneOf(['Chứng Chỉ', 'Bằng Cắp'], 'Phải là Chứng Chỉ hoặc bằng cấp'),
 
   subject: yup
     .string()
@@ -174,14 +173,11 @@ export const schemaResAT = yup.object({
     ),
   experience: yup
     .number()
-    .typeError('Chỉ được nhập số (năm giảng dạy, dạy thêm,...)')
-    .required('Trường này là bắt buộc')
-    .positive('Giá không thể là số âm'),
-
+    .required('Số năm kinh nghiệm là bắt buộc')
+    .min(0, 'Số năm kinh nghiệm phải lớn hơn 0'),
   specializedSkills: yup.string().required('Kỹ năng chuyên môn là bắt buộc'),
   imageQualification: yup.string().required('Ảnh còn thiếu')
 })
-
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
 export type SchemaResAT = yup.InferType<typeof schemaResAT>
 

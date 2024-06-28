@@ -1,4 +1,4 @@
-import { RequestBody } from '../types/user.request.type'
+import { RequestBody, RequestTutorBody } from '../types/user.request.type'
 import { SuccessResponseReq } from './../types/utils.type'
 
 import { getProfileFromLS } from '../utils/auth'
@@ -48,5 +48,8 @@ export const studentApi = {
 
   viewAllTutorsJoinRequests(idReq: string) {
     return http.get(`student/appovedRequest?IDAccount=${idReq}`)
-  }
+  },
+
+  registerAsTutor: async (body: RequestTutorBody) =>
+    await http.post(`User/registerAsTutorFB?id=${user.id}`, body)
 }
