@@ -52,24 +52,24 @@ export default function TutorList() {
     }
   }, [idRe])
 
-  const acceptTutorMutation = useMutation({
-    mutationFn: async (tutor: Tutor) => {
-      const body: acceptTutorBody = {
-        idre: idRe as string,
-        idtu: tutor.id
-      }
-      // Replace with the actual API call to accept the tutor
-      await studentApi.acceptTutor(body)
-      toast.success('Thành công đăng kí ')
-      navigator('/')
-    },
-    onSuccess: () => {
-      console.log('Tutor accepted successfully')
-    },
-    onError: (error: any) => {
-      console.error('Error accepting tutor:', error)
-    }
-  })
+  // const acceptTutorMutation = useMutation({
+  //   mutationFn: async (tutor: Tutor) => {
+  //     const body: acceptTutorBody = {
+  //       idre: idRe as string,
+  //       idtu: tutor.id
+  //     }
+  //     // Replace with the actual API call to accept the tutor
+  //     await studentApi.acceptTutor(body)
+  //     toast.success('Thành công đăng kí ')
+  //     navigator('/')
+  //   },
+  //   onSuccess: () => {
+  //     console.log('Tutor accepted successfully')
+  //   },
+  //   onError: (error: any) => {
+  //     console.error('Error accepting tutor:', error)
+  //   }
+  // })
   const handleClosePopup = () => {
     setIsPopupVisible(false)
     setCurrentTutor(null)
@@ -83,12 +83,12 @@ export default function TutorList() {
     setCurrentTutor(tutor)
     setIsPopupVisible(true)
   }
-  const handleapproved = (tutor: Tutor) => {
-    setCurrentTutor(tutor)
-    console.log(' id tutor nèk:', tutor.id)
-    console.log(' id cua request:', idRe)
-    acceptTutorMutation.mutate(tutor)
-  }
+  // const handleapproved = (tutor: Tutor) => {
+  //   setCurrentTutor(tutor)
+  //   console.log(' id tutor nèk:', tutor.id)
+  //   console.log(' id cua request:', idRe)
+  //   acceptTutorMutation.mutate(tutor)
+  // }
 
   return (
     <div>
@@ -174,7 +174,7 @@ export default function TutorList() {
               <div className='w-full h-full px-auto mx-auto pt-32'>
                 <div className='rounded-lg w-full h-10 bg-pink-400 hover:opacity-80'>
                   <button
-                    onClick={() => handleapproved(tutor)}
+                    // onClick={() => handleapproved(tutor)}
                     className='pt-3'
                   >
                     Chấp nhận

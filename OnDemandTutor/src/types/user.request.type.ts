@@ -55,13 +55,13 @@ export interface RequestBody {
 }
 
 export interface RequestTutorBody {
-  specializedskills: string
+  specializedSkills: string
   experience: number
   subject: string
-  qualificationname: string
+  qualifiCationname: string
   type: string
   introduction: string
-  imagequalification: string
+  imageQualification: string
 }
 
 export interface RequestResult {
@@ -82,10 +82,17 @@ export interface ChangePasswordReqBody {
   new_password: string
 }
 export interface joinClassBody {
-  requestId: string
+  idRequest: string
   id: string
 }
 export interface acceptTutorBody {
-  idtu: string
-  idre: string
+  idTutor: string
+  idRequest: string
 }
+
+// idTutor là id của account có roles là tutor
+// id là account có roles là học sinh
+
+//  requestList
+//  student.api
+// tutorList

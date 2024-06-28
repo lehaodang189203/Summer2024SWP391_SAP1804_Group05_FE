@@ -73,7 +73,7 @@ export default function RequestStudentCurrent() {
   }
   const handleCurRe = (idRe: string) => {
     viewTutorMutation.mutate(idRe, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         navigate(`${path.tutors}/?idRe=${idRe}`)
       },
       onError: (error) => {

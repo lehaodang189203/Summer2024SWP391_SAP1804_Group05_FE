@@ -11,10 +11,10 @@ import { storage } from '../../utils/firebase'
 export default function RegisterAsTutor() {
   const [file, setFile] = useState<File | null>(null)
   const [experience, setExperience] = useState<number | null>(null)
-  const [imagequalification, setImageQualification] = useState<string>('')
+  const [imageQualification, setImageQualification] = useState<string>('')
   const [introduction, setIntroduction] = useState<string>('')
-  const [qualificationname, setQualificationName] = useState<string>('')
-  const [specializedskills, setSpecializedSkills] = useState<string>('')
+  const [qualificationName, setQualificationName] = useState<string>('')
+  const [specializedSkills, setSpecializedSkills] = useState<string>('')
   const [subject, setSubject] = useState<string>('')
   const [type, setType] = useState<string>('')
 
@@ -43,8 +43,8 @@ export default function RegisterAsTutor() {
     if (
       !experience ||
       !introduction ||
-      !qualificationname ||
-      !specializedskills ||
+      !qualificationName ||
+      !specializedSkills ||
       !subject ||
       !type
     ) {
@@ -53,13 +53,14 @@ export default function RegisterAsTutor() {
     }
 
     try {
+      let imageUrl = imageQualification
       if (file) {
         console.log(file)
 
-        const url = await uploadAvatar(file)
-        console.log(url)
+        imageUrl = await uploadAvatar(file)
+        console.log(imageUrl)
 
-        setImageQualification(url) // Set the URL in the state
+        setImageQualification(imageUrl) // Set the URL in the state
         setFile(null)
         if (fileInputRef.current) {
           fileInputRef.current.value = ''
@@ -68,10 +69,10 @@ export default function RegisterAsTutor() {
 
       const formData: RequestTutorBody = {
         experience: experience!,
-        imagequalification,
+        imagequalification: imageUrl,
         introduction,
-        qualificationname,
-        specializedskills,
+        qualificationname: qualificationName,
+        specializedskills: specializedSkills,
         subject,
         type
       }
@@ -124,7 +125,7 @@ export default function RegisterAsTutor() {
               Qualification Name:
               <input
                 type='text'
-                value={qualificationname}
+                value={qualificationName}
                 onChange={(e) => setQualificationName(e.target.value)}
                 className='w-full p-2 border rounded'
                 required
@@ -134,7 +135,7 @@ export default function RegisterAsTutor() {
               Specialized Skills:
               <input
                 type='text'
-                value={specializedskills}
+                value={specializedSkills}
                 onChange={(e) => setSpecializedSkills(e.target.value)}
                 className='w-full p-2 border rounded'
                 required
@@ -170,7 +171,9 @@ export default function RegisterAsTutor() {
               <InputFile onChange={handleChangeFile} />
             </div>
             <div>
-              <img src={imagequalification} />
+              {imageQualification && (
+                <img src={imageQualification} alt='Ảnh chứng chỉ' />
+              )}
             </div>
           </div>
           <div className='mt-6 flex justify-around'>

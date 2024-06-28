@@ -56,15 +56,15 @@ export const studentApi = {
     return http.get<any>(`Student/viewAllTutorsJoinRequest?requestId=${idReq}`)
   },
 
-  // Chấp nhận yêu cầu từ một gia sư cụ thể
-  acceptTutor: async (body: acceptTutorBody) => {
-    await http.post(
-      `student/SelectTutor?idrequest=${body.idre}&idaccounttutor=${body.idtu}`,
-      body
-    )
-  },
+  // // Chấp nhận yêu cầu từ một gia sư cụ thể
+  // acceptTutor: async (body: acceptTutorBody) => {
+  //   await http.post(
+  //     `student/SelectTutor?idrequest=${body.idre}&idaccounttutor=${body.idtu}`,
+  //     body
+  //   )
+  // },
 
-  // Đăng ký làm gia sư
+  // // Đăng ký làm gia sư
   registerAsTutor: async (body: RequestTutorBody) =>
     await http.post(`User/registerAsTutorFB?id=${user.id}`, body)
 }
