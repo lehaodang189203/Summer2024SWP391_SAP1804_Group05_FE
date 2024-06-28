@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
@@ -13,8 +13,10 @@ import { clearLS, getProfileFromLS } from '../../utils/auth'
 import { getAvatarUrl } from '../../utils/utils'
 import Popover from '../Popover/Popover'
 import userImage from '../../assets/img/user.svg'
+import userApi from '../../api/user.api'
+import { User } from '../../types/user.type'
 
-const user = getProfileFromLS() // tạo user để in ra số dư trên header
+const user:User = getProfileFromLS() // tạo user để in ra số dư trên header
 export default function NavHeader() {
   //const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
   // const receiveNotification = () => {
@@ -31,6 +33,16 @@ export default function NavHeader() {
   } = useContext(AppContext)
 
   const navigate = useNavigate()
+
+
+  const { data: ProfileData, refetch } = useQuery({
+    queryKey: ['Account'],
+    queryFn: userApi.getProfile
+  })
+
+  console.log(ProfileData)
+
+   
 
   const refresh = refreshToken
 
@@ -53,6 +65,9 @@ export default function NavHeader() {
       }
     )
   }
+
+
+
 
   return (
     <div className='container'>
@@ -126,7 +141,7 @@ export default function NavHeader() {
                 <Link to={path.deposit}>
                 <div className='flex gap-4 rounded-md shadow-lg p-3 pr-4 hover:bg-pink-300'>
                   <div>Số dư: </div>
-                  {user.accountBalance !== null ? user.accountBalance : 0}
+                  {user.accountBalance !== null ? user.accountBalance    : 0}
                   <div>VNĐ</div>
                 </div>
                 </Link>

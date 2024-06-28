@@ -6,7 +6,7 @@ import {
   faSchool
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Select } from 'antd'
 import Search from 'antd/es/transfer/search'
 import { useState } from 'react'
@@ -15,6 +15,8 @@ import { FaSearch } from 'react-icons/fa'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
 import { DataType } from '../../../types/request.type'
+import { useNavigate } from 'react-router-dom'
+import { path } from '../../../constant/path'
 
 const options1 = [
   { label: 'Lọc theo thời gian' },
@@ -55,7 +57,7 @@ export default function RequestStudentCurrent() {
     queryFn: () => studentApi.appoovedequest(),
     placeholderData: []
   })
-
+  const navigate = useNavigate();
   console.log('RequestData', RequestData)
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -64,6 +66,10 @@ export default function RequestStudentCurrent() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
+
+
+  
+
 
   const items = RequestData || []
   const startIndex = (currentPage - 1) * itemsPerPage
@@ -82,7 +88,19 @@ export default function RequestStudentCurrent() {
   const handleSelectChange3 = (option: any) => {
     setSelectedOption3(option)
   }
-
+  const handleCurRe = (idRe : string) =>{
+    viewTutorMutation.mutate(idRe,{
+      onSuccess: (data)=>{
+        navigate(`${path.tutors}/?idRe=${idRe}`);
+      },
+      onError: (error)=>{
+        console.log('lõi nè', error)
+      }
+    })
+  }
+  const viewTutorMutation = useMutation({
+    mutationFn: (idRe:any) => studentApi.viewAllTutorsJoinRequests(idRe)
+  })
   return (
     <div className='bg-gray-200 w-4/5 p-3'>
       <div className='m-3'>
@@ -129,11 +147,11 @@ export default function RequestStudentCurrent() {
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
           {currentItems.length > 0 &&
-            currentItems.map((request, key) => (
+            currentItems.map((request:DataType, key) => (
               <>
                 <div
-                  className='m-5 p-3 flex border shadow-md hover:shadow-2xl hover:shadow-black rounded-md'
-                  key={key}
+                  className='m-5 p-3 flex border shadow-md hover:shadow-xl hover:shadow-black rounded-md cursor-pointer'
+                  key={key} onClick={()=>handleCurRe(request.idrequest)}
                 >
                   <div className=' w-10/12 bg-slate-100 rounded-xl text-left justify-between text-base p-5 border shadow-md'>
                     <div className='text-lg font-bold text-center pr-56 '>
@@ -146,11 +164,11 @@ export default function RequestStudentCurrent() {
                             icon={faCalendarDays}
                             className='mr-2'
                           />
-                          {request.timeTable}
+                          {request.timetable}
                         </div>
                         <div>
                           <FontAwesomeIcon icon={faSchool} className='mr-2' />
-                          {request.learningMethod}
+                          {request.learningmethod}
                         </div>
                         <div>
                           <FontAwesomeIcon
@@ -170,15 +188,19 @@ export default function RequestStudentCurrent() {
                             {' '}
                             Giá mong muốn{' '}
                           </div>
-                          <div>{request.price}</div>
+                          <div className='flex gap-3'>
+                            <div>{request.price}</div>
+                            <div>VNĐ</div>
+                          </div>
+                          
                         </div>
                       </div>
                     </div>
                     <div>
-                      <FontAwesomeIcon icon={faClock} /> {request.timeStart} tới{' '}
-                      {request.timeEnd}
+                      <FontAwesomeIcon icon={faClock} /> {request.timestart} tới{' '}
+                      {request.timeend}
                     </div>
-                    <div> Mong muốn: {request.description}</div>
+                    <div> Mô tả: {request.description}</div>
                   </div>
                   <div className='bg-green-600 shadow-md w-1/6 flex items-center justify-center text-center font-bold rounded-lg ml-2'>
                     Đã duyệt

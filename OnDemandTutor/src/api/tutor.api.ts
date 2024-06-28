@@ -1,6 +1,15 @@
+import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { DataType } from '../types/request.type'
+import { joinClassBody } from '../types/user.request.type'
+import { User } from '../types/user.type'
 import { SuccessResponse } from '../types/utils.type'
+import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
+
+
+
+const user:User = getProfileFromLS()
+
 
 export const tutorApi = {
   viewRequest: async (): Promise<DataType[]> => {
@@ -8,7 +17,7 @@ export const tutorApi = {
       const response = await http.get<SuccessResponse<DataType[]>>(
         'tutor/viewRequest'
       )
-      if (response.status === 200) {
+      if (response.status === HttpStatusCode.Ok) {
         return response.data.data
       } else {
         throw new Error('Danh sách trống')
@@ -19,6 +28,6 @@ export const tutorApi = {
     }
   },
   //  tham gia lớp
-  joinClass: async ({ Rid, id }: { Rid: string; id: string }) =>
-    await http.post(`tutor/join-request?requestId=${Rid}&tutorId=${id}`)
+  joinClass: async (body:joinClassBody) =>
+    await http.post(`tutor/join-request?requestId=${body.requestId}&id=${body.id}`)
 }

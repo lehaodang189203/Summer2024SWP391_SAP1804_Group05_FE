@@ -15,7 +15,8 @@ export const path = {
   requestStudentCurrent: '/requestStudentCurrent', //student
   requestList: '/requests', //tutor and student
   profileTT: '/profile', //tutor
-
+  paymentSucsess:'/paymentSucsess',
+  paymentFail:'/paymentFail',
   detailRequest: '/detailRequest', //chưa được sử dụng
   calender: '/calender', //calender nèk
   Moderator: {

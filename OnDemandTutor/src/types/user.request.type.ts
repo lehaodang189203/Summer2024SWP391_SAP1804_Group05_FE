@@ -37,7 +37,7 @@ export interface LogoutReqBody {
   refresh_token: string
 }
 export interface reqDeposit {
-  idAccount: string
+  id: string
   amount: number
 }
 
@@ -45,13 +45,13 @@ export interface RequestBody {
   class: string
   timetable: string
   description: string
-  LearningMethod: string
+  learningmethod: string
   price: number
   subject: string
-  timeStart: string
-  timeEnd: string
+  timestart: string
+  timeend: string
   title: string
-  totalSessions: number
+  totalsessions: number
 }
 
 export interface RequestTutorBody {
@@ -80,4 +80,12 @@ export interface RequestResult {
 export interface ChangePasswordReqBody {
   password: string
   new_password: string
+}
+export interface joinClassBody {
+  requestId: string
+  id: string
+}
+export interface acceptTutorBody {
+  idtu: string
+  idre: string
 }

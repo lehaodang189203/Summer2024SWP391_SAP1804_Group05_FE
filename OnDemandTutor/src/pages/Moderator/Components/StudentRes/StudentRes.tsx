@@ -7,18 +7,18 @@ import { moderatorApi } from '../../../../api/moderator.api'
 import { toast } from 'react-toastify'
 
 interface DataType {
-  idRequest: string
-  fullName: string
+  idrequest: string
+  fullname: string
   subject: string
   title: string
-  timeTable:string
+  timetable:string
   price: number
   description: string
   class: string
-  learningMethod: string
+  learningmethod: string
   date: string
-  timeStart: string
-  timeEnd: string
+  timestart: string
+  timeend: string
 }
 
 export default function StudentRes() {
@@ -41,7 +41,7 @@ export default function StudentRes() {
   const rejectMutation = useMutation({
     mutationFn: (idReq: string) => moderatorApi.rejectRequest(idReq),
     onSuccess: () => {
-      toast.error('Yêu cầu đã bị từ chối')
+      toast.success('Yêu cầu đã bị từ chối')
       refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
       setVisible(false)
     }
@@ -55,23 +55,24 @@ export default function StudentRes() {
 
   const handleApprove = () => {
     if (selectedRecord) {
-      approveMutation.mutate(selectedRecord.idRequest)
+      approveMutation.mutate(selectedRecord.idrequest)
+      console.log('id của thằng request nè ',selectedRecord.idrequest)
     }
   }
 
   const handleReject = () => {
     if (selectedRecord) {
-      rejectMutation.mutate(selectedRecord.idRequest)
+      rejectMutation.mutate(selectedRecord.idrequest)
     }
   }
 
   const columns: TableColumnsType<DataType> = [
     {
       title: 'Tên Học Sinh',
-      dataIndex: 'fullName',
+      dataIndex: 'fullname',
       onFilter: (value, record) =>
-        record.fullName.indexOf(value as string) === 0,
-      sorter: (a, b) => a.fullName.length - b.fullName.length,
+        record.fullname.indexOf(value as string) === 0,
+      sorter: (a, b) => a.fullname.length - b.fullname.length,
       width: 200,
       fixed: 'left'
     },
@@ -94,22 +95,22 @@ export default function StudentRes() {
     },
     {
       title: 'Phương thức học',
-      dataIndex: 'learningMethod',
+      dataIndex: 'learningmethod',
       width: 150
     },
     {
       title: 'Ngày',
-      dataIndex: 'timeTable',
+      dataIndex: 'timetable',
       width: 150
     },
     {
       title: 'Giờ bắt đầu',
-      dataIndex: 'timeStart',
+      dataIndex: 'timestart',
       width: 150
     },
     {
       title: 'Giờ kết thúc',
-      dataIndex: 'timeEnd',
+      dataIndex: 'timeend',
       width: 150
     },
     {
@@ -122,7 +123,7 @@ export default function StudentRes() {
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
-            onClick={() => showDetail(record.idRequest)} // Ensure the id is passed correctly
+            onClick={() => showDetail(record.idrequest)} // Ensure the id is passed correctly
           >
             Chi tiết
           </button>
@@ -137,7 +138,7 @@ export default function StudentRes() {
   const [visible, setVisible] = useState(false)
 
   const showDetail = (id: string) => {
-    const record = RequestData?.find((item) => item.idRequest === id) || null
+    const record = RequestData?.find((item) => item.idrequest === id) || null
     console.log('id', id)
     setSelectedRecord(record)
     setVisible(true)
@@ -183,18 +184,18 @@ export default function StudentRes() {
               <p className='font-medium'>
                 Tên: {''}
                 <span className='font-bold text-pink-500'>
-                  {selectedRecord.fullName}
+                  {selectedRecord.fullname}
                 </span>
               </p>
               <div className='flex'>
                 <p className='font-medium'>
                   Ngày học:{' '}
                   <span className='line-under'>
-                    {selectedRecord.date} <br />
+                    {selectedRecord.timetable} <br />
                   </span>
                   Thời gian:{' '}
                   <span className='font-bold'>
-                    từ {selectedRecord.timeStart} tới {selectedRecord.timeEnd}{' '}
+                    từ {selectedRecord.timestart} tới {selectedRecord.timeend}{' '}
                   </span>
                 </p>
               </div>

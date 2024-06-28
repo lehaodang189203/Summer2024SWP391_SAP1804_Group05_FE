@@ -132,11 +132,11 @@ export function RequestStudentPending() {
                   <div className='trái'>
                     <div>
                       <FontAwesomeIcon icon={faCalendarDays} className='mr-2' />
-                      {request.timeTable}
+                      {request.timetable}
                     </div>
                     <div>
                       <FontAwesomeIcon icon={faSchool} className='mr-2' />
-                      {request.learningMethod}
+                      {request.learningmethod}
                     </div>
                     <div>
                       <FontAwesomeIcon
@@ -158,8 +158,8 @@ export function RequestStudentPending() {
                   </div>
                 </div>
                 <div>
-                  <FontAwesomeIcon icon={faClock} /> {request.timeStart} tới{' '}
-                  {request.timeEnd}
+                  <FontAwesomeIcon icon={faClock} /> {request.timestart} tới{' '}
+                  {request.timeend}
                 </div>
                 <div> Mong muốn: {request.description}</div>
               </div>

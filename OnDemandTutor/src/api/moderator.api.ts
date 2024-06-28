@@ -26,6 +26,7 @@ export const moderatorApi = {
         'modaretor/viewRequest'
       )
       if (response.status === HttpStatusCode.Ok) {
+        
         return response.data.data
       } else {
         throw new Error('Danh sách trống')
