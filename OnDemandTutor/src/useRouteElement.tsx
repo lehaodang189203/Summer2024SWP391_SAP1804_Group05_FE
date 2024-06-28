@@ -15,7 +15,7 @@ import RequestList from './pages/RequestList'
 import TutorList from './pages/TutorList'
 import Calendar from './pages/Calendar'
 import CheckOut from './pages/CheckOut'
- import Deposit from './pages/Deposit'
+import Deposit from './pages/Deposit'
 import ChangPassword from './pages/User/pages/ChangePassword'
 import Profile, { default as ProfileTT } from './pages/User/pages/Profile'
 import SessionList from './pages/Admin/Components/SessionList'
@@ -32,7 +32,7 @@ import { User } from './types/user.type'
 import RegisterAsTuTor from './pages/RegisterAsTutor/RegisterAsTutor'
 import PaymentCallback from './pages/PaymentCallBack'
 import ModAccountStudent from './pages/Moderator/Components/ModAccountStudent'
-import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
+// import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
 import PaymentFail from './pages/PaymentCallBack/PaymentFail'
 
 function ProtectedRoute() {
@@ -96,14 +96,14 @@ export default function useRouteElements() {
           ),
           index: true
         },
-        // {
-        //   path: path.registerAsTutor, //student
-        //   element: (
-        //     <MainLayout>
-        //       <RegisterAsTuTor />
-        //     </MainLayout>
-        //   )
-        // },
+        {
+          path: path.registerAsTutor, //student
+          element: (
+            <MainLayout>
+              <RegisterAsTuTor />
+            </MainLayout>
+          )
+        },
         {
           path: path.user, //user-----------------------------------------------------------------------------------
           element: (
@@ -183,23 +183,23 @@ export default function useRouteElements() {
           )
         },
         {
-          path: path.paymentcallback,// student // này là hiển thị thông báo nạp tiền thành công nha fen
+          path: path.paymentcallback, // student // này là hiển thị thông báo nạp tiền thành công nha fen
           element: (
             <MainLayout>
               <PaymentCallback />
             </MainLayout>
           )
         },
+        // {
+        //   path: path.paymentSucsess, // student // này là hiển thị thông báo nạp tiền thành công nha fen
+        //   element: (
+        //     <MainLayout>
+        //       <PaymentSuccess />
+        //     </MainLayout>
+        //   )
+        // },
         {
-          path: path.paymentSucsess,// student // này là hiển thị thông báo nạp tiền thành công nha fen
-          element: (
-            <MainLayout>
-              <PaymentSuccess />
-            </MainLayout>
-          )
-        },
-        {
-          path: path.paymentFail,// student // này là hiển thị thông báo nạp tiền thành công nha fen
+          path: path.paymentFail, // student // này là hiển thị thông báo nạp tiền thành công nha fen
           element: (
             <MainLayout>
               <PaymentFail />
@@ -222,8 +222,8 @@ export default function useRouteElements() {
             {
               path: path.Moderator.tutorResRegis,
               element: <ModTutorResRegis />
-            }
-            ,{
+            },
+            {
               path: path.Moderator.listAccountStudent,
               element: <ModAccountStudent />
             }
