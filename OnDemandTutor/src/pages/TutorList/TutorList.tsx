@@ -1,20 +1,18 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import me from '../../assets/img/me.jpg'
 import {
   faPersonHalfDress,
   faSchool,
   faUserGraduate
 } from '@fortawesome/free-solid-svg-icons'
-import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import Pagination from '../../components/Pagination'
-import Popup from '../../components/Popup/Popup'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { tutorApi } from '../../api/tutor.api'
-import { studentApi } from '../../api/student.api'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useMutation } from '@tanstack/react-query'
 import queryString from 'query-string'
-import { acceptTutorBody } from '../../types/user.request.type'
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { studentApi } from '../../api/student.api'
+import me from '../../assets/img/me.jpg'
+import Popup from '../../components/Popup/Popup'
+import { acceptTutorBody } from '../../types/user.request.type'
 interface Tutor {
   id: string
   experience: number
@@ -37,7 +35,7 @@ export default function TutorList() {
   const getTutorMutation = useMutation({
     mutationFn: async (idre: string) => {
       const response = await studentApi.viewAllTutorsJoinRequests(idre)
-      console.log(response.data.data)
+
       return response.data.data
     },
     onSuccess: (data: Tutor[]) => {
@@ -61,7 +59,7 @@ export default function TutorList() {
         idtu: tutor.id
       }
       // Replace with the actual API call to accept the tutor
-      const response = await studentApi.acceptTutor(body)
+      await studentApi.acceptTutor(body)
       toast.success('Thành công đăng kí ')
       navigator('/')
     },

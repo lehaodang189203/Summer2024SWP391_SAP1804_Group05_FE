@@ -1,78 +1,84 @@
-import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { tutorApi } from '../../api/tutor.api';
-import Pagination from '../../components/Pagination';
-import FormRequest from '../FormRequest/FormRequest';
-import { DataType } from '../../types/request.type';
-import { getProfileFromLS } from '../../utils/auth';
-import { User } from '../../types/user.type';
-import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
-import { joinClassBody } from '../../types/user.request.type';
+import { useMutation, useQuery } from '@tanstack/react-query'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { tutorApi } from '../../api/tutor.api'
+import Pagination from '../../components/Pagination'
+import { DataType } from '../../types/request.type'
+import { joinClassBody } from '../../types/user.request.type'
+import { User } from '../../types/user.type'
+import { getProfileFromLS } from '../../utils/auth'
+import FormRequest from '../FormRequest/FormRequest'
 
 const RequestList: React.FC = () => {
-  const user: User = getProfileFromLS();
-  const { idrequest } = useParams<{ idrequest: string }>();
-  const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
+  const user: User = getProfileFromLS()
+  const { idrequest } = useParams<{ idrequest: string }>()
+  const [selectedClasses, setSelectedClasses] = useState<string[]>([])
   const { data: RequestData } = useQuery<DataType[]>({
     queryKey: ['Request'],
     queryFn: () => tutorApi.viewRequest(),
     placeholderData: []
-  });
+  })
 
   const tutorAprrovedReMutation = useMutation({
     mutationFn: (body: joinClassBody) => tutorApi.joinClass(body)
-  });
+  })
 
   const handleAcceptClass = (requestId: string) => {
     if (!selectedClasses.includes(requestId)) {
       //toast.success('Bạn nhận lớp thành công');
-     
-      tutorAprrovedReMutation.mutate({ requestId: requestId, id: user.id }, {
-        onSuccess: () => {
-          toast.success('Bạn nhận lớp thành công');
-        },
-        onError: () => {
-          toast.error('Thất bại');
+
+      tutorAprrovedReMutation.mutate(
+        { requestId: requestId, id: user.id },
+        {
+          onSuccess: () => {
+            toast.success('Bạn nhận lớp thành công')
+          },
+          onError: () => {
+            toast.error('Thất bại')
+          }
         }
-      });
+      )
     }
-  };
+  }
 
   useEffect(() => {
     if (RequestData) {
-      console.log(RequestData);
+      console.log(RequestData)
     }
-  }, [RequestData]);
+  }, [RequestData])
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+    setCurrentPage(page)
+  }
 
-  const items = RequestData || [];
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = items.slice(startIndex, startIndex + itemsPerPage);
+  const items = RequestData || []
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
 
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(false)
 
   const handleOpenPopup = () => {
-    setShowForm(true);
-  };
+    setShowForm(true)
+  }
 
   const handleCloseForm = () => {
-    setShowForm(false);
-  };
+    setShowForm(false)
+  }
 
   return (
     <>
       <div className='container grid grid-cols-1 md:grid-cols-2 gap-5 h-[1000px]'>
         {currentItems
-          .filter(data => data.idrequest) // Ensure idrequest is not null or undefined
+          .filter((data) => data.idrequest) // Ensure idrequest is not null or undefined
           .map((data, index) => (
-            <div key={data.idrequest || `${data.subject}-${data.class}-${index}`} className='col-span-1'>
+            <div
+              key={data.idrequest || `${data.subject}-${data.class}-${index}`}
+              className='col-span-1'
+            >
               <div className='w-[35rem] h-auto rounded-3xl mx-5 my-5 px-5 hover:shadow-2xl hover:shadow-black border border-gray-300'>
                 <div className='my-2'>
                   <h2 className='text-red-600 text-2xl'>{data.title}</h2>
@@ -80,7 +86,8 @@ const RequestList: React.FC = () => {
                 <div className='text-[1rem] text-left'>
                   <div>
                     Môn dạy:{' '}
-                    <span className='text-blue-500 font-bold text-md'>{data.subject}
+                    <span className='text-blue-500 font-bold text-md'>
+                      {data.subject}
                     </span>
                   </div>
                   <div className='my-1'>
@@ -138,10 +145,16 @@ const RequestList: React.FC = () => {
                             : 'bg-pink-400 hover:opacity-80'
                         }`}
                         style={{
-                          pointerEvents: selectedClasses.includes(data.idrequest!) ? 'none' : 'auto',
+                          pointerEvents: selectedClasses.includes(
+                            data.idrequest!
+                          )
+                            ? 'none'
+                            : 'auto'
                         }}
                       >
-                        {selectedClasses.includes(data.idrequest!) ? 'Đã nhận lớp' : 'Nhận Lớp'}
+                        {selectedClasses.includes(data.idrequest!)
+                          ? 'Đã nhận lớp'
+                          : 'Nhận Lớp'}
                       </div>
                     ) : (
                       <div className='w-full h-10 bg-gray-300 mx-auto justify-center items-center flex'>
@@ -149,7 +162,7 @@ const RequestList: React.FC = () => {
                       </div>
                     )}
                   </div>
-</div>
+                </div>
               </div>
             </div>
           ))}
@@ -175,7 +188,7 @@ const RequestList: React.FC = () => {
         onPageChange={handlePageChange}
       />
     </>
-  );
-};
+  )
+}
 
-export default RequestList;
+export default RequestList

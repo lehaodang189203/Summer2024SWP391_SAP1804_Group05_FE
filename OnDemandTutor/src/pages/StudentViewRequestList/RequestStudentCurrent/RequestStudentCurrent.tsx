@@ -12,11 +12,11 @@ import Search from 'antd/es/transfer/search'
 import { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 
+import { useNavigate } from 'react-router-dom'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
-import { DataType } from '../../../types/request.type'
-import { useNavigate } from 'react-router-dom'
 import { path } from '../../../constant/path'
+import { DataType } from '../../../types/request.type'
 
 const options1 = [
   { label: 'Lọc theo thời gian' },
@@ -36,28 +36,15 @@ const options3 = [
   { value: 'banana', label: 'Tiếng Việt' },
   { value: 'cherry', label: 'Tiếng Anh' }
 ]
-// const data = Array.from({ length: 10 }, () => ({
-//   idRequest: '1',
-//   title: 'Học vãi luôn',
-//   date: '24-05-2024',
-//   LearningMethod: 'Học Trực Tiếp',
-//   class: 'Lớp 7',
-//   price: '12.000.000đ',
-//   subject: 'Toán',
-//   timeEnd: '10:30',
-//   timeStart: '9:30',
-//   description: 'Vừa học vừa chơi nhaa',
-//   status: 'processing'
-// }))
 
 //  trang hiện hành
 export default function RequestStudentCurrent() {
   const { data: RequestData = [] } = useQuery<DataType[]>({
     queryKey: ['Request'],
-    queryFn: () => studentApi.appoovedequest(),
+    queryFn: () => studentApi.approvedRequest(),
     placeholderData: []
   })
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   console.log('RequestData', RequestData)
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -66,10 +53,6 @@ export default function RequestStudentCurrent() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
   }
-
-
-  
-
 
   const items = RequestData || []
   const startIndex = (currentPage - 1) * itemsPerPage
@@ -88,18 +71,18 @@ export default function RequestStudentCurrent() {
   const handleSelectChange3 = (option: any) => {
     setSelectedOption3(option)
   }
-  const handleCurRe = (idRe : string) =>{
-    viewTutorMutation.mutate(idRe,{
-      onSuccess: (data)=>{
-        navigate(`${path.tutors}/?idRe=${idRe}`);
+  const handleCurRe = (idRe: string) => {
+    viewTutorMutation.mutate(idRe, {
+      onSuccess: (data) => {
+        navigate(`${path.tutors}/?idRe=${idRe}`)
       },
-      onError: (error)=>{
+      onError: (error) => {
         console.log('lõi nè', error)
       }
     })
   }
   const viewTutorMutation = useMutation({
-    mutationFn: (idRe:any) => studentApi.viewAllTutorsJoinRequests(idRe)
+    mutationFn: (idRe: any) => studentApi.viewAllTutorsJoinRequests(idRe)
   })
   return (
     <div className='bg-gray-200 w-4/5 p-3'>
@@ -147,11 +130,12 @@ export default function RequestStudentCurrent() {
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
           {currentItems.length > 0 &&
-            currentItems.map((request:DataType, key) => (
+            currentItems.map((request: DataType, key) => (
               <>
                 <div
                   className='m-5 p-3 flex border shadow-md hover:shadow-xl hover:shadow-black rounded-md cursor-pointer'
-                  key={key} onClick={()=>handleCurRe(request.idrequest)}
+                  key={key}
+                  onClick={() => handleCurRe(request.idrequest)}
                 >
                   <div className=' w-10/12 bg-slate-100 rounded-xl text-left justify-between text-base p-5 border shadow-md'>
                     <div className='text-lg font-bold text-center pr-56 '>
@@ -192,7 +176,6 @@ export default function RequestStudentCurrent() {
                             <div>{request.price}</div>
                             <div>VNĐ</div>
                           </div>
-                          
                         </div>
                       </div>
                     </div>

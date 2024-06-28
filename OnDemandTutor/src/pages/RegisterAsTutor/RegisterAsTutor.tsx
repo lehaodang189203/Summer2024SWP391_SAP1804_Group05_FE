@@ -1,20 +1,20 @@
-import { useState, useRef } from 'react'
-import { studentApi } from '../../api/student.api'
 import { useMutation } from '@tanstack/react-query'
-import { RequestTutorBody } from '../../types/user.request.type'
-import { toast } from 'react-toastify'
-import InputFile from '../../components/InputFile'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
+import { studentApi } from '../../api/student.api'
+import InputFile from '../../components/InputFile'
+import { RequestTutorBody } from '../../types/user.request.type'
 import { storage } from '../../utils/firebase'
 
 export default function RegisterAsTutor() {
   const [file, setFile] = useState<File | null>(null)
   const [experience, setExperience] = useState<number | null>(null)
-  const [imageQualification, setImageQualification] = useState<string>('')
+  const [imagequalification, setImageQualification] = useState<string>('')
   const [introduction, setIntroduction] = useState<string>('')
-  const [qualificationName, setQualificationName] = useState<string>('')
-  const [specializedSkills, setSpecializedSkills] = useState<string>('')
+  const [qualificationname, setQualificationName] = useState<string>('')
+  const [specializedskills, setSpecializedSkills] = useState<string>('')
   const [subject, setSubject] = useState<string>('')
   const [type, setType] = useState<string>('')
 
@@ -43,8 +43,8 @@ export default function RegisterAsTutor() {
     if (
       !experience ||
       !introduction ||
-      !qualificationName ||
-      !specializedSkills ||
+      !qualificationname ||
+      !specializedskills ||
       !subject ||
       !type
     ) {
@@ -68,10 +68,10 @@ export default function RegisterAsTutor() {
 
       const formData: RequestTutorBody = {
         experience: experience!,
-        imageQualification,
+        imagequalification,
         introduction,
-        qualificationName,
-        specializedSkills,
+        qualificationname,
+        specializedskills,
         subject,
         type
       }
@@ -124,7 +124,7 @@ export default function RegisterAsTutor() {
               Qualification Name:
               <input
                 type='text'
-                value={qualificationName}
+                value={qualificationname}
                 onChange={(e) => setQualificationName(e.target.value)}
                 className='w-full p-2 border rounded'
                 required
@@ -134,7 +134,7 @@ export default function RegisterAsTutor() {
               Specialized Skills:
               <input
                 type='text'
-                value={specializedSkills}
+                value={specializedskills}
                 onChange={(e) => setSpecializedSkills(e.target.value)}
                 className='w-full p-2 border rounded'
                 required
@@ -170,7 +170,7 @@ export default function RegisterAsTutor() {
               <InputFile onChange={handleChangeFile} />
             </div>
             <div>
-              <img src={imageQualification} />
+              <img src={imagequalification} />
             </div>
           </div>
           <div className='mt-6 flex justify-around'>

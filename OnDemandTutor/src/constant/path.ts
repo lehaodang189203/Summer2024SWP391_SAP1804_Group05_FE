@@ -15,8 +15,8 @@ export const path = {
   requestStudentCurrent: '/requestStudentCurrent', //student
   requestList: '/requests', //tutor and student
   profileTT: '/profile', //tutor
-  paymentSucsess:'/paymentSucsess',
-  paymentFail:'/paymentFail',
+  paymentSucsess: '/paymentSucsess',
+  paymentFail: '/paymentFail',
   detailRequest: '/detailRequest', //chưa được sử dụng
   calender: '/calender', //calender nèk
   Moderator: {
@@ -25,7 +25,7 @@ export const path = {
     listStudentRequest: '/mod/listStudentRequest', //danh sách học sinh tạo req session(phiên học)
     tutorResRegis: '/mod/tutorResRegis', //danh sách giảng viên đăng kí để approved (đang làm)
     tutorPostSession: '/mod/listTutor', // danh sách post giảng viên tạo phiên học
-    listAccountStudent:'/mod/listAccountStudent'
+    listAccountStudent: '/mod/listAccountStudent'
     //danh sách phiên học
     //khiếu nại
   },

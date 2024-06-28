@@ -45,23 +45,23 @@ export interface RequestBody {
   class: string
   timetable: string
   description: string
-  learningmethod: string
+  learningMethod: string
   price: number
   subject: string
-  timestart: string
-  timeend: string
+  timeStart: string
+  timeEnd: string
   title: string
-  totalsessions: number
+  totalSessions: number
 }
 
 export interface RequestTutorBody {
-  specializedSkills: string
+  specializedskills: string
   experience: number
   subject: string
-  qualificationName: string
+  qualificationname: string
   type: string
   introduction: string
-  imageQualification: string
+  imagequalification: string
 }
 
 export interface RequestResult {
