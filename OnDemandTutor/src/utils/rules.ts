@@ -1,17 +1,17 @@
 import * as yup from 'yup'
 
-function testDate(this: yup.TestContext<yup.AnyObject>) {
-  const { timestart, timeend } = this.parent as {
-    timestart: string
-    timeend: string
+function testTime(this: yup.TestContext<yup.AnyObject>) {
+  const { timeStart, timeEnd } = this.parent as {
+    timeStart: string
+    timeEnd: string
   }
-  if (timestart && timeend) {
-    const start = new Date(`1970-01-01T${timestart}:00Z`) // Adding reference date
-    const end = new Date(`1970-01-01T${timeend}:00Z`) // Adding reference date
+  if (timeStart && timeEnd) {
+    const start = new Date(`1970-01-01T${timeStart}:00Z`) // Adding reference date
+    const end = new Date(`1970-01-01T${timeEnd}:00Z`) // Adding reference date
 
     return start < end
   }
-  return timestart === '' || timeend === ''
+  return timeStart === '' || timeEnd === ''
 }
 
 const handleConfirmPasswordYup = (refString: string) => {
@@ -94,10 +94,10 @@ export const updateSchema = yup.object({
 export const requestSchema = yup.object({
   title: yup.string().required('Tựa đề là bắt buộc'),
 
-  timetable: yup.string().required('Chọn buổi học là bắt buộc'), // Expect an array of strings for timetable
+  timeTable: yup.string().required('Chọn buổi học là bắt buộc'), // Expect an array of strings for timetable
 
-  totalsessions: yup.number(),
-  learningmethod: yup
+  totalSessions: yup.number(),
+  learningMethod: yup
     .string()
     .oneOf(
       ['Dạy trực tiếp(offline)', 'Dạy trực tuyến (online)'],
@@ -129,16 +129,16 @@ export const requestSchema = yup.object({
       ],
       'Môn học không hợp lệ'
     ),
-  timeend: yup.string().required('Thời gian kết thúc là bắt buộc').test({
+  timeEnd: yup.string().required('Thời gian kết thúc là bắt buộc').test({
     name: 'time-not-allowed',
     message: 'thời gian không phù hợp',
-    test: testDate
+    test: testTime
   }),
 
-  timestart: yup.string().required('Thời gian bắt đầu là bắt buộc').test({
+  timeStart: yup.string().required('Thời gian bắt đầu là bắt buộc').test({
     name: 'time-not-allowed',
     message: 'thời gian không phù hợp',
-    test: testDate
+    test: testTime
   }),
   description: yup
     .string()

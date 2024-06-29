@@ -1,22 +1,18 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 
 // import { getRefreshTokeNFromLS } from '../../utils/auth'
-import { BellOutlined } from '@ant-design/icons'
-import { Badge } from 'antd'
+import userApi from '../../api/user.api'
+import userImage from '../../assets/img/user.svg'
 import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
-import { LogoutReqBody } from '../../types/user.request.type'
-import { clearLS, getProfileFromLS } from '../../utils/auth'
-import { getAvatarUrl } from '../../utils/utils'
-import Popover from '../Popover/Popover'
-import userImage from '../../assets/img/user.svg'
-import userApi from '../../api/user.api'
 import { User } from '../../types/user.type'
+import { clearLS, getProfileFromLS } from '../../utils/auth'
+import Popover from '../Popover/Popover'
 
-const user:User = getProfileFromLS() // tạo user để in ra số dư trên header
+const user: User = getProfileFromLS() // tạo user để in ra số dư trên header
 export default function NavHeader() {
   //const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
   // const receiveNotification = () => {
@@ -34,15 +30,12 @@ export default function NavHeader() {
 
   const navigate = useNavigate()
 
-
   const { data: ProfileData, refetch } = useQuery({
     queryKey: ['Account'],
     queryFn: userApi.getProfile
   })
 
   console.log(ProfileData)
-
-   
 
   const refresh = refreshToken
 
@@ -65,9 +58,6 @@ export default function NavHeader() {
       }
     )
   }
-
-
-
 
   return (
     <div className='container'>
@@ -123,27 +113,30 @@ export default function NavHeader() {
         {isAuthenticated && (
           <div className='flex justify-center text-center'>
             {user &&
-              (user.roles === 'admin' || user.roles === 'Mod' ? (
+              (user.roles === 'Kiểm duyệt viên' ||
+              user.roles === 'Quản trị viên' ? (
                 <div>
                   <Link
                     to={
-                      user.roles === 'admin'
+                      user.roles === 'Kiểm duyệt viên'
                         ? path.Admin.admin
                         : path.Moderator.mod
                     }
                   >
                     <button className='btn btn-primary shadow-md rounded-md p-3 hover:bg-pink-500'>
-                      {user.roles === 'admin' ? 'Admin' : 'Mod'}
+                      {user.roles === 'Kiểm duyệt viên'
+                        ? 'Kiểm duyệt viên'
+                        : 'Quản trị viên'}
                     </button>
                   </Link>
                 </div>
               ) : (
                 <Link to={path.deposit}>
-                <div className='flex gap-4 rounded-md shadow-lg p-3 pr-4 hover:bg-pink-300'>
-                  <div>Số dư: </div>
-                  {user.accountBalance !== null ? user.accountBalance    : 0}
-                  <div>VNĐ</div>
-                </div>
+                  <div className='flex gap-4 rounded-md shadow-lg p-3 pr-4 hover:bg-pink-300'>
+                    <div>Số dư: </div>
+                    {user.accountBalance !== null ? user.accountBalance : 0}
+                    <div>VNĐ</div>
+                  </div>
                 </Link>
               ))}
           </div>

@@ -4,72 +4,51 @@ import {
   faUserGraduate
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useMutation } from '@tanstack/react-query'
-import queryString from 'query-string'
-import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { studentApi } from '../../api/student.api'
 import me from '../../assets/img/me.jpg'
+import { Tutor } from '../../types/tutor.type'
+import { AcceptTutorBody } from '../../types/user.request.type'
 import Popup from '../../components/Popup/Popup'
-import { acceptTutorBody } from '../../types/user.request.type'
-interface Tutor {
-  id: string
-  experience: number
-  fullname: string
-  gender: string
-  qualificationname: string
-  specializedskills: string
-  subject: string
-}
 
 export default function TutorList() {
   const [isPopupVisible, setIsPopupVisible] = useState(false)
   const [color, setColor] = useState(false)
   const [currentTutor, setCurrentTutor] = useState<Tutor | null>(null)
-  const [tutors, setTutors] = useState<Tutor[]>([])
+
   const navigator = useNavigate()
-  const location = useLocation()
-  const { idRe } = queryString.parse(location.search)
+  const { idReq } = useParams()
 
-  const getTutorMutation = useMutation({
-    mutationFn: async (idre: string) => {
-      const response = await studentApi.viewAllTutorsJoinRequests(idre)
+  console.log(idReq)
 
-      return response.data.data
+  const { data: TutorListProfile } = useQuery({
+    queryKey: ['Tutor', idReq],
+    queryFn: () => studentApi.viewAllTutorsJoinRequests(idReq as string),
+    enabled: !!idReq // chắc chắn phải có idREq thì mới gọi
+  })
+
+  const acceptTutorMutation = useMutation({
+    mutationFn: async (tutor: Tutor) => {
+      const body: AcceptTutorBody = {
+        idTutor: idReq as string,
+        idRequest: tutor.id
+      }
+      // Replace with the actual API call to accept the tutor
+      await studentApi.acceptTutor(body)
+      toast.success('Thành công đăng kí ')
+      navigator('/')
     },
-    onSuccess: (data: Tutor[]) => {
-      setTutors(data)
+    onSuccess: () => {
+      console.log('Tutor accepted successfully')
     },
     onError: (error: any) => {
-      console.error('Error fetching tutors:', error)
+      console.error('Error accepting tutor:', error)
     }
   })
 
-  useEffect(() => {
-    if (typeof idRe === 'string') {
-      getTutorMutation.mutate(idRe)
-    }
-  }, [idRe])
-
-  // const acceptTutorMutation = useMutation({
-  //   mutationFn: async (tutor: Tutor) => {
-  //     const body: acceptTutorBody = {
-  //       idre: idRe as string,
-  //       idtu: tutor.id
-  //     }
-  //     // Replace with the actual API call to accept the tutor
-  //     await studentApi.acceptTutor(body)
-  //     toast.success('Thành công đăng kí ')
-  //     navigator('/')
-  //   },
-  //   onSuccess: () => {
-  //     console.log('Tutor accepted successfully')
-  //   },
-  //   onError: (error: any) => {
-  //     console.error('Error accepting tutor:', error)
-  //   }
-  // })
   const handleClosePopup = () => {
     setIsPopupVisible(false)
     setCurrentTutor(null)
@@ -83,16 +62,17 @@ export default function TutorList() {
     setCurrentTutor(tutor)
     setIsPopupVisible(true)
   }
-  // const handleapproved = (tutor: Tutor) => {
-  //   setCurrentTutor(tutor)
-  //   console.log(' id tutor nèk:', tutor.id)
-  //   console.log(' id cua request:', idRe)
-  //   acceptTutorMutation.mutate(tutor)
-  // }
+
+  const handleapproved = (tutor: Tutor) => {
+    setCurrentTutor(tutor)
+    console.log(' id tutor nèk:', tutor.id)
+    console.log(' id cua request:', idReq)
+    acceptTutorMutation.mutate(tutor)
+  }
 
   return (
     <div>
-      {tutors.map((tutor, index) => (
+      {TutorListProfile?.map((tutor, index) => (
         <div
           key={index}
           className='w-[1230px] rounded-3xl border-3 bg-transparent border-2 h-auto mx-auto my-5 px-5 hover:shadow-lg hover:shadow-gray-900'
@@ -174,7 +154,7 @@ export default function TutorList() {
               <div className='w-full h-full px-auto mx-auto pt-32'>
                 <div className='rounded-lg w-full h-10 bg-pink-400 hover:opacity-80'>
                   <button
-                    // onClick={() => handleapproved(tutor)}
+                    onClick={() => handleapproved(tutor)}
                     className='pt-3'
                   >
                     Chấp nhận
@@ -196,7 +176,6 @@ export default function TutorList() {
       ))}
       {/* Pagination */}
       {/* <Pagination totalItems={tutors.length} itemsPerPage={itemsPerPage} currentPage={currentPage} onPageChange={handlePageChange} /> */}
-
       {isPopupVisible && currentTutor && (
         <Popup
           handleHidden={handleClosePopup}

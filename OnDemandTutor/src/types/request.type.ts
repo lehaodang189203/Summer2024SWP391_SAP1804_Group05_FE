@@ -1,4 +1,4 @@
-export interface DataType {
+export interface Request {
   idrequest: string
   fullname: string
   subject: string

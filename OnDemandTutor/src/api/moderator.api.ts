@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
-import { DataType } from '../types/request.type'
+import { Request } from '../types/request.type'
 import { User } from '../types/user.type'
 import { SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
@@ -26,7 +26,6 @@ export const moderatorApi = {
         'modaretor/viewRequest'
       )
       if (response.status === HttpStatusCode.Ok) {
-        
         return response.data.data
       } else {
         throw new Error('Danh sách trống')
@@ -35,11 +34,10 @@ export const moderatorApi = {
       // Handle network or API errors
       throw new Error('Failed to fetch data')
     }
-  }
-  ,
-  getRequestTutorReg: async (): Promise<DataType[]> => {
+  },
+  getRequestTutorReg: async (): Promise<Request[]> => {
     try {
-      const response = await http.get<SuccessResponseReq<DataType[]>>(
+      const response = await http.get<SuccessResponseReq<Request[]>>(
         'modaretor/viewListTutor'
       )
       if (response.status === HttpStatusCode.Ok) {
@@ -58,9 +56,7 @@ export const moderatorApi = {
     await http.put(`modaretor/rejectProfile?id=${tutorReqID}`),
   getAccount: async (): Promise<User[]> => {
     try {
-      const response = await http.get<User[]>(
-        'user/getAllUser'
-      )
+      const response = await http.get<User[]>('user/getAllUser')
       if (response.status === HttpStatusCode.Ok) {
         return response.data
       } else {

@@ -13,7 +13,7 @@ export default function RegisterAsTutor() {
   const [experience, setExperience] = useState<number | null>(null)
   const [imageQualification, setImageQualification] = useState<string>('')
   const [introduction, setIntroduction] = useState<string>('')
-  const [qualificationName, setQualificationName] = useState<string>('')
+  const [qualifiCationName, setQualificationName] = useState<string>('')
   const [specializedSkills, setSpecializedSkills] = useState<string>('')
   const [subject, setSubject] = useState<string>('')
   const [type, setType] = useState<string>('')
@@ -43,7 +43,7 @@ export default function RegisterAsTutor() {
     if (
       !experience ||
       !introduction ||
-      !qualificationName ||
+      !qualifiCationName ||
       !specializedSkills ||
       !subject ||
       !type
@@ -69,10 +69,10 @@ export default function RegisterAsTutor() {
 
       const formData: RequestTutorBody = {
         experience: experience!,
-        imagequalification: imageUrl,
+        imageQualification: imageUrl,
         introduction,
-        qualificationname: qualificationName,
-        specializedskills: specializedSkills,
+        qualifiCationName,
+        specializedSkills,
         subject,
         type
       }
@@ -125,7 +125,7 @@ export default function RegisterAsTutor() {
               Qualification Name:
               <input
                 type='text'
-                value={qualificationName}
+                value={qualifiCationName}
                 onChange={(e) => setQualificationName(e.target.value)}
                 className='w-full p-2 border rounded'
                 required

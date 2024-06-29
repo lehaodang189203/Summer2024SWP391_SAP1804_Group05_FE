@@ -6,17 +6,17 @@ import {
   faSchool
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Select } from 'antd'
 import Search from 'antd/es/transfer/search'
 import { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
 import { path } from '../../../constant/path'
-import { DataType } from '../../../types/request.type'
+import { Request } from '../../../types/request.type'
 
 const options1 = [
   { label: 'Lọc theo thời gian' },
@@ -37,12 +37,11 @@ const options3 = [
   { value: 'cherry', label: 'Tiếng Anh' }
 ]
 
-//  trang hiện hành
 export default function RequestStudentCurrent() {
-  const { data: RequestData = [] } = useQuery<DataType[]>({
+  const { data: RequestData = [] } = useQuery<Request[]>({
     queryKey: ['Request'],
     queryFn: () => studentApi.approvedRequest(),
-    placeholderData: []
+    placeholderData: keepPreviousData
   })
   const navigate = useNavigate()
   console.log('RequestData', RequestData)
@@ -58,10 +57,10 @@ export default function RequestStudentCurrent() {
   const startIndex = (currentPage - 1) * itemsPerPage
   const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
 
-  const [selectedOption1, setSelectedOption1] = useState(null) // component lọc// sẽ chia nhỏ thành components sau nhen fen
+  const [selectedOption1, setSelectedOption1] = useState(null)
   const [selectedOption2, setSelectedOption2] = useState(null)
   const [selectedOption3, setSelectedOption3] = useState(null)
-  //const [searchTerm, setSearchTerm] = useState('');// component lọc
+
   const handleSelectChange = (option: any) => {
     setSelectedOption1(option)
   }
@@ -71,19 +70,12 @@ export default function RequestStudentCurrent() {
   const handleSelectChange3 = (option: any) => {
     setSelectedOption3(option)
   }
+
   const handleCurRe = (idRe: string) => {
-    viewTutorMutation.mutate(idRe, {
-      onSuccess: () => {
-        navigate(`${path.tutors}/?idRe=${idRe}`)
-      },
-      onError: (error) => {
-        console.log('lõi nè', error)
-      }
-    })
+    // Sử dụng Link để điều hướng đến trang TutorList
+    navigate(`${path.tutors}/${idRe}`)
   }
-  const viewTutorMutation = useMutation({
-    mutationFn: (idRe: any) => studentApi.viewAllTutorsJoinRequests(idRe)
-  })
+
   return (
     <div className='bg-gray-200 w-4/5 p-3'>
       <div className='m-3'>
@@ -112,7 +104,6 @@ export default function RequestStudentCurrent() {
             placeholder='Lọc theo'
             className='w-[200px]'
           />
-          {/* Kính lúp không chạy ????????????? */}
         </div>
         <div className=' ml-5 h-14 flex-nowrap content-center hover:scale-150 transition-transform duration-300 cursor-pointer'>
           <div className=''>
@@ -122,19 +113,16 @@ export default function RequestStudentCurrent() {
       </div>
 
       <div className='p-3'>
-        {' '}
-        {/* quản lí thẻ request ở đây nha fen */}
         <div className='flex justify-between font-bold mr-20 ml-32'>
           <div>Thông tin đơn</div>
           <div>Tình Trạng</div>
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
           {currentItems.length > 0 &&
-            currentItems.map((request: DataType, key) => (
-              <>
+            currentItems.map((request: Request, key) => (
+              <Link to={`/tutor/${request.idrequest}`} key={key}>
                 <div
                   className='m-5 p-3 flex border shadow-md hover:shadow-xl hover:shadow-black rounded-md cursor-pointer'
-                  key={key}
                   onClick={() => handleCurRe(request.idrequest)}
                 >
                   <div className=' w-10/12 bg-slate-100 rounded-xl text-left justify-between text-base p-5 border shadow-md'>
@@ -189,7 +177,7 @@ export default function RequestStudentCurrent() {
                     Đã duyệt
                   </div>
                 </div>
-              </>
+              </Link>
             ))}
         </div>
       </div>

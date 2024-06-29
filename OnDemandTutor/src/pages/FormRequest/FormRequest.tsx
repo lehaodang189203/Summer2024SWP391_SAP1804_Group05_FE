@@ -16,27 +16,27 @@ interface FormRequestProps {
 type FormData = Pick<
   Requestchema,
   | 'class'
-  | 'learningmethod'
+  | 'learningMethod'
   | 'description'
   | 'price'
   | 'subject'
-  | 'timeend'
-  | 'timestart'
-  | 'timetable'
+  | 'timeEnd'
+  | 'timeStart'
+  | 'timeTable'
   | 'title'
-  | 'totalsessions'
+  | 'totalSessions'
 >
 const schema = requestSchema.pick([
   'title',
-  'timetable',
-  'learningmethod',
+  'timeTable',
+  'learningMethod',
   'class',
   'price',
   'subject',
-  'timeend',
-  'timestart',
+  'timeEnd',
+  'timeStart',
   'description',
-  'totalsessions'
+  'totalSessions'
 ])
 
 interface FormRequestProps {
@@ -65,15 +65,15 @@ export default function FormRequest({ onClose }: FormRequestProps) {
 
   const onSubmit = handleSubmit((data) => {
     // Lấy chuỗi timetable từ dữ liệu form
-    const { timetable } = data
+    const { timeTable } = data
 
     // Đếm số lượng mục trong chuỗi timetable
-    const totalSessions = timetable.split(',').length
+    const totalSessions = timeTable.split(',').length
 
     // Tạo một đối tượng mới với totalSessions được gán vào
     const newData = {
       ...data,
-      totalsessions: totalSessions
+      totalSessions: totalSessions
     }
 
     console.log(newData) // In ra đối tượng mới với totalSessions
@@ -155,7 +155,7 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     Phương thức học
                   </label>
                   <select
-                    {...register('learningmethod')}
+                    {...register('learningMethod')}
                     className='ml-8 text-sm w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
                   >
                     <option value=''>Chọn phương thức học</option>
@@ -166,9 +166,9 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                       Dạy trực tuyến (online)
                     </option>
                   </select>
-                  {errors.learningmethod && (
+                  {errors.learningMethod && (
                     <p className='text-red-600 mt-1 text-[0.75rem]'>
-                      {errors.learningmethod.message}
+                      {errors.learningMethod.message}
                     </p>
                   )}
                 </div>
@@ -214,12 +214,12 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                   <label>Thời khóa biểu</label>
                   <Controller
                     control={control}
-                    name='timetable'
+                    name='timeTable'
                     render={({ field }) => (
                       <DateOfWeek
                         value={field.value} // Sử dụng field.value thay vì value trực tiếp
                         onChange={field.onChange} // Sử dụng field.onChange thay vì onChange trực tiếp
-                        errorMessage={errors.timetable?.message}
+                        errorMessage={errors.timeTable?.message}
                       />
                     )}
                   />
@@ -230,12 +230,12 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     Thời gian bắt đầu
                   </label>
                   <Input
-                    name='timestart'
+                    name='timeStart'
                     type='time'
                     register={register}
                     classNameInput='ml-10 w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
                     classNameError='text-red-600 mt-1 text-[0.75rem]'
-                    errorMessage={errors.timestart?.message}
+                    errorMessage={errors.timeStart?.message}
                     // onChange={() => {
                     //   trigger('timeEnd')
                     // }}
@@ -247,14 +247,14 @@ export default function FormRequest({ onClose }: FormRequestProps) {
                     Thời gian kết thúc
                   </label>
                   <Input
-                    name='timeend'
+                    name='timeEnd'
                     type='time'
                     register={register}
                     classNameInput='ml-10 w-[20rem] p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
                     classNameError='text-red-600 mt-1 text-[0.75rem]'
-                    errorMessage={errors.timeend?.message}
+                    errorMessage={errors.timeEnd?.message}
                     onChange={() => {
-                      trigger('timestart')
+                      trigger('timeStart')
                     }}
                   />
                 </div>

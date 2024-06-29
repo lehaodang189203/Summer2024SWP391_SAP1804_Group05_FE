@@ -28,3 +28,27 @@ export type NoUndefinedField<T> = {
 
 export const getAvatarUrl = (avatarName?: string) =>
   avatarName ? `${config.baseUrl}images/${avatarName}` : userImage
+
+// Code xóa các ký tự đặc biệt trên bàn phím
+const removeSpecialCharacter = (str: string) =>
+  // eslint-disable-next-line no-useless-escape
+  str.replace(
+    /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g,
+    ''
+  )
+
+//chuyển path
+export const generateNameId = ({
+  title,
+  idRequest
+}: {
+  title: string
+  idRequest: string
+}) => {
+  return removeSpecialCharacter(title).replace(/\s/g, '-') + `-i-${idRequest}`
+}
+
+export const getIdFromNameId = (nameId: string) => {
+  const arr = nameId.split('-i-')
+  return arr[arr.length - 1] //vị trí cuối
+}

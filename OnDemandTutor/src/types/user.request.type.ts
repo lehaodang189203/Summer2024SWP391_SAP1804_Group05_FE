@@ -43,7 +43,7 @@ export interface reqDeposit {
 
 export interface RequestBody {
   class: string
-  timetable: string
+  timeTable: string
   description: string
   learningMethod: string
   price: number
@@ -58,7 +58,7 @@ export interface RequestTutorBody {
   specializedSkills: string
   experience: number
   subject: string
-  qualifiCationname: string
+  qualifiCationName: string
   type: string
   introduction: string
   imageQualification: string
@@ -81,11 +81,11 @@ export interface ChangePasswordReqBody {
   password: string
   new_password: string
 }
-export interface joinClassBody {
+export interface JoinClassBody {
   idRequest: string
   id: string
 }
-export interface acceptTutorBody {
+export interface AcceptTutorBody {
   idTutor: string
   idRequest: string
 }

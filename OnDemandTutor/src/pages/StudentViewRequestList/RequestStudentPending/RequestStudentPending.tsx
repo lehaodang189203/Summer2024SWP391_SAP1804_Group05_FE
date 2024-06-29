@@ -11,10 +11,10 @@ import Search from 'antd/es/transfer/search'
 import { FaSearch } from 'react-icons/fa'
 import { getProfileFromLS } from '../../../utils/auth'
 import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
-import { DataType } from '../../../types/request.type'
+import { Request } from '../../../types/request.type'
 
 const options1 = [
   { label: 'Lọc theo thời gian' },
@@ -35,10 +35,10 @@ const options3 = [
   { value: 'cherry', label: 'Tiếng Anh' }
 ]
 export function RequestStudentPending() {
-  const { data: RequestData = [] } = useQuery<DataType[]>({
+  const { data: RequestData } = useQuery<Request[]>({
     queryKey: ['Request'],
-    queryFn: () => studentApi.pedingRequest(),
-    placeholderData: []
+    queryFn: () => studentApi.pendingRequest(),
+    placeholderData: keepPreviousData
   })
 
   useEffect(() => {}, [RequestData])
