@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom';
-import BUMBUM from '../../assets/img/BUMBUM.png';
-import Popover from '../Popover/Popover';
-import NavHeader from '../NavHeader';
-import { path } from '../../constant/path';
+import { Link } from 'react-router-dom'
+import BUMBUM from '../../assets/img/BUMBUM.png'
+import Popover from '../Popover/Popover'
+import NavHeader from '../NavHeader'
+import { path } from '../../constant/path'
 
 export default function Header() {
   return (
@@ -33,7 +33,7 @@ export default function Header() {
                   <div className='rounded-3xl shadow-black shadow-xl'>
                     <div className='w-[20rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
                       <Link
-                        to={path.tutors}
+                        to={path.registerAsTutor}
                         className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
                       >
                         Đăng ký thành giảng viên
@@ -48,14 +48,16 @@ export default function Header() {
                   </div>
                 }
               >
-                <div className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
-                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'>
+                <div
+                  className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
+                >
                   Loại dịch vụ
                 </div>
               </Popover>
               <Link
                 to='/'
-className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
                                     after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
               >
                 Hỗ trợ
@@ -68,7 +70,7 @@ className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative 
         </div>
       </div>
     </header>
-  );
+  )
 }
 //  return (
 //    <div className='container'>

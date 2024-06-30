@@ -28,9 +28,10 @@ import ReStuCurrentPage from './pages/StudentViewRequestList/Layout/ReStuCurrent
 import ReStuPending from './pages/StudentViewRequestList/Layout/ReStuPending'
 import TutorList from './pages/TutorList'
 import ChangPassword from './pages/User/pages/ChangePassword'
-import Profile, { default as ProfileTT } from './pages/User/pages/Profile'
+import Profile from './pages/User/pages/Profile'
 // import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
 import PaymentFail from './pages/PaymentCallBack/PaymentFail'
+import ProfileTT from './pages/User/pages/ProfileTT'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -110,7 +111,8 @@ export default function useRouteElements() {
           ),
           children: [
             { index: true, element: <Profile /> },
-            { path: path.changePassword, element: <ChangPassword /> }
+            { path: path.changePassword, element: <ChangPassword /> },
+            { path: path.profileTT, element: <ProfileTT /> }
           ]
         },
 
@@ -147,14 +149,7 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-        {
-          path: path.profileTT, //tutor
-          element: (
-            <MainLayout>
-              <ProfileTT />
-            </MainLayout>
-          )
-        },
+
         {
           path: path.tutors, //student--------------------------------------------------------------------------
           element: (

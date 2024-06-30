@@ -17,6 +17,7 @@ export default function RegisterAsTutor() {
   const [specializedSkills, setSpecializedSkills] = useState<string>('')
   const [subject, setSubject] = useState<string>('')
   const [type, setType] = useState<string>('')
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -26,6 +27,15 @@ export default function RegisterAsTutor() {
 
   const handleChangeFile = (file?: File) => {
     setFile(file || null)
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    } else {
+      setPreviewUrl(null)
+    }
   }
 
   const uploadAvatar = async (file: File): Promise<string> => {
@@ -93,7 +103,7 @@ export default function RegisterAsTutor() {
   }
 
   return (
-    <div className=' flex items-center justify-center bg-black bg-opacity-50'>
+    <div className='flex items-center justify-center bg-black bg-opacity-50'>
       <div className='p-6'>
         <form
           onSubmit={handleSubmit}
@@ -101,7 +111,29 @@ export default function RegisterAsTutor() {
         >
           <div className='space-y-2'>
             <label className='block'>
-              Experience:
+              Giới thiệu :
+              <input
+                type='text'
+                value={introduction}
+                onChange={(e) => setIntroduction(e.target.value)}
+                className='w-full p-2 border rounded'
+                required
+              />
+            </label>
+
+            <label className='block'>
+              Kĩ năng đặc biệt:
+              <input
+                type='text'
+                value={specializedSkills}
+                onChange={(e) => setSpecializedSkills(e.target.value)}
+                className='w-full p-2 border rounded'
+                required
+              />
+            </label>
+
+            <label className='block'>
+              Số năm kinh nghiệm(số):
               <input
                 type='number'
                 value={experience || ''}
@@ -112,17 +144,7 @@ export default function RegisterAsTutor() {
             </label>
 
             <label className='block'>
-              Introduction:
-              <input
-                type='text'
-                value={introduction}
-                onChange={(e) => setIntroduction(e.target.value)}
-                className='w-full p-2 border rounded'
-                required
-              />
-            </label>
-            <label className='block'>
-              Qualification Name:
+              Tên bằng cắp(chứng chỉ):
               <input
                 type='text'
                 value={qualifiCationName}
@@ -131,28 +153,30 @@ export default function RegisterAsTutor() {
                 required
               />
             </label>
+
             <label className='block'>
-              Specialized Skills:
-              <input
-                type='text'
-                value={specializedSkills}
-                onChange={(e) => setSpecializedSkills(e.target.value)}
-                className='w-full p-2 border rounded'
-                required
-              />
-            </label>
-            <label className='block'>
-              Subject:
-              <input
-                type='text'
+              Môn học:
+              <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 className='w-full p-2 border rounded'
                 required
-              />
+              >
+                <option value=''>Chọn môn học</option>
+                <option value='Ngữ văn'>Ngữ văn</option>
+                <option value='Toán học'>Toán học</option>
+                <option value='Vật lý'>Vật lý</option>
+                <option value='Hóa học'>Hóa học</option>
+                <option value='Sinh học'>Sinh học</option>
+                <option value='Lịch sử'>Lịch sử</option>
+                <option value='Địa lý'>Địa lý</option>
+                <option value='Giáo dục công dân'>Giáo dục công dân</option>
+                <option value='Ngoại ngữ'>Ngoại ngữ</option>
+                <option value='Tin học'>Tin học</option>
+              </select>
             </label>
             <label className='block'>
-              Type:
+              Loại :
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
@@ -167,12 +191,11 @@ export default function RegisterAsTutor() {
 
             <div>
               <label htmlFor=''>Hãy chọn ảnh chứng chỉ</label>
-
               <InputFile onChange={handleChangeFile} />
             </div>
             <div>
-              {imageQualification && (
-                <img src={imageQualification} alt='Ảnh chứng chỉ' />
+              {previewUrl && (
+                <img src={previewUrl} alt='Ảnh chứng chỉ' className='mt-4' />
               )}
             </div>
           </div>

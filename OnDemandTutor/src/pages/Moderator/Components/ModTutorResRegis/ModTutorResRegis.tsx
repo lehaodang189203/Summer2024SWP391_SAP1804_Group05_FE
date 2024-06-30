@@ -20,7 +20,6 @@ interface DataType {
 }
 
 export default function ModTutorResRegis() {
-
   const [searchText, setSearchText] = useState('') // liên quan đến giá trị input vào search
   const [selectedRecord, setSelectedRecord] = useState<DataType | null>(null)
   const [open, setOpen] = useState(false)
@@ -28,8 +27,8 @@ export default function ModTutorResRegis() {
   // Lấy danh sách yêu cầu từ API
   const { data: requestData, refetch } = useQuery<any>({
     queryKey: ['RequestTutorReg'],
-    queryFn:() => moderatorApi.getRequestTutorReg(),
-  });
+    queryFn: () => moderatorApi.getRequestTutorReg()
+  })
 
   // Khởi tạo các mutation cho việc phê duyệt và từ chối yêu cầu
   const approveMutation = useMutation({
@@ -53,6 +52,7 @@ export default function ModTutorResRegis() {
       console.log(requestData)
     }
   }, [requestData])
+
   const handleApprove = () => {
     if (selectedRecord) {
       console.log('selectedRecord nè', selectedRecord)
@@ -68,8 +68,6 @@ export default function ModTutorResRegis() {
     }
   }
   const columns: TableColumnsType<DataType> = [
-    
-    
     {
       // định nghĩa từng cột
       title: 'Tên', // tên của cột hay còn gọi là header của cột
@@ -136,7 +134,7 @@ export default function ModTutorResRegis() {
       )
     },
     {
-      title: 'Hành Động',
+      title: 'Xem duyệt',
       dataIndex: 'action',
       className: 'TextAlign',
       fixed: 'right',
@@ -147,7 +145,7 @@ export default function ModTutorResRegis() {
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
             onClick={() => showDetail(record)}
           >
-            Hành Động
+            Chi tiết
           </button>
         </div>
       )
@@ -221,12 +219,15 @@ export default function ModTutorResRegis() {
                       <p>
                         Kĩ năng đặc biệt : {selectedRecord.specializedskills}
                       </p>
-                       {/* <img src={selectedRecord.imageQualification} alt="ảnh" />    // ảnh nè   */}
+                      {/* <img src={selectedRecord.imageQualification} alt="ảnh" />    // ảnh nè   */}
                       <p>Kinh nghiệm dạy : {selectedRecord.experience} Năm</p>
                       <p>Kĩ năng nổi bật: {selectedRecord.specializedskills}</p>
                     </div>
                   ) : (
-                    <p>Ảnh nèk : <img src={selectedRecord.imagequalification} alt="ảnh" /></p>
+                    <p>
+                      Ảnh :{' '}
+                      <img src={selectedRecord.imagequalification} alt='ảnh' />
+                    </p>
                   )}
                 </div>
               )}

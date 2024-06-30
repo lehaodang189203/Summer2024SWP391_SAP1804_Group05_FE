@@ -31,6 +31,7 @@ export interface UpdateReqBody {
   date_of_birth: string // Sử dụng Date để biểu diễn ngày tháng
   gender: string
   phone: string
+  roles: string
 }
 
 export interface LogoutReqBody {
