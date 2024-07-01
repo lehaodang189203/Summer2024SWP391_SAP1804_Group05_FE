@@ -60,78 +60,53 @@ export default function NavHeader() {
     <div className='container'>
       <div className='flex justify-end gap-5'>
         {isAuthenticated && (
-          <div className='flex justify-center text-center'>
-            {user &&
-              (user.roles === roles.moderator || user.roles === roles.admin ? (
-                <div>
-                  <Link
-                    to={
-                      user.roles === roles.moderator
-                        ? path.Moderator.mod
-                        : path.Admin.admin
-                    }
-                  >
-                    <button className='btn btn-primary shadow-md rounded-md p-3 hover:bg-pink-500'>
-                      {user.roles === roles.moderator
-                        ? roles.moderator
-                        : roles.admin}
-                    </button>
-                  </Link>
-                </div>
-              ) : (
-                <Link to={path.deposit}>
-                  <div className='flex gap-4 rounded-md shadow-lg p-3 pr-4 hover:bg-pink-300'>
-                    <div>Số dư: </div>
-                    {user.accountBalance !== null ? user.accountBalance : 0}
-                    <div>VNĐ</div>
-                  </div>
-                </Link>
-              ))}
-          </div>
-        )}
-        {isAuthenticated && (
           <Popover
-            className='flex items-center  hover:text-pink-400 cursor-pointer'
+            className='flex my-2 items-center hover:text-pink-400 cursor-pointer '
             renderPopover={
-              <div className='shadow-md rounded-sm border border-gray-200'>
+              <div className='shadow-md mt-2 rounded-sm border border-gray-200'>
                 <Link
                   to={path.user}
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                 >
                   Tài khoản của tôi
                 </Link>
-                <Link
-                  to='/'
-                  className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                >
-                  Đơn Mua
-                </Link>
-                <Link
-                  to='/deposit'
-                  className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                >
-                  Nạp tiền
-                </Link>
+
+                {profile?.roles === roles.moderator ||
+                  (profile?.roles === roles.admin && (
+                    <Link
+                      to={path.deposit}
+                      className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                    >
+                      Nạp tiền
+                    </Link>
+                  ))}
+
                 {profile?.roles === roles.moderator && (
                   <Link
                     to={path.Moderator.mod}
                     className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                   >
-                    thông báo
+                    Kiểu duyệt
                   </Link>
                 )}
-                <Link
-                  to={path.studentViewRequestList}
-                  className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                >
-                  Xem đơn của bạn(Học Sinh)
-                </Link>
-                <Link
-                  to={path.home}
-                  className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                >
-                  Xem đơn của bạn(Tutor)
-                </Link>
+                {(profile?.roles === roles.student ||
+                  profile?.roles === roles.tutor) && (
+                  <div>
+                    <Link
+                      to={path.studentViewRequestList}
+                      className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                    >
+                      Xem đơn của bạn (Học Sinh)
+                    </Link>
+                    <Link
+                      to={path.tutorViewRequestList}
+                      className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                    >
+                      Xem đơn của bạn (Tutor)
+                    </Link>
+                  </div>
+                )}
+
                 <button
                   onClick={handleLogout}
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'

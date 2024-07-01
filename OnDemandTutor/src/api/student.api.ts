@@ -1,9 +1,10 @@
 import {
   AcceptTutorBody,
   RequestBody,
-  RequestTutorBody
+  RequestTutorBody,
+  UpdateRequest
 } from '../types/user.request.type'
-import { SuccessResponseReq } from './../types/utils.type'
+import { SuccessResponse, SuccessResponseReq } from './../types/utils.type'
 
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
@@ -78,5 +79,11 @@ export const studentApi = {
 
   // // Đăng ký làm gia sư
   registerAsTutor: async (body: RequestTutorBody) =>
-    await http.post(`User/registerAsTutorFB?id=${user.id}`, body)
+    await http.post(`User/registerAsTutorFB?id=${user.id}`, body),
+
+  updateRequest: async (body: UpdateRequest) =>
+    await http.put<SuccessResponse<RequestBody>>(
+      `Student/updateRequest?IDRequest=${body.idReq}`,
+      body.dataUpdate
+    )
 }

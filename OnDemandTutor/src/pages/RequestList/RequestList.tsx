@@ -21,25 +21,22 @@ export default function RequestList() {
   })
 
   const tutorAprrovedReMutation = useMutation({
-    mutationFn: (body: JoinClassBody) => tutorApi.joinClass(body)
+    mutationFn: (body: JoinClassBody) => tutorApi.joinClass(body),
+    onSuccess: (data, variables) => {
+      setSelectedClasses((prevSelectedClasses) => [
+        ...prevSelectedClasses,
+        variables.idRequest
+      ])
+      toast.success(data.data.message)
+    },
+    onError: (data) => {
+      toast.error(data.message)
+    }
   })
 
   const handleAcceptClass = (requestId: string) => {
-    // nếu giảng viên đó không có lớp
     if (!selectedClasses.includes(requestId)) {
-      //toast.success('Bạn nhận lớp thành công');
-
-      tutorAprrovedReMutation.mutate(
-        { idRequest: requestId, id: user.id },
-        {
-          onSuccess: (data) => {
-            toast.success(data.data.message)
-          },
-          onError: (data) => {
-            toast.error(data.message)
-          }
-        }
-      )
+      tutorAprrovedReMutation.mutate({ idRequest: requestId, id: user.id })
     }
   }
 
@@ -74,10 +71,10 @@ export default function RequestList() {
     <>
       <div className='container grid grid-cols-1 md:grid-cols-2 gap-5 h-[1000px]'>
         {currentItems
-          .filter((data) => data.idrequest) // Ensure idrequest is not null or undefined
+          .filter((data) => data.idRequest) // Ensure idrequest is not null or undefined
           .map((data, index) => (
             <div
-              key={data.idrequest || `${data.subject}-${data.class}-${index}`}
+              key={data.idRequest || `${data.subject}-${data.class}-${index}`}
               className='col-span-1'
             >
               <div className='w-[35rem] h-auto rounded-3xl mx-5 my-5 px-5 hover:shadow-2xl hover:shadow-black border border-gray-300'>
@@ -106,25 +103,25 @@ export default function RequestList() {
                   <div className='my-1'>
                     Ngày học:{' '}
                     <span className='text-black font-bold text-md'>
-                      {data.timetable}
+                      {data.timeTable}
                     </span>
                   </div>
                   <div className='my-1'>
                     Thời gian bắt đầu:{' '}
                     <span className='text-black font-bold text-md'>
-                      {data.timestart}
+                      {data.timeStart}
                     </span>
                   </div>
                   <div className='my-1'>
                     Thời gian kết thúc{' '}
                     <span className='text-black font-bold text-md'>
-                      {data.timeend}
+                      {data.timeEnd}
                     </span>
                   </div>
                   <div className='my-1'>
                     Hình thức:{' '}
                     <span className='text-black font-bold text-md'>
-                      {data.learningmethod}
+                      {data.learningMethod}
                     </span>
                   </div>
                   <div className='my-1'>
@@ -139,21 +136,21 @@ export default function RequestList() {
                     {user?.roles === 'Gia sư' ? (
                       <div
                         role='button'
-                        onClick={() => handleAcceptClass(data.idrequest)}
+                        onClick={() => handleAcceptClass(data.idRequest)}
                         className={`rounded-lg w-full h-10 mx-auto justify-center items-center flex ${
-                          selectedClasses.includes(data.idrequest!)
+                          selectedClasses.includes(data.idRequest!)
                             ? 'bg-gray-700 cursor-not-allowed'
                             : 'bg-pink-400 hover:opacity-80'
                         }`}
                         style={{
                           pointerEvents: selectedClasses.includes(
-                            data.idrequest!
+                            data.idRequest!
                           )
                             ? 'none'
                             : 'auto'
                         }}
                       >
-                        {selectedClasses.includes(data.idrequest!)
+                        {selectedClasses.includes(data.idRequest!)
                           ? 'Đã nhận lớp'
                           : 'Nhận Lớp'}
                       </div>

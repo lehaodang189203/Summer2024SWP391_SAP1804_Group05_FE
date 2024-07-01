@@ -8,7 +8,7 @@ import InputNumber from '../../components/InputNumber'
 import DateOfWeek from '../../components/DayOfWeek/DayOfWeek'
 import { studentApi } from '../../api/student.api'
 import { useMutation } from '@tanstack/react-query'
-import { RequestBody } from '../../types/user.request.type'
+import { RequestBody, RequestResult } from '../../types/user.request.type'
 import { toast } from 'react-toastify'
 interface FormRequestProps {
   onClose: () => void
@@ -41,8 +41,9 @@ const schema = requestSchema.pick([
 
 interface FormRequestProps {
   onClose: () => void
+  idRequest?: string
 }
-export default function FormRequest({ onClose }: FormRequestProps) {
+export default function FormRequest({ onClose, idRequest }: FormRequestProps) {
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
 
   const {
@@ -59,8 +60,14 @@ export default function FormRequest({ onClose }: FormRequestProps) {
     resolver: yupResolver(schema)
   })
 
+  //  tạo
   const ReqMutation = useMutation({
     mutationFn: (body: RequestBody) => studentApi.createRequest(body)
+  })
+
+  //  cập nhật
+  const UpdateReqMutation = useMutation({
+    mutationFn: studentApi.updateRequest
   })
 
   const onSubmit = handleSubmit((data) => {
@@ -78,23 +85,30 @@ export default function FormRequest({ onClose }: FormRequestProps) {
 
     console.log(newData) // In ra đối tượng mới với totalSessions
 
-    ReqMutation.mutate(newData, {
-      onSuccess: () => {
-        console.log('11')
-
-        toast.success('Yêu cầu của bạn đang chờ để xét duyệt')
-        // Đóng thông báo xác nhận sau khi submit
-        setShowConfirmation(false)
-        onClose()
-      },
-      onError: (error) => {
-        toast.error(error.message)
-        console.log(error)
-        // Đóng thông báo xác nhận sau khi submit
-        setShowConfirmation(false)
-        onClose()
-      }
-    })
+    if (idRequest) {
+      UpdateReqMutation.mutate(
+        { idReq: idRequest, dataUpdate: newData },
+        {
+          onSuccess: (response) => {
+            toast.success(response.data.message)
+            onClose()
+          },
+          onError: (error) => {
+            toast.error(error.message)
+          }
+        }
+      )
+    } else {
+      ReqMutation.mutate(newData, {
+        onSuccess: () => {
+          toast.success('Yêu cầu của bạn đang chờ để xét duyệt')
+          onClose()
+        },
+        onError: (error) => {
+          toast.error(error.message)
+        }
+      })
+    }
   })
 
   const handleConfirmCancel = () => {

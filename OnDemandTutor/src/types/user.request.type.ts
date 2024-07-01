@@ -24,7 +24,7 @@ export interface ResReqBody {
   phone: string
 }
 
-export interface UpdateReqBody {
+export interface UpdateProfileBody {
   fullName: string
   address: string
   avatar: string
@@ -76,6 +76,11 @@ export interface RequestResult {
   date: string
   timeStart: string
   timeEnd: string
+}
+
+export interface UpdateRequest {
+  idReq: string
+  dataUpdate: RequestBody
 }
 
 export interface ChangePasswordReqBody {

@@ -9,6 +9,7 @@ import { reqDeposit } from '../../types/user.request.type'
 
 import { User, User as UserProfile } from '../../types/user.type'
 import { getProfileFromLS, setProfileToLS } from '../../utils/auth'
+import { path } from '../../constant/path'
 
 const user: User = getProfileFromLS()
 export default function Deposit() {
@@ -76,14 +77,14 @@ export default function Deposit() {
         // Cập nhật accountBalance trong profile
         const updatedProfile: UserProfile = {
           ...result!,
-          id: result!.id || data.id, // Ensure id is always a string
+          id: result!.id || data.id,
           accountBalance: (result?.accountBalance || 0) + amount
         }
         setProfile(updatedProfile)
         setProfileToLS(updatedProfile)
 
         // Sử dụng navigate để chuyển đến URL tương đối
-        navigate('/dashboard') // Ví dụ: chuyển hướng đến trang dashboard sau khi nạp tiền thành công
+        navigate(path.home) // Ví dụ: chuyển hướng đến trang dashboard sau khi nạp tiền thành công
       } else {
         alert(depositResult.message || 'Có lỗi xảy ra, vui lòng thử lại.')
       }
@@ -144,3 +145,11 @@ export default function Deposit() {
     </div>
   )
 }
+
+// NCB
+// Thành công
+
+// 9704198526191432198
+//NGUYEN VAN A
+// 07/15
+// 123456

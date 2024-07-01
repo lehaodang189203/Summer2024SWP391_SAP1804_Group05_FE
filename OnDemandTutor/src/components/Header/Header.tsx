@@ -3,6 +3,11 @@ import BUMBUM from '../../assets/img/BUMBUM.png'
 import Popover from '../Popover/Popover'
 import NavHeader from '../NavHeader'
 import { path } from '../../constant/path'
+import { getProfileFromLS } from '../../utils/auth'
+import { User } from '../../types/user.type'
+import { roles } from '../../constant/roles'
+
+const user: User = getProfileFromLS()
 
 export default function Header() {
   return (
@@ -32,17 +37,20 @@ export default function Header() {
                 renderPopover={
                   <div className='rounded-3xl shadow-black shadow-xl'>
                     <div className='w-[20rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
-                      <Link
-                        to={path.registerAsTutor}
-                        className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
-                      >
-                        Đăng ký thành giảng viên
-                      </Link>
+                      {user.roles !== roles.admin &&
+                        user.roles !== roles.moderator && (
+                          <Link
+                            to={path.registerAsTutor}
+                            className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
+                          >
+                            Đăng ký thành giảng viên
+                          </Link>
+                        )}
                       <Link
                         to={path.requestList}
                         className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-r-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
                       >
-                        danh sách lớp
+                        Danh sách lớp
                       </Link>
                     </div>
                   </div>
@@ -72,25 +80,3 @@ export default function Header() {
     </header>
   )
 }
-//  return (
-//    <div className='container'>
-//      <nav className='z-index-1 relative mx-auto mt-64 w-96 h-10 bg-gray-700 rounded-lg text-center shadow-md flex'>
-//        <Link to='/' className='inline-block w-24 text-white uppercase'>
-//          Home
-//        </Link>
-//        <Link to='/about' className='inline-block w-28 text-white uppercase'>
-//          About
-//        </Link>
-//        <Link to='/blog' className='inline-block w-24 text-white uppercase'>
-//          Blog
-//        </Link>
-//        <Link to='/portfolio' className='inline-block w-40 text-white uppercase'>
-//          Portfolio
-//        </Link>
-//        <Link to='/contact' className='inline-block w-30 text-white uppercase'>
-//          Contact
-//        </Link>
-//        <div className='animation start-home absolute h-full w-24 bg-teal-500 rounded-lg transition-all duration-500 ease-in-out'></div>
-//      </nav>
-//    </div>
-//  )

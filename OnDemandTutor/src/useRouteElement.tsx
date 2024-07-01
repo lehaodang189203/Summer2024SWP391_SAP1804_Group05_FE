@@ -32,6 +32,7 @@ import Profile from './pages/User/pages/Profile'
 // import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
 import PaymentFail from './pages/PaymentCallBack/PaymentFail'
 import ProfileTT from './pages/User/pages/ProfileTT'
+import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -182,14 +183,14 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-        // {
-        //   path: path.paymentSucsess, // student // này là hiển thị thông báo nạp tiền thành công nha fen
-        //   element: (
-        //     <MainLayout>
-        //       <PaymentSuccess />
-        //     </MainLayout>
-        //   )
-        // },
+        {
+          path: path.paymentSucsess, // student // này là hiển thị thông báo nạp tiền thành công nha fen
+          element: (
+            <MainLayout>
+              <PaymentSuccess />
+            </MainLayout>
+          )
+        },
         {
           path: path.paymentFail, // student // này là hiển thị thông báo nạp tiền thành công nha fen
           element: (
@@ -200,6 +201,14 @@ export default function useRouteElements() {
         },
         {
           path: path.studentViewRequestList, //student
+          element: (
+            <MainLayout>
+              <ReStuPending />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.tutorViewRequestList, //student
           element: (
             <MainLayout>
               <ReStuPending />
@@ -237,16 +246,16 @@ export default function useRouteElements() {
               element: <AdminRejectRegister />
             }
           ]
-        }
+        },
 
-        // {
-        //   path: path.deposit,
-        //   element: (
-        //     <MainLayout>
-        //       <Deposit />
-        //     </MainLayout>
-        //   )
-        // },
+        {
+          path: path.deposit,
+          element: (
+            <MainLayout>
+              <Deposit />
+            </MainLayout>
+          )
+        }
       ]
     }
   ])

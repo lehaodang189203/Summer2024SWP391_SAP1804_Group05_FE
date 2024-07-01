@@ -19,6 +19,7 @@ export const path = {
   paymentFail: '/paymentFail',
   detailRequest: '/detailRequest', //chưa được sử dụng
   calender: '/calender', //calender nèk
+  tutorViewRequestList: '/studentViewRequestList', //student
   Moderator: {
     //                                                      mod-------------------------------------
     mod: '/mod',

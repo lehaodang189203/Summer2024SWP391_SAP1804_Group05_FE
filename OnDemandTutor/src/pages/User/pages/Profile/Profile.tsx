@@ -18,7 +18,7 @@ import { setProfileToLS } from '../../../../utils/auth'
 import { storage } from '../../../../utils/firebase'
 import { UpdateSchema, updateSchema } from '../../../../utils/rules'
 
-import { UpdateReqBody } from '../../../../types/user.request.type'
+import { UpdateProfileBody } from '../../../../types/user.request.type'
 
 type FormData = Pick<
   UpdateSchema,
@@ -137,7 +137,7 @@ export default function Profile() {
         }
       }
 
-      const formData: UpdateReqBody = {
+      const formData: UpdateProfileBody = {
         fullName:
           data.fullName !== profile?.fullName
             ? data.fullName

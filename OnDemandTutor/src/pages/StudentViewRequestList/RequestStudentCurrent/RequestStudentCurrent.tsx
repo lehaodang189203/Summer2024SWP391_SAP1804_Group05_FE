@@ -17,6 +17,7 @@ import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
 import { path } from '../../../constant/path'
 import { Request } from '../../../types/request.type'
+import RequestComonents from '../components'
 
 const options1 = [
   { label: 'Lọc theo thời gian' },
@@ -77,7 +78,7 @@ export default function RequestStudentCurrent() {
   }
 
   return (
-    <div className='bg-gray-200 w-4/5 p-3'>
+    <div className='bg-gray-200 w-full p-3'>
       <div className='m-3'>
         <Search />
       </div>
@@ -118,67 +119,9 @@ export default function RequestStudentCurrent() {
           <div>Tình Trạng</div>
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
-          {currentItems.length > 0 &&
-            currentItems.map((request: Request, key) => (
-              <Link to={`/tutor/${request.idrequest}`} key={key}>
-                <div
-                  className='m-5 p-3 flex border shadow-md hover:shadow-xl hover:shadow-black rounded-md cursor-pointer'
-                  onClick={() => handleCurRe(request.idrequest)}
-                >
-                  <div className=' w-10/12 bg-slate-100 rounded-xl text-left justify-between text-base p-5 border shadow-md'>
-                    <div className='text-lg font-bold text-center pr-56 '>
-                      {request.title}
-                    </div>
-                    <div className='flex justify-between'>
-                      <div className='trái'>
-                        <div>
-                          <FontAwesomeIcon
-                            icon={faCalendarDays}
-                            className='mr-2'
-                          />
-                          {request.timetable}
-                        </div>
-                        <div>
-                          <FontAwesomeIcon icon={faSchool} className='mr-2' />
-                          {request.learningmethod}
-                        </div>
-                        <div>
-                          <FontAwesomeIcon
-                            icon={faGraduationCap}
-                            className='mr-2'
-                          />
-                          {request.class}
-                        </div>
-                        <div>
-                          <FontAwesomeIcon icon={faBook} className='mr-2' />
-                          {request.subject}
-                        </div>
-                      </div>
-                      <div className='flex '>
-                        <div>
-                          <div className='font-bold text-lg'>
-                            {' '}
-                            Giá mong muốn{' '}
-                          </div>
-                          <div className='flex gap-3'>
-                            <div>{request.price}</div>
-                            <div>VNĐ</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <FontAwesomeIcon icon={faClock} /> {request.timestart} tới{' '}
-                      {request.timeend}
-                    </div>
-                    <div> Mô tả: {request.description}</div>
-                  </div>
-                  <div className='bg-green-600 shadow-md w-1/6 flex items-center justify-center text-center font-bold rounded-lg ml-2'>
-                    Đã duyệt
-                  </div>
-                </div>
-              </Link>
-            ))}
+          {currentItems.map((request, key) => (
+            <RequestComonents key={key} request={request} />
+          ))}
         </div>
       </div>
       <Pagination

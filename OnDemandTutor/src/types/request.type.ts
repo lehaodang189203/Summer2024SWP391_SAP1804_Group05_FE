@@ -1,13 +1,14 @@
 export interface Request {
-  idrequest: string
-  fullname: string
+  idRequest: string
+  totalSession: number
   subject: string
   title: string
   price: number
   description: string
   class: string
-  learningmethod: string
-  timetable: string
-  timestart: string
-  timeend: string
+  learningMethod: string
+  timeTable: string
+  timeStart: string
+  timeEnd: string
+  status: string
 }
