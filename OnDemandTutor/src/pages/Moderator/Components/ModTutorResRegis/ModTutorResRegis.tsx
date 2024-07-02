@@ -5,23 +5,11 @@ import { Button, Modal, Table, TableColumnsType } from 'antd'
 import { moderatorApi } from '../../../../api/moderator.api'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-interface DataType {
-  id: string
-  fullname: string
-  date_of_birth: string
-  gender: string
-  subject: string
-  experience: number
-  specializedskills: string
-  qualificationname: string // có nhhiều nhen
-  imagequalification: string
-  type: string
-  // statuses: string[];
-}
+import { TutorType } from '../../../../types/tutor.type'
 
 export default function ModTutorResRegis() {
   const [searchText, setSearchText] = useState('') // liên quan đến giá trị input vào search
-  const [selectedRecord, setSelectedRecord] = useState<DataType | null>(null)
+  const [selectedRecord, setSelectedRecord] = useState<TutorType | null>(null)
   const [open, setOpen] = useState(false)
   const [isDetails, setIsDetails] = useState(false)
   // Lấy danh sách yêu cầu từ API
@@ -67,7 +55,7 @@ export default function ModTutorResRegis() {
       rejectMutation.mutate(selectedRecord.id)
     }
   }
-  const columns: TableColumnsType<DataType> = [
+  const columns: TableColumnsType<TutorType> = [
     {
       // định nghĩa từng cột
       title: 'Tên', // tên của cột hay còn gọi là header của cột
@@ -122,7 +110,7 @@ export default function ModTutorResRegis() {
       className: 'TextAlign',
       width: 120,
       fixed: 'right',
-      render: (text: string, record: DataType) => (
+      render: (text: string, record: TutorType) => (
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
@@ -139,7 +127,7 @@ export default function ModTutorResRegis() {
       className: 'TextAlign',
       fixed: 'right',
       width: 150,
-      render: (text: string, record: DataType) => (
+      render: (text: string, record: TutorType) => (
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
@@ -154,7 +142,7 @@ export default function ModTutorResRegis() {
 
   const onChange = () => {}
 
-  const showDetail = (record: DataType) => {
+  const showDetail = (record: TutorType) => {
     setSelectedRecord(record)
     setOpen(true)
     setIsDetails(true)
@@ -163,7 +151,7 @@ export default function ModTutorResRegis() {
     setOpen(false)
     setSelectedRecord(null)
   }
-  const showImg = (record: DataType) => {
+  const showImg = (record: TutorType) => {
     setSelectedRecord(record)
     setOpen(true)
     setIsDetails(false)
@@ -210,23 +198,22 @@ export default function ModTutorResRegis() {
                 <div>
                   {isDetails ? (
                     <div>
-                      <p>Tên : {selectedRecord.fullname}</p>
+                      <p>Tên : {selectedRecord.fullName}</p>
                       <p>Ngày sinh : {selectedRecord.date_of_birth}</p>
                       <p>Giới tính : {selectedRecord.gender}</p>
                       <p>Môn : {selectedRecord.subject}</p>
                       <p>Bằng cấp(Chứng chỉ) : {selectedRecord.type}</p>
-                      <p>Tên bằng Cấp : {selectedRecord.qualificationname}</p>
+                      <p>Tên bằng Cấp : {selectedRecord.qualifiCationName}</p>
                       <p>
-                        Kĩ năng đặc biệt : {selectedRecord.specializedskills}
+                        Kĩ năng đặc biệt : {selectedRecord.specializedSkills}
                       </p>
                       {/* <img src={selectedRecord.imageQualification} alt="ảnh" />    // ảnh nè   */}
                       <p>Kinh nghiệm dạy : {selectedRecord.experience} Năm</p>
-                      <p>Kĩ năng nổi bật: {selectedRecord.specializedskills}</p>
                     </div>
                   ) : (
                     <p>
                       Ảnh :{' '}
-                      <img src={selectedRecord.imagequalification} alt='ảnh' />
+                      <img src={selectedRecord.imageQualifiCation} alt='ảnh' />
                     </p>
                   )}
                 </div>

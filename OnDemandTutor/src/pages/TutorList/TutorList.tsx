@@ -10,14 +10,14 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { studentApi } from '../../api/student.api'
 import me from '../../assets/img/me.jpg'
-import { Tutor } from '../../types/tutor.type'
+import { TutorType } from '../../types/tutor.type'
 import { AcceptTutorBody } from '../../types/user.request.type'
 import Popup from '../../components/Popup/Popup'
 
 export default function TutorList() {
   const [isPopupVisible, setIsPopupVisible] = useState(false)
   const [color, setColor] = useState(false)
-  const [currentTutor, setCurrentTutor] = useState<Tutor | null>(null)
+  const [currentTutor, setCurrentTutor] = useState<TutorType | null>(null)
 
   const navigator = useNavigate()
   const { idReq } = useParams()
@@ -31,7 +31,7 @@ export default function TutorList() {
   })
 
   const acceptTutorMutation = useMutation({
-    mutationFn: async (tutor: Tutor) => {
+    mutationFn: async (tutor: TutorType) => {
       const body: AcceptTutorBody = {
         idTutor: idReq as string,
         idRequest: tutor.id
@@ -58,12 +58,12 @@ export default function TutorList() {
     setColor(!color)
   }
 
-  const handleItemClick = (tutor: Tutor) => {
+  const handleItemClick = (tutor: TutorType) => {
     setCurrentTutor(tutor)
     setIsPopupVisible(true)
   }
 
-  const handleapproved = (tutor: Tutor) => {
+  const handleapproved = (tutor: TutorType) => {
     setCurrentTutor(tutor)
     console.log(' id tutor nèk:', tutor.id)
     console.log(' id cua request:', idReq)
@@ -96,7 +96,7 @@ export default function TutorList() {
                 <div className='justify-start flex pl-2'>
                   <div>
                     <h1 className='text-2xl text-bold-sm text-start'>
-                      Tên Gia sư: {tutor.fullname}
+                      Tên Gia sư: Thành
                     </h1>
                     {/* gender */}
                     <div className='text-lg justify-start flex pl-1 pt-2'>
@@ -104,28 +104,22 @@ export default function TutorList() {
                         icon={faPersonHalfDress}
                         className='pt-2 h-6'
                       />
-                      <span className='pl-2 pt-1'>{tutor.gender}</span>
+                      <span className='pl-2 pt-1'>Nam</span>
                     </div>
                     {/* study */}
                     <div className='text-lg justify-start flex pl-1 pt-2'>
                       <FontAwesomeIcon icon={faSchool} className='pt-2' />
-                      <span className='pl-2 pt-1'>
-                        {tutor.qualificationname}
-                      </span>
+                      <span className='pl-2 pt-1'>HandJob</span>
                     </div>
                     {/* study */}
                     <div className='text-lg justify-start flex pl-1 pt-2'>
                       <FontAwesomeIcon icon={faUserGraduate} className='pt-2' />
-                      <span className='pl-2 pt-1'>
-                        Kinh nghiệm: {tutor.experience} Năm
-                      </span>
+                      <span className='pl-2 pt-1'>Kinh nghiệm: 2 Năm</span>
                     </div>
 
                     {/* Description */}
                     <div className='text-lg justify-start flex pl-1 pt-2'>
-                      <span className='text-start text-sm'>
-                        {tutor.specializedskills}...
-                      </span>
+                      <span className='text-start text-sm'>Học giỏi</span>
                     </div>
                   </div>
                 </div>
@@ -191,7 +185,7 @@ export default function TutorList() {
                   <div className='justify-start flex pl-2'>
                     <div>
                       <h1 className='text-2xl font-bold text-start'>
-                        {currentTutor.fullname}
+                        {currentTutor.fullName}
                       </h1>
                       {/* gender */}
                       <div className='text-lg flex pl-1 pt-2'>
@@ -201,6 +195,18 @@ export default function TutorList() {
                         />
                         <span className='pl-2 pt-1'>{currentTutor.gender}</span>
                       </div>
+
+                      {/* subject */}
+                      <div className='text-lg flex pl-1 pt-2'>
+                        <FontAwesomeIcon
+                          icon={faPersonHalfDress}
+                          className='pt-2 h-6'
+                        />
+                        <span className='pl-2 pt-1'>
+                          {currentTutor.subject}
+                        </span>
+                      </div>
+
                       {/* study */}
                       <div className='text-lg flex pl-1 pt-2'>
                         <FontAwesomeIcon icon={faSchool} className='pt-2' />
@@ -215,12 +221,24 @@ export default function TutorList() {
                           className='pt-2'
                         />
                         <span className='pl-2 pt-1'>
-                          {currentTutor.qualificationname}
+                          {currentTutor.specializedSkills}
                         </span>
                       </div>
                       {/* Description */}
                       <div className='pt-2 text-left'>
-                        {currentTutor.qualificationname}
+                        {currentTutor.qualifiCationName}
+                      </div>
+                      {/* ảnh bằng */}
+                      <div>
+                        <img
+                          src={currentTutor.imageQualifiCation}
+                          alt='Ảnh chứng chỉ'
+                          className='mt-4'
+                        />
+                      </div>
+                      {/* Description */}
+                      <div className='pt-2 text-left'>
+                        {currentTutor.introduction}
                       </div>
                     </div>
                   </div>

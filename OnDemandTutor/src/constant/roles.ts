@@ -1,6 +1,6 @@
 export const roles = {
   student: 'học sinh',
-  tutor: 'giảng viên',
+  tutor: 'gia sư',
   moderator: 'kiểm duyệt viên',
   admin: 'quản trị viên'
 }

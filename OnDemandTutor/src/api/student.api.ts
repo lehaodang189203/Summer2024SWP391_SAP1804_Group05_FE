@@ -11,7 +11,7 @@ import http from '../utils/http'
 
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { Request } from '../types/request.type'
-import { Tutor } from '../types/tutor.type'
+import { TutorType } from '../types/tutor.type'
 import { User } from '../types/user.type'
 
 const user = <User>getProfileFromLS()
@@ -56,7 +56,7 @@ export const studentApi = {
   // Xem tất cả yêu cầu tham gia của gia sư
   async viewAllTutorsJoinRequests(idReq: string) {
     try {
-      const response = await http.get<SuccessResponseReq<Tutor[]>>(
+      const response = await http.get<SuccessResponseReq<TutorType[]>>(
         `Student/viewAllTutorsJoinRequest?requestId=${idReq}`
       )
       if (response.status === HttpStatusCode.Ok) {

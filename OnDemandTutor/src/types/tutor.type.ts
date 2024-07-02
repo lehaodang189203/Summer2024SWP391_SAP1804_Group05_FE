@@ -1,13 +1,13 @@
-export interface Tutor {
+export interface TutorType {
   id: string
-  fullname: string
+  fullName: string
   date_of_birth: string
   gender: string
-  specializedskills: string
+  specializedSkills: string
   experience: number
   subject: string
-  qualificationname: string
+  qualifiCationName: string
   type: string
-  imagequalification: string
+  imageQualifiCation: string
   introduction: string
 }
