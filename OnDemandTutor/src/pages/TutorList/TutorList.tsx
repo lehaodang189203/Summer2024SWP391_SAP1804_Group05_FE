@@ -25,10 +25,12 @@ export default function TutorList() {
   console.log(idReq)
 
   const { data: TutorListProfile } = useQuery({
-    queryKey: ['Tutor', idReq],
+    queryKey: ['Request', idReq],
     queryFn: () => studentApi.viewAllTutorsJoinRequests(idReq as string),
     enabled: !!idReq // chắc chắn phải có idREq thì mới gọi
   })
+
+  console.log(TutorListProfile)
 
   const acceptTutorMutation = useMutation({
     mutationFn: async (tutor: TutorType) => {

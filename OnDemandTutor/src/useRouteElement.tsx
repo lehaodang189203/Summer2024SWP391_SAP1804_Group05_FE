@@ -45,10 +45,6 @@ function RejectedRoute() {
 }
 
 export default function useRouteElements() {
-  // nhiệm vụ nè =)))
-
-  //  cầm cái roles (Student, Tutor, Admin, Moderator) lên chat gpt kêu nó phân rolés để cái roles nào chỉ đc vào cái path đó, riêng admin thì vào đc hết
-
   const routeElements = useRoutes([
     {
       path: '',

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import classNames from 'classnames'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBook,
@@ -25,20 +24,14 @@ interface Props {
 
 export default function RequestComponents({ request, refetch }: Props) {
   const [showButtons, setShowButtons] = useState(false)
-  const timeoutRef = React.useRef<number | null>(null)
   const [showForm, setShowForm] = useState(false)
   const navigate = useNavigate()
 
   const handleMouseEnter = () => {
-    timeoutRef.current = window.setTimeout(() => {
-      setShowButtons(true)
-    }, 500) // 500 milliseconds = 0.5 seconds
+    setShowButtons(true)
   }
 
   const handleMouseLeave = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
     setShowButtons(false)
   }
 
@@ -67,6 +60,8 @@ export default function RequestComponents({ request, refetch }: Props) {
   })
 
   const handleDelete = (idRequest: string) => {
+    console.log(idRequest)
+
     const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa không?')
     if (isConfirmed) {
       handleDeleteRequest.mutate(idRequest)
@@ -75,13 +70,9 @@ export default function RequestComponents({ request, refetch }: Props) {
 
   return (
     <>
+      Sao chép mã
       <div
-        className={classNames(
-          'container m-5 p-3 flex border shadow-md rounded-md relative',
-          {
-            'hover:bg-gray-200': showButtons // Add gray background when hovering
-          }
-        )}
+        className='container m-5 p-3 flex border shadow-md rounded-md relative hover:bg-gray-200'
         key={request.idRequest}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -92,45 +83,42 @@ export default function RequestComponents({ request, refetch }: Props) {
             {request.title}
           </h1>
           <div className='flex justify-between'>
-            <div className='w-[10rem]'>
-              <div>
+            <div className='flex flex-col'>
+              <div className='flex items-center'>
                 <FontAwesomeIcon icon={faCalendarDays} className='mr-2' />
-                {request.timeTable}
+                <span>{request.timeTable}</span>
               </div>
-              <div>
+              <div className='flex items-center'>
                 <FontAwesomeIcon icon={faSchool} className='mr-2' />
-                {request.learningMethod}
+                <span>{request.learningMethod}</span>
               </div>
-              <div>
+              <div className='flex items-center'>
                 <FontAwesomeIcon icon={faGraduationCap} className='mr-2' />
-                {request.class}
+                <span>{request.class}</span>
               </div>
-              <div>
+              <div className='flex items-center'>
                 <FontAwesomeIcon icon={faBook} className='mr-2' />
-                {request.subject}
+                <span>{request.subject}</span>
               </div>
-              {/* time */}
-              <div>
-                <FontAwesomeIcon icon={faClock} /> {request.timeStart} tới{' '}
-                {request.timeEnd}
+              <div className='flex items-center'>
+                <FontAwesomeIcon icon={faClock} className='mr-2' />
+                <span>
+                  {request.timeStart} tới {request.timeEnd}
+                </span>
               </div>
-              {/* description */}
-              <div>Mong muốn: {request.description}</div>
+              <div className='flex items-center'>
+                <span>Mong muốn: {request.description}</span>
+              </div>
             </div>
-            {/* price */}
-            <div>
-              <div>
-                <div className='font-bold text-lg'> Giá mong muốn </div>
-                <div>{request.price}</div>
-              </div>
+            <div className='flex flex-col'>
+              <div className='font-bold text-lg'>Giá mong muốn</div>
+              <div>{request.price}</div>
             </div>
           </div>
         </div>
-        {/* status */}
         <Status request={request} />
-        {/* show buttons when status is pending and hovering */}
         {request.status === statusReq.pending && showButtons && (
-          <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-md'>
+          <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-md z-10'>
             <div className='flex items-center gap-2 p-3 rounded-md'>
               <button
                 onClick={handleOpenPopup}
@@ -147,14 +135,14 @@ export default function RequestComponents({ request, refetch }: Props) {
             </div>
           </div>
         )}
+        {showForm && (
+          <FormRequest
+            idRequest={request.idRequest}
+            onClose={handleCloseForm}
+            refetch={refetch}
+          />
+        )}
       </div>
-      {showForm && (
-        <FormRequest
-          idRequest={request.idRequest}
-          onClose={handleCloseForm}
-          refetch={refetch}
-        />
-      )}
     </>
   )
 }

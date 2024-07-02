@@ -137,13 +137,17 @@ export default function Login() {
   //   mutationFn: () => authApi.loginGG()
   // })
   const signInGoogle = () => {
-    const googleAuthWindow = window.open('http://localhost:7133/api/user/signin-google', '_blank', 'width=500,height=600');
+    const googleAuthWindow = window.open(
+      'http://localhost:7133/api/user/signin-google',
+      '_blank',
+      'width=500,height=600'
+    )
 
     // Optional: You can add some code to check if the window was blocked by the browser.
     if (!googleAuthWindow) {
-        alert('Popup blocked. Please allow popups for this website.');
+      alert('Popup blocked. Please allow popups for this website.')
     }
-};
+  }
   return (
     <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
       <div className='container justify-center flex'>

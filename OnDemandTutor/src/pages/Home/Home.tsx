@@ -2,7 +2,7 @@ import home from '../../assets/img/home.jpg'
 
 export default function Home() {
   return (
-    <div className='h-[100rem] bg-white rounded-3xl shadow-2xl border-red-500 container '>
+    <div className='h-[100rem] bg-white rounded-3xl shadow-2xl border-red-500   '>
       <div className='relative w-full h-[50%]  '>
         <img src={home} className='w-full h-full object-cover rounded-3xl' />
         <div className='absolute top-0 left-0 w-full h-full bg-black opacity-50 rounded-3xl'></div>
