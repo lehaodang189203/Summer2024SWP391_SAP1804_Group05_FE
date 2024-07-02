@@ -30,7 +30,7 @@ const options3 = [
 ]
 
 export function RequestStudentPending() {
-  const { data: RequestData } = useQuery<Request[]>({
+  const { data: RequestData, refetch } = useQuery<Request[]>({
     queryKey: ['Request'],
     queryFn: () => studentApi.pendingRequest(),
     placeholderData: keepPreviousData
@@ -111,7 +111,11 @@ export function RequestStudentPending() {
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
           {currentItems.map((request, key) => (
-            <RequestComponents request={request} />
+            <RequestComponents
+              key={request.idRequest}
+              request={request}
+              refetch={refetch}
+            />
           ))}
         </div>
       </div>

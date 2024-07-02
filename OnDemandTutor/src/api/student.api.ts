@@ -25,7 +25,7 @@ export const studentApi = {
   async pendingRequest() {
     try {
       const response = await http.get<SuccessResponseReq<Request[]>>(
-        `Student/pedingRequest?IDAccount=${user.id}`
+        `Student/pedingRequest?id=${user.id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data

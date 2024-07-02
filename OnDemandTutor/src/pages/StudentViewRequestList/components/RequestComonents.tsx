@@ -28,10 +28,11 @@ export default function RequestComponents({ request, refetch }: Props) {
   const timeoutRef = React.useRef<number | null>(null)
   const [showForm, setShowForm] = useState(false)
   const navigate = useNavigate()
+
   const handleMouseEnter = () => {
     timeoutRef.current = window.setTimeout(() => {
       setShowButtons(true)
-    }, 500) // 1000 milliseconds = 1 second
+    }, 500) // 500 milliseconds = 0.5 seconds
   }
 
   const handleMouseLeave = () => {
@@ -55,7 +56,6 @@ export default function RequestComponents({ request, refetch }: Props) {
     }
   }
 
-  //  chuaư thêm xóa
   const handleDeleteRequest = useMutation({
     mutationFn: (idRequest: string) => studentApi.deleteRequest(idRequest),
     onSuccess: (data) => {
@@ -65,6 +65,13 @@ export default function RequestComponents({ request, refetch }: Props) {
       }
     }
   })
+
+  const handleDelete = (idRequest: string) => {
+    const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa không?')
+    if (isConfirmed) {
+      handleDeleteRequest.mutate(idRequest)
+    }
+  }
 
   return (
     <>
@@ -122,7 +129,7 @@ export default function RequestComponents({ request, refetch }: Props) {
         {/* status */}
         <Status request={request} />
         {/* show buttons when status is pending and hovering */}
-        {'Đang duyệt' === statusReq.pending && showButtons && (
+        {request.status === statusReq.pending && showButtons && (
           <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-md'>
             <div className='flex items-center gap-2 p-3 rounded-md'>
               <button
@@ -132,7 +139,7 @@ export default function RequestComponents({ request, refetch }: Props) {
                 Cập nhật
               </button>
               <button
-                onClick={() => handleDeleteRequest}
+                onClick={() => handleDelete(request.idRequest)}
                 className='bg-red-500 text-white px-4 py-2 rounded-md'
               >
                 Xóa
@@ -141,7 +148,13 @@ export default function RequestComponents({ request, refetch }: Props) {
           </div>
         )}
       </div>
-      {showForm && <FormRequest onClose={handleCloseForm} />}
+      {showForm && (
+        <FormRequest
+          idRequest={request.idRequest}
+          onClose={handleCloseForm}
+          refetch={refetch}
+        />
+      )}
     </>
   )
 }

@@ -84,7 +84,7 @@ export default function NavHeader() {
                   Tài khoản của tôi
                 </Link>
 
-                {user?.roles.toLowerCase() === roles.moderator && (
+                {profile?.roles.toLowerCase() === roles.moderator && (
                   <Link
                     to={path.Moderator.mod}
                     className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
@@ -92,8 +92,8 @@ export default function NavHeader() {
                     Kiểu duyệt
                   </Link>
                 )}
-                {(user?.roles.toLowerCase() === roles.student ||
-                  user?.roles.toLowerCase() === roles.tutor) && (
+                {(profile?.roles.toLowerCase() === roles.student ||
+                  profile?.roles.toLowerCase() === roles.tutor) && (
                   <div>
                     <Link
                       to={path.deposit}
