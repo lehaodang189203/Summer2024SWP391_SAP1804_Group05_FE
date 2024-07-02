@@ -85,5 +85,10 @@ export const studentApi = {
     await http.put<SuccessResponse<RequestBody>>(
       `Student/updateRequest?IDRequest=${body.idReq}`,
       body.dataUpdate
+    ),
+
+  deleteRequest: async (idRequest: string) =>
+    await http.delete<SuccessResponse<any>>(
+      `Student/deleteRequest?IdRquest=${idRequest}`
     )
 }

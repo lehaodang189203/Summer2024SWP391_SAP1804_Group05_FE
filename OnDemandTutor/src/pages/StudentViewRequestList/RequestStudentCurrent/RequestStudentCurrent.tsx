@@ -39,7 +39,7 @@ const options3 = [
 ]
 
 export default function RequestStudentCurrent() {
-  const { data: RequestData = [] } = useQuery<Request[]>({
+  const { data: RequestData = [], refetch } = useQuery<Request[]>({
     queryKey: ['Request'],
     queryFn: () => studentApi.approvedRequest(),
     placeholderData: keepPreviousData
@@ -120,7 +120,7 @@ export default function RequestStudentCurrent() {
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
           {currentItems.map((request, key) => (
-            <RequestComonents key={key} request={request} />
+            <RequestComonents key={key} request={request} refetch={refetch} />
           ))}
         </div>
       </div>

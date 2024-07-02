@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { Suspense, useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import { path } from './constant/path'
 import { AppContext } from './context/app.context'
@@ -90,7 +90,9 @@ export default function useRouteElements() {
           path: path.home,
           element: (
             <MainLayout>
-              <Home />
+              <Suspense fallback={<div>loading</div>}>
+                <Home />
+              </Suspense>
             </MainLayout>
           ),
           index: true

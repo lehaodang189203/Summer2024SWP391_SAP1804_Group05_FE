@@ -1,17 +1,16 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 
 // import { getRefreshTokeNFromLS } from '../../utils/auth'
-import userApi from '../../api/user.api'
 import userImage from '../../assets/img/user.svg'
 import { path } from '../../constant/path'
+import { roles } from '../../constant/roles'
 import { AppContext } from '../../context/app.context'
 import { User } from '../../types/user.type'
 import { clearLS, getProfileFromLS } from '../../utils/auth'
 import Popover from '../Popover/Popover'
-import { roles } from '../../constant/roles'
 
 const user: User = getProfileFromLS() // tạo user để in ra số dư trên header
 export default function NavHeader() {
@@ -31,13 +30,6 @@ export default function NavHeader() {
 
   const navigate = useNavigate()
 
-  const { data: ProfileData } = useQuery({
-    queryKey: ['Account'],
-    queryFn: userApi.getProfile
-  })
-
-  console.log(ProfileData)
-
   const logoutMutation = useMutation({
     mutationFn: (body: any) => authApi.logoutAccount(body)
   })
@@ -55,10 +47,26 @@ export default function NavHeader() {
       }
     )
   }
-
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount)
+  }
   return (
     <div className='container'>
       <div className='flex justify-end gap-5'>
+        {isAuthenticated && (
+          <div className='border-2 px-auto py-auto mt-2 mr-10 rounded-md justify-center items-center flex  font-medium  '>
+            <Link to={path.deposit} className=' '>
+              <span>Số dư:</span>{' '}
+              {formatCurrency(
+                profile?.accountBalance ? profile.accountBalance : 0
+              )}
+            </Link>
+          </div>
+        )}
+
         {isAuthenticated && (
           <Popover
             className='flex my-2 items-center hover:text-pink-400 cursor-pointer '
@@ -71,8 +79,8 @@ export default function NavHeader() {
                   Tài khoản của tôi
                 </Link>
 
-                {profile?.roles === roles.moderator ||
-                  (profile?.roles === roles.admin && (
+                {user?.roles === roles.moderator ||
+                  (user?.roles === roles.admin && (
                     <Link
                       to={path.deposit}
                       className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
@@ -81,7 +89,7 @@ export default function NavHeader() {
                     </Link>
                   ))}
 
-                {profile?.roles === roles.moderator && (
+                {user?.roles === roles.moderator && (
                   <Link
                     to={path.Moderator.mod}
                     className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
@@ -89,9 +97,15 @@ export default function NavHeader() {
                     Kiểu duyệt
                   </Link>
                 )}
-                {(profile?.roles === roles.student ||
-                  profile?.roles === roles.tutor) && (
+                {(user?.roles === roles.student ||
+                  user?.roles === roles.tutor) && (
                   <div>
+                    <Link
+                      to={path.deposit}
+                      className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                    >
+                      Nạp tiền
+                    </Link>
                     <Link
                       to={path.studentViewRequestList}
                       className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'

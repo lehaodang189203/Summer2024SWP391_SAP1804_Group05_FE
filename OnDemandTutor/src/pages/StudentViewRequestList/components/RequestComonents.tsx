@@ -14,12 +14,16 @@ import { statusReq } from '../../../constant/status.Req'
 import { path } from '../../../constant/path'
 import FormRequest from '../../FormRequest/FormRequest'
 import { useNavigate } from 'react-router-dom'
+import { studentApi } from '../../../api/student.api'
+import { useMutation } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 interface Props {
   request: RequestType
+  refetch?: (() => void) | undefined
 }
 
-const RequestComponents: React.FC<Props> = ({ request }) => {
+export default function RequestComponents({ request, refetch }: Props) {
   const [showButtons, setShowButtons] = useState(false)
   const timeoutRef = React.useRef<number | null>(null)
   const [showForm, setShowForm] = useState(false)
@@ -50,6 +54,17 @@ const RequestComponents: React.FC<Props> = ({ request }) => {
       navigate(`${path.tutors}/${idRe}`)
     }
   }
+
+  //  chuaư thêm xóa
+  const handleDeleteRequest = useMutation({
+    mutationFn: (idRequest: string) => studentApi.deleteRequest(idRequest),
+    onSuccess: (data) => {
+      if (refetch) {
+        toast.success(data.data.message)
+        refetch() // refetch lại API khi xóa thành công
+      }
+    }
+  })
 
   return (
     <>
@@ -116,7 +131,10 @@ const RequestComponents: React.FC<Props> = ({ request }) => {
               >
                 Cập nhật
               </button>
-              <button className='bg-red-500 text-white px-4 py-2 rounded-md'>
+              <button
+                onClick={() => handleDeleteRequest}
+                className='bg-red-500 text-white px-4 py-2 rounded-md'
+              >
                 Xóa
               </button>
             </div>
@@ -127,5 +145,3 @@ const RequestComponents: React.FC<Props> = ({ request }) => {
     </>
   )
 }
-
-export default RequestComponents

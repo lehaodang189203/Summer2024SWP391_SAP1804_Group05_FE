@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -7,15 +7,12 @@ import userApi from '../../api/user.api'
 import { AppContext } from '../../context/app.context'
 import { reqDeposit } from '../../types/user.request.type'
 
-import { User, User as UserProfile } from '../../types/user.type'
-import { getProfileFromLS, setProfileToLS } from '../../utils/auth'
-import { path } from '../../constant/path'
+import { User } from '../../types/user.type'
+import { getProfileFromLS } from '../../utils/auth'
 
 const user: User = getProfileFromLS()
 export default function Deposit() {
-  const [fullName, setFullName] = useState<string>('')
-  const [amount, setAmount] = useState<number>(10000)
-  const navigate = useNavigate()
+  const [amount, setAmount] = useState<number>(0)
 
   const {
     isAuthenticated,
@@ -25,69 +22,35 @@ export default function Deposit() {
     setProfile
   } = useContext(AppContext)
 
-  const { data: ProfileData, refetch } = useQuery({
-    queryKey: ['Account'],
-    queryFn: userApi.getProfile
-  })
-
-  console.log(ProfileData)
-
-  const result = ProfileData?.data.data
-  console.log('result', result)
-
   const updateProfileMutation = useMutation({
     mutationFn: userApi.updateProfile
   })
 
   const depositMutation = useMutation({
-    mutationFn: (body: reqDeposit) => paymentApi.deposit(body)
-  })
-  // const depositMutation = useMutation({
-  //     mutationFn: (body: reqDeposit) => paymentApi.deposit(body),
-  //     onSuccess: (data:any) => {
-  //         console.log('data trả về ',data)
-  //         if (data.success) {
-  //             window.location.href = data.data;
-  //         } else {
-  //             alert(data.message || "Có lỗi xảy ra, vui lòng thử lại.");
-  //         }
-  //     },
-  //     onError: (error:any) => {
-  //         console.log(error);
-  //         alert("Có lỗi xảy ra, vui lòng thử lại.");
-  //     }
-  // });
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    const data: reqDeposit = {
-      id: user.id,
-      amount: amount
-    }
-    console.log('data gửi vào ', data)
-    try {
-      const depositResult = await depositMutation.mutateAsync(data)
-
-      console.log('depositResult:', depositResult)
-
-      if (depositResult.success) {
+    mutationFn: (body: reqDeposit) => paymentApi.deposit(body),
+    onSuccess: (data) => {
+      if (data) {
         toast.success('Đang chuyển trang')
-        window.location.href = depositResult.data // Chuyển hướng đến URL từ response
-
-        // Cập nhật accountBalance trong profile
-        const updatedProfile: UserProfile = {
-          ...result!,
-          id: result!.id || data.id,
-          accountBalance: (result?.accountBalance || 0) + amount
-        }
-        setProfile(updatedProfile)
-        setProfileToLS(updatedProfile)
-
-        // Sử dụng navigate để chuyển đến URL tương đối
-        navigate(path.home) // Ví dụ: chuyển hướng đến trang dashboard sau khi nạp tiền thành công
+        window.location.href = data.data.data // Chuyển hướng đến URL từ response
       } else {
-        alert(depositResult.message || 'Có lỗi xảy ra, vui lòng thử lại.')
+        alert('Có lỗi xảy ra, vui lòng thử lại.')
       }
+    },
+    onError: (error) => {
+      console.error(error)
+      alert('Có lỗi xảy ra, vui lòng thử lại.')
+    }
+  })
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    try {
+      const formData: reqDeposit = {
+        id: profile?.id ? profile.id : user.id,
+        amount: amount
+      }
+      depositMutation.mutate(formData)
     } catch (error) {
       console.error('Error during deposit:', error)
       alert('Có lỗi xảy ra, vui lòng thử lại.')
