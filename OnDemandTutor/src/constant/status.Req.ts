@@ -1,4 +1,4 @@
 export const statusReq = {
   approved: 'Đã duyệt',
-  pending: 'Chưa duyệt'
+  pending: 'Đang duyệt'
 }

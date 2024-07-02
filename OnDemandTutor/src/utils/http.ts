@@ -52,7 +52,7 @@ class Http {
         if (url === pathAuth.login || url === pathAuth.register) {
           const data = response.data as AuthResponse
           console.log(data)
-          this.accessToken = data.data.access_token
+          this.accessToken = `Bearer ${data.data.access_token}`
           console.log('accessToken', data.data.access_token)
 
           this.refreshToken = data.data.refresh_token

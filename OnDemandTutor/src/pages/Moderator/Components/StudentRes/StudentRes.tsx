@@ -5,28 +5,16 @@ import { Button, Modal, Table, TableColumnsType } from 'antd'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { moderatorApi } from '../../../../api/moderator.api'
 import { toast } from 'react-toastify'
-
-interface DataType {
-  idrequest: string
-  fullname: string
-  subject: string
-  title: string
-  timetable:string
-  price: number
-  description: string
-  class: string
-  learningmethod: string
-  date: string
-  timestart: string
-  timeend: string
-}
+import { RequestModerator } from '../../../../types/request.type'
 
 export default function StudentRes() {
   // Lấy danh sách yêu cầu từ API
-  const { data: RequestData, refetch } = useQuery<DataType[]>({
+  const { data: RequestData, refetch } = useQuery<RequestModerator[]>({
     queryKey: ['Request'],
-    queryFn: () => moderatorApi.getRequest()
+    queryFn: () => moderatorApi.viewRequests()
   })
+
+  console.log('RequestData', RequestData)
 
   // Khởi tạo các mutation cho việc phê duyệt và từ chối yêu cầu
   const approveMutation = useMutation({
@@ -55,24 +43,24 @@ export default function StudentRes() {
 
   const handleApprove = () => {
     if (selectedRecord) {
-      approveMutation.mutate(selectedRecord.idrequest)
-      console.log('id của thằng request nè ',selectedRecord.idrequest)
+      approveMutation.mutate(selectedRecord.idRequest)
+      console.log('id của thằng request nè ', selectedRecord.idRequest)
     }
   }
 
   const handleReject = () => {
     if (selectedRecord) {
-      rejectMutation.mutate(selectedRecord.idrequest)
+      rejectMutation.mutate(selectedRecord.idRequest)
     }
   }
 
-  const columns: TableColumnsType<DataType> = [
+  const columns: TableColumnsType<RequestModerator> = [
     {
       title: 'Tên Học Sinh',
-      dataIndex: 'fullname',
+      dataIndex: 'fullName',
       onFilter: (value, record) =>
-        record.fullname.indexOf(value as string) === 0,
-      sorter: (a, b) => a.fullname.length - b.fullname.length,
+        record.fullName.indexOf(value as string) === 0,
+      sorter: (a, b) => a.fullName.length - b.fullName.length,
       width: 200,
       fixed: 'left'
     },
@@ -95,22 +83,28 @@ export default function StudentRes() {
     },
     {
       title: 'Phương thức học',
-      dataIndex: 'learningmethod',
+      dataIndex: 'learningMethod',
       width: 150
     },
     {
       title: 'Ngày',
-      dataIndex: 'timetable',
+      dataIndex: 'timeTable',
       width: 150
     },
     {
+      title: 'Số buổi',
+      dataIndex: 'totalSession',
+      width: 150,
+      sorter: (a, b) => a.totalSession - b.totalSession
+    },
+    {
       title: 'Giờ bắt đầu',
-      dataIndex: 'timestart',
+      dataIndex: 'timeStart',
       width: 150
     },
     {
       title: 'Giờ kết thúc',
-      dataIndex: 'timeend',
+      dataIndex: 'timeEnd',
       width: 150
     },
     {
@@ -119,11 +113,11 @@ export default function StudentRes() {
       fixed: 'right',
       className: 'TextAlign',
       width: 100,
-      render: ( record: DataType) => (
+      render: (text: string, record: RequestModerator) => (
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
-            onClick={() => showDetail(record.idrequest)} // Ensure the id is passed correctly
+            onClick={() => showDetail(record.idRequest)} // Ensure the id is passed correctly
           >
             Chi tiết
           </button>
@@ -134,11 +128,13 @@ export default function StudentRes() {
 
   const onChange = () => {} // Placeholder for future implementation
 
-  const [selectedRecord, setSelectedRecord] = useState<DataType | null>(null)
+  const [selectedRecord, setSelectedRecord] = useState<RequestModerator | null>(
+    null
+  )
   const [visible, setVisible] = useState(false)
 
   const showDetail = (id: string) => {
-    const record = RequestData?.find((item) => item.idrequest === id) || null
+    const record = RequestData?.find((item) => item.idRequest === id) || null
     console.log('id', id)
     setSelectedRecord(record)
     setVisible(true)
@@ -151,7 +147,6 @@ export default function StudentRes() {
 
   return (
     <>
-      
       <ModMenu kind='student' style='Option1' />
       <div className='text-left'>Yêu cầu đặt lịch</div>
       <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
@@ -184,18 +179,22 @@ export default function StudentRes() {
               <p className='font-medium'>
                 Tên: {''}
                 <span className='font-bold text-pink-500'>
-                  {selectedRecord.fullname}
+                  {selectedRecord.fullName}
                 </span>
               </p>
               <div className='flex'>
                 <p className='font-medium'>
                   Ngày học:{' '}
                   <span className='line-under'>
-                    {selectedRecord.timetable} <br />
+                    {selectedRecord.timeTable} <br />
+                  </span>
+                  Số ngày học:{' '}
+                  <span className='line-under'>
+                    {selectedRecord.totalSession} <br />
                   </span>
                   Thời gian:{' '}
                   <span className='font-bold'>
-                    từ {selectedRecord.timestart} tới {selectedRecord.timeend}{' '}
+                    từ {selectedRecord.timeStart} tới {selectedRecord.timeEnd}{' '}
                   </span>
                 </p>
               </div>

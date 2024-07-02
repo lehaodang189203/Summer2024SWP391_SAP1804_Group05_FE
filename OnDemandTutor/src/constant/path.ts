@@ -7,7 +7,7 @@ export const path = {
   changePassword: '/user/changePassword', //user
   profile: '/user/profile', //user
   registerAsTutor: '/registerAsTutor', //student
-  tutors: '/tutor/:idReq', //student
+  tutors: '/tutors/:idReq', //student
   checkOut: '/checkout', //student
   paymentcallback: '/paymentcallback', //student
   deposit: '/deposit', //student

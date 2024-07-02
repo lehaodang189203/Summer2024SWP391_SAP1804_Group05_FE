@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
-import { Request } from '../types/request.type'
+import { Request, RequestModerator } from '../types/request.type'
 import { User } from '../types/user.type'
 import { SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
@@ -14,16 +14,10 @@ import http from '../utils/http'
 // }
 //DataType[]
 export const moderatorApi = {
-  approvedRequest: async (ReqID: string) =>
-    await http.put(`modaretor/approvedRequest?requestId=${ReqID}`),
-
-  rejectRequest: async (ReqID: string) =>
-    await http.put(`modaretor/rejectRequest?requestId=${ReqID}`),
-
-  getRequest: async (): Promise<any> => {
+  async viewRequests() {
     try {
-      const response = await http.get<SuccessResponseReq<any>>(
-        'modaretor/viewRequest'
+      const response = await http.get<SuccessResponseReq<RequestModerator[]>>(
+        `/modaretor/viewRequest`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -35,6 +29,12 @@ export const moderatorApi = {
       throw new Error('Failed to fetch data')
     }
   },
+  approvedRequest: async (ReqID: string) =>
+    await http.put(`modaretor/approvedRequest?requestId=${ReqID}`),
+
+  rejectRequest: async (ReqID: string) =>
+    await http.put(`modaretor/rejectRequest?requestId=${ReqID}`),
+
   getRequestTutorReg: async (): Promise<Request[]> => {
     try {
       const response = await http.get<SuccessResponseReq<Request[]>>(

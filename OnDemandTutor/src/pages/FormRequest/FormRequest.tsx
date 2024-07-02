@@ -77,6 +77,7 @@ export default function FormRequest({
       ...data,
       totalSessions: totalSessions
     }
+    console.log(newData)
 
     if (idRequest) {
       UpdateReqMutation.mutate(

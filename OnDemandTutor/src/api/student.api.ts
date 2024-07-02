@@ -1,5 +1,6 @@
 import {
   AcceptTutorBody,
+  JoinClass,
   RequestBody,
   RequestTutorBody,
   UpdateRequest
@@ -54,10 +55,10 @@ export const studentApi = {
   },
 
   // Xem tất cả yêu cầu tham gia của gia sư
-  async viewAllTutorsJoinRequests(idReq: string) {
+  viewAllTutorsJoinRequests: async (requestId: string) => {
     try {
       const response = await http.get<SuccessResponseReq<TutorType[]>>(
-        `Student/viewAllTutorsJoinRequest?requestId=${idReq}`
+        `Student/viewAllTutorsJoinRequest?idRequest=${requestId}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -89,6 +90,6 @@ export const studentApi = {
 
   deleteRequest: async (idRequest: string) =>
     await http.delete<SuccessResponse<any>>(
-      `Student/deleteRequest?IdRquest=${idRequest}`
+      `Student/deleteRequest?idRequest=${idRequest}`
     )
 }

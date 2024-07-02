@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 export default function Footer() {
   return (
-    <footer className='container bg-slate-950 mt-[1rem] rounded-2xl shadow-sm  w-full '>
+    <footer className='  bg-slate-950 mt-[1rem] rounded-2xl shadow-sm  w-full '>
       <div className='mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8'>
         <div className='sm:flex sm:items-center sm:justify-between pr-16'>
           <div className='text-gray-100 mx-10 text-3xl'>OTD-Learning</div>
