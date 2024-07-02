@@ -88,7 +88,8 @@ export const updateSchema = yup.object({
   fullName: yup
     .string()
     .max(160, 'Độ dài tối đa là 160 ký tự')
-    .required('Họ và tên là bắt buộc')
+    .required('Họ và tên là bắt buộc'),
+  roles: yup.string()
 })
 
 export const requestSchema = yup.object({

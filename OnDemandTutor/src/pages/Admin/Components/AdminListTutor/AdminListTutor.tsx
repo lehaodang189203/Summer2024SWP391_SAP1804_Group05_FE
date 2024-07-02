@@ -195,7 +195,7 @@ function AdminListTutor () {
         dataIndex: "detail",
         className: "TextAlign",
         width:100,
-        render: (text: string, record: DataType) => (<div className="flex gap-1">
+        render: ( record: DataType) => (<div className="flex gap-1">
           <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
           onClick={() => showDetail(record)}
           >Chi tiết</button></div>

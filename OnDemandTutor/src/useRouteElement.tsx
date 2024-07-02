@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { Suspense, useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import { path } from './constant/path'
 import { AppContext } from './context/app.context'
@@ -15,7 +15,7 @@ import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/
 import AdminListTutor from './pages/Admin/Components/AdminListTutor'
 import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
 import SessionList from './pages/Admin/Components/SessionList'
-import StudentList from './pages/Admin/Components/StudentList'
+import StudentList from './pages/Admin/Components/AdminStudentList'
 import CheckOut from './pages/CheckOut'
 import Deposit from './pages/Deposit'
 import ModAccountStudent from './pages/Moderator/Components/ModAccountStudent'
@@ -28,15 +28,21 @@ import ReStuCurrentPage from './pages/StudentViewRequestList/Layout/ReStuCurrent
 import ReStuPending from './pages/StudentViewRequestList/Layout/ReStuPending'
 import TutorList from './pages/TutorList'
 import ChangPassword from './pages/User/pages/ChangePassword'
-import Profile, { default as ProfileTT } from './pages/User/pages/Profile'
+import Profile from './pages/User/pages/Profile'
 // import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
 import PaymentFail from './pages/PaymentCallBack/PaymentFail'
 import Dashboard from './pages/Admin/Components/Dashboard'
+import ProfileTT from './pages/User/pages/ProfileTT'
+import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
+import AdminStudentReq from './pages/Admin/Components/AdminStudentReq'
+import AdminStudentReqApproved from './pages/Admin/Components/AdminStudentReqApproved'
+import AdminStudentReqRejected from './pages/Admin/Components/AdminStudentReqRejected'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
   return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
 }
+
 
 function RejectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -89,7 +95,9 @@ export default function useRouteElements() {
           path: path.home,
           element: (
             <MainLayout>
-              <Home />
+              <Suspense fallback={<div>loading</div>}>
+                <Home />
+              </Suspense>
             </MainLayout>
           ),
           index: true
@@ -111,7 +119,8 @@ export default function useRouteElements() {
           ),
           children: [
             { index: true, element: <Profile /> },
-            { path: path.changePassword, element: <ChangPassword /> }
+            { path: path.changePassword, element: <ChangPassword /> },
+            { path: path.profileTT, element: <ProfileTT /> }
           ]
         },
 
@@ -148,14 +157,7 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-        {
-          path: path.profileTT, //tutor
-          element: (
-            <MainLayout>
-              <ProfileTT />
-            </MainLayout>
-          )
-        },
+
         {
           path: path.tutors, //student--------------------------------------------------------------------------
           element: (
@@ -188,14 +190,14 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-        // {
-        //   path: path.paymentSucsess, // student // này là hiển thị thông báo nạp tiền thành công nha fen
-        //   element: (
-        //     <MainLayout>
-        //       <PaymentSuccess />
-        //     </MainLayout>
-        //   )
-        // },
+        {
+          path: path.paymentSucsess, // student // này là hiển thị thông báo nạp tiền thành công nha fen
+          element: (
+            <MainLayout>
+              <PaymentSuccess />
+            </MainLayout>
+          )
+        },
         {
           path: path.paymentFail, // student // này là hiển thị thông báo nạp tiền thành công nha fen
           element: (
@@ -206,6 +208,14 @@ export default function useRouteElements() {
         },
         {
           path: path.studentViewRequestList, //student
+          element: (
+            <MainLayout>
+              <ReStuPending />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.tutorViewRequestList, //student
           element: (
             <MainLayout>
               <ReStuPending />
@@ -237,6 +247,9 @@ export default function useRouteElements() {
             },
             { path: path.Admin.sessionList, element: <SessionList /> },
             { path: path.Admin.studentlist, element: <StudentList /> },
+            { path: path.Admin.adminStudentReq, element: <AdminStudentReq /> },
+            { path: path.Admin.adminStudentReqApproved, element: <AdminStudentReqApproved /> },
+            { path: path.Admin.adminStudentReqRejected, element: <AdminStudentReqRejected /> },
             { path: path.Admin.tutorList, element: <AdminListTutor /> },
             {
               path: path.Admin.confirmProfileRegisterTT,
@@ -248,16 +261,16 @@ export default function useRouteElements() {
             },
             
           ]
-        }
+        },
 
-        // {
-        //   path: path.deposit,
-        //   element: (
-        //     <MainLayout>
-        //       <Deposit />
-        //     </MainLayout>
-        //   )
-        // },
+        {
+          path: path.deposit,
+          element: (
+            <MainLayout>
+              <Deposit />
+            </MainLayout>
+          )
+        }
       ]
     }
   ])

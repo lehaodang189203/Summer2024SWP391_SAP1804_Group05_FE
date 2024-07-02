@@ -1,10 +1,11 @@
 import Search from 'antd/es/transfer/search'
-import ModMenu from '../ModMenu/ModMenu'
+
 import { useEffect, useState } from 'react'
 import { Button, Modal, Table, TableColumnsType } from 'antd'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { moderatorApi } from '../../../../api/moderator.api'
 import { toast } from 'react-toastify'
+import StudentMenu from '../AdminMenu/StudentMenu/StudentMenu'
 
 interface DataType {
   idrequest: string
@@ -21,7 +22,7 @@ interface DataType {
   timeend: string
 }
 
-export default function StudentRes() {
+export default function AdminStudentReqRejected() {
   // Lấy danh sách yêu cầu từ API
   const { data: RequestData, refetch } = useQuery<DataType[]>({
     queryKey: ['Request'],
@@ -151,10 +152,14 @@ export default function StudentRes() {
 
   return (
     <>
-      
-      <ModMenu kind='student' style='Option1' />
-      <div className='text-left'>Yêu cầu đặt lịch</div>
-      <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
+      <div className='text-left'>Yêu cầu đã từ chối</div>
+      <StudentMenu
+            list=""
+            req=""
+            app=""
+            rej="rej"
+            />
+      <div className='text-left shadow-sm shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
         <div className='mb-5'>
           <Search />
         </div>

@@ -14,11 +14,12 @@ export const path = {
   studentViewRequestList: '/studentViewRequestList', //student
   requestStudentCurrent: '/requestStudentCurrent', //student
   requestList: '/requests', //tutor and student
-  profileTT: '/profile', //tutor
+  profileTT: '/user/profileTT', //tutor
   paymentSucsess: '/paymentSucsess',
   paymentFail: '/paymentFail',
   detailRequest: '/detailRequest', //chưa được sử dụng
   calender: '/calender', //calender nèk
+  tutorViewRequestList: '/studentViewRequestList', //student
   Moderator: {
     //                                                      mod-------------------------------------
     mod: '/mod',
@@ -36,6 +37,9 @@ export const path = {
     confirmProfileRegisterTT: '/admin/tutorList/confirmProfileRegisterTT',
     rejectProfileRegisterTT: '/admin/tutorList/rejectProfileRegisterTT', // chưa làm
     studentlist: '/admin/student',
+    adminStudentReq: '/admin/studentReq',
+    adminStudentReqApproved : '/admin/studentReqApproved',
+    adminStudentReqRejected : '/admin/studentReqRejected',
     sessionList: '/admin/sessionList',
     dashBoard:'/admin/dashboard'
   }

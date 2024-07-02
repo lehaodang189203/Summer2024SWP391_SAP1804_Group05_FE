@@ -66,15 +66,6 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
       }
     }
 
-    // Parse the final value based on inputType before submitting
-    const parseFinalValue = () => {
-      if (inputType === 'price') {
-        // Remove commas before parsing
-        return parseFloat(localValue.replace(/,/g, ''))
-      }
-      return parseFloat(localValue)
-    }
-
     return (
       <div className={className}>
         <input

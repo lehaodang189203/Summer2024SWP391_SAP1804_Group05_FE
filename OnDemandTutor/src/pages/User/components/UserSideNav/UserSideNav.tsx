@@ -1,11 +1,10 @@
 import classNames from 'classnames'
 import { Link, NavLink } from 'react-router-dom'
-
-import { path } from '../../../../constant/path'
-import { getAvatarUrl } from '../../../../utils/utils'
 import { useContext } from 'react'
-import { AppContext } from '../../../../context/app.context'
 import userImage from '../../../../assets/img/user.svg'
+import { path } from '../../../../constant/path'
+import { roles } from '../../../../constant/roles'
+import { AppContext } from '../../../../context/app.context'
 export default function UserSideNav() {
   const { profile } = useContext(AppContext)
   return (
@@ -77,11 +76,20 @@ export default function UserSideNav() {
           }
         >
           <div className='mr-3 h-[22px] w-[22px]'>
-            <img
-              src='https://cf.shopee.vn/file/ba61750a46794d8847c3f463c5e71cc4'
-              alt=''
-              className='h-full w-full'
-            />
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth={1.5}
+              stroke='currentColor'
+              className='size-6 fill-blue-400'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z'
+              />
+            </svg>
           </div>
           Đổi mật khẩu
         </NavLink>
@@ -101,8 +109,32 @@ export default function UserSideNav() {
               className='h-full w-full'
             />
           </div>
-          Đơn mua
+          Hồ sơ giảng viên
         </NavLink>
+
+        {profile?.roles === roles.tutor && (
+          <NavLink
+            to={path.profileTT}
+            className={({ isActive }) =>
+              classNames(
+                'mt-4 flex items-center  capitalize transition-colors',
+                {
+                  'text-orange': isActive,
+                  'text-gray-600': !isActive
+                }
+              )
+            }
+          >
+            <div className='mr-3 h-[22px] w-[22px]'>
+              <img
+                src='https://down-vn.img.susercontent.com/file/ba61750a46794d8847c3f463c5e71cc4'
+                alt=''
+                className='h-full w-full'
+              />
+            </div>
+            Hồ sơ giảng viên
+          </NavLink>
+        )}
       </div>
     </div>
   )

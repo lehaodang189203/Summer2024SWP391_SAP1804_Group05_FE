@@ -5,7 +5,7 @@ interface props{
     con:string;
     rej:string;
 }
-function TurorMenu({
+export default function TurorMenu({
     list,
     con,
     rej
@@ -15,7 +15,7 @@ function TurorMenu({
     const rejStyle = rej === 'rej' ? 'bg-blue-500 p-5' : 'hover:bg-blue-400 p-5';
     return ( <>
         <div className="flex bg-transparent justify-center  border-2 shadow-black rounded-2xl shadow-sm">
-            <Link to={path.Admin.tutorList}><button className={ListStyle}>Danh sách giảng viên</button></Link>     
+            <Link to={path.Admin.tutorList}><button className={ListStyle}>Danh sách gia sư</button></Link>     
             <div className="p-5">||</div>
             <Link to={path.Admin.confirmProfileRegisterTT}><button className={conStyle}>Đơn yêu cầu thành giảng viên</button></Link>
             <div className="p-5">||</div>
@@ -51,5 +51,4 @@ function TurorMenu({
 //     </>
 //   )
 }
-
-export default TurorMenu
+ TurorMenu

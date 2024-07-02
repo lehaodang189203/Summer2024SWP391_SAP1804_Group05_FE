@@ -5,13 +5,13 @@ import { SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
-const user = <User>getProfileFromLS()
+// const user = <User>getProfileFromLS()
 
-if (user) {
-  console.log(user)
-} else {
-  console.log('Không có')
-}
+// if (user) {
+//   console.log(user)
+// } else {
+//   console.log('Không có')
+// }
 //DataType[]
 export const moderatorApi = {
   approvedRequest: async (ReqID: string) =>

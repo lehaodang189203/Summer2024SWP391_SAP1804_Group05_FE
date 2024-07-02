@@ -22,13 +22,7 @@ import { UpdateProfileBody } from '../../../../types/user.request.type'
 
 type FormData = Pick<
   UpdateSchema,
-  | 'fullName'
-  | 'phone'
-  | 'date_of_birth'
-  | 'address'
-  | 'gender'
-  | 'avatar'
-  | 'roles'
+  'fullName' | 'phone' | 'date_of_birth' | 'address' | 'gender' | 'avatar'
 >
 
 const profileSchema = updateSchema.pick([
@@ -37,11 +31,10 @@ const profileSchema = updateSchema.pick([
   'phone',
   'date_of_birth',
   'gender',
-  'avatar',
-  'roles'
+  'avatar'
 ])
 
-export default function Profile() {
+export default function ProfileTT() {
   const [urlImage, setUrlImage] = useState<string | null>(null)
 
   const {
@@ -93,7 +86,7 @@ export default function Profile() {
           ? new Date(profile.date_of_birth)
           : new Date(1990, 0, 1)
       )
-      setValue('phone', profile.phone || ''), setValue('roles', profile.roles)
+      setValue('phone', profile.phone || '')
     }
   }, [profile, setValue])
 
@@ -188,7 +181,7 @@ export default function Profile() {
     <div className='pb-10 rounded-sm bg-transparent px-2 shadow-md:px-7 md:pb-20 shadow-black'>
       <div className='border-b border-b-gray py-6'>
         <h1 className='text-lg font-medium capitalize text-gray-900'>
-          Hồ Sơ của tôi
+          Hồ Sơ của giảng viên
         </h1>
         <div className='mt-1 text-sm text-gray-700'>
           Quản lý thông tin hồ sơ để bảo vệ tài khoản

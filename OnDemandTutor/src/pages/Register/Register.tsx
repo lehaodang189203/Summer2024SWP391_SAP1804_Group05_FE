@@ -214,7 +214,7 @@ export default function Register() {
               isLoading={registerAccountMutation.isPending}
               disabled={registerAccountMutation.isPending}
             >
-              Đăng Nhập
+              Đăng Ký
             </Button>
           </div>
         </form>

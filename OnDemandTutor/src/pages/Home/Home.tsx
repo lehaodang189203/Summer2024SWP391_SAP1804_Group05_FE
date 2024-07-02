@@ -2,7 +2,7 @@ import home from '../../assets/img/home.jpg'
 
 export default function Home() {
   return (
-    <div className='h-[100rem] bg-white rounded-3xl shadow-2xl border-red-500  '>
+    <div className='h-[100rem] bg-white rounded-3xl shadow-2xl border-red-500 container '>
       <div className='relative w-full h-[50%]  '>
         <img src={home} className='w-full h-full object-cover rounded-3xl' />
         <div className='absolute top-0 left-0 w-full h-full bg-black opacity-50 rounded-3xl'></div>
@@ -30,7 +30,7 @@ export default function Home() {
           />
           <div>
             <div className='items-end flex'>
-              <span className='text-black text-xl pl-[2rem] border-transpenrant'>
+              <span className='text-black text-xl pl-[2rem] border-transpenrant w-min-[2rem]'>
                 Lớp học ảo eTalk của tôi eTalk cung cấp khả năng video và âm
                 thanh, lớp học ảo và tài liệu học tập kỹ thuật số tương tác cho
                 tất cả các lớp, khiến nó trở thành nền tảng lý tưởng cho gia sư

@@ -1,16 +1,17 @@
 import {
   AcceptTutorBody,
   RequestBody,
-  RequestTutorBody
+  RequestTutorBody,
+  UpdateRequest
 } from '../types/user.request.type'
-import { SuccessResponseReq } from './../types/utils.type'
+import { SuccessResponse, SuccessResponseReq } from './../types/utils.type'
 
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { Request } from '../types/request.type'
-import { Tutor } from '../types/tutor.type'
+import { TutorType } from '../types/tutor.type'
 import { User } from '../types/user.type'
 
 const user = <User>getProfileFromLS()
@@ -24,7 +25,7 @@ export const studentApi = {
   async pendingRequest() {
     try {
       const response = await http.get<SuccessResponseReq<Request[]>>(
-        `Student/pedingRequest?IDAccount=${user.id}`
+        `Student/pedingRequest?id=${user.id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -55,7 +56,7 @@ export const studentApi = {
   // Xem tất cả yêu cầu tham gia của gia sư
   async viewAllTutorsJoinRequests(idReq: string) {
     try {
-      const response = await http.get<SuccessResponseReq<Tutor[]>>(
+      const response = await http.get<SuccessResponseReq<TutorType[]>>(
         `Student/viewAllTutorsJoinRequest?requestId=${idReq}`
       )
       if (response.status === HttpStatusCode.Ok) {
@@ -78,5 +79,16 @@ export const studentApi = {
 
   // // Đăng ký làm gia sư
   registerAsTutor: async (body: RequestTutorBody) =>
-    await http.post(`User/registerAsTutorFB?id=${user.id}`, body)
+    await http.post(`User/registerAsTutorFB?id=${user.id}`, body),
+
+  updateRequest: async (body: UpdateRequest) =>
+    await http.put<SuccessResponse<RequestBody>>(
+      `Student/updateRequest?IDRequest=${body.idReq}`,
+      body.dataUpdate
+    ),
+
+  deleteRequest: async (idRequest: string) =>
+    await http.delete<SuccessResponse<any>>(
+      `Student/deleteRequest?IdRquest=${idRequest}`
+    )
 }

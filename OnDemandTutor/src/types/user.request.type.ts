@@ -24,13 +24,14 @@ export interface ResReqBody {
   phone: string
 }
 
-export interface UpdateReqBody {
+export interface UpdateProfileBody {
   fullName: string
   address: string
   avatar: string
   date_of_birth: string // Sử dụng Date để biểu diễn ngày tháng
   gender: string
   phone: string
+  roles: string
 }
 
 export interface LogoutReqBody {
@@ -75,6 +76,11 @@ export interface RequestResult {
   date: string
   timeStart: string
   timeEnd: string
+}
+
+export interface UpdateRequest {
+  idReq: string
+  dataUpdate: RequestBody
 }
 
 export interface ChangePasswordReqBody {
