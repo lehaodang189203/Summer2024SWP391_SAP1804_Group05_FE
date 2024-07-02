@@ -2,12 +2,14 @@ import { useState } from "react"
 import { Link } from "react-router-dom";
 import BUMBUM from '../../../../assets/img/BUMBUM.png'
 import { path } from "../../../../constant/path";
+import { getProfileFromLS } from "../../../../utils/auth";
 export default function AdminNav(){
     const option = ['DashBar','StudentList','TutorList', 'SessionList']
     const [active, setAtive] = useState("");
     const handleSetActive = (data:string)=> {
         setAtive(data)
     }
+    const user =getProfileFromLS()
     return(
         <div className=" h-full p-2 grid grid-flow-row grid-rows-12">
             <div className="row-span-2"><img src={BUMBUM} alt='logo' /></div>
@@ -28,7 +30,7 @@ export default function AdminNav(){
             </div>
             
 
-            <div className="row-span-1 text-center">Admin: Thanh Nguyen</div>
+            <div className="row-span-1 text-center">Admin: {user.fullname}</div>
         </div>
     )
 }

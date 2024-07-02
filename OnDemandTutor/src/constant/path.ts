@@ -36,7 +36,8 @@ export const path = {
     confirmProfileRegisterTT: '/admin/tutorList/confirmProfileRegisterTT',
     rejectProfileRegisterTT: '/admin/tutorList/rejectProfileRegisterTT', // chưa làm
     studentlist: '/admin/student',
-    sessionList: '/admin/sessionList'
+    sessionList: '/admin/sessionList',
+    dashBoard:'/admin/dashboard'
   }
 } as const
 

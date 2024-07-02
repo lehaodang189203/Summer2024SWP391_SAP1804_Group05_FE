@@ -31,6 +31,7 @@ import ChangPassword from './pages/User/pages/ChangePassword'
 import Profile, { default as ProfileTT } from './pages/User/pages/Profile'
 // import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
 import PaymentFail from './pages/PaymentCallBack/PaymentFail'
+import Dashboard from './pages/Admin/Components/Dashboard'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -230,6 +231,10 @@ export default function useRouteElements() {
           path: path.Admin.admin, //admin--------------------------------------------------------
           element: <AdminLayout />,
           children: [
+            {
+              index:true,
+              element:<Dashboard/>
+            },
             { path: path.Admin.sessionList, element: <SessionList /> },
             { path: path.Admin.studentlist, element: <StudentList /> },
             { path: path.Admin.tutorList, element: <AdminListTutor /> },
@@ -240,7 +245,8 @@ export default function useRouteElements() {
             {
               path: path.Admin.rejectProfileRegisterTT,
               element: <AdminRejectRegister />
-            }
+            },
+            
           ]
         }
 
