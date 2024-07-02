@@ -7,6 +7,7 @@ export const paymentApi = {
   deposit: async (body: reqDeposit) => {
     return await http.post<SuccessResponseReq<string>>(`payment/payment`, body)
   },
+
   paymentcallback: async (body: User) => {
     const response = await http.get<any>(
       `payment/paymentCallBack?id=${body.id}`

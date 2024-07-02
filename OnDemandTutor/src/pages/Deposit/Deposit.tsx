@@ -12,7 +12,7 @@ import { getProfileFromLS } from '../../utils/auth'
 
 const user: User = getProfileFromLS()
 export default function Deposit() {
-  const [amount, setAmount] = useState<number>(0)
+  const [amount, setAmount] = useState<number>(100000)
 
   const {
     isAuthenticated,
@@ -27,19 +27,7 @@ export default function Deposit() {
   })
 
   const depositMutation = useMutation({
-    mutationFn: (body: reqDeposit) => paymentApi.deposit(body),
-    onSuccess: (data) => {
-      if (data) {
-        toast.success('Đang chuyển trang')
-        window.location.href = data.data.data // Chuyển hướng đến URL từ response
-      } else {
-        alert('Có lỗi xảy ra, vui lòng thử lại.')
-      }
-    },
-    onError: (error) => {
-      console.error(error)
-      alert('Có lỗi xảy ra, vui lòng thử lại.')
-    }
+    mutationFn: (body: reqDeposit) => paymentApi.deposit(body)
   })
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -50,7 +38,20 @@ export default function Deposit() {
         id: profile?.id ? profile.id : user.id,
         amount: amount
       }
-      depositMutation.mutate(formData)
+      await depositMutation.mutateAsync(formData, {
+        onSuccess: (data) => {
+          if (data) {
+            toast.success('Đang chuyển trang')
+            window.location.href = data.data.data // Chuyển hướng đến URL từ response
+          } else {
+            alert('Có lỗi xảy ra, vui lòng thử lại.')
+          }
+        },
+        onError: (error) => {
+          console.error(error)
+          alert('Có lỗi xảy ra, vui lòng thử lại.')
+        }
+      })
     } catch (error) {
       console.error('Error during deposit:', error)
       alert('Có lỗi xảy ra, vui lòng thử lại.')
@@ -113,6 +114,6 @@ export default function Deposit() {
 // Thành công
 
 // 9704198526191432198
-//NGUYEN VAN A
+// NGUYEN VAN A
 // 07/15
 // 123456

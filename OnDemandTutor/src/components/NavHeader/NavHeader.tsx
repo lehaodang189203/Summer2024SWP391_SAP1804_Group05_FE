@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
 
@@ -53,6 +53,11 @@ export default function NavHeader() {
       currency: 'VND'
     }).format(amount)
   }
+
+  useEffect(() => {
+    console.log('profile', profile)
+  }, [profile])
+
   return (
     <div className='container'>
       <div className='flex justify-end gap-5'>
@@ -79,17 +84,7 @@ export default function NavHeader() {
                   Tài khoản của tôi
                 </Link>
 
-                {user?.roles === roles.moderator ||
-                  (user?.roles === roles.admin && (
-                    <Link
-                      to={path.deposit}
-                      className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                    >
-                      Nạp tiền
-                    </Link>
-                  ))}
-
-                {user?.roles === roles.moderator && (
+                {user?.roles.toLowerCase() === roles.moderator && (
                   <Link
                     to={path.Moderator.mod}
                     className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
@@ -97,8 +92,8 @@ export default function NavHeader() {
                     Kiểu duyệt
                   </Link>
                 )}
-                {(user?.roles === roles.student ||
-                  user?.roles === roles.tutor) && (
+                {(user?.roles.toLowerCase() === roles.student ||
+                  user?.roles.toLowerCase() === roles.tutor) && (
                   <div>
                     <Link
                       to={path.deposit}

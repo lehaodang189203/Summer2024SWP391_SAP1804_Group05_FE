@@ -6,10 +6,18 @@ import { path } from '../../constant/path'
 import { getProfileFromLS } from '../../utils/auth'
 import { User } from '../../types/user.type'
 import { roles } from '../../constant/roles'
-
-const user: User = getProfileFromLS()
+import { useContext, useEffect, useState } from 'react'
+import { AppContext } from '../../context/app.context'
 
 export default function Header() {
+  const [user, setUser] = useState<User | null>(null)
+  useEffect(() => {
+    const userProfile = getProfileFromLS()
+    if (userProfile) {
+      setUser(userProfile)
+    }
+  }, [])
+
   return (
     <header className='h-[8rem] bg-transparent w-full border-2 shadow-lg rounded-2xl mt-2 mb-5 hover:shadow-black hover:shadow-lg'>
       <div className='max-w-7xl mx-auto px-4'>
@@ -37,8 +45,8 @@ export default function Header() {
                 renderPopover={
                   <div className='rounded-3xl shadow-black shadow-xl'>
                     <div className='w-[20rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
-                      {user.roles !== roles.admin &&
-                        user.roles !== roles.moderator && (
+                      {user?.roles.toLowerCase() !== roles.admin &&
+                        user?.roles.toLowerCase() !== roles.moderator && (
                           <Link
                             to={path.registerAsTutor}
                             className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
