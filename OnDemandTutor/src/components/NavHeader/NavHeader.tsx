@@ -10,6 +10,7 @@ import { roles } from '../../constant/roles'
 import { AppContext } from '../../context/app.context'
 import { clearLS } from '../../utils/auth'
 import Popover from '../Popover/Popover'
+import UserButton from '../UserBotton'
 
 export default function NavHeader() {
   //const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
@@ -58,17 +59,10 @@ export default function NavHeader() {
 
   return (
     <div className='hidden md:flex justify-end gap-5'>
-      {isAuthenticated && (
-        <div className='border-2 px-auto py-auto mt-2 mr-10 rounded-md justify-center items-center flex  font-medium  '>
-          <Link to={path.deposit} className=' '>
-            <span>Số dư:</span>{' '}
-            {formatCurrency(
-              profile?.accountBalance ? profile.accountBalance : 0
-            )}
-          </Link>
-        </div>
-      )}
-
+      <UserButton
+        isAuthenticated={isAuthenticated}
+        profile={profile}
+      />
       {isAuthenticated && (
         <Popover
           className='flex my-2 items-center hover:text-pink-400 cursor-pointer '

@@ -2,16 +2,16 @@ import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { Request, RequestModerator } from '../types/request.type'
 import { User } from '../types/user.type'
 import { SuccessResponseReq } from '../types/utils.type'
-import { getProfileFromLS } from '../utils/auth'
+//import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
-const user = <User>getProfileFromLS()
+// const user = <User>getProfileFromLS()
 
-if (user) {
-  console.log(user)
-} else {
-  console.log('Không có')
-}
+// if (user) {
+//   console.log(user)
+// } else {
+//   console.log('Không có')
+// }
 //DataType[]
 export const moderatorApi = {
   async viewRequests() {
