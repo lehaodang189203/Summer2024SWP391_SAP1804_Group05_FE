@@ -70,7 +70,6 @@ export default function RequestComponents({ request, refetch }: Props) {
 
   return (
     <>
-      Sao chép mã
       <div
         className='container m-5 p-3 flex border shadow-md rounded-md relative hover:bg-gray-200'
         key={request.idRequest}

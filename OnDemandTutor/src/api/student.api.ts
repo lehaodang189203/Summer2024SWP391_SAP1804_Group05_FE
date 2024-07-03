@@ -1,8 +1,8 @@
 import {
   AcceptTutorBody,
-  JoinClass,
   RequestBody,
   RequestTutorBody,
+  SelecTutorReqBody,
   UpdateRequest
 } from '../types/user.request.type'
 import { SuccessResponse, SuccessResponseReq } from './../types/utils.type'
@@ -91,5 +91,11 @@ export const studentApi = {
   deleteRequest: async (idRequest: string) =>
     await http.delete<SuccessResponse<any>>(
       `Student/deleteRequest?idRequest=${idRequest}`
+    ),
+
+  // select Tutor
+  selectTutor: async (body: SelecTutorReqBody) =>
+    await http.post<SuccessResponse<any>>(
+      `Student/SelectTutor?idRequest=${body.idRequest}&idaccounttutor=${body.idTutor}`
     )
 }

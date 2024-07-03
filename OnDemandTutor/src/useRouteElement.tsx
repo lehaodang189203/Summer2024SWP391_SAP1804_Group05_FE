@@ -155,7 +155,7 @@ export default function useRouteElements() {
         },
 
         {
-          path: path.tutors, //student--------------------------------------------------------------------------
+          path: '/tutors/:idReq', //student--------------------------------------------------------------------------
           element: (
             <MainLayout>
               <TutorList />
