@@ -3,77 +3,61 @@ import Search from 'antd/es/transfer/search'
 import { useEffect, useState } from 'react'
 import { Button, Modal, Table, TableColumnsType } from 'antd'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { moderatorApi } from '../../../../api/moderator.api'
 import { toast } from 'react-toastify'
 import StudentMenu from '../AdminMenu/StudentMenu/StudentMenu'
+import { adminAPI } from '../../../../api/admin.api'
+import { RequestModerator } from '../../../../types/request.type'
+import { moderatorApi } from '../../../../api/moderator.api'
 
-interface DataType {
-  idrequest: string
-  fullname: string
-  subject: string
-  title: string
-  timetable:string
-  price: number
-  description: string
-  class: string
-  learningmethod: string
-  date: string
-  timestart: string
-  timeend: string
-}
+
 
 export default function AdminStudentReqApproved() {
   // Lấy danh sách yêu cầu từ API
-  const { data: RequestData, refetch } = useQuery<DataType[]>({
+  const { data: RequestAppData, refetch } = useQuery<RequestModerator[]>({
     queryKey: ['Request'],
-    queryFn: () => moderatorApi.getRequest()
+    queryFn: () => adminAPI.getStudentReqApproved()
   })
 
   // Khởi tạo các mutation cho việc phê duyệt và từ chối yêu cầu
-  const approveMutation = useMutation({
-    mutationFn: (idReq: string) => moderatorApi.approvedRequest(idReq),
-    onSuccess: () => {
-      toast.success('Yêu cầu đã được phê duyệt')
-      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
-      setVisible(false)
-    }
-  })
+  // const approveMutation = useMutation({
+  //   mutationFn: (idReq: string) => moderatorApi.approvedRequest(idReq),
+  //   onSuccess: () => {
+  //     toast.success('Yêu cầu đã được phê duyệt')
+  //     refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
+  //     setVisible(false)
+  //   }
+  // })
 
-  const rejectMutation = useMutation({
+  const rejectRePeMutation = useMutation({
     mutationFn: (idReq: string) => moderatorApi.rejectRequest(idReq),
     onSuccess: () => {
-      toast.success('Yêu cầu đã bị từ chối')
+      toast.success('Yêu cầu đã bị xóa khỏi hệ thống, chuyển vào mục đã từ chối')
       refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
       setVisible(false)
     }
   })
 
   useEffect(() => {
-    if (RequestData) {
-      console.log(RequestData)
+    if (RequestAppData) {
+      console.log(RequestAppData)
     }
-  }, [RequestData])
+  }, [RequestAppData])
 
-  const handleApprove = () => {
+  
+
+  const handleDeleteRe = () => {
     if (selectedRecord) {
-      approveMutation.mutate(selectedRecord.idrequest)
-      console.log('id của thằng request nè ',selectedRecord.idrequest)
+      rejectRePeMutation.mutate(selectedRecord.idRequest)
     }
   }
 
-  const handleReject = () => {
-    if (selectedRecord) {
-      rejectMutation.mutate(selectedRecord.idrequest)
-    }
-  }
-
-  const columns: TableColumnsType<DataType> = [
+  const columns: TableColumnsType<RequestModerator> = [
     {
       title: 'Tên Học Sinh',
-      dataIndex: 'fullname',
+      dataIndex: 'fullName',
       onFilter: (value, record) =>
-        record.fullname.indexOf(value as string) === 0,
-      sorter: (a, b) => a.fullname.length - b.fullname.length,
+        record.fullName.indexOf(value as string) === 0,
+      sorter: (a, b) => a.fullName.length - b.fullName.length,
       width: 200,
       fixed: 'left'
     },
@@ -96,22 +80,22 @@ export default function AdminStudentReqApproved() {
     },
     {
       title: 'Phương thức học',
-      dataIndex: 'learningmethod',
+      dataIndex: 'learningMethod',
       width: 150
     },
     {
       title: 'Ngày',
-      dataIndex: 'timetable',
+      dataIndex: 'timeTable',
       width: 150
     },
     {
       title: 'Giờ bắt đầu',
-      dataIndex: 'timestart',
+      dataIndex: 'timeStart',
       width: 150
     },
     {
       title: 'Giờ kết thúc',
-      dataIndex: 'timeend',
+      dataIndex: 'timeEnd',
       width: 150
     },
     {
@@ -120,11 +104,14 @@ export default function AdminStudentReqApproved() {
       fixed: 'right',
       className: 'TextAlign',
       width: 100,
-      render: ( record: DataType) => (
+      render: (text:string, record: RequestModerator) => (
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
-            onClick={() => showDetail(record.idrequest)} // Ensure the id is passed correctly
+            onClick={() => {
+              console.log(record)
+              showDetail(record.idRequest)}
+            } // Ensure the id is passed correctly
           >
             Chi tiết
           </button>
@@ -135,11 +122,11 @@ export default function AdminStudentReqApproved() {
 
   const onChange = () => {} // Placeholder for future implementation
 
-  const [selectedRecord, setSelectedRecord] = useState<DataType | null>(null)
+  const [selectedRecord, setSelectedRecord] = useState<RequestModerator | null>(null)
   const [visible, setVisible] = useState(false)
 
   const showDetail = (id: string) => {
-    const record = RequestData?.find((item) => item.idrequest === id) || null
+    const record = RequestAppData?.find((item) => item.idRequest === id) || null
     console.log('id', id)
     setSelectedRecord(record)
     setVisible(true)
@@ -165,22 +152,19 @@ export default function AdminStudentReqApproved() {
         </div>
         <Table
           columns={columns}
-          dataSource={RequestData}
+          dataSource={RequestAppData}
           pagination={{ pageSize: 10 }}
           onChange={onChange}
           showSorterTooltip={{ target: 'sorter-icon' }}
           scroll={{ x: 1300, y: 400 }}
         />
         <Modal
-          title='Chi tiết'
-          visible={visible}
+          title={selectedRecord?.title}
+          open={visible}
           onCancel={handleCancel}
           footer={[
-            <Button key='approve' onClick={handleApprove}>
-              Xác nhận
-            </Button>,
-            <Button key='reject' onClick={handleReject}>
-              Từ chối
+            <Button key='reject' onClick={handleDeleteRe}>
+              Xóa đơn đã duyệt ra khỏi hệ thống
             </Button>
           ]}
         >
@@ -189,18 +173,22 @@ export default function AdminStudentReqApproved() {
               <p className='font-medium'>
                 Tên: {''}
                 <span className='font-bold text-pink-500'>
-                  {selectedRecord.fullname}
+                  {selectedRecord.fullName}
                 </span>
               </p>
               <div className='flex'>
                 <p className='font-medium'>
                   Ngày học:{' '}
                   <span className='line-under'>
-                    {selectedRecord.timetable} <br />
+                    {selectedRecord.timeTable} <br />
                   </span>
                   Thời gian:{' '}
                   <span className='font-bold'>
-                    từ {selectedRecord.timestart} tới {selectedRecord.timeend}{' '}
+                    từ {selectedRecord.timeStart} tới {selectedRecord.timeEnd}{' '}
+                  </span><br />
+                  Phương thức học:{' '}
+                  <span className='line-under'>
+                     {selectedRecord.learningMethod}
                   </span>
                 </p>
               </div>

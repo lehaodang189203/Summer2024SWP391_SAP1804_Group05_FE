@@ -2,30 +2,19 @@ import { useState } from "react";
 import { Button, Modal, Table, TableColumnsType} from "antd";
 import Search from "antd/es/transfer/search";
 import StudentMenu from "../AdminMenu/StudentMenu/StudentMenu";
-interface DataTypeStu{
-    id: string,
-    fullName: string,
-    phone: string,
-    email: string,
-    date_of_birth: string,
-    gender: string,
-    roles: string
-    // statuses: string[];
-}
+import { adminAPI } from "../../../../api/admin.api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
-const data = [
-    {
-        id: "21",
-        fullName: "Nguyễn Trí Thành",
-        date_of_birth: "2000-01-19",
-        gender: "Nam",
-        phone: "0899923213",
-        roles: "Học sinh",
-        email: "thanh@gmail.com"
-    }
-];
+
+
 const onChange=( )=>{}
 export default function AdminStudentList () {
+    // Lấy danh sách học sinh
+    const { data: StudentData, refetch } = useQuery<DataTypeStu[]>({
+    queryKey: ['StudentList'],
+    queryFn: () => adminAPI.getStudentList() // đổi lại thành api cảu admin nha, vẫn đang xài api của mod nhé
+    })
     //const [searchText, setSearchText] = useState('');// liên quan đến giá trị input vào search
     const [selectedRecord, setSelectedRecord] = useState<DataTypeStu | null>(null);
     const [visible, setVisible] = useState(false);
@@ -38,8 +27,22 @@ export default function AdminStudentList () {
         setVisible(false);
         setSelectedRecord(null);
     };
+    const removeMutation = useMutation({
+        mutationFn: (idAccount: string) => adminAPI.deleteAccount(idAccount),
+        onSuccess: () => {
+          toast.success('Đã xóa tài khoản')
+          refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
+          setVisible(false)
+        }
+      });
+    const handleDelete = () => {
+        if (selectedRecord) {
+          removeMutation.mutate(selectedRecord.id)
+          console.log('id của thằng request nè ', selectedRecord.id)
+        }
+    };
     const columns: TableColumnsType<DataTypeStu> = [{// định nghĩa từng cột
-        title: "Tên", // tên của cột hay còn gọi là header của cột
+        title: "Tên học sinh", // tên của cột hay còn gọi là header của cột
         dataIndex: "fullName",// xác định trường nào trong interface DataType
         defaultSortOrder: "descend",
         onFilter: (value, record) => record.fullName.indexOf(value as string) === 0,
@@ -74,7 +77,7 @@ export default function AdminStudentList () {
         dataIndex: "detail",
         className: "TextAlign",
         width:100,
-        render: ( record: DataTypeStu) => (<div className="flex gap-1">
+        render: ( text:string ,record: DataTypeStu) => (<div className="flex gap-1">
           <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
           onClick={() => showDetail(record)}
           >Chi tiết</button></div>
@@ -91,7 +94,7 @@ export default function AdminStudentList () {
             app=""
             rej=""
             />
-            <div className=" text-left border-2 p-5 h-[600px] rounded-t-xl shadow-black rounded-2xl shadow-sm mt-5">
+            <div className="text-left shadow-sm shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6">
                 <div className="mb-5">
                     <Search
                     // inputText={searchText}
@@ -103,7 +106,7 @@ export default function AdminStudentList () {
                 <Table
                 className=""
                 columns={columns}
-                dataSource={data}
+                dataSource={StudentData}
                 pagination={{ pageSize: 6 }} 
                 onChange={onChange}
                 showSorterTooltip={{ target: "sorter-icon" }}
@@ -117,19 +120,21 @@ export default function AdminStudentList () {
                     onCancel={handleCancel}
                     footer={[
                         <Button key="back" onClick={handleCancel}>
-                            Sửa
+                            Sửa(chưa thêm api)
                         </Button>,
-                        <Button key="back" onClick={handleCancel}>
+                        <Button key="back" onClick={handleDelete}>
                             Xóa
                         </Button>
                     ]}
                 >
                     {selectedRecord && (
                         <div>
-                            <p> Tên : {selectedRecord.fullName}</p>
-                            <p> Ngày sinh : {selectedRecord.date_of_birth}</p>
-                            <p> Giới tính : {selectedRecord.gender}</p>
-                            <p> Email : {selectedRecord.email}</p>
+                            <p> Tên : {selectedRecord.fullName ?selectedRecord.fullName :'Chưa cập nhập'}</p>
+                            <p> ID: {selectedRecord.id?selectedRecord.id :'Chưa cập nhập'}</p>
+                            <p> Ngày sinh : {selectedRecord.date_of_birth?selectedRecord.date_of_birth :'Chưa cập nhập'}</p>
+                            <p> Giới tính : {selectedRecord.gender?selectedRecord.gender :'Chưa cập nhập'}</p>
+                            <p> Email : {selectedRecord.email?selectedRecord.email :'Chưa cập nhập'}</p>
+                            <p> Số điện thoại : {selectedRecord.phone?selectedRecord.phone :'Chưa cập nhập'}</p>
                         </div>
                         )}
                 </Modal>

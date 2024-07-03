@@ -91,7 +91,7 @@ export default function Header() {
               </Link>
             </div>
           </div>
-          <nav className='h-36 pt-4 md:pt-[48px] col-span-12 md:col-span-5'>
+          <nav className='h-36 pt-1 md:pt-[32px] col-span-12 md:col-span-5'>
             <NavHeader />
           </nav>
         </div>

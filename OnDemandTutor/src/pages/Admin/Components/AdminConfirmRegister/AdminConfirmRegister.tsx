@@ -4,17 +4,19 @@ import { Button, Modal, Table, TableColumnsType } from 'antd'
 import { moderatorApi } from '../../../../api/moderator.api'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { TutorType } from '../../../../types/tutor.type'
+import { AdminTutorType, TutorType } from '../../../../types/tutor.type'
+import TurorMenu from '../AdminMenu/TutorMenu'
+import { adminAPI } from '../../../../api/admin.api'
 
 export default function ModTutorResRegis() {
   const [searchText, setSearchText] = useState('') // liên quan đến giá trị input vào search
-  const [selectedRecord, setSelectedRecord] = useState<TutorType | null>(null)
+  const [selectedRecord, setSelectedRecord] = useState<AdminTutorType | null>(null)
   const [open, setOpen] = useState(false)
   const [isDetails, setIsDetails] = useState(false)
   // Lấy danh sách yêu cầu từ API
   const { data: requestData, refetch } = useQuery<any>({
     queryKey: ['RequestTutorReg'],
-    queryFn: () => moderatorApi.getRequestTutorReg()
+    queryFn: () => adminAPI.getRequestTutorReg()
   })
 
   // Khởi tạo các mutation cho việc phê duyệt và từ chối yêu cầu
@@ -54,11 +56,11 @@ export default function ModTutorResRegis() {
       rejectMutation.mutate(selectedRecord.id)
     }
   }
-  const columns: TableColumnsType<TutorType> = [
+  const columns: TableColumnsType<AdminTutorType> = [
     {
       // định nghĩa từng cột
       title: 'Tên', // tên của cột hay còn gọi là header của cột
-      dataIndex: 'fullname', // xác định trường nào trong interface DataType
+      dataIndex: 'fullName', // xác định trường nào trong interface DataType
       //defaultSortOrder: "descend",
       //onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
       //sorter: (a, b) => a.FullName.length - b.FullName.length,
@@ -94,22 +96,22 @@ export default function ModTutorResRegis() {
     },
     {
       title: 'Tên Bằng Cấp(Chứng chỉ)',
-      dataIndex: 'qualificationname',
+      dataIndex: 'qualifiCationName',
       //defaultSortOrder: "descend"
       width: 200
     },
     {
       title: 'Kĩ Năng Nổi bật',
-      dataIndex: 'specializedskills',
+      dataIndex: 'specializedSkills',
       width: 200
     },
     {
       title: 'Ảnh bằng cấp',
-      dataIndex: 'img',
+      dataIndex: 'imageQualifiCation',
       className: 'TextAlign',
       width: 120,
       fixed: 'right',
-      render: (text: string, record: TutorType) => (
+      render: (text: string, record: AdminTutorType) => (
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
@@ -126,11 +128,13 @@ export default function ModTutorResRegis() {
       className: 'TextAlign',
       fixed: 'right',
       width: 150,
-      render: (text: string, record: TutorType) => (
+      render: (text: string, record: AdminTutorType) => (
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
-            onClick={() => showDetail(record)}
+            onClick={() => {
+              console.log('record',record)
+              showDetail(record)}}
           >
             Chi tiết
           </button>
@@ -141,8 +145,9 @@ export default function ModTutorResRegis() {
 
   const onChange = () => {}
 
-  const showDetail = (record: TutorType) => {
+  const showDetail = (record: AdminTutorType) => {
     setSelectedRecord(record)
+    
     setOpen(true)
     setIsDetails(true)
   }
@@ -150,7 +155,7 @@ export default function ModTutorResRegis() {
     setOpen(false)
     setSelectedRecord(null)
   }
-  const showImg = (record: TutorType) => {
+  const showImg = (record: AdminTutorType) => {
     setSelectedRecord(record)
     setOpen(true)
     setIsDetails(false)
@@ -160,7 +165,11 @@ export default function ModTutorResRegis() {
     <>
       <div>
         <div className='text-left'>Yêu cầu trở thành gia sư</div>
-        {/* //<ModMenu kind='tutor' style='Option1' /> */}
+        <TurorMenu
+            list=""
+            con="con"
+            rej=""
+            />
         <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
           <div className='mb-5'>
             <Search
@@ -208,12 +217,14 @@ export default function ModTutorResRegis() {
                       </p>
                       {/* <img src={selectedRecord.imageQualification} alt="ảnh" />    // ảnh nè   */}
                       <p>Kinh nghiệm dạy : {selectedRecord.experience} Năm</p>
+                      <p>Giới thiệu : {selectedRecord.introduction} </p>
                     </div>
                   ) : (
-                    <p>
+                    <div>
                       Ảnh :{' '}
-                      <img src={selectedRecord.imageQualifiCation} alt='ảnh' />
-                    </p>
+                      <p>{selectedRecord.imageQualification}</p>
+                      <img src={selectedRecord.imageQualification} alt='ảnh' />
+                    </div>
                   )}
                 </div>
               )}

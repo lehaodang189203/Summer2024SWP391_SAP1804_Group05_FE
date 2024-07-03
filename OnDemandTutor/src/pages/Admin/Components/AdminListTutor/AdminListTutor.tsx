@@ -1,151 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import TurorMenu from "../AdminMenu/TutorMenu";
 import { Button, Modal, Table, TableColumnsType} from "antd";
 import Search from "antd/es/transfer/search";
-interface DataType{
-    AccountID: string,
-    FullName:string,
-    Date_Of_Birth:string,
-    Gender:string,
-    SubjectName:string[],
-    Experience:number,
-    SpecializedSkill:string,
-    QualificationName:string,
-    Img:string,
-    Type:string
-    // statuses: string[];
-}
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { AdminTutorType } from "../../../../types/tutor.type";
+import { toast } from "react-toastify";
+import { adminAPI } from "../../../../api/admin.api";
 
-const data = [
-    {
-        AccountID: "12",
-        FullName: "Nguyễn Trí Thành",
-        Date_Of_Birth: "2003-11-27",
-        Gender: "Nam",
-        SubjectName: ["Toán","Ngữ Văn"],
-        Experience: 4,
-        SpecializedSkill: "Đọc Hiểu tiếng Việt",
-        QualificationName: "Bằng Cử nhân FPT",
-        Img: "url1",
-        Type: "Bằng"    
-    }   ,
-    {
-        AccountID: "13",
-        FullName: "Lê Văn An",
-        Date_Of_Birth: "2002-05-15",
-        Gender: "Nam",
-        SubjectName: "Vật Lý",
-        Experience: 3,
-        SpecializedSkill: "Giải Tích",
-        QualificationName: "Bằng Thạc sĩ",
-        Img: "url2",
-        Type: "Bằng"
-    },
-    {
-        AccountID: "14",
-        FullName: "Trần Thị Hoa",
-        Date_Of_Birth: "2001-08-09",
-        Gender: "Nữ",
-        SubjectName: "Hóa Học",
-        Experience: 5,
-        SpecializedSkill: "Phân Tích Hóa Học",
-        QualificationName: "Bằng Tiến sĩ",
-        Img: "url3",
-        Type: "Bằng"
-    },
-    {
-        AccountID: "15",
-        FullName: "Phạm Ngọc Minh",
-        Date_Of_Birth: "2000-12-22",
-        Gender: "Nam",
-        SubjectName: "Sinh Học",
-        Experience: 6,
-        SpecializedSkill: "Nghiên Cứu Sinh Học",
-        QualificationName: "Bằng Cử nhân",
-        Img: "url4",
-        Type: "Bằng"
-    },
-    {
-        AccountID: "16",
-        FullName: "Đỗ Hồng Quân",
-        Date_Of_Birth: "2004-04-18",
-        Gender: "Nam",
-        SubjectName: "Tiếng Anh",
-        Experience: 2,
-        SpecializedSkill: "Dịch Thuật",
-        QualificationName: "Bằng Cử nhân",
-        Img: "url5",
-        Type: "Chứng Chỉ"
-    },
-    {
-        AccountID: "17",
-        FullName: "Ngô Thanh Hương",
-        Date_Of_Birth: "1999-09-30",
-        Gender: "Nữ",
-        SubjectName: "Lịch Sử",
-        Experience: 7,
-        SpecializedSkill: "Phân Tích Lịch Sử",
-        QualificationName: "Bằng Thạc sĩ",
-        Img: "url6",
-        Type: "Bằng"
-    },
-    {
-        AccountID: "18",
-        FullName: "Bùi Văn Phúc",
-        Date_Of_Birth: "2003-11-27",
-        Gender: "Nam",
-        SubjectName: "Địa Lý",
-        Experience: 4,
-        SpecializedSkill: "Phân Tích Địa Lý",
-        QualificationName: "Bằng Tiến sĩ",
-        Img: "url7",
-        Type: "Chứng Chỉ"
-    },
-    {
-        AccountID: "19",
-        FullName: "Lý Phương Mai",
-        Date_Of_Birth: "2002-03-14",
-        Gender: "Nữ",
-        SubjectName: "Tin Học",
-        Experience: 3,
-        SpecializedSkill: "Lập Trình",
-        QualificationName: "Bằng Cử nhân",
-        Img: "url8",
-        Type: "Bằng"
-    },
-    {
-        AccountID: "20",
-        FullName: "Dương Ngọc Lan",
-        Date_Of_Birth: "2001-07-07",
-        Gender: "Nữ",
-        SubjectName: "Văn Học",
-        Experience: 5,
-        SpecializedSkill: "Phân Tích Văn Học",
-        QualificationName: "Bằng Thạc sĩ",
-        Img: "url9",
-        Type: "Chứng Chỉ"
-    },
-    {
-        AccountID: "21",
-        FullName: "Trịnh Quốc Khánh",
-        Date_Of_Birth: "2000-01-19",
-        Gender: "Nam",
-        SubjectName: "Thể Dục",
-        Experience: 6,
-        SpecializedSkill: "Huấn Luyện Thể Thao",
-        QualificationName: "Bằng Tiến sĩ",
-        Img: "url10",
-        Type: "Bằng"
-    }
-];
+
 const onChange=( )=>{}
 function AdminListTutor () {
-    const [searchText, setSearchText] = useState('');// liên quan đến giá trị input vào search
-    const [selectedRecord, setSelectedRecord] = useState<DataType | null>(null);
+    const { data: TutorList, refetch } = useQuery<AdminTutorType[]>({
+        queryKey: ['TutorList'],
+        queryFn: () => adminAPI.getTutorList()
+      })
+    
+      console.log('TutorList', TutorList)
+    
+      // Khởi tạo các mutation cho việc phê duyệt và từ chối yêu cầu
+      const removeMutation = useMutation({
+        mutationFn: (idAccount: string) => adminAPI.deleteAccount(idAccount),
+        onSuccess: () => {
+          toast.success('Đã xóa tài khoản')
+          refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
+          setVisible(false)
+        }
+      })
+    
+      useEffect(() => {
+        if (TutorList) {
+          console.log('TutorList',TutorList)
+        }
+      }, [TutorList])
+    
+      const handleDelete = () => {
+        if (selectedRecord) {
+          removeMutation.mutate(selectedRecord.id)
+          console.log('id của thằng request nè ', selectedRecord.id)
+        }
+      }
+    
+      
+    //const [searchText, setSearchText] = useState('');// liên quan đến giá trị input vào search
+    const [selectedRecord, setSelectedRecord] = useState<AdminTutorType | null>(null);
     const [visible, setVisible] = useState(false);
 
-    const showDetail = (record: DataType) => {
+    const showDetail = (record: AdminTutorType) => {
         setSelectedRecord(record);
         setVisible(true);
     };
@@ -153,37 +54,42 @@ function AdminListTutor () {
         setVisible(false);
         setSelectedRecord(null);
     };
-    const columns: TableColumnsType<DataType> = [{// định nghĩa từng cột
+    const columns: TableColumnsType<AdminTutorType> = [{// định nghĩa từng cột
         title: "Tên", // tên của cột hay còn gọi là header của cột
-        dataIndex: "FullName",// xác định trường nào trong interface DataType
+        dataIndex: "fullName",// xác định trường nào trong interface DataType
         defaultSortOrder: "descend",
-        onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
-        sorter: (a, b) => a.FullName.length - b.FullName.length,
+        onFilter: (value, record) => record.fullName.indexOf(value as string) === 0,
+        sorter: (a, b) => a.fullName.length - b.fullName.length,
         width:200,
         fixed:"left"
       }
       ,{
         title:"Ngày sinh",
-        dataIndex:"Date_Of_Birth",
+        dataIndex:"date_of_birth",
         defaultSortOrder: "descend",
         width:200,
-        sorter: (a, b) => new Date(a.Date_Of_Birth).getTime() - new Date(b.Date_Of_Birth).getTime()
+        sorter: (a, b) => new Date(a.date_of_birth).getTime() - new Date(b.date_of_birth).getTime()
+      },{
+        title:"Email",
+        dataIndex:"email",
+        defaultSortOrder: "descend",
+        width:200,
       },{
         title:"Giới Tính",
-        dataIndex:"Gender",
-        sorter: (a, b) => parseInt(a.Gender) - parseInt(b.Gender),
+        dataIndex:"gender",
+        sorter: (a, b) => parseInt(a.gender) - parseInt(b.gender),
         width:200
       },{
         title:"Tên Môn Học",
-        dataIndex:"SubjectName",
+        dataIndex:"subject",
         defaultSortOrder: "descend",
         width:200
       },{
         title:"Kinh Nghiệm",
-        dataIndex:"Experience",
+        dataIndex:"experience",
         defaultSortOrder: "descend",
         width:200,
-        sorter: (a, b) => (a.Experience - b.Experience)
+        sorter: (a, b) => (a.experience - b.experience)
       },{
         title:"Tên Bằng Cấp(Chứng chỉ)",
         dataIndex:"QualificationName",
@@ -195,7 +101,7 @@ function AdminListTutor () {
         dataIndex: "detail",
         className: "TextAlign",
         width:100,
-        render: ( record: DataType) => (<div className="flex gap-1">
+        render: (text :string,record: AdminTutorType) => (<div className="flex gap-1">
           <button className="p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
           onClick={() => showDetail(record)}
           >Chi tiết</button></div>
@@ -223,7 +129,7 @@ function AdminListTutor () {
                 <Table
                 className=""
                 columns={columns}
-                dataSource={data}
+                dataSource={TutorList}
                 pagination={{ pageSize: 6 }} 
                 onChange={onChange}
                 showSorterTooltip={{ target: "sorter-icon" }}
@@ -237,24 +143,25 @@ function AdminListTutor () {
                     onCancel={handleCancel}
                     footer={[
                         <Button key="back" onClick={handleCancel}>
-                            Sửa
+                            Sửa(chưa nốiapi)
                         </Button>,
-                        <Button key="back" onClick={handleCancel}>
+                        <Button key="back" onClick={handleDelete}>
                             Xóa
                         </Button>
                     ]}
                 >
                     {selectedRecord && (
                         <div>
-                            <p> Tên : {selectedRecord.FullName}</p>
-                            <p> Ngày sinh : {selectedRecord.Date_Of_Birth}</p>
-                            <p> Giới tính : {selectedRecord.Gender}</p>
-                            <p> Môn : {selectedRecord.SubjectName}</p>
-                            <p>Bằng cấp(Chứng chỉ) : {selectedRecord.Type}</p>
-                            <p> Tên bằng Cấp : {selectedRecord.QualificationName}</p>
-                            <p> Kĩ năng đặc biệt : {selectedRecord.SpecializedSkill}</p>
+                            <p> Tên : {selectedRecord.fullName}</p>
+                            <p> Email : {selectedRecord.email ?selectedRecord.email : 'Chưa cập nhập'}</p>
+                            <p> Ngày sinh : {selectedRecord.date_of_birth ?selectedRecord.date_of_birth : 'Chưa cập nhập'}</p>
+                            <p> Giới tính : {selectedRecord.gender? selectedRecord.gender:'Chưa cập nhập'}</p>
+                            <p> Môn : {selectedRecord.subject ?selectedRecord.subject:'Chưa cập nhập'}</p>
+                            <p>Bằng cấp(Chứng chỉ) : {selectedRecord.type ? selectedRecord.type : 'Chưa cập nhập'}</p>
+                            <p> Tên bằng Cấp : {selectedRecord.qualifiCationName ?selectedRecord.qualifiCationName : 'Chưa cập nhập'}</p>
+                            <p> Kĩ năng đặc biệt : {selectedRecord.specializedSkills ?selectedRecord.specializedSkills : 'Chưa cập nhập'}</p>
                             {/* <img src={selectedRecord.Img}> : {selectedRecord.Img}</img>    // ảnh nè  */}
-                            <p> Kinh nghiệm dạy : {selectedRecord.Experience} Năm</p> 
+                            <p> Kinh nghiệm dạy : {selectedRecord.experience ?selectedRecord.experience :'Chưa cập nhập số '} Năm</p> 
                         </div>
                         )}
                 </Modal>
