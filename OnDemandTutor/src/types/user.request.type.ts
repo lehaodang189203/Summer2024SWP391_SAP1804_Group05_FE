@@ -101,6 +101,12 @@ export interface JoinClass {
   id: string
 }
 
+export interface SelecTutorReqBody {
+  idRequest: string
+
+  idTutor: string
+}
+
 // idTutor là id của account có roles là tutor
 // id là account có roles là học sinh
 

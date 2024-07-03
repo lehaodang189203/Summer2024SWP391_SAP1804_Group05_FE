@@ -1,6 +1,9 @@
 import {
+  faAudioDescription,
+  faImage,
   faPersonHalfDress,
   faSchool,
+  faStar,
   faUserGraduate
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,10 +12,12 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { studentApi } from '../../api/student.api'
-import me from '../../assets/img/me.jpg'
-import { TutorType } from '../../types/tutor.type'
-import { AcceptTutorBody } from '../../types/user.request.type'
 import Popup from '../../components/Popup/Popup'
+import { TutorType } from '../../types/tutor.type'
+import {
+  AcceptTutorBody,
+  SelecTutorReqBody
+} from '../../types/user.request.type'
 
 export default function TutorList() {
   const [isPopupVisible, setIsPopupVisible] = useState(false)
@@ -20,36 +25,22 @@ export default function TutorList() {
   const [currentTutor, setCurrentTutor] = useState<TutorType | null>(null)
 
   const navigator = useNavigate()
-  const { idReq } = useParams()
+  const { idReq: idRequestParams } = useParams()
 
-  console.log(idReq)
+  console.log(idRequestParams)
 
   const { data: TutorListProfile } = useQuery({
-    queryKey: ['Request', idReq],
-    queryFn: () => studentApi.viewAllTutorsJoinRequests(idReq as string),
-    enabled: !!idReq // chắc chắn phải có idREq thì mới gọi
+    queryKey: ['Request', idRequestParams],
+    queryFn: () =>
+      studentApi.viewAllTutorsJoinRequests(idRequestParams as string),
+    enabled: !!idRequestParams // chắc chắn phải có idREq thì mới gọi
+  })
+
+  const selectTutorMutation = useMutation({
+    mutationFn: (body: SelecTutorReqBody) => studentApi.selectTutor(body)
   })
 
   console.log(TutorListProfile)
-
-  const acceptTutorMutation = useMutation({
-    mutationFn: async (tutor: TutorType) => {
-      const body: AcceptTutorBody = {
-        idTutor: idReq as string,
-        idRequest: tutor.id
-      }
-      // Replace with the actual API call to accept the tutor
-      await studentApi.acceptTutor(body)
-      toast.success('Thành công đăng kí ')
-      navigator('/')
-    },
-    onSuccess: () => {
-      console.log('Tutor accepted successfully')
-    },
-    onError: (error: any) => {
-      console.error('Error accepting tutor:', error)
-    }
-  })
 
   const handleClosePopup = () => {
     setIsPopupVisible(false)
@@ -64,12 +55,22 @@ export default function TutorList() {
     setCurrentTutor(tutor)
     setIsPopupVisible(true)
   }
-
-  const handleapproved = (tutor: TutorType) => {
-    setCurrentTutor(tutor)
-    console.log(' id tutor nèk:', tutor.id)
-    console.log(' id cua request:', idReq)
-    acceptTutorMutation.mutate(tutor)
+  const handleapproved = (idTutor: string) => {
+    if (idRequestParams) {
+      selectTutorMutation.mutate(
+        { idRequest: idRequestParams, idTutor },
+        {
+          onSuccess: (data) => {
+            toast.success(data.data.message)
+          },
+          onError: (data) => {
+            toast.error(data.message)
+          }
+        }
+      )
+    } else {
+      console.error('Không có id của request')
+    }
   }
 
   return (
@@ -84,7 +85,12 @@ export default function TutorList() {
             <div className='col-span-3' onClick={() => handleItemClick(tutor)}>
               <div className='mx-8 my-5'>
                 <div className='w-[13rem] h-[15rem]'>
-                  <img src={me} alt='' className='w-full h-full' />
+                  <img
+                    src={tutor.avatar}
+                    // src={tutor.avatar}
+                    alt='ảnh đại diện'
+                    className='w-full h-full'
+                  />
                 </div>
               </div>
             </div>
@@ -98,7 +104,7 @@ export default function TutorList() {
                 <div className='justify-start flex pl-2'>
                   <div>
                     <h1 className='text-2xl text-bold-sm text-start'>
-                      Tên Gia sư: Thành
+                      Tên: {tutor.fullName}
                     </h1>
                     {/* gender */}
                     <div className='text-lg justify-start flex pl-1 pt-2'>
@@ -106,23 +112,45 @@ export default function TutorList() {
                         icon={faPersonHalfDress}
                         className='pt-2 h-6'
                       />
-                      <span className='pl-2 pt-1'>Nam</span>
+                      <span className='pl-2 pt-1'>
+                        Giới tính:{tutor.gender}
+                      </span>
                     </div>
                     {/* study */}
                     <div className='text-lg justify-start flex pl-1 pt-2'>
                       <FontAwesomeIcon icon={faSchool} className='pt-2' />
-                      <span className='pl-2 pt-1'>HandJob</span>
+                      <span className='pl-2 pt-1'>
+                        Môn học:{''}
+                        {tutor.subject}
+                      </span>
                     </div>
-                    {/* study */}
+                    {/* kinh nghiệm */}
                     <div className='text-lg justify-start flex pl-1 pt-2'>
                       <FontAwesomeIcon icon={faUserGraduate} className='pt-2' />
-                      <span className='pl-2 pt-1'>Kinh nghiệm: 2 Năm</span>
+                      <span className='pl-2 pt-1'>
+                        Kinh nghiệm:{''}
+                        {tutor.experience}
+                      </span>
+                    </div>
+                    {/* kĩ nangư đặc biệt */}
+                    <div className='text-lg justify-start flex pl-1 pt-2'>
+                      <FontAwesomeIcon icon={faStar} className='pt-2' />
+                      <span className='pl-2 pt-1'>
+                        Kỹ năng đặc biệt:{''}
+                        {tutor.specializedSkills}
+                      </span>
                     </div>
 
                     {/* Description */}
-                    <div className='text-lg justify-start flex pl-1 pt-2'>
-                      <span className='text-start text-sm'>Học giỏi</span>
-                    </div>
+                    {/* <div className='text-lg justify-start flex pl-1 pt-2'>
+                      <FontAwesomeIcon
+                        icon={faAudioDescription}
+                        className='pt-2'
+                      />
+                      <span className='pl-2 pt-1'>
+                        Mô tả:{tutor.introduction}
+                      </span>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -150,7 +178,7 @@ export default function TutorList() {
               <div className='w-full h-full px-auto mx-auto pt-32'>
                 <div className='rounded-lg w-full h-10 bg-pink-400 hover:opacity-80'>
                   <button
-                    onClick={() => handleapproved(tutor)}
+                    onClick={() => handleapproved(tutor.id)}
                     className='pt-3'
                   >
                     Chấp nhận
@@ -179,7 +207,11 @@ export default function TutorList() {
             <div className='overflow-y-auto p-4'>
               {/* img */}
               <div className='flex justify-center py-4'>
-                <img src={me} alt='Tutor' className='w-32 h-32 rounded-full' />
+                <img
+                  src={currentTutor.avatar}
+                  alt='gia sư'
+                  className='w-32 h-32 rounded-full'
+                />
               </div>
               {/* description */}
               <div className='mx-4 my-5'>
@@ -199,36 +231,47 @@ export default function TutorList() {
                       </div>
 
                       {/* subject */}
-                      <div className='text-lg flex pl-1 pt-2'>
-                        <FontAwesomeIcon
-                          icon={faPersonHalfDress}
-                          className='pt-2 h-6'
-                        />
+                      <div className='text-lg justify-start flex pl-1 pt-2'>
+                        <FontAwesomeIcon icon={faSchool} className='pt-2 h-6' />
                         <span className='pl-2 pt-1'>
+                          Môn học:{''}
                           {currentTutor.subject}
                         </span>
                       </div>
 
                       {/* study */}
                       <div className='text-lg flex pl-1 pt-2'>
-                        <FontAwesomeIcon icon={faSchool} className='pt-2' />
-                        <span className='pl-2 pt-1'>
-                          {currentTutor.experience}
-                        </span>
-                      </div>
-                      {/* study */}
-                      <div className='text-lg flex pl-1 pt-2'>
                         <FontAwesomeIcon
                           icon={faUserGraduate}
-                          className='pt-2'
+                          className='pt-2 h-6'
                         />
                         <span className='pl-2 pt-1'>
-                          {currentTutor.specializedSkills}
+                          Kinh nghiệm: {currentTutor.experience}
+                        </span>
+                      </div>
+                      {/* Kĩ năng đặc biệt  */}
+                      <div className='text-lg flex pl-1 pt-2'>
+                        <FontAwesomeIcon icon={faStar} className='pt-2' />
+                        <span className='pl-2 pt-1'>
+                          Kỹ năng đặc biệt: {currentTutor.specializedSkills}
+                        </span>
+                      </div>
+                      {/* Mô tả */}
+                      <div className='text-lg flex pl-1 pt-2'>
+                        <FontAwesomeIcon
+                          icon={faAudioDescription}
+                          className='pt-2 h-6'
+                        />
+                        <span className='pl-2 pt-1'>
+                          Giới thiệu {currentTutor.introduction}
                         </span>
                       </div>
                       {/* Description */}
-                      <div className='pt-2 text-left'>
-                        {currentTutor.qualifiCationName}
+                      <div className='text-lg flex pl-1 pt-2'>
+                        <FontAwesomeIcon icon={faImage} className='pt-2 h-6' />
+                        <span className='pl-2 pt-1'>
+                          Tên bằng: {currentTutor.qualifiCationName}
+                        </span>
                       </div>
                       {/* ảnh bằng */}
                       <div>
