@@ -13,7 +13,7 @@ export default function ModTutorResRegis() {
   const [open, setOpen] = useState(false)
   const [isDetails, setIsDetails] = useState(false)
   // Lấy danh sách yêu cầu từ API
-  const { data: requestData, refetch } = useQuery<any>({
+  const { data: requestData, refetch } = useQuery({
     queryKey: ['RequestTutorReg'],
     queryFn: () => moderatorApi.getRequestTutorReg()
   })
@@ -59,7 +59,7 @@ export default function ModTutorResRegis() {
     {
       // định nghĩa từng cột
       title: 'Tên', // tên của cột hay còn gọi là header của cột
-      dataIndex: 'fullname', // xác định trường nào trong interface DataType
+      dataIndex: 'fullName', // xác định trường nào trong interface DataType
       //defaultSortOrder: "descend",
       //onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
       //sorter: (a, b) => a.FullName.length - b.FullName.length,
@@ -95,18 +95,18 @@ export default function ModTutorResRegis() {
     },
     {
       title: 'Tên Bằng Cấp(Chứng chỉ)',
-      dataIndex: 'qualificationname',
+      dataIndex: 'qualifiCationName',
       //defaultSortOrder: "descend"
       width: 200
     },
     {
       title: 'Kĩ Năng Nổi bật',
-      dataIndex: 'specializedskills',
+      dataIndex: 'specializedSkills',
       width: 200
     },
     {
       title: 'Ảnh bằng cấp',
-      dataIndex: 'img',
+      dataIndex: 'imageQualification',
       className: 'TextAlign',
       width: 120,
       fixed: 'right',
@@ -213,7 +213,7 @@ export default function ModTutorResRegis() {
                   ) : (
                     <p>
                       Ảnh :{' '}
-                      <img src={selectedRecord.imageQualifiCation} alt='ảnh' />
+                      <img src={selectedRecord.imageQualification} alt='ảnh' />
                     </p>
                   )}
                 </div>

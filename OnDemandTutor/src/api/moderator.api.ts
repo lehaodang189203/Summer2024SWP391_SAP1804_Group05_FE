@@ -1,7 +1,8 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { Request, RequestModerator } from '../types/request.type'
+import { TutorType } from '../types/tutor.type'
 import { User } from '../types/user.type'
-import { SuccessResponseReq } from '../types/utils.type'
+import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 //import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
@@ -35,9 +36,9 @@ export const moderatorApi = {
   rejectRequest: async (ReqID: string) =>
     await http.put(`modaretor/rejectRequest?requestId=${ReqID}`),
 
-  getRequestTutorReg: async (): Promise<Request[]> => {
+  getRequestTutorReg: async (): Promise<TutorType[]> => {
     try {
-      const response = await http.get<SuccessResponseReq<Request[]>>(
+      const response = await http.get<SuccessResponseReq<TutorType[]>>(
         'modaretor/viewListTutor'
       )
       if (response.status === HttpStatusCode.Ok) {
@@ -52,8 +53,10 @@ export const moderatorApi = {
   },
   approvedTutorReg: async (tutorReqID: string) =>
     await http.put(`modaretor/approveProfile?id=${tutorReqID}`),
+
   rejectTutorReg: async (tutorReqID: string) =>
     await http.put(`modaretor/rejectProfile?id=${tutorReqID}`),
+
   getAccount: async (): Promise<User[]> => {
     try {
       const response = await http.get<User[]>('user/getAllUser')
@@ -66,5 +69,10 @@ export const moderatorApi = {
       // Handle network or API errors
       throw new Error('Failed to fetch data')
     }
-  }
+  },
+
+  deleteRequest: async (idRequest: string) =>
+    await http.delete<SuccessResponse<any>>(
+      `modaretor/DeleteRequest?idRequest=${idRequest}`
+    )
 }

@@ -8,7 +8,8 @@ import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
 import { AppContext } from '../../../context/app.context'
 import { Request } from '../../../types/request.type'
-import RequestComonents from '../components'
+import RequestComponents from '../components/RequestComponents'
+
 const options1 = [
   { label: 'Lọc theo thời gian' },
   { value: 'apple', label: 'Thời gian' },
@@ -106,7 +107,7 @@ export default function RequestStudentCurrent() {
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
           {currentItems.map((request, key) => (
-            <RequestComonents key={key} request={request} refetch={refetch} />
+            <RequestComponents key={key} request={request} refetch={refetch} />
           ))}
         </div>
       </div>

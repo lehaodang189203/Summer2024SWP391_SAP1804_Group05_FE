@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { tutorApi } from '../../api/tutor.api'
 import Pagination from '../../components/Pagination'
@@ -8,43 +8,56 @@ import { JoinClassBody } from '../../types/user.request.type'
 import { User } from '../../types/user.type'
 import { getProfileFromLS } from '../../utils/auth'
 import FormRequest from '../FormRequest/FormRequest'
+import { AppContext } from '../../context/app.context'
+import { roles } from '../../constant/roles'
 
 export default function RequestList() {
   const user: User = getProfileFromLS()
+  const { profile } = useContext(AppContext)
 
   const [selectedClasses, setSelectedClasses] = useState<string[]>([])
 
-  const { data: RequestData } = useQuery<Request[]>({
+  console.log(profile)
+
+  const { data: requestData } = useQuery<Request[]>({
     queryKey: ['Request'],
     queryFn: () => tutorApi.viewRequest(),
     placeholderData: keepPreviousData
   })
 
-  const tutorAprrovedReMutation = useMutation({
-    mutationFn: (body: JoinClassBody) => tutorApi.joinClass(body),
-    onSuccess: (data, variables) => {
-      setSelectedClasses((prevSelectedClasses) => [
-        ...prevSelectedClasses,
-        variables.idRequest
-      ])
-      toast.success(data.data.message)
-    },
-    onError: (data) => {
-      toast.error(data.message)
-    }
+  const tutorApprovedReMutation = useMutation({
+    mutationFn: (body: JoinClassBody) => tutorApi.joinClass(body)
   })
 
   const handleAcceptClass = (requestId: string) => {
     if (!selectedClasses.includes(requestId)) {
-      tutorAprrovedReMutation.mutate({ idRequest: requestId, id: user.id })
+      const joinClass = {
+        requestId: requestId,
+        id: profile?.id ? profile.id : user.id
+      }
+
+      tutorApprovedReMutation.mutate(joinClass, {
+        onSuccess: (data) => {
+          setSelectedClasses((prevSelectedClasses) => [
+            ...prevSelectedClasses,
+            requestId
+          ])
+          toast.success(data.data.message)
+        }
+      })
     }
   }
 
+  const handleDeleteRequest = (requestId: string) => {
+    // Xử lý logic xóa request ở đây
+    console.log(`Deleting request ${requestId}`)
+  }
+
   useEffect(() => {
-    if (RequestData) {
-      console.log(RequestData)
+    if (requestData) {
+      console.log(requestData)
     }
-  }, [RequestData])
+  }, [requestData])
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
@@ -53,7 +66,7 @@ export default function RequestList() {
     setCurrentPage(page)
   }
 
-  const items = RequestData || []
+  const items = requestData || []
   const startIndex = (currentPage - 1) * itemsPerPage
   const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
 
@@ -71,7 +84,7 @@ export default function RequestList() {
     <>
       <div className='container grid grid-cols-1 md:grid-cols-2 gap-5 h-[1000px]'>
         {currentItems
-          .filter((data) => data.idRequest) // Ensure idrequest is not null or undefined
+          .filter((data) => data.idRequest) // Ensure idRequest is not null or undefined
           .map((data, index) => (
             <div
               key={data.idRequest || `${data.subject}-${data.class}-${index}`}
@@ -133,7 +146,7 @@ export default function RequestList() {
                 </div>
                 <div className='w-full items-end flex'>
                   <div className='my-4 w-full px-auto mx-auto'>
-                    {user?.roles === 'gia sư' ? (
+                    {user?.roles.toLowerCase() === roles.tutor && (
                       <div
                         role='button'
                         onClick={() => handleAcceptClass(data.idRequest)}
@@ -154,13 +167,24 @@ export default function RequestList() {
                           ? 'Đã nhận lớp'
                           : 'Nhận Lớp'}
                       </div>
-                    ) : (
+                    )}
+                    {user?.roles.toLowerCase() === roles.student && (
                       <div className='w-full h-10 bg-gray-300 mx-auto justify-center items-center flex'>
                         Bạn phải là gia sư
                       </div>
                     )}
                   </div>
                 </div>
+                {user?.roles.toLowerCase() === roles.moderator && (
+                  <div className='flex justify-end mt-2'>
+                    <button
+                      onClick={() => handleDeleteRequest(data.idRequest!)}
+                      className='bg-red-700 text-white px-4 py-2 rounded-md w-full hover:bg-slate-600 hover:shadow-xl hover:shadow-black mb-2'
+                    >
+                      Xóa
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}

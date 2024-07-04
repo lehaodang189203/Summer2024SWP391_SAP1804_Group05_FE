@@ -1,3 +1,3 @@
-import RequestComonents from './RequestComonents'
+import RequestComponents from './RequestComponents'
 
-export default RequestComonents
+export default RequestComponents

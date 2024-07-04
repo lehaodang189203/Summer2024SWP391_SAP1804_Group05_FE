@@ -9,7 +9,7 @@ export interface TutorType {
   subject: string
   qualifiCationName: string
   type: string
-  imageQualifiCation: string
+  imageQualification: string
   introduction: string
 }
 export interface AdminTutorType {
@@ -30,7 +30,7 @@ interface AdminStudentReq {
   fullname: string
   subject: string
   title: string
-  timetable:string
+  timetable: string
   price: number
   description: string
   class: string

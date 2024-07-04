@@ -3,4 +3,4 @@ export const roles = {
   tutor: 'gia sư',
   moderator: 'kiểm duyệt viên',
   admin: 'quản trị viên'
-}
+} as const

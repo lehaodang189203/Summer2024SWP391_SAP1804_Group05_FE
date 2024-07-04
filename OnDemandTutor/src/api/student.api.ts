@@ -102,6 +102,15 @@ export const studentApi = {
     ),
 
   //  lấy lớp học đang diễn ra
-  classActive: async (id: string) =>
-    await http.get<SuccessResponse<any>>(`Student/classActive?id=${id}`)
+  classActive(id: string) {
+    return http.get<SuccessResponseReq<Request[]>>(
+      `Student/classActive?id=${id}`
+    )
+  },
+
+  classCompled(idRequest: string) {
+    return http.put<SuccessResponseReq<any>>(
+      `tutor/classCompled?idRequest=${idRequest}`
+    )
+  }
 }

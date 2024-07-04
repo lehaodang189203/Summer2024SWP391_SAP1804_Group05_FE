@@ -93,9 +93,9 @@ export default function StudentRes() {
     },
     {
       title: 'Số buổi',
-      dataIndex: 'totalSession',
+      dataIndex: 'totalSessions',
       width: 150,
-      sorter: (a, b) => a.totalSession - b.totalSession
+      sorter: (a, b) => a.totalSessions - b.totalSessions
     },
     {
       title: 'Giờ bắt đầu',
@@ -190,7 +190,7 @@ export default function StudentRes() {
                   </span>
                   Số ngày học:{' '}
                   <span className='line-under'>
-                    {selectedRecord.totalSession} <br />
+                    {selectedRecord.totalSessions} <br />
                   </span>
                   Thời gian:{' '}
                   <span className='font-bold'>

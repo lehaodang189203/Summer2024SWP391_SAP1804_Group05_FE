@@ -88,7 +88,7 @@ export interface ChangePasswordReqBody {
   new_password: string
 }
 export interface JoinClassBody {
-  idRequest: string
+  requestId: string
   id: string
 }
 export interface AcceptTutorBody {

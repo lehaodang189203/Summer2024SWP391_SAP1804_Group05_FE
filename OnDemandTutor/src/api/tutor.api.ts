@@ -24,6 +24,6 @@ export const tutorApi = {
   //  tham gia lớp
   joinClass: async (body: JoinClassBody) =>
     await http.post<SuccessResponse<any>>(
-      `tutor/join-request?requestId=${body.idRequest}&id=${body.id}`
+      `tutor/join-request?requestId=${body.requestId}&id=${body.id}`
     )
 }

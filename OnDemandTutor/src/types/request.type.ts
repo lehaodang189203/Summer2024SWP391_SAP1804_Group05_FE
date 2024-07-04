@@ -1,9 +1,7 @@
 import { UserSchema } from '../utils/rules'
-import { TutorType } from './tutor.type'
-import { User } from './user.type'
 export interface Request {
   idRequest: string
-  totalSession: number
+  totalSessions: number
   subject: string
   title: string
   price: number
@@ -18,7 +16,7 @@ export interface Request {
 
 export interface RequestModerator {
   idRequest: string
-  totalSession: number
+  totalSessions: number
   subject: string
   title: string
   price: number
@@ -33,7 +31,7 @@ export interface RequestModerator {
 }
 
 export interface ClassType {
-  totalSession: number
+  totalSessions: number
   subject: string
   title: string
   price: number

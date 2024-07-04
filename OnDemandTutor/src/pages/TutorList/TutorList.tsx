@@ -24,7 +24,6 @@ export default function TutorList() {
   const [color, setColor] = useState(false)
   const [currentTutor, setCurrentTutor] = useState<TutorType | null>(null)
 
-  const navigator = useNavigate()
   const { idReq: idRequestParams } = useParams()
 
   console.log(idRequestParams)
@@ -276,7 +275,7 @@ export default function TutorList() {
                       {/* ảnh bằng */}
                       <div>
                         <img
-                          src={currentTutor.imageQualifiCation}
+                          src={currentTutor.imageQualification}
                           alt='Ảnh chứng chỉ'
                           className='mt-4'
                         />
