@@ -20,6 +20,7 @@ export const path = {
   detailRequest: '/detailRequest', //chưa được sử dụng
   calender: '/calender', //calender nèk
   tutorViewRequestList: '/studentViewRequestList', //student
+  myClass: '/myClass',
   Moderator: {
     //                                                      mod-------------------------------------
     mod: '/mod',
@@ -38,10 +39,10 @@ export const path = {
     rejectProfileRegisterTT: '/admin/tutorList/rejectProfileRegisterTT', // chưa làm
     studentlist: '/admin/student',
     adminStudentReq: '/admin/studentReq',
-    adminStudentReqApproved : '/admin/studentReqApproved',
-    adminStudentReqRejected : '/admin/studentReqRejected',
+    adminStudentReqApproved: '/admin/studentReqApproved',
+    adminStudentReqRejected: '/admin/studentReqRejected',
     sessionList: '/admin/sessionList',
-    dashBoard:'/admin/dashboard'
+    dashBoard: '/admin/dashboard'
   }
 } as const
 
@@ -51,7 +52,7 @@ export const pathAuth = {
   user: '/user',
   register: 'user/register',
   registerAsTutor: '/registerAT',
-  logout: 'user/Logout',
+  logout: 'user/logout',
   tutors: '/tutors',
   profileTT: '/profile',
   requestList: '/requests',

@@ -1,24 +1,14 @@
-import {
-  faBook,
-  faCalendarDays,
-  faClock,
-  faGraduationCap,
-  faSchool
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Select } from 'antd'
 import Search from 'antd/es/transfer/search'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 
-import { Link, useNavigate } from 'react-router-dom'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
-import { path } from '../../../constant/path'
+import { AppContext } from '../../../context/app.context'
 import { Request } from '../../../types/request.type'
 import RequestComonents from '../components'
-
 const options1 = [
   { label: 'Lọc theo thời gian' },
   { value: 'apple', label: 'Thời gian' },
@@ -39,13 +29,14 @@ const options3 = [
 ]
 
 export default function RequestStudentCurrent() {
-  const { data: RequestData = [], refetch } = useQuery<Request[]>({
+  const { profile } = useContext(AppContext)
+
+  const { data: RequestData, refetch } = useQuery<Request[]>({
     queryKey: ['Request'],
-    queryFn: () => studentApi.approvedRequest(),
+    queryFn: () => studentApi.approvedRequest(profile?.id as string),
+    enabled: !!profile?.id, // tránh bị dữ liệu cũ còn , mà kh fetch kịp
     placeholderData: keepPreviousData
   })
-  const navigate = useNavigate()
-  console.log('RequestData', RequestData)
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
@@ -70,11 +61,6 @@ export default function RequestStudentCurrent() {
   }
   const handleSelectChange3 = (option: any) => {
     setSelectedOption3(option)
-  }
-
-  const handleCurRe = (idRe: string) => {
-    // Sử dụng Link để điều hướng đến trang TutorList
-    navigate(`${path.tutors}/${idRe}`)
   }
 
   return (

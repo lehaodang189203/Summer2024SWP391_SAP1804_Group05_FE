@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authApi } from '../../api/auth.api'
@@ -11,6 +11,7 @@ import { AppContext } from '../../context/app.context'
 import { clearLS } from '../../utils/auth'
 import Popover from '../Popover/Popover'
 import UserButton from '../UserBotton'
+import { LogoutReqBody } from '../../types/user.request.type'
 
 export default function NavHeader() {
   //const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
@@ -18,6 +19,8 @@ export default function NavHeader() {
   //   //  hàm để nhận thông báo mới, vd sử dụng button onclick bằng hàm này
   //   setCount(count + 1)
   // }
+
+  const queryClient = useQueryClient()
 
   const {
     isAuthenticated,
@@ -27,10 +30,8 @@ export default function NavHeader() {
     setProfile
   } = useContext(AppContext)
 
-  const navigate = useNavigate()
-
   const logoutMutation = useMutation({
-    mutationFn: (body: any) => authApi.logoutAccount(body)
+    mutationFn: (body: LogoutReqBody) => authApi.logoutAccount(body)
   })
 
   const handleLogout = () => {
@@ -38,9 +39,8 @@ export default function NavHeader() {
       { refresh_token: refreshToken },
       {
         onSuccess: () => {
-          navigate(path.login)
-          clearLS()
           setProfile(null)
+          queryClient.removeQueries({ queryKey: ['Request'] })
           setIsAuthenticated(false)
         }
       }
@@ -59,10 +59,7 @@ export default function NavHeader() {
 
   return (
     <div className='hidden md:flex justify-end gap-5'>
-      <UserButton
-        isAuthenticated={isAuthenticated}
-        profile={profile}
-      />
+      <UserButton isAuthenticated={isAuthenticated} profile={profile} />
       {isAuthenticated && (
         <Popover
           className='flex my-2 items-center hover:text-pink-400 cursor-pointer '
@@ -103,6 +100,12 @@ export default function NavHeader() {
                     className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                   >
                     Xem đơn của bạn (Tutor)
+                  </Link>
+                  <Link
+                    to={path.myClass}
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    Lớp học của bạn
                   </Link>
                 </div>
               )}

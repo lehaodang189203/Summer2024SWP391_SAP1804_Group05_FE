@@ -1,4 +1,4 @@
-/*eslint-disable @typescript-eslint/no-var-requires*/
+/* eslint-disable @typescript-eslint/no-var-requires */
 const plugin = require('tailwindcss/plugin')
 
 /** @type {import('tailwindcss').Config} */
@@ -11,6 +11,13 @@ module.exports = {
     extend: {
       colors: {
         orange: '#ee4d2d'
+      },
+      maxHeight: {
+        0: '0',
+        full: '100%'
+      },
+      transitionProperty: {
+        'max-height': 'max-height'
       }
     }
   },
@@ -26,8 +33,6 @@ module.exports = {
         }
       })
     })
-    //  thằng này phải cài nha truncate mutiple-line (tailwind)
-    //  giúp đoạn chữ quá dài thì chúng ta sẽ cho 3 chấm
     // require('@tailwindcss/line-clamp')
   ]
 }

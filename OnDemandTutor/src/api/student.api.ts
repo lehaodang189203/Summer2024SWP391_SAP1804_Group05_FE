@@ -14,6 +14,8 @@ import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { Request } from '../types/request.type'
 import { TutorType } from '../types/tutor.type'
 import { User } from '../types/user.type'
+import { useContext } from 'react'
+import { AppContext } from '../context/app.context'
 
 const user = <User>getProfileFromLS()
 
@@ -23,10 +25,10 @@ export const studentApi = {
     await http.post(`student/createRequest?id=${user.id}`, body),
 
   // Lấy danh sách yêu cầu chờ duyệt
-  async pendingRequest() {
+  async pendingRequest(id: string) {
     try {
       const response = await http.get<SuccessResponseReq<Request[]>>(
-        `Student/pedingRequest?id=${user.id}`
+        `Student/pedingRequest?id=${id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -40,9 +42,9 @@ export const studentApi = {
   },
 
   // Lấy danh sách yêu cầu đã duyệt
-  async approvedRequest() {
+  async approvedRequest(id: string) {
     try {
-      const response = await http.get(`Student/appovedRequest?id=${user.id}`)
+      const response = await http.get(`Student/appovedRequest?id=${id}`)
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
       } else {
@@ -97,5 +99,9 @@ export const studentApi = {
   selectTutor: async (body: SelecTutorReqBody) =>
     await http.post<SuccessResponse<any>>(
       `Student/SelectTutor?idRequest=${body.idRequest}&idaccounttutor=${body.idTutor}`
-    )
+    ),
+
+  //  lấy lớp học đang diễn ra
+  classActive: async (id: string) =>
+    await http.get<SuccessResponse<any>>(`Student/classActive?id=${id}`)
 }

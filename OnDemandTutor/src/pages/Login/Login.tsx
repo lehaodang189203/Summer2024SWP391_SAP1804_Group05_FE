@@ -19,7 +19,11 @@ import { isAxiosError } from '../../utils/utils'
 
 import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
 import { path } from '../../constant/path'
-import { getProfileFromLS, getRefreshTokenFromLS } from '../../utils/auth'
+import {
+  getProfileFromLS,
+  getRefreshTokenFromLS,
+  setProfileToLS
+} from '../../utils/auth'
 import Button from '../../components/Button'
 import userApi from '../../api/user.api'
 
@@ -88,6 +92,7 @@ export default function Login() {
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
         setProfile(data.data.data.user)
+        setProfileToLS(data.data.data.user)
         toast.success(data.data.message)
         navigate(path.home)
       },

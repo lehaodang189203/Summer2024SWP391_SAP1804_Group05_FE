@@ -1,13 +1,13 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { Select } from 'antd'
 import Search from 'antd/es/transfer/search'
+import { useContext, useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
-import { getProfileFromLS } from '../../../utils/auth'
-import { useEffect, useState } from 'react'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
 import { Request } from '../../../types/request.type'
-import RequestComonents from '../components'
+
+import { AppContext } from '../../../context/app.context'
 import RequestComponents from '../components/RequestComonents'
 
 const options1 = [
@@ -30,13 +30,18 @@ const options3 = [
 ]
 
 export function RequestStudentPending() {
+  const { profile } = useContext(AppContext)
+
   const { data: RequestData, refetch } = useQuery<Request[]>({
     queryKey: ['Request'],
-    queryFn: () => studentApi.pendingRequest(),
+    queryFn: () => studentApi.pendingRequest(profile?.id as string),
+    enabled: !!profile?.id,
     placeholderData: keepPreviousData
   })
 
-  useEffect(() => {}, [RequestData])
+  useEffect(() => {
+    refetch()
+  }, [RequestData, profile])
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
@@ -62,8 +67,6 @@ export function RequestStudentPending() {
   const handleSelectChange3 = (option: any) => {
     setSelectedOption3(option)
   }
-
-  const profile = getProfileFromLS()
 
   console.log('profile', profile)
   console.log('RequestData', RequestData)

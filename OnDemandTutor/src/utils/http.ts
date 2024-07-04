@@ -8,11 +8,11 @@ import {
   setRefreshTokenToLS
 } from './auth'
 
-import { AuthResponse } from '../types/auth.type'
 import config from '../constant/config'
+import { AuthResponse } from '../types/auth.type'
 
 import { toast } from 'react-toastify'
-import { path, pathAuth } from '../constant/path'
+import { pathAuth } from '../constant/path'
 
 class Http {
   instance: AxiosInstance

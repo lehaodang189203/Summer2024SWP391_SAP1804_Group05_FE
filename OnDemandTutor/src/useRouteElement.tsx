@@ -37,12 +37,12 @@ import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSucces
 import AdminStudentReq from './pages/Admin/Components/AdminStudentReq'
 import AdminStudentReqApproved from './pages/Admin/Components/AdminStudentReqApproved'
 import AdminStudentReqRejected from './pages/Admin/Components/AdminStudentReqRejected'
+import MyClass from './pages/MyClass'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
   return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
 }
-
 
 function RejectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -219,6 +219,14 @@ export default function useRouteElements() {
           )
         },
         {
+          path: path.myClass, //student
+          element: (
+            <MainLayout>
+              <MyClass />
+            </MainLayout>
+          )
+        },
+        {
           path: path.Moderator.mod, //mod-------------------------------------------------------------------------------
           element: <ModeratorLayout />,
           children: [
@@ -238,14 +246,20 @@ export default function useRouteElements() {
           element: <AdminLayout />,
           children: [
             {
-              index:true,
-              element:<Dashboard/>
+              index: true,
+              element: <Dashboard />
             },
             { path: path.Admin.sessionList, element: <SessionList /> },
             { path: path.Admin.studentlist, element: <StudentList /> },
             { path: path.Admin.adminStudentReq, element: <AdminStudentReq /> },
-            { path: path.Admin.adminStudentReqApproved, element: <AdminStudentReqApproved /> },
-            { path: path.Admin.adminStudentReqRejected, element: <AdminStudentReqRejected /> },
+            {
+              path: path.Admin.adminStudentReqApproved,
+              element: <AdminStudentReqApproved />
+            },
+            {
+              path: path.Admin.adminStudentReqRejected,
+              element: <AdminStudentReqRejected />
+            },
             { path: path.Admin.tutorList, element: <AdminListTutor /> },
             {
               path: path.Admin.confirmProfileRegisterTT,
@@ -254,8 +268,7 @@ export default function useRouteElements() {
             {
               path: path.Admin.rejectProfileRegisterTT,
               element: <AdminRejectRegister />
-            },
-            
+            }
           ]
         },
 
