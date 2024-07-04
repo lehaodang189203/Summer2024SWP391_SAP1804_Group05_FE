@@ -1,42 +1,37 @@
-import { faGoogle } from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { authApi } from '../../api/auth.api'
-import Input from '../../components/Input'
-import { AppContext } from '../../context/app.context'
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@tanstack/react-query';
+import { useContext, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { authApi } from '../../api/auth.api';
+import Input from '../../components/Input';
+import { AppContext } from '../../context/app.context';
 import {
   ForgotPasswordReqBody,
   LoginReqBody
-} from '../../types/user.request.type'
-import { ErrorResponse } from '../../types/utils.type'
-import { Schema, schema } from '../../utils/rules'
-import { isAxiosError } from '../../utils/utils'
+} from '../../types/user.request.type';
+import { ErrorResponse } from '../../types/utils.type';
+import { Schema, schema } from '../../utils/rules';
+import { isAxiosError } from '../../utils/utils';
+import { HttpStatusCode } from '../../constant/HttpStatusCode.enum';
+import { path } from '../../constant/path';
+import { getProfileFromLS, getRefreshTokenFromLS } from '../../utils/auth';
+import Button from '../../components/Button';
+import userApi from '../../api/user.api';
 
-import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
-import { path } from '../../constant/path'
-import {
-  getProfileFromLS,
-  getRefreshTokenFromLS,
-  setProfileToLS
-} from '../../utils/auth'
-import Button from '../../components/Button'
-import userApi from '../../api/user.api'
-
-type FormData = Pick<Schema, 'email' | 'password'>
-const loginSchema = schema.pick(['email', 'password'])
-const forgotPasswordSchema = schema.pick(['email'])
+type FormData = Pick<Schema, 'email' | 'password'>;
+const loginSchema = schema.pick(['email', 'password']);
+const forgotPasswordSchema = schema.pick(['email']);
 
 export default function Login() {
-  const { setIsAuthenticated, setRefreshToken, setProfile } =
-    useContext(AppContext)
-  const navigate = useNavigate()
+  const { setIsAuthenticated, setRefreshToken, setProfile } = useContext(AppContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const [showForgotPassword, setShowForgotPassword] = useState(false)
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const {
     register: loginRegister,
@@ -46,113 +41,113 @@ export default function Login() {
     reset: resetLoginForm
   } = useForm<FormData>({
     resolver: yupResolver(loginSchema)
-  })
+  });
 
   const {
     register: forgotPasswordRegister,
     handleSubmit: handleForgotPasswordSubmit,
-
     formState: { errors: forgotPasswordErrors },
     reset: resetForgotPasswordForm
   } = useForm<Pick<FormData, 'email'>>({
     resolver: yupResolver(forgotPasswordSchema)
-  })
+  });
 
   const forgotPasswordMutation = useMutation({
     mutationFn: (body: ForgotPasswordReqBody) => userApi.forgotPassword(body)
-  })
+  });
 
   const onSubmitForgotPassword = (data: Pick<FormData, 'email'>) => {
-    console.log('email', data)
+    console.log('email', data);
 
     forgotPasswordMutation.mutate(data, {
       onSuccess: () => {
-        toast.success('Đã gửi')
-        setShowForgotPassword(false)
-        resetForgotPasswordForm() // Reset form after successful submission
+        toast.success('Đã gửi');
+        setShowForgotPassword(false);
+        resetForgotPasswordForm(); // Reset form after successful submission
       },
       onError: (error) => {
-        console.log(error)
+        console.log(error);
       }
-    })
-  }
+    });
+  };
 
   const loginMutation = useMutation({
     mutationFn: (body: LoginReqBody) => authApi.loginAccount(body)
-  })
+  });
 
   const onSubmitLogin = (data: FormData) => {
-    console.log(data)
+    console.log(data);
 
     loginMutation.mutate(data, {
       onSuccess: (data) => {
-        console.log('login', data)
+        console.log('login', data);
 
-        const refreshToken = getRefreshTokenFromLS()
-        setRefreshToken(refreshToken)
-        setIsAuthenticated(true)
-        setProfile(data.data.data.user)
-        setProfileToLS(data.data.data.user)
-        toast.success(data.data.message)
-        navigate(path.home)
+        const refreshToken = getRefreshTokenFromLS();
+        setRefreshToken(refreshToken);
+setIsAuthenticated(true);
+        setProfile(data.data.data.user);
+        toast.success(data.data.message);
+        navigate(path.home);
       },
       onError: (error) => {
         if (
           isAxiosError<ErrorResponse<any>>(error) &&
           error.response?.status === HttpStatusCode.UnprocessableEntity
         ) {
-          const errorAuthen = error.response.data
+          const errorAuthen = error.response.data;
           if (errorAuthen.data) {
             Object.keys(errorAuthen.data).forEach((key) => {
               setLoginError(key as keyof FormData, {
                 type: 'server',
                 message: errorAuthen.data[key]
-              })
-            })
+              });
+            });
           }
-          toast.error(errorAuthen.message)
+          toast.error(errorAuthen.message);
         } else {
-          toast.error('An unexpected error occurred')
+          toast.error('An unexpected error occurred');
         }
       }
-    })
-  }
+    });
+  };
 
-  // useEffect(() => {
-  //     handleGoogleCallback();
-  // }, []);
+  const handleGoogleCallback = (event: { origin: string; data: { profile: any; accessToken: any; refreshToken: any; }; }) => {
+    if (event.origin === 'http://localhost:7133') {
+      const { profile, accessToken, refreshToken } = event.data;
+      if (profile && accessToken && refreshToken) {
+        setProfile(JSON.parse(profile));
+        setIsAuthenticated(true);
+        setRefreshToken(refreshToken);
+        localStorage.setItem('profile', profile);
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', refreshToken);
+        navigate(path.home);
+        toast.success('Logged in successfully');
+      } else {
+        toast.error('Login failed');
+      }
+    }
+  };
 
-  // const handleGoogleCallback = async () => {
-  //   loginGGMutation.mutate(undefined, {
-  //     onSuccess: (data) => {
-  //       const refreshToken = getRefreshTokenFromLS()
-  //       setRefreshToken(refreshToken)
-  //       setIsAuthenticated(true)
-  //       setProfile(data.data.data.user)
-  //       toast.success(data.data.message)
-  //       navigate(path.home)
-  //     },
-  //     onError: (error) => {
-  //       toast.error('An unexpected error occurred')
-  //     }
-  //   })
-  // }
+  useEffect(() => {
+    window.addEventListener('message', handleGoogleCallback);
+    return () => {
+      window.removeEventListener('message', handleGoogleCallback);
+    };
+  }, []);
 
-  // const loginGGMutation = useMutation({
-  //   mutationFn: () => authApi.loginGG()
-  // })
   const signInGoogle = () => {
     const googleAuthWindow = window.open(
       'http://localhost:7133/api/user/signin-google',
       '_blank',
       'width=500,height=600'
-    )
+    );
 
-    // Optional: You can add some code to check if the window was blocked by the browser.
     if (!googleAuthWindow) {
-      alert('Popup blocked. Please allow popups for this website.')
+      alert('Popup blocked. Please allow popups for this website.');
     }
-  }
+  };
+
   return (
     <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
       <div className='container justify-center flex'>
@@ -178,7 +173,7 @@ export default function Login() {
             />
             <div className='mt-3'>
               <Button
-                type='submit'
+type='submit'
                 className='w-full rounded-xl text-center bg-pink-300 py-4 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
                 isLoading={loginMutation.isPending}
                 disabled={loginMutation.isPending}
@@ -225,8 +220,8 @@ export default function Login() {
                 type='button'
                 className='w-full text-center text-blue-500'
                 onClick={() => {
-                  setShowForgotPassword(false)
-                  resetLoginForm() // Reset the login form
+                  setShowForgotPassword(false);
+                  resetLoginForm(); // Reset the login form
                 }}
               >
                 Quay lại
@@ -261,9 +256,9 @@ export default function Login() {
             >
               Đăng Ký
             </Link>
-          </div>
+</div>
         </div>
       </div>
     </div>
-  )
+  );
 }

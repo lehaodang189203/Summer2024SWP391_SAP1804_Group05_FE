@@ -92,7 +92,7 @@ export const studentApi = {
 
   deleteRequest: async (idRequest: string) =>
     await http.delete<SuccessResponse<any>>(
-      `Student/deleteRequest?idRequest=${idRequest}`
+      `Student/deleteRequest?id=${user.id}&idRequest=${idRequest}`
     ),
 
   // select Tutor

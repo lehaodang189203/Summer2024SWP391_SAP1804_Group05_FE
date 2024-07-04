@@ -10,6 +10,7 @@ import { getProfileFromLS } from '../../utils/auth'
 import FormRequest from '../FormRequest/FormRequest'
 import { AppContext } from '../../context/app.context'
 import { roles } from '../../constant/roles'
+import { moderatorApi } from '../../api/moderator.api'
 
 export default function RequestList() {
   const user: User = getProfileFromLS()
@@ -19,7 +20,7 @@ export default function RequestList() {
 
   console.log(profile)
 
-  const { data: requestData } = useQuery<Request[]>({
+  const { data: requestData,refetch } = useQuery<Request[]>({
     queryKey: ['Request'],
     queryFn: () => tutorApi.viewRequest(),
     placeholderData: keepPreviousData
@@ -48,11 +49,16 @@ export default function RequestList() {
     }
   }
 
-  const handleDeleteRequest = (requestId: string) => {
-    // Xử lý logic xóa request ở đây
-    console.log(`Deleting request ${requestId}`)
+  const handleDeleteRequest = (idReq: string) => {
+    deleteMutation.mutate(idReq)
   }
-
+  const deleteMutation = useMutation({
+    mutationFn: (idReq: string) => moderatorApi.deleteRequest(idReq),
+    onSuccess: () => {
+      toast.success('Yêu cầu đã bị xóa')
+      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
+    }
+  })
   useEffect(() => {
     if (requestData) {
       console.log(requestData)
