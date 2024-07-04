@@ -102,9 +102,10 @@ export const studentApi = {
     ),
 
   //  lấy lớp học đang diễn ra
-  classActive(id: string) {
-    return http.get<SuccessResponseReq<Request[]>>(
-      `Student/classActive?id=${id}`
+  classActive(body: string) {
+    console.log('id',body)
+    return http.get<any>(
+      `Student/classActive?id=${body}`
     )
   },
 
