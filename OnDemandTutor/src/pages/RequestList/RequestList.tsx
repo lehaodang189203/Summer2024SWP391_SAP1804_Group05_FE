@@ -133,7 +133,7 @@ export default function RequestList() {
                 </div>
                 <div className='w-full items-end flex'>
                   <div className='my-4 w-full px-auto mx-auto'>
-                    {user?.roles === 'Gia sư' ? (
+                    {user?.roles === 'gia sư' ? (
                       <div
                         role='button'
                         onClick={() => handleAcceptClass(data.idRequest)}
