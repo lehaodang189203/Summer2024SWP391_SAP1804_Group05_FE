@@ -53,7 +53,16 @@ export default function StudentRes() {
       rejectMutation.mutate(selectedRecord.idRequest)
     }
   }
-
+  const handleDelete = (idReq: string) => {
+    deleteMutation.mutate(idReq)
+  }
+  const deleteMutation = useMutation({
+    mutationFn: (idReq: string) => moderatorApi.deleteRequest(idReq),
+    onSuccess: () => {
+      toast.success('Yêu cầu đã bị xóa')
+      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
+    }
+  })
   const columns: TableColumnsType<RequestModerator> = [
     {
       title: 'Tên Học Sinh',
@@ -108,19 +117,25 @@ export default function StudentRes() {
       width: 150
     },
     {
-      title: 'Chi tiết',
+      title: '',
       dataIndex: 'detail',
       fixed: 'right',
       className: 'TextAlign',
-      width: 100,
+      width: 200,
       render: (text: string, record: RequestModerator) => (
         <div className='flex gap-1'>
           <button
-            className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
+            className='p-1 border w-2/3 border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
             onClick={() => showDetail(record.idRequest)} // Ensure the id is passed correctly
           >
             Chi tiết
           </button>
+          <button
+          className='p-1 border w-1/3 border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
+          onClick={() => handleDelete(record.idRequest)}
+        >
+          Xóa
+        </button>
         </div>
       )
     }
