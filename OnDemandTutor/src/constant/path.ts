@@ -41,6 +41,7 @@ export const path = {
     adminStudentReq: '/admin/studentReq',
     adminStudentReqApproved: '/admin/studentReqApproved',
     adminStudentReqRejected: '/admin/studentReqRejected',
+    TransactionList: 'admin/TransactionList',
     sessionList: '/admin/sessionList',
     dashBoard: '/admin/dashboard'
   }

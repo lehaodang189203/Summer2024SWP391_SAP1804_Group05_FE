@@ -22,7 +22,7 @@ export const adminAPI = {
   async getRequestTutorReg() {
     try {
       const response = await http.get<SuccessResponseReq<AdminTutorType[]>>(
-        `/Admin/viewAllRequestReject`
+        `/modaretor/viewListTutor`
       );
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data;
@@ -163,6 +163,21 @@ export const adminAPI = {
     try {
       const response = await http.get<SuccessResponseReq<ChartData[]>>(
         `/Admin/ViewRevenueByYear?year=${year}`
+      );
+      if (response.status === HttpStatusCode.Ok) {
+        console.log(' response.data.data', response.data.data)
+        return response.data.data;
+      } else {
+        throw new Error('Failed to fetch data');
+      }
+    } catch (error) {
+      throw new Error('Failed to fetch data');
+    }
+  },
+  async getTransaction() {
+    try {
+      const response = await http.get<SuccessResponseReq<any>>(
+        `/Admin/ViewAllTransaction`
       );
       if (response.status === HttpStatusCode.Ok) {
         console.log(' response.data.data', response.data.data)

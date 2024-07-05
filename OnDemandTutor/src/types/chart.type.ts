@@ -4,4 +4,4 @@ interface ChartData {
     revenue: number;
     month: number;
     year: number;
-  }
+}

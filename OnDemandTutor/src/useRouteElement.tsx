@@ -38,6 +38,7 @@ import AdminStudentReq from './pages/Admin/Components/AdminStudentReq'
 import AdminStudentReqApproved from './pages/Admin/Components/AdminStudentReqApproved'
 import AdminStudentReqRejected from './pages/Admin/Components/AdminStudentReqRejected'
 import MyClass from './pages/MyClass'
+import TransactionList from './pages/Admin/Components/TransactionList'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -252,6 +253,7 @@ export default function useRouteElements() {
             { path: path.Admin.sessionList, element: <SessionList /> },
             { path: path.Admin.studentlist, element: <StudentList /> },
             { path: path.Admin.adminStudentReq, element: <AdminStudentReq /> },
+            { path: path.Admin.TransactionList, element: <TransactionList /> },
             {
               path: path.Admin.adminStudentReqApproved,
               element: <AdminStudentReqApproved />

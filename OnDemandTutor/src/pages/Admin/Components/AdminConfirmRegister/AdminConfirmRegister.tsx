@@ -170,7 +170,7 @@ export default function ModTutorResRegis() {
             con="con"
             rej=""
             />
-        <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
+        <div className='text-left shadow-sm shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
           <div className='mb-5'>
             <Search
             // inputText={searchText}
@@ -222,7 +222,6 @@ export default function ModTutorResRegis() {
                   ) : (
                     <div>
                       Ảnh :{' '}
-                      <p>{selectedRecord.imageQualification}</p>
                       <img src={selectedRecord.imageQualification} alt='ảnh' />
                     </div>
                   )}

@@ -117,7 +117,7 @@ function AdminListTutor () {
             con=""
             rej=""
             />
-            <div className=" text-left border-2 p-5 h-[600px] rounded-t-xl shadow-black rounded-2xl shadow-sm mt-5">
+            <div className="text-left shadow-sm shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6">
                 <div className="mb-5">
                     <Search
                     // inputText={searchText}
@@ -153,7 +153,7 @@ function AdminListTutor () {
                     {selectedRecord && (
                         <div>
                             <p> Tên : {selectedRecord.fullName}</p>
-                            <p> Email : {selectedRecord.email ?selectedRecord.email : 'Chưa cập nhập'}</p>
+                            {/* <p> Email : {selectedRecord.email ?selectedRecord.email : 'Chưa cập nhập'}</p> */}
                             <p> Ngày sinh : {selectedRecord.date_of_birth ?selectedRecord.date_of_birth : 'Chưa cập nhập'}</p>
                             <p> Giới tính : {selectedRecord.gender? selectedRecord.gender:'Chưa cập nhập'}</p>
                             <p> Môn : {selectedRecord.subject ?selectedRecord.subject:'Chưa cập nhập'}</p>

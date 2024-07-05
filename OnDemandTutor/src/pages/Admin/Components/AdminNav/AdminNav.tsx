@@ -47,6 +47,14 @@ export default function AdminNav(){
                         Danh sách giảng viên
                     </button>  
                 </Link>
+                <Link to={path.Admin.TransactionList}>
+                    <button 
+                        className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
+                        onClick={() => handleSetActive('SessionList')}
+                    >
+                        Danh sách giao dịch
+                    </button>
+                </Link>
                 <Link to={path.Admin.sessionList}>
                     <button 
                         className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
