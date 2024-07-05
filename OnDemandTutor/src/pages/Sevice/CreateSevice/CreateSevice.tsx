@@ -2,9 +2,9 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import ScheduleItemForm from './components/ScheduleItemForm';
+import ScheduleItemForm from '../components/ScheduleItemForm';
 import { useMutation } from '@tanstack/react-query';
-import { tutorApi } from '../../api/tutor.api';
+import { tutorApi } from '../../../api/tutor.api';
 import { toast } from 'react-toastify';
 
 const schema = yup.object().shape({
@@ -25,7 +25,7 @@ const schema = yup.object().shape({
 type FormDataService = yup.InferType<typeof schema>;
 
 export default function ServiceForm  ()  {
-  const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormDataService>({
+  const { control, handleSubmit, setValue, watch, formState: { errors },reset } = useForm<FormDataService>({
     resolver: yupResolver(schema),
     defaultValues: {
       pricePerHour: 0,
@@ -45,7 +45,7 @@ export default function ServiceForm  ()  {
   const classes = ['11', '12', '10'];
   const learningMethods = ['Online', 'Offline'];
   const hours = [
-    '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
+    '01:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00',
     '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00',
     '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00'
   ];
@@ -140,6 +140,7 @@ export default function ServiceForm  ()  {
         onSuccess:(res :any) => {
             console.log('data trả về khi create service nè', res);
             toast.success(res.message)
+            reset()// reset lại form khi gửi đi thành công
         },
         onError:(errors) =>{
             console.log(errors)

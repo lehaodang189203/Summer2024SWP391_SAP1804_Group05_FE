@@ -3,7 +3,7 @@ import { Request } from '../types/request.type'
 import { DataService } from '../types/tutor.type'
 import { JoinClassBody } from '../types/user.request.type'
 import { User } from '../types/user.type'
-import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
+import { SuccessResponse } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 const user = <User>getProfileFromLS();
@@ -36,8 +36,9 @@ export const tutorApi = {
       const response = await http.post<any>(//hiện tại tui để any trước
         `/tutor/createService?id=${user.id}`,body
       )
+      console.log('response',response)
       if (response.status === HttpStatusCode.Ok) {
-        return response.data.data
+        return response.data
       } else {
         throw new Error('Danh sách trống')
       }
