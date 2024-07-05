@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { path } from '../../constant/path'
 export default function Footer() {
   return (
     <footer className='  bg-slate-950 mt-[1rem] rounded-2xl shadow-sm  w-full '>
@@ -129,7 +130,7 @@ export default function Footer() {
             <ul className='mt-3 space-y-1 text-sm'>
               <li>
                 <Link
-                  to={'/registerAT'}
+                  to={path.registerAsTutor}
                   className='text-gray-400 transition hover:text-pink-500 opacity-90 '
                 >
                   Trở Thành Gia Sư

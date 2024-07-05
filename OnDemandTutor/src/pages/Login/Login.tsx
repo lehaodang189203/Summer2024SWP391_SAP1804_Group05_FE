@@ -84,7 +84,7 @@ export default function Login() {
 
         const refreshToken = getRefreshTokenFromLS();
         setRefreshToken(refreshToken);
-setIsAuthenticated(true);
+        setIsAuthenticated(true);
         setProfile(data.data.data.user);
         toast.success(data.data.message);
         navigate(path.home);

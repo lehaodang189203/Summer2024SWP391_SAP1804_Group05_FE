@@ -10,6 +10,7 @@ export default function AdminNav(){
         setAtive(data)
     }
     const user = getProfileFromLS()
+    console.log('user',user)
     return (
         <div className="fixed top-0 left-0 h-full p-2 grid grid-flow-row grid-rows-12 bg-white shadow-lg w-1/6 rounded-lg">
             <Link to={path.home} className="row-span-2"> 
@@ -60,12 +61,20 @@ export default function AdminNav(){
                         className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
                         onClick={() => handleSetActive('SessionList')}
                     >
+                        Danh sách đánh giá
+                    </button>
+                </Link>
+                <Link to={path.Admin.sessionList}>
+                    <button 
+                        className="text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md"
+                        onClick={() => handleSetActive('SessionList')}
+                    >
                         Danh sách phiên học
                     </button>
                 </Link>
             </div>
             <div className="row-span-1 text-center">
-                Admin: {user.fullname}
+                Admin: {user.fullName}
             </div>
         </div>
     )

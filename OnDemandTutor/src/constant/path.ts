@@ -15,6 +15,7 @@ export const path = {
   requestStudentCurrent: '/requestStudentCurrent', //student
   requestList: '/requests', //tutor and student
   profileTT: '/user/profileTT', //tutor
+  createService:'/createService',//tutor
   paymentSucsess: '/paymentSucsess',
   paymentFail: '/paymentFail',
   detailRequest: '/detailRequest', //chưa được sử dụng

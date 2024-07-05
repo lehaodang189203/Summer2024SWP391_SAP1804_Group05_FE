@@ -6,6 +6,7 @@ import CardBox from "../CardBox";
 import ChartCard from '../ChartCard';
 import { adminAPI } from '../../../../api/admin.api';
 import { useEffect, useState } from 'react';
+import { ChartData } from '../../../../types/chart.type';
 
 export default function Dashboard() {
     const [amountStudents, setAmountStudents] = useState<number>(0);

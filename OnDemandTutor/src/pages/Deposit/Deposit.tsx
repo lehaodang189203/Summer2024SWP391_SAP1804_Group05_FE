@@ -94,6 +94,8 @@ export default function Deposit() {
             <option value={20000}>20,000 VND</option>
             <option value={50000}>50,000 VND</option>
             <option value={100000}>100,000 VND</option>
+            <option value={200000}>200,000 VND</option>
+            <option value={500000}>500,000 VND</option>
           </select>
         </div>
 

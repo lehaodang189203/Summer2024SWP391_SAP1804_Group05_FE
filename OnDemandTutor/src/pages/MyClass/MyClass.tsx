@@ -9,13 +9,8 @@ export default function MyClass() {
   const { profile } = useContext(AppContext)
   console.log("profile",profile)
   const { data } = useQuery({
-    queryKey: ['Account',profile?.id],
-    queryFn: async () =>  await studentApi.classActive(profile?.id as string),
-    placeholderData: keepPreviousData,
-    enabled: !profile?.id,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false //lưu ý :)))
+    queryKey: ['Account'],
+    queryFn:  () =>   studentApi.classActive(profile?.id as string),
   })
   console.log(data)
   const classMutation = useMutation({
