@@ -94,7 +94,7 @@ export default function UserSideNav() {
           Đổi mật khẩu
         </NavLink>
         <NavLink
-          to='/'
+          to={path.profileTT}
           className={({ isActive }) =>
             classNames('mt-4 flex items-center  capitalize transition-colors', {
               'text-orange': isActive,
@@ -111,30 +111,6 @@ export default function UserSideNav() {
           </div>
           Hồ sơ giảng viên
         </NavLink>
-
-        {profile?.roles === roles.tutor && (
-          <NavLink
-            to={path.profileTT}
-            className={({ isActive }) =>
-              classNames(
-                'mt-4 flex items-center  capitalize transition-colors',
-                {
-                  'text-orange': isActive,
-                  'text-gray-600': !isActive
-                }
-              )
-            }
-          >
-            <div className='mr-3 h-[22px] w-[22px]'>
-              <img
-                src='https://down-vn.img.susercontent.com/file/ba61750a46794d8847c3f463c5e71cc4'
-                alt=''
-                className='h-full w-full'
-              />
-            </div>
-            Hồ sơ giảng viên
-          </NavLink>
-        )}
       </div>
     </div>
   )

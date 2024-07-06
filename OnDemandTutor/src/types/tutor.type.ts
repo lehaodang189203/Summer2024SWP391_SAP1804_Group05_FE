@@ -12,6 +12,20 @@ export interface TutorType {
   imageQualification: string
   introduction: string
 }
+
+export interface TutorProfile {
+  speacializedSkill: string
+  experience: number
+  introduction: string
+  subjects: string
+  qualifications: {
+    id: string
+    name: string
+    img: string
+    type: string
+  }
+}
+
 export interface AdminTutorType {
   id: string
   fullName: string

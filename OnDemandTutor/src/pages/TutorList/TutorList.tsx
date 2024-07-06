@@ -1,5 +1,6 @@
 import {
   faAudioDescription,
+  faBook,
   faImage,
   faPersonHalfDress,
   faSchool,
@@ -272,6 +273,14 @@ export default function TutorList() {
                           Tên bằng: {currentTutor.qualifiCationName}
                         </span>
                       </div>
+                      {/* Description */}
+                      <div className='pt-2 text-left'>
+                        <FontAwesomeIcon icon={faBook} className='pt-2 h-6' />
+                        <span className='pl-2 pt-1'>
+                          Mô tả:
+                          {currentTutor.introduction}
+                        </span>
+                      </div>
                       {/* ảnh bằng */}
                       <div>
                         <img
@@ -279,10 +288,6 @@ export default function TutorList() {
                           alt='Ảnh chứng chỉ'
                           className='mt-4'
                         />
-                      </div>
-                      {/* Description */}
-                      <div className='pt-2 text-left'>
-                        {currentTutor.introduction}
                       </div>
                     </div>
                   </div>

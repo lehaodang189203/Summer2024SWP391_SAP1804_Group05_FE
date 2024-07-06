@@ -11,16 +11,17 @@ import FormRequest from '../FormRequest/FormRequest'
 import { AppContext } from '../../context/app.context'
 import { roles } from '../../constant/roles'
 import { moderatorApi } from '../../api/moderator.api'
+import { truncateByDomain } from 'recharts/types/util/ChartUtils'
 
 export default function RequestList() {
   const user: User = getProfileFromLS()
   const { profile } = useContext(AppContext)
 
   const [selectedClasses, setSelectedClasses] = useState<string[]>([])
-
+  const [boolean, setBoolean] = useState<boolean>(false)
   console.log(profile)
 
-  const { data: requestData,refetch } = useQuery<Request[]>({
+  const { data: requestData, refetch } = useQuery<Request[]>({
     queryKey: ['Request'],
     queryFn: () => tutorApi.viewRequest(),
     placeholderData: keepPreviousData
@@ -39,10 +40,13 @@ export default function RequestList() {
 
       tutorApprovedReMutation.mutate(joinClass, {
         onSuccess: (data) => {
+          setBoolean(true)
           setSelectedClasses((prevSelectedClasses) => [
             ...prevSelectedClasses,
             requestId
           ])
+          console.log(111)
+
           toast.success(data.data.message)
         }
       })
@@ -157,7 +161,7 @@ export default function RequestList() {
                         role='button'
                         onClick={() => handleAcceptClass(data.idRequest)}
                         className={`rounded-lg w-full h-10 mx-auto justify-center items-center flex ${
-                          selectedClasses.includes(data.idRequest!)
+                          boolean
                             ? 'bg-gray-700 cursor-not-allowed'
                             : 'bg-pink-400 hover:opacity-80'
                         }`}
@@ -169,9 +173,7 @@ export default function RequestList() {
                             : 'auto'
                         }}
                       >
-                        {selectedClasses.includes(data.idRequest!)
-                          ? 'Đã nhận lớp'
-                          : 'Nhận Lớp'}
+                        {boolean ? 'Đã nhận lớp' : 'Nhận Lớp'}
                       </div>
                     )}
                     {user?.roles.toLowerCase() === roles.student && (
@@ -196,18 +198,21 @@ export default function RequestList() {
           ))}
       </div>
 
-      <div className='fixed bottom-6 right-6'>
-        <button
-          onClick={handleOpenPopup}
-          className='mb-10 bg-slate-500 text-white rounded-full p-4 shadow-lg hover:bg-transparent transition-all duration-300 hover:text-black shadow-black hover: relative group'
-        >
-          +
-          <span className='absolute bottom-full right-1/2 transform translate-x-1/2 mb-2 w-[3rem] p-2 text-white bg-black rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
-            Bấm vào để tạo lớp
-          </span>
-        </button>
-        {showForm && <FormRequest onClose={handleCloseForm} />}
-      </div>
+      {user?.roles.toLowerCase() !== roles.moderator &&
+        user.roles.toLowerCase() !== roles.admin && (
+          <div className='fixed bottom-6 right-6'>
+            <button
+              onClick={handleOpenPopup}
+              className='mb-10 bg-slate-500 text-white rounded-full p-4 shadow-lg hover:bg-transparent transition-all duration-300 hover:text-black shadow-black hover: relative group'
+            >
+              +
+              <span className='absolute bottom-full right-1/2 transform translate-x-1/2 mb-2 w-[3rem] p-2 text-white bg-black rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
+                Bấm vào để tạo lớp
+              </span>
+            </button>
+            {showForm && <FormRequest onClose={handleCloseForm} />}
+          </div>
+        )}
 
       <Pagination
         totalItems={items.length}

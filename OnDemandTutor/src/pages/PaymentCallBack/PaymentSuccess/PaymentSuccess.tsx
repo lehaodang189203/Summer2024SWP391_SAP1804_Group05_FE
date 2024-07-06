@@ -13,7 +13,7 @@ export default function PaymentSuccess() {
   const { profile, setProfile } = useContext(AppContext)
   const { data: ProfileData } = useQuery({
     queryKey: ['Account'],
-    queryFn: userApi.getProfile
+    queryFn: () => userApi.getProfile(profile?.id as string)
   })
   useEffect(() => {
     setProfile(ProfileData ? ProfileData.data.data : profile)

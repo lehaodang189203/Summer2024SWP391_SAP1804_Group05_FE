@@ -78,8 +78,19 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
           ref={ref}
         />
         <div className={classNameError}>{errorMessage}</div>
-        {/* {errorMessage && <div className={classNameError}>{errorMessage}</div>} */}
       </div>
     )
   }
 )
+
+// To use this component and ensure the final value is cast to a number
+const handleSubmit = (data: any) => {
+  const priceWithoutCommas = data.price.replace(/,/g, '')
+  const priceAsNumber = Number(priceWithoutCommas)
+  if (isNaN(priceAsNumber)) {
+    // Handle invalid number error
+  } else {
+    // Proceed with the valid number
+    console.log('Valid number:', priceAsNumber)
+  }
+}

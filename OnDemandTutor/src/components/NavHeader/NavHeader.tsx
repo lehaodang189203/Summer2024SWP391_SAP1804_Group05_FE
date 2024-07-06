@@ -77,7 +77,7 @@ export default function NavHeader() {
                   to={path.Moderator.mod}
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                 >
-                  Kiểu duyệt
+                  Kiểm duyệt
                 </Link>
               )}
               {profile?.roles.toLowerCase() === roles.admin && (
@@ -85,7 +85,7 @@ export default function NavHeader() {
                   to={path.Admin.admin}
                   className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                 >
-                  Quản trị viên
+                  Quản lý
                 </Link>
               )}
               {(profile?.roles.toLowerCase() === roles.student ||
@@ -107,7 +107,7 @@ export default function NavHeader() {
                     to={path.tutorViewRequestList}
                     className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                   >
-                    Xem đơn của bạn (Tutor)
+                    Xem hồ sơ giảng viên
                   </Link>
                   <Link
                     to={path.myClass}

@@ -1,14 +1,27 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { Request } from '../types/request.type'
+<<<<<<< HEAD
+import { TutorProfile, TutorType } from '../types/tutor.type'
+import { JoinClassBody } from '../types/user.request.type'
+
+import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
+=======
 import { DataService } from '../types/tutor.type'
 import { JoinClassBody } from '../types/user.request.type'
 import { User } from '../types/user.type'
 import { SuccessResponse } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
+>>>>>>> 2eb47b4b35ddfccb55e1f767eb52ea0936093715
 import http from '../utils/http'
 const user = <User>getProfileFromLS();
 
 export const tutorApi = {
+  getProfileTT(id: string) {
+    return http.get<SuccessResponseReq<TutorProfile>>(
+      `tutor/GetProfileTutor?id=${id}`
+    )
+  },
+
   viewRequest: async (): Promise<Request[]> => {
     try {
       const response = await http.get<SuccessResponse<Request[]>>(
