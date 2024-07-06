@@ -14,6 +14,7 @@ export const path = {
   deposit: '/deposit', //student
   studentViewRequestList: '/studentViewRequestList', //student
   requestStudentCurrent: '/requestStudentCurrent', //student
+  Service:'/Service',
   requestList: '/requests', //tutor and student
   profileTT: '/user/profileTT', //tutor
   createService:'/createService',//tutor

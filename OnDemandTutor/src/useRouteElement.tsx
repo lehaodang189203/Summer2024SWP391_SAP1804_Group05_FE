@@ -41,6 +41,7 @@ import MyClass from './pages/MyClass'
 import TransactionList from './pages/Admin/Components/TransactionList'
 import CreateService from './pages/Sevice/CreateSevice'
 import Support from './pages/Support'
+import ServiceList from './pages/Sevice/BookService'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -151,6 +152,14 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <Support />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.Service, //student
+          element: (
+            <MainLayout>
+              <ServiceList />
             </MainLayout>
           )
         },
