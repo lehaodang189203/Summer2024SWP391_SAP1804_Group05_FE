@@ -154,7 +154,14 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-
+        {
+          path: path.profileTT,
+          element: (
+            <MainLayout>
+              <ProfileTT />
+            </MainLayout>
+          )
+        },
         {
           path: '/tutors/:idReq', //student--------------------------------------------------------------------------
           element: (

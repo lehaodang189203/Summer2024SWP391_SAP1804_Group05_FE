@@ -22,8 +22,8 @@ const user = getProfileFromLS()
 //  accountBalance: string
 
 const userApi = {
-  getProfile() {
-    return http.get<SuccessResponseReq<User>>(`user/getProfile?id=${user.id}`)
+  getProfile(id: string) {
+    return http.get<SuccessResponseReq<User>>(`user/getProfile?id=${id}`)
   },
   async updateProfile(body: UpdateProfileBody) {
     // console.log('body của res khi call api',body)

@@ -73,6 +73,7 @@ export default function FormRequest({
   const onSubmit = handleSubmit((data) => {
     const { timeTable } = data
     const totalSessions = timeTable.split(',').length
+
     const newData = {
       ...data,
       totalSessions: totalSessions
@@ -135,7 +136,7 @@ export default function FormRequest({
               <label className='block text-sm font-medium'>Môn học</label>
               <select
                 {...register('subject')}
-                className='w-full p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
+                className='w-full p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl text-center'
               >
                 <option value=''>Chọn môn học</option>
                 <option value='Ngữ văn'>Ngữ văn</option>

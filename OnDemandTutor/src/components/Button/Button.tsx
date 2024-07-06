@@ -29,7 +29,7 @@ export default function Button(props: ButtonProps) {
           />
         </svg>
       )}
-      <span className='ml-2'>{children}</span>
+      <span className=' text-center'>{children}</span>
     </button>
   )
 }

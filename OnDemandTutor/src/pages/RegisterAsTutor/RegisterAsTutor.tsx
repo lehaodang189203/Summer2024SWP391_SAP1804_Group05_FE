@@ -1,12 +1,13 @@
 import { useMutation } from '@tanstack/react-query'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 import { studentApi } from '../../api/student.api'
 import InputFile from '../../components/InputFile'
 import { RequestTutorBody } from '../../types/user.request.type'
 import { storage } from '../../utils/firebase'
+import { AppContext } from '../../context/app.context'
 
 export default function RegisterAsTutor() {
   const [file, setFile] = useState<File | null>(null)
@@ -21,8 +22,10 @@ export default function RegisterAsTutor() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
+  const { profile } = useContext(AppContext)
   const ReqMutation = useMutation({
-    mutationFn: (body: RequestTutorBody) => studentApi.registerAsTutor(body)
+    mutationFn: (body: RequestTutorBody) =>
+      studentApi.registerAsTutor(body, profile?.id as string)
   })
 
   const handleChangeFile = (file?: File) => {
@@ -89,11 +92,18 @@ export default function RegisterAsTutor() {
 
       console.log('formData', formData)
       ReqMutation.mutate(formData, {
-        onSuccess: () => {
-          toast.success('Đơn của bạn đang chờ để xét duyệt')
+        onSuccess: (data) => {
+          toast.success(data.data.message)
+          setExperience(null)
+          setImageQualification('')
+          setIntroduction('')
+          setQualificationName('')
+          setSpecializedSkills('')
+          setSubject('')
+          setType('')
+          setPreviewUrl(null)
         },
         onError: (error) => {
-          toast.error('thất bại')
           toast.error(error.message)
         }
       })
@@ -110,7 +120,7 @@ export default function RegisterAsTutor() {
           className='w-[50rem] space-y-4 border-2 rounded-xl p-4 bg-white shadow-black shadow-lg'
         >
           <div className='space-y-2'>
-            <label className='block'>
+            <label className='block mb-2'>
               Giới thiệu :
               <input
                 type='text'
@@ -121,7 +131,7 @@ export default function RegisterAsTutor() {
               />
             </label>
 
-            <label className='block'>
+            <label className='block  mb-2'>
               Kĩ năng đặc biệt:
               <input
                 type='text'
@@ -132,7 +142,7 @@ export default function RegisterAsTutor() {
               />
             </label>
 
-            <label className='block'>
+            <label className='block  mb-2'>
               Số năm kinh nghiệm(số):
               <input
                 type='number'
@@ -143,7 +153,7 @@ export default function RegisterAsTutor() {
               />
             </label>
 
-            <label className='block'>
+            <label className='block  mb-2'>
               Tên bằng cắp(chứng chỉ):
               <input
                 type='text'
@@ -154,12 +164,12 @@ export default function RegisterAsTutor() {
               />
             </label>
 
-            <label className='block'>
+            <label className='block  mb-2'>
               Môn học:
               <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className='w-full p-2 border rounded'
+                className='w-full p-2 border rounded  '
                 required
               >
                 <option value=''>Chọn môn học</option>
@@ -175,7 +185,7 @@ export default function RegisterAsTutor() {
                 <option value='Tin học'>Tin học</option>
               </select>
             </label>
-            <label className='block'>
+            <label className='block  mb-2'>
               Loại :
               <select
                 value={type}
@@ -189,7 +199,7 @@ export default function RegisterAsTutor() {
               </select>
             </label>
 
-            <div>
+            <div className=' mb-2'>
               <label htmlFor=''>Hãy chọn ảnh chứng chỉ</label>
               <InputFile onChange={handleChangeFile} />
             </div>

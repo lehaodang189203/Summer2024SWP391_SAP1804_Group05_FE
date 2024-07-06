@@ -1,50 +1,48 @@
-import Search from 'antd/es/transfer/search'
-import ModMenu from '../ModMenu/ModMenu'
-import { useEffect, useState } from 'react'
-import { Button, Modal, Table, TableColumnsType } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { Modal, Table, Button } from 'antd'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { moderatorApi } from '../../../../api/moderator.api'
 import { toast } from 'react-toastify'
 import { RequestModerator } from '../../../../types/request.type'
 
 export default function StudentRes() {
-  // Lấy danh sách yêu cầu từ API
   const { data: RequestData, refetch } = useQuery<RequestModerator[]>({
     queryKey: ['Request'],
     queryFn: () => moderatorApi.viewRequests()
   })
 
-  console.log('RequestData', RequestData)
-
-  // Khởi tạo các mutation cho việc phê duyệt và từ chối yêu cầu
   const approveMutation = useMutation({
     mutationFn: (idReq: string) => moderatorApi.approvedRequest(idReq),
-    onSuccess: () => {
-      toast.success('Yêu cầu đã được phê duyệt')
-      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
+    onSuccess: (data) => {
+      toast.success(data.data.message)
+      refetch()
       setVisible(false)
     }
   })
 
   const rejectMutation = useMutation({
     mutationFn: (idReq: string) => moderatorApi.rejectRequest(idReq),
-    onSuccess: () => {
-      toast.success('Yêu cầu đã bị từ chối')
-      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
+    onSuccess: (data) => {
+      toast.success(data.data.message)
+      refetch()
       setVisible(false)
     }
   })
 
   useEffect(() => {
-    if (RequestData) {
-      console.log(RequestData)
+    if (approveMutation.isSuccess) {
+      refetch()
+      setVisible(false)
     }
-  }, [RequestData])
+    if (rejectMutation.isSuccess) {
+      refetch()
+      setVisible(false)
+    }
+  }, [approveMutation.isSuccess, rejectMutation.isSuccess])
 
   const handleApprove = () => {
     if (selectedRecord) {
       approveMutation.mutate(selectedRecord.idRequest)
-      console.log('id của thằng request nè ', selectedRecord.idRequest)
     }
   }
 
@@ -53,30 +51,34 @@ export default function StudentRes() {
       rejectMutation.mutate(selectedRecord.idRequest)
     }
   }
+
   const handleDelete = (idReq: string) => {
     deleteMutation.mutate(idReq)
   }
   const deleteMutation = useMutation({
     mutationFn: (idReq: string) => moderatorApi.deleteRequest(idReq),
-    onSuccess: () => {
-      toast.success('Yêu cầu đã bị xóa')
+    onSuccess: (data) => {
+      toast.success(data.data.message)
       refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
     }
   })
-  const columns: TableColumnsType<RequestModerator> = [
+
+  const columns: {
+    title: string
+    dataIndex: string
+    width: number
+    fixed?: 'left' | 'right'
+    render?: (_: any, record: RequestModerator) => React.ReactNode
+  }[] = [
     {
       title: 'Tên Học Sinh',
       dataIndex: 'fullName',
-      onFilter: (value, record) =>
-        record.fullName.indexOf(value as string) === 0,
-      sorter: (a, b) => a.fullName.length - b.fullName.length,
       width: 200,
       fixed: 'left'
     },
     {
       title: 'Môn',
       dataIndex: 'subject',
-      defaultSortOrder: 'descend',
       width: 200
     },
     {
@@ -87,8 +89,7 @@ export default function StudentRes() {
     {
       title: 'Giá',
       dataIndex: 'price',
-      width: 150,
-      sorter: (a, b) => a.price - b.price
+      width: 150
     },
     {
       title: 'Phương thức học',
@@ -103,8 +104,7 @@ export default function StudentRes() {
     {
       title: 'Số buổi',
       dataIndex: 'totalSessions',
-      width: 150,
-      sorter: (a, b) => a.totalSessions - b.totalSessions
+      width: 150
     },
     {
       title: 'Giờ bắt đầu',
@@ -120,28 +120,25 @@ export default function StudentRes() {
       title: '',
       dataIndex: 'detail',
       fixed: 'right',
-      className: 'TextAlign',
       width: 200,
-      render: (text: string, record: RequestModerator) => (
+      render: (_: any, record: RequestModerator) => (
         <div className='flex gap-1'>
-          <button
-            className='p-1 border w-2/3 border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
-            onClick={() => showDetail(record.idRequest)} // Ensure the id is passed correctly
+          <Button
+            className='border w-2/3 border-blue-400 rounded-lg hover:bg-blue-600 active:bg-blue-500'
+            onClick={() => showDetail(record.idRequest)}
           >
             Chi tiết
-          </button>
-          <button
-          className='p-1 border w-1/3 border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
-          onClick={() => handleDelete(record.idRequest)}
-        >
-          Xóa
-        </button>
+          </Button>
+          <Button
+            className='border w-1/3 border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
+            onClick={() => handleDelete(record.idRequest)}
+          >
+            Xóa
+          </Button>
         </div>
       )
     }
   ]
-
-  const onChange = () => {} // Placeholder for future implementation
 
   const [selectedRecord, setSelectedRecord] = useState<RequestModerator | null>(
     null
@@ -150,7 +147,6 @@ export default function StudentRes() {
 
   const showDetail = (id: string) => {
     const record = RequestData?.find((item) => item.idRequest === id) || null
-    console.log('id', id)
     setSelectedRecord(record)
     setVisible(true)
   }
@@ -162,18 +158,11 @@ export default function StudentRes() {
 
   return (
     <>
-      <ModMenu kind='student' style='Option1' />
-      <div className='text-left'>Yêu cầu đặt lịch</div>
       <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
-        <div className='mb-5'>
-          <Search />
-        </div>
         <Table
           columns={columns}
           dataSource={RequestData}
           pagination={{ pageSize: 10 }}
-          onChange={onChange}
-          showSorterTooltip={{ target: 'sorter-icon' }}
           scroll={{ x: 1300, y: 400 }}
         />
         <Modal
@@ -190,36 +179,38 @@ export default function StudentRes() {
           ]}
         >
           {selectedRecord && (
-            <div>
-              <p className='font-medium'>
-                Tên: {''}
-                <span className='font-bold text-pink-500'>
-                  {selectedRecord.fullName}
+            <div className='details'>
+              <p className='detail-item'>
+                <span className='font-medium text-gray-600'>Tên:</span>{' '}
+                <span className='font-bold  '>{selectedRecord.fullName}</span>
+              </p>
+              <p className='detail-item'>
+                <span className='font-medium text-gray-600'>Ngày học:</span>{' '}
+                <span className='font-bold  '>{selectedRecord.timeTable}</span>
+              </p>
+              <p className='detail-item'>
+                <span className='font-medium text-gray-600'>Số ngày học:</span>{' '}
+                <span className='font-bold text-yellow-600'>
+                  {selectedRecord.totalSessions}
                 </span>
               </p>
-              <div className='flex'>
-                <p className='font-medium'>
-                  Ngày học:{' '}
-                  <span className='line-under'>
-                    {selectedRecord.timeTable} <br />
-                  </span>
-                  Số ngày học:{' '}
-                  <span className='line-under'>
-                    {selectedRecord.totalSessions} <br />
-                  </span>
-                  Thời gian:{' '}
-                  <span className='font-bold'>
-                    từ {selectedRecord.timeStart} tới {selectedRecord.timeEnd}{' '}
-                  </span>
-                </p>
-              </div>
-              <p className='font-medium'>
-                Môn học:
-                <span className='text-blue-400'> {selectedRecord.subject}</span>
+              <p className='detail-item'>
+                <span className='font-medium text-gray-600'>Thời gian:</span>{' '}
+                <span className='font-bold text-purple-600'>
+                  từ {selectedRecord.timeStart} tới {selectedRecord.timeEnd}
+                </span>
               </p>
-              <p className='font-medium'>
-                Học phí: {''}
-                <span className='text-red-500'>{selectedRecord.price}</span>
+              <p className='detail-item'>
+                <span className='font-medium text-gray-600'>Môn học:</span>{' '}
+                <span className='font-bold text-green-600'>
+                  {selectedRecord.subject}
+                </span>
+              </p>
+              <p className='detail-item'>
+                <span className='font-medium text-gray-600'>Học phí:</span>{' '}
+                <span className='font-bold text-red-600'>
+                  {selectedRecord.price}
+                </span>
               </p>
             </div>
           )}

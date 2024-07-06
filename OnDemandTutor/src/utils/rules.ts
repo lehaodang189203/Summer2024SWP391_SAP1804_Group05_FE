@@ -109,6 +109,11 @@ export const requestSchema = yup.object({
   class: yup.string().oneOf(['10', '11', '12']).required('Chọn lớp'),
   price: yup
     .number()
+    .transform((value, originalValue) => {
+      // Remove commas from the original value
+      const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
+      return isNaN(formattedValue) ? 0 : formattedValue
+    })
     .required('Giá là bắt buộc')
     .positive('Giá không thể là số âm'),
 
@@ -179,6 +184,40 @@ export const schemaResAT = yup.object({
   specializedSkills: yup.string().required('Kỹ năng chuyên môn là bắt buộc'),
   imageQualification: yup.string().required('Ảnh còn thiếu')
 })
+
+export const updateTT = yup.object({
+  introduction: yup.string().required('Giới thiệu bản thân là bắt buộc'),
+  qualificationName: yup.string().required('Không được bỏ trống'),
+  type: yup
+    .string()
+    .oneOf(['Chứng Chỉ', 'Bằng Cắp'], 'Phải là Chứng Chỉ hoặc bằng cấp'),
+
+  subject: yup
+    .string()
+    .required('Môn học là bắt buộc')
+    .oneOf(
+      [
+        'Ngữ văn',
+        'Toán học',
+        'Vật lý',
+        'Hóa học',
+        'Sinh học',
+        'Lịch sử',
+        'Địa lý',
+        'Giáo dục công dân',
+        'Ngoại ngữ',
+        'Tin học'
+      ],
+      'Môn học không hợp lệ'
+    ),
+  experience: yup
+    .number()
+    .required('Số năm kinh nghiệm là bắt buộc')
+    .min(0, 'Số năm kinh nghiệm phải lớn hơn 0'),
+  specializedSkills: yup.string().required('Kỹ năng chuyên môn là bắt buộc'),
+  imageQualification: yup.string().required('Ảnh còn thiếu')
+})
+
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
 export type SchemaResAT = yup.InferType<typeof schemaResAT>
 
@@ -186,3 +225,4 @@ export type Requestchema = yup.InferType<typeof requestSchema>
 export type UserSchema = yup.InferType<typeof userSchema>
 export type Schema = yup.InferType<typeof schema>
 export type UpdateSchema = yup.InferType<typeof updateSchema>
+export type UpdateTTSchema = yup.InferType<typeof updateTT>

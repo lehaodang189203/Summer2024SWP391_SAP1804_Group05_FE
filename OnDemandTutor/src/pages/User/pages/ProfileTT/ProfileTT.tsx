@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -16,25 +16,44 @@ import InputNumber from '../../../../components/InputNumber'
 import { AppContext } from '../../../../context/app.context'
 import { setProfileToLS } from '../../../../utils/auth'
 import { storage } from '../../../../utils/firebase'
-import { UpdateSchema, updateSchema } from '../../../../utils/rules'
+import { UpdateTTSchema, updateTT } from '../../../../utils/rules'
 
 import { UpdateProfileBody } from '../../../../types/user.request.type'
+import { tutorApi } from '../../../../api/tutor.api'
 
 type FormData = Pick<
-  UpdateSchema,
-  'fullName' | 'phone' | 'date_of_birth' | 'address' | 'gender' | 'avatar'
+  UpdateTTSchema,
+  | 'experience'
+  | 'subject'
+  | 'imageQualification'
+  | 'introduction'
+  | 'specializedSkills'
+  | 'type'
 >
 
-const profileSchema = updateSchema.pick([
-  'fullName',
-  'address',
-  'phone',
-  'date_of_birth',
-  'gender',
-  'avatar'
+const profileSchema = updateTT.pick([
+  'experience',
+  'subject',
+  'imageQualification',
+  'introduction',
+
+  'specializedSkills',
+  'type'
 ])
 
 export default function ProfileTT() {
+  const { data: ProfileTutor, refetch } = useQuery({
+    queryKey: ['Account'],
+    queryFn: () => tutorApi.getProfileTT(profile?.id as string),
+    placeholderData: keepPreviousData
+  })
+
+  console.log(ProfileTutor)
+
+  const profileTT = ProfileTutor?.data.data
+  console.log(profileTT)
+
+  const { profile } = useContext(AppContext)
   const [urlImage, setUrlImage] = useState<string | null>(null)
 
   const {
@@ -46,11 +65,13 @@ export default function ProfileTT() {
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
-      fullName: '',
-      phone: '',
-      gender: 'nam',
-      avatar: '',
-      date_of_birth: new Date(1990, 0, 1)
+      experience: profileTT?.experience,
+      imageQualification: profileTT?.qualifications,
+      introduction: profileTT?.introduction,
+      subject: profileTT?.subjects,
+
+      specializedSkills: profileTT?.speacializedSkill,
+      type: profileTT?.type
     },
     resolver: yupResolver(profileSchema)
   })
@@ -62,16 +83,6 @@ export default function ProfileTT() {
   const previewImage = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
-
-  const { data: ProfileData, refetch } = useQuery({
-    queryKey: ['Account'],
-    queryFn: userApi.getProfile
-  })
-
-  console.log(ProfileData)
-
-  const profile = ProfileData?.data.data
-  console.log(profile)
 
   useEffect(() => {
     if (profile) {
@@ -90,7 +101,7 @@ export default function ProfileTT() {
     }
   }, [profile, setValue])
 
-  console.log(ProfileData)
+  // console.log(ProfileData)
   console.log(profile)
 
   const updateProfileMutation = useMutation({
@@ -196,18 +207,18 @@ export default function ProfileTT() {
           {/* email */}
           <div className='flex flex-wrap flex-col sm:flex-row'>
             <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>
-              Email
+              Mô tả
             </div>
             <div className='sm:w-[80%] sm:pl-5'>
               <div className='pt-3 text-gray-700 sm:text-left ml-3'>
-                {profile?.email}
+                {profileTT?.introduction}
               </div>
             </div>
           </div>
 
           <div className='mt-6 flex flex-wrap flex-col sm:flex-row'>
             <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>
-              Tên
+              Môn học
             </div>
             <div className='sm:w-[80%] sm:pl-5'>
               <Input
@@ -300,19 +311,18 @@ export default function ProfileTT() {
           </div>
         </div>
 
-        <div className='flex justify-center md:w-72 md:border-l md:border-l-gray-200'>
+        <div className='flex justify-center md:w-96 h-full md:border-l md:border-l-gray-200'>
           <div className='flex flex-col items-center'>
-            <div className='my-5 h-24 w-24'>
-              {/* ảnh đại diện */}
+            <div className='my-5  '>
               <img
                 src={
                   file
                     ? previewImage
-                    : profile?.avatar
-                    ? profile.avatar
+                    : profileTT?.qualifications.img
+                    ? profileTT?.qualifications.img
                     : userImage
                 }
-                className='h-full w-full rounded-full object-cover'
+                className='h-full w-full  object-cover'
               />
             </div>
             <InputFile onChange={handleChangeFile} />

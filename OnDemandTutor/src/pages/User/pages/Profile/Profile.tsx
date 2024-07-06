@@ -42,6 +42,8 @@ const profileSchema = updateSchema.pick([
 ])
 
 export default function Profile() {
+  const { profile } = useContext(AppContext)
+
   const [urlImage, setUrlImage] = useState<string | null>(null)
 
   const {
@@ -72,33 +74,35 @@ export default function Profile() {
 
   const { data: ProfileData, refetch } = useQuery({
     queryKey: ['Account'],
-    queryFn: userApi.getProfile
+    queryFn: () => userApi.getProfile(profile?.id as string)
   })
 
   console.log(ProfileData)
 
-  const profile = ProfileData?.data.data
+  const profileAPI = ProfileData?.data.data
   console.log(profile)
 
   useEffect(() => {
-    if (profile) {
-      setValue('fullName', profile.fullName || '')
-      setValue('avatar', profile.avatar || '')
-      setValue('phone', profile.phone || '')
-      setValue('address', profile.address || '')
-      setValue('gender', profile.gender || '')
+    if (profileAPI) {
+      refetch()
+      setValue('fullName', profileAPI.fullName || '')
+      setValue('avatar', profileAPI.avatar || '')
+      setValue('phone', profileAPI.phone || '')
+      setValue('address', profileAPI.address || '')
+      setValue('gender', profileAPI.gender || 'nam')
       setValue(
         'date_of_birth',
-        profile.date_of_birth
-          ? new Date(profile.date_of_birth)
+        profileAPI.date_of_birth
+          ? new Date(profileAPI.date_of_birth)
           : new Date(1990, 0, 1)
       )
-      setValue('phone', profile.phone || ''), setValue('roles', profile.roles)
+      setValue('phone', profileAPI.phone || ''),
+        setValue('roles', profileAPI.roles)
     }
-  }, [profile, setValue])
+  }, [profileAPI, setValue])
 
   console.log(ProfileData)
-  console.log(profile)
+  console.log(profileAPI)
 
   const updateProfileMutation = useMutation({
     mutationFn: userApi.updateProfile
@@ -139,26 +143,28 @@ export default function Profile() {
 
       const formData: UpdateProfileBody = {
         fullName:
-          data.fullName !== profile?.fullName
+          data.fullName !== profileAPI?.fullName
             ? data.fullName
-            : profile?.fullName || '',
+            : profileAPI?.fullName || '',
         phone:
-          data.phone !== profile?.phone ? data.phone! : profile?.phone || '',
+          data.phone !== profileAPI?.phone
+            ? data.phone!
+            : profileAPI?.phone || '',
         address:
-          data.address !== profile?.address
+          data.address !== profileAPI?.address
             ? data.address || ''
-            : profile?.address || '',
+            : profileAPI?.address || '',
         gender:
-          data.gender !== profile?.gender
+          data.gender !== profileAPI?.gender
             ? data.gender || ''
-            : profile?.gender || '',
+            : profileAPI?.gender || 'nam',
         date_of_birth:
           convertDateOfBirth(data.date_of_birth?.toString() || '') !==
-          profile?.date_of_birth
+          profileAPI?.date_of_birth
             ? convertDateOfBirth(data.date_of_birth?.toString() || '')
-            : profile?.date_of_birth || '',
-        avatar: file ? await uploadAvatar(file) : profile?.avatar || '',
-        roles: profile?.roles || ''
+            : profileAPI?.date_of_birth || '',
+        avatar: file ? await uploadAvatar(file) : profileAPI?.avatar || '',
+        roles: profileAPI?.roles || ''
       }
 
       const updateRes = await updateProfileMutation.mutateAsync(formData, {
@@ -315,8 +321,8 @@ export default function Profile() {
                 src={
                   file
                     ? previewImage
-                    : profile?.avatar
-                    ? profile.avatar
+                    : profileAPI?.avatar
+                    ? profileAPI.avatar
                     : userImage
                 }
                 className='h-full w-full rounded-full object-cover'

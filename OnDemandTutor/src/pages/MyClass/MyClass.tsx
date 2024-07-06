@@ -4,20 +4,20 @@ import { studentApi } from '../../api/student.api'
 import { AppContext } from '../../context/app.context'
 import { Request } from '../../types/request.type'
 import { toast } from 'react-toastify'
+import http from '../../utils/http'
 
 export default function MyClass() {
   const { profile } = useContext(AppContext)
-  console.log("profile",profile)
+  console.log('profile', profile)
+
   const { data } = useQuery({
-    queryKey: ['Account',profile?.id],
-    queryFn: async () =>  await studentApi.classActive(profile?.id as string),
-    placeholderData: keepPreviousData,
-    enabled: !profile?.id,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false //lưu ý :)))
+    queryKey: ['Account', profile?.id],
+    queryFn: async () => await studentApi.classActive(profile?.id as string),
+
+    placeholderData: keepPreviousData
   })
-  console.log(data)
+
+  console.log(data?.data)
   const classMutation = useMutation({
     mutationFn: (idReq: string) => studentApi.classCompled(idReq)
   })

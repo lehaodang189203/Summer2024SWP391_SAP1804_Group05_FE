@@ -81,8 +81,11 @@ export const studentApi = {
   },
 
   // // Đăng ký làm gia sư
-  registerAsTutor: async (body: RequestTutorBody) =>
-    await http.post(`User/registerAsTutorFB?id=${user.id}`, body),
+  registerAsTutor: async (body: RequestTutorBody, id: string) =>
+    await http.post<SuccessResponse<any>>(
+      `User/registerAsTutorFB?id=${id}`,
+      body
+    ),
 
   updateRequest: async (body: UpdateRequest) =>
     await http.put<SuccessResponse<RequestBody>>(
@@ -102,11 +105,9 @@ export const studentApi = {
     ),
 
   //  lấy lớp học đang diễn ra
-  classActive(body: string) {
-    console.log('id',body)
-    return http.get<any>(
-      `Student/classActive?id=${body}`
-    )
+  classActive(id: string) {
+    console.log('id', id)
+    return http.get<any>(`Student/classActive?id=${id}`)
   },
 
   classCompled(idRequest: string) {

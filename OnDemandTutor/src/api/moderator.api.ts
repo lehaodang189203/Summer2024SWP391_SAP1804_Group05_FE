@@ -31,7 +31,9 @@ export const moderatorApi = {
     }
   },
   approvedRequest: async (ReqID: string) =>
-    await http.put(`modaretor/approvedRequest?requestId=${ReqID}`),
+    await http.put<SuccessResponse<any>>(
+      `modaretor/approvedRequest?requestId=${ReqID}`
+    ),
 
   rejectRequest: async (ReqID: string) =>
     await http.put(`modaretor/rejectRequest?requestId=${ReqID}`),

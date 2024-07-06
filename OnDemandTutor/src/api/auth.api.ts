@@ -14,11 +14,9 @@ export const authApi = {
 
   registerAccount: async (body: ResReqBody) =>
     await http.post<AuthResponse>('user/register', body),
-  // loginGoogle : async () =>
-  //   await http.post<any>('/signin-google'),
-  // logoutAccount: () => http.post('/logout')
-  loginGG: async () =>
-    await http.post<AuthResponse>('User/google-callback'),
+
+  loginGG: async () => await http.post<AuthResponse>('User/google-callback'),
+
   logoutAccount: async (body: LogoutReqBody) =>
     await http.post('user/logout', body)
 }

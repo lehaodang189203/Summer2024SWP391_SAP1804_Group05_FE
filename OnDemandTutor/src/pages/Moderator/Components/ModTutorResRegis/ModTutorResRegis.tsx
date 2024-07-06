@@ -113,7 +113,7 @@ export default function ModTutorResRegis() {
       render: (text: string, record: TutorType) => (
         <div className='flex gap-1'>
           <button
-            className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
+            className='border  p-1 border-blue-400 rounded-lg hover:bg-blue-600 active:bg-blue-500 w-20'
             onClick={() => showImg(record)}
           >
             Xem Bằng
