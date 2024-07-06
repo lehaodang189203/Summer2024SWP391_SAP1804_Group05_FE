@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ScheduleFormToChoose from '../components/ScheduleFormToChose';
 import ModalChooseService from '../components/ModalChooseService';
+import { useQuery } from '@tanstack/react-query';
+import { studentApi } from '../../../api/student.api';
 
 interface Schedule {
   date: string;
@@ -8,9 +10,9 @@ interface Schedule {
 }
 
 interface ClassInfo {
-    id:string
+  id: string;
   pricePerHour: number;
-  title: string;
+  tittle: string;
   subject: string;
   class: string;
   description: string;
@@ -18,53 +20,33 @@ interface ClassInfo {
   schedule: Schedule[];
 }
 
-const data: ClassInfo[] = [
-  {
-    id:"xxx",
-    pricePerHour: 100000,
-    title: 'Lớp toán con cá',
-    subject: 'Toán học',
-    class: '10',
-    description: 'Có cái nhìn sâu sắc về toán học nhoa',
-    learningMethod: 'Online',
-    schedule: [
-      {
-        date: '2024-07-10',
-        timeSlots: ['10:00', '14:00'],
-      },
-      {
-        date: '2024-07-11',
-        timeSlots: ['12:00', '14:00'],
-      },
-    ],
-  },
-  { id:"xtx",
-    pricePerHour: 200000,
-    title: 'Lớp toán con cú',
-    subject: 'Toán học',
-    class: '10',
-    description: 'Có cái nhìn sâu sắc hơn nữa về toán học nhoa',
-    learningMethod: 'Online',
-    schedule: [
-      {
-        date: '2024-07-13',
-        timeSlots: ['10:00', '14:00'],
-      },
-      {
-        date: '2024-07-18',
-        timeSlots: ['15:00', '17:00'],
-      },
-    ],
-  },
-  // Add more class data here
-];
-
 const ServiceList: React.FC = () => {
-  const [classData, setClassData] = useState<ClassInfo[]>(data);
+  const [classData, setClassData] = useState<ClassInfo[]>([]);
   const [selectedClassIndex, setSelectedClassIndex] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const { data: fetchedClassData, refetch } = useQuery<ClassInfo[]>({
+    queryKey: ['Service'],
+    queryFn: async () => {
+      try {
+        const data = await studentApi.getAllService();
+        console.log('Fetched data:', data); // Debugging log
+        setClassData(data);
+        return data;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (fetchedClassData) {
+      console.log('Fetched class data:', fetchedClassData);
+    }
+  }, [fetchedClassData]);
 
   const handleDateChange = (classIndex: number, date: string) => {
     setSelectedClassIndex(classIndex);
@@ -101,16 +83,16 @@ const ServiceList: React.FC = () => {
   return (
     <div className="w-2/3 border mx-auto grid gap-4">
       {classData.map((item, classIndex) => (
-        <div key={classIndex} className="w-full bg-slate-400 rounded-lg grid grid-cols-2">
+        <div key={item.id} className="w-full bg-slate-400 rounded-lg grid grid-cols-2">
           <div className="col-span-1 p-4">
-            <h2 className="text-xl font-bold mb-2">{item.title}</h2>
+            <h2 className="text-xl font-bold mb-2">{item.tittle || 'No Title Available'}</h2>
             <div className="text-left h-full mx-auto">
-            <p><strong>Subject:</strong> {item.id}</p>
-              <p><strong>Subject:</strong> {item.subject}</p>
-              <p><strong>Class:</strong> {item.class}</p>
-              <p><strong>Learning Method:</strong> {item.learningMethod}</p>
-              <p><strong>Price Per Hour:</strong> {item.pricePerHour} VNĐ</p>
-              <p><strong>Description:</strong> {item.description}</p>
+              <p><strong>ID:</strong> {item.id || 'N/A'}</p>
+              <p><strong>Subject:</strong> {item.subject || 'N/A'}</p>
+              <p><strong>Class:</strong> {item.class || 'N/A'}</p>
+              <p><strong>Learning Method:</strong> {item.learningMethod || 'N/A'}</p>
+              <p><strong>Price Per Hour:</strong> {item.pricePerHour || 'N/A'} VNĐ</p>
+              <p><strong>Description:</strong> {item.description || 'No description available'}</p>
             </div>
           </div>
           <div className="col-span-1 p-4">
@@ -122,6 +104,7 @@ const ServiceList: React.FC = () => {
               handleDateChange={handleDateChange}
               handleTimeSlotChange={handleTimeSlotChange}
               getDayOfWeek={getDayOfWeek}
+              classData={classData} // Pass classData here
             />
             {selectedClassIndex === classIndex && selectedTimeSlot && (
               <button

@@ -114,16 +114,36 @@ export const studentApi = {
     return http.put<SuccessResponseReq<any>>(
       `tutor/classCompled?idRequest=${idRequest}`
     )
+  },
+  getAllService: async () => {
+    try {
+
+      const response = await http.get<SuccessResponseReq<any>>(
+        `/Student/GetAllService`
+      )
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      console.error('Lỗi trong quá trình xử lý:', error)
+      throw error
+    }
   }
   ,
   BookingServiceLearning: async (serviceID: string,body:any) => {
     try {
-
-      const response = await http.get<SuccessResponseReq<TutorType[]>>(
-        `/Student/BookingServiceLearning?idService=${serviceID}&id=${user.id}`,body
+      console.log('serviceID',serviceID)
+      console.log('id',user.id)
+      console.log('body',body)
+      const response = await http.post<SuccessResponseReq<any>>(
+        
+        `/Student/BookingServiceLearning?id=${user.id}&idService=${serviceID}`,body
       )
       if (response.status === HttpStatusCode.Ok) {
-        return response.data.data
+        console.log('response.data',response.data)
+        return response.data
       } else {
         throw new Error('Danh sách trống')
       }

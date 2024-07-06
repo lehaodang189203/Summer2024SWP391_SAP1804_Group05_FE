@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { studentApi } from '../../../../api/student.api'; // Ensure the path to your API file is correct
+import { toast } from 'react-toastify';
 
 interface Props {
   isOpen: boolean;
@@ -11,7 +12,7 @@ interface Props {
   classInfo: {
     id: string;
     pricePerHour: number;
-    title: string;
+    tittle: string;
     subject: string;
     class: string;
     description: string;
@@ -36,6 +37,7 @@ const ModalChooseService: React.FC<Props> = ({
     mutationFn: (body: any) => studentApi.BookingServiceLearning(classInfo?.id || '', body),
     onSuccess: (data: any) => {
       console.log('data res', data);
+      toast.success(data.message)
       onConfirm(); // Call the parent onConfirm function to close the modal
     },
     onError: (error) => {
@@ -64,8 +66,8 @@ const ModalChooseService: React.FC<Props> = ({
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg w-1/2">
         <h2 className="text-2xl mb-4">Confirm Selection</h2>
-
-        <p><strong>Class:</strong> {classInfo.title}</p>
+        <p><strong>ID:</strong> {classInfo.id}</p>
+        <p><strong>Class:</strong> {classInfo.class}</p>
         <p><strong>Date:</strong> {selectedDate}</p>
         <p><strong>Time Slot:</strong> {selectedTimeSlots.join(', ')}</p>
         <label className="block mt-4">
