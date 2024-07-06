@@ -79,11 +79,14 @@ export default function Login() {
   const onSubmitLogin = (data: FormData) => {
     loginMutation.mutate(data, {
       onSuccess: (data) => {
+        console.log('login', data)
+
         const refreshToken = getRefreshTokenFromLS()
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
         setProfile(data.data.data.user)
         toast.success(data.data.message)
+        navigate(path.home)
       },
       onError: (error) => {
         if (

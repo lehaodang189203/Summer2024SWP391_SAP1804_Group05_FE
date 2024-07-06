@@ -25,6 +25,10 @@ export default function ProfileTT() {
     enabled: !!profile?.id
   })
 
+  useEffect(() => {
+    refetch()
+  }, [profileTutor])
+
   const profileTT = profileTutor?.data.data
 
   const {

@@ -1,5 +1,8 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { Request } from '../types/request.type'
+
+import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
+
 import {
   AddQualification,
   DataService,
@@ -9,7 +12,6 @@ import {
 import { JoinClassBody } from '../types/user.request.type'
 import { User } from '../types/user.type'
 
-import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 

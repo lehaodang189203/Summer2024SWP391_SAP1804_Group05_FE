@@ -115,4 +115,21 @@ export const studentApi = {
       `tutor/classCompled?idRequest=${idRequest}`
     )
   }
+  ,
+  BookingServiceLearning: async (serviceID: string,body:any) => {
+    try {
+
+      const response = await http.get<SuccessResponseReq<TutorType[]>>(
+        `/Student/BookingServiceLearning?idService=${serviceID}&id=${user.id}`,body
+      )
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      console.error('Lỗi trong quá trình xử lý:', error)
+      throw error
+    }
+  }
 }
