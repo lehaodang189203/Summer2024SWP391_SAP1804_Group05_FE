@@ -12,9 +12,12 @@ export default function MyClass() {
 
   const { data } = useQuery({
     queryKey: ['Account', profile?.id],
-    queryFn: async () => await studentApi.classActive(profile?.id as string),
-
-    placeholderData: keepPreviousData
+    queryFn: () => studentApi.classActive(profile?.id as string),
+    placeholderData: keepPreviousData,
+    enabled: !profile?.id,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false //lưu ý :)))
   })
 
   console.log(data?.data)

@@ -83,12 +83,21 @@ export default function Login() {
       onSuccess: (data) => {
         console.log('login', data)
 
+<<<<<<< HEAD
         const refreshToken = getRefreshTokenFromLS()
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
         setProfile(data.data.data.user)
         toast.success(data.data.message)
         navigate(path.home)
+=======
+        const refreshToken = getRefreshTokenFromLS();
+        setRefreshToken(refreshToken);
+        setIsAuthenticated(true);
+        setProfile(data.data.data.user);
+        toast.success(data.data.message);
+        navigate(path.home);
+>>>>>>> 2eb47b4b35ddfccb55e1f767eb52ea0936093715
       },
       onError: (error) => {
         if (

@@ -39,6 +39,8 @@ import AdminStudentReqApproved from './pages/Admin/Components/AdminStudentReqApp
 import AdminStudentReqRejected from './pages/Admin/Components/AdminStudentReqRejected'
 import MyClass from './pages/MyClass'
 import TransactionList from './pages/Admin/Components/TransactionList'
+import CreateService from './pages/Sevice/CreateSevice'
+import Support from './pages/Support'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -120,7 +122,14 @@ export default function useRouteElements() {
             { path: path.profileTT, element: <ProfileTT /> }
           ]
         },
-
+        {
+          path: path.createService, //tutor and student-------------------------------------------------------------------------
+          element: (
+            <MainLayout>
+              <CreateService />
+            </MainLayout>
+          )
+        },
         {
           path: path.requestList, //tutor and student-------------------------------------------------------------------------
           element: (
@@ -137,7 +146,14 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-
+        {
+          path: path.support, //student
+          element: (
+            <MainLayout>
+              <Support />
+            </MainLayout>
+          )
+        },
         {
           path: path.checkOut, //student
           element: (

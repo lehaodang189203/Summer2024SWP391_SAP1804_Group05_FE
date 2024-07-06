@@ -18,8 +18,8 @@ export default function TurorMenu({
             <Link to={path.Admin.tutorList}><button className={ListStyle}>Danh sách gia sư</button></Link>     
             <div className="p-5">||</div>
             <Link to={path.Admin.confirmProfileRegisterTT}><button className={conStyle}>Đơn yêu cầu thành giảng viên</button></Link>
-            <div className="p-5">||</div>
-            <Link to={path.Admin.rejectProfileRegisterTT}><button className={rejStyle}>Đơn đã từ chối</button></Link> 
+            {/* <div className="p-5">||</div>
+            <Link to={path.Admin.rejectProfileRegisterTT}><button className={rejStyle}>Đơn đã từ chối</button></Link>  */}
             <div></div>
         </div>
         
