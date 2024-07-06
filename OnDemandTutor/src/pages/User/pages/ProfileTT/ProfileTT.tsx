@@ -1,339 +1,190 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
-import { v4 as uuidv4 } from 'uuid'
-import userApi from '../../../../api/user.api'
-import userImage from '../../../../assets/img/user.svg'
-import Button from '../../../../components/Button'
-import DateSelect from '../../../../components/DateSelect/DateSelect'
-import GenderSelect from '../../../../components/GenderSelect'
-import Input from '../../../../components/Input'
-import InputFile from '../../../../components/InputFile'
-import InputNumber from '../../../../components/InputNumber'
-import { AppContext } from '../../../../context/app.context'
-import { setProfileToLS } from '../../../../utils/auth'
-import { storage } from '../../../../utils/firebase'
-import { UpdateTTSchema, updateTT } from '../../../../utils/rules'
-
-import { UpdateProfileBody } from '../../../../types/user.request.type'
+import { useContext, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { tutorApi } from '../../../../api/tutor.api'
+import { AppContext } from '../../../../context/app.context'
+import { UpdateTTSchema, updateTT } from '../../../../utils/rules'
+import UpdateMajorTT from './components/UpdateMajorTT'
+import UpdateProfile from './components/UpdateProfileTT'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
 
-type FormData = Pick<
-  UpdateTTSchema,
-  | 'experience'
-  | 'subject'
-  | 'imageQualification'
-  | 'introduction'
-  | 'specializedSkills'
-  | 'type'
->
-
-const profileSchema = updateTT.pick([
-  'experience',
-  'subject',
-  'imageQualification',
-  'introduction',
-
-  'specializedSkills',
-  'type'
-])
+type FormData = UpdateTTSchema
+const updateTTSchema = updateTT
 
 export default function ProfileTT() {
-  const { data: ProfileTutor, refetch } = useQuery({
+  const { profile } = useContext(AppContext)
+  const [showUpdateOptions, setShowUpdateOptions] = useState(false)
+  const [selectedUpdate, setSelectedUpdate] = useState<string | null>(null)
+
+  const { data: profileTutor, refetch } = useQuery({
     queryKey: ['Account'],
     queryFn: () => tutorApi.getProfileTT(profile?.id as string),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
+    enabled: !!profile?.id
   })
 
-  console.log(ProfileTutor)
-
-  const profileTT = ProfileTutor?.data.data
-  console.log(profileTT)
-
-  const { profile } = useContext(AppContext)
-  const [urlImage, setUrlImage] = useState<string | null>(null)
+  const profileTT = profileTutor?.data.data
 
   const {
-    handleSubmit,
-    watch,
-    setValue,
     register,
-    control,
-    formState: { errors }
+    handleSubmit,
+    formState: { errors },
+    setValue
   } = useForm<FormData>({
+    resolver: yupResolver(updateTTSchema),
     defaultValues: {
-      experience: profileTT?.experience,
-      imageQualification: profileTT?.qualifications,
-      introduction: profileTT?.introduction,
-      subject: profileTT?.subjects,
-
-      specializedSkills: profileTT?.speacializedSkill,
-      type: profileTT?.type
-    },
-    resolver: yupResolver(profileSchema)
+      experience: profileTT?.experience || 0,
+      subjects: profileTT?.subjects || '',
+      introduction: profileTT?.introduction || '',
+      qualificationName: profileTT?.qualifications.name || '',
+      speacializedSkill: profileTT?.speacializedSkill || '', // Fixed spelling error
+      type: profileTT?.qualifications.type || '', // Ensure correct default value
+      qualifications: {
+        id: profileTT?.qualifications.id || '',
+        type: profileTT?.qualifications.type || '',
+        name: profileTT?.qualifications.name || '',
+        img: profileTT?.qualifications.img || ''
+      }
+    }
   })
-  const { setProfile } = useContext(AppContext)
-
-  const [file, setFile] = useState<File | null>(null)
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
-
-  const previewImage = useMemo(() => {
-    return file ? URL.createObjectURL(file) : ''
-  }, [file])
 
   useEffect(() => {
-    if (profile) {
-      setValue('fullName', profile.fullName || '')
-      setValue('avatar', profile.avatar || '')
-      setValue('phone', profile.phone || '')
-      setValue('address', profile.address || '')
-      setValue('gender', profile.gender || '')
-      setValue(
-        'date_of_birth',
-        profile.date_of_birth
-          ? new Date(profile.date_of_birth)
-          : new Date(1990, 0, 1)
-      )
-      setValue('phone', profile.phone || '')
+    if (profileTT) {
+      setValue('speacializedSkill', profileTT.speacializedSkill || '') // Fixed spelling error
+      setValue('experience', profileTT.experience || 0)
+      setValue('introduction', profileTT.introduction || '')
+      setValue('subjects', profileTT.subjects || '')
+      setValue('qualifications', profileTT.qualifications || '')
+      setValue('type', profileTT.qualifications.type || '')
     }
-  }, [profile, setValue])
+    refetch()
+  }, [profileTT, setValue])
 
-  // console.log(ProfileData)
-  console.log(profile)
-
-  const updateProfileMutation = useMutation({
-    mutationFn: userApi.updateProfile
-  })
-
-  const uploadAvatar = async (file: File): Promise<string> => {
-    const imageRef = ref(storage, `avatarUser/${file.name + uuidv4()}`)
-    const snapshot = await uploadBytes(imageRef, file)
-    const url = await getDownloadURL(snapshot.ref)
-    return url
-  }
-
-  function convertDateOfBirth(date_of_birth: string): string {
-    const dateOfBirth = date_of_birth
-      ? new Date(date_of_birth)
-      : new Date('1990-01-01')
-
-    return `${dateOfBirth.getFullYear()}-${String(
-      dateOfBirth.getMonth() + 1
-    ).padStart(2, '0')}-${String(dateOfBirth.getDate()).padStart(2, '0')}`
-  }
-
-  const onSubmit = handleSubmit(async (data: FormData) => {
-    console.log(data)
-
-    try {
-      if (file) {
-        const url = await uploadAvatar(file)
-
-        setUrlImage(url)
-
-        setValue('avatar', url) // Update the avatar URL in form data
-        setFile(null)
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ''
-        }
-      }
-
-      const formData: UpdateProfileBody = {
-        fullName:
-          data.fullName !== profile?.fullName
-            ? data.fullName
-            : profile?.fullName || '',
-        phone:
-          data.phone !== profile?.phone ? data.phone! : profile?.phone || '',
-        address:
-          data.address !== profile?.address
-            ? data.address || ''
-            : profile?.address || '',
-        gender:
-          data.gender !== profile?.gender
-            ? data.gender || ''
-            : profile?.gender || '',
-        date_of_birth:
-          convertDateOfBirth(data.date_of_birth?.toString() || '') !==
-          profile?.date_of_birth
-            ? convertDateOfBirth(data.date_of_birth?.toString() || '')
-            : profile?.date_of_birth || '',
-        avatar: file ? await uploadAvatar(file) : profile?.avatar || '',
-        roles: profile?.roles || ''
-      }
-
-      const updateRes = await updateProfileMutation.mutateAsync(formData, {
-        onSuccess: (data) => {
-          toast.success(data.data.message)
-          setProfile(data.data.data)
-          setProfileToLS(data.data.data)
-          refetch()
-        },
-        onError: (error) => {
-          toast.error(error.message)
-          console.error(error)
-        }
-      })
-
-      console.log(updateRes)
-    } catch (error) {
-      console.log(error)
+  const handleUpdate = (option: string) => {
+    if (showUpdateOptions && selectedUpdate === option) {
+      setShowUpdateOptions(false)
+      setSelectedUpdate(null)
+    } else {
+      setShowUpdateOptions(true)
+      setSelectedUpdate(option)
     }
-  })
-
-  const handleChangeFile = (file?: File) => {
-    setFile(file || null)
   }
 
   return (
     <div className='pb-10 rounded-sm bg-transparent px-2 shadow-md:px-7 md:pb-20 shadow-black'>
       <div className='border-b border-b-gray py-6'>
         <h1 className='text-lg font-medium capitalize text-gray-900'>
-          Hồ Sơ của giảng viên
+          Hồ Sơ của tôi
         </h1>
         <div className='mt-1 text-sm text-gray-700'>
           Quản lý thông tin hồ sơ để bảo vệ tài khoản
         </div>
       </div>
 
-      <form
-        className='mt-8 flex flex-col-reverse md:flex-row md:items-start'
-        onSubmit={onSubmit}
-      >
+      <div className='mt-8 flex flex-col-reverse md:flex-row md:items-start'>
         <div className='mt-6 flex-grow md:mt-0'>
-          {/* email */}
-          <div className='flex flex-wrap flex-col sm:flex-row'>
-            <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>
-              Mô tả
+          {/* Khung bọc profileTT */}
+          <div className='border rounded-lg p-6 shadow-lg bg-white'>
+            {/* email */}
+            <div className='flex   flex-row'>
+              <div className='w-[20%] truncate pt-3 text-right capitalize'>
+                Email
+              </div>
+              <div className='w-[80%] pl-5'>
+                <div className='pt-3 text-gray-700 text-left ml-3'>
+                  {profile?.email}
+                </div>
+              </div>
             </div>
-            <div className='sm:w-[80%] sm:pl-5'>
-              <div className='pt-3 text-gray-700 sm:text-left ml-3'>
+
+            <div className='mt-6 flex   flex-row'>
+              <div className='w-[20%] truncate pt-3 text-right capitalize mr-2'>
+                Môn dạy
+              </div>
+              <div className='w-[80%] rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+                {profileTT?.subjects}
+              </div>
+            </div>
+
+            <div className='mt-2 flex   flex-row'>
+              <div className='w-[20%] truncate pt-3 text-right capitalize mr-2'>
+                Kinh nghiệm
+              </div>
+
+              <div className='w-[80%] rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+                {profileTT?.experience}
+              </div>
+            </div>
+
+            {/* giới thiệu */}
+            <div className='mt-2 flex   flex-row '>
+              <div className='w-[20%] truncate pt-3 text-right capitalize mr-2'>
+                Giới thiệu
+              </div>
+
+              <div className='w-[80%] rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
                 {profileTT?.introduction}
               </div>
             </div>
-          </div>
 
-          <div className='mt-6 flex flex-wrap flex-col sm:flex-row'>
-            <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>
-              Môn học
-            </div>
-            <div className='sm:w-[80%] sm:pl-5'>
-              <Input
-                className='px-3 py-auto w-full focus:border-gray-500 focus:shadow-sm rounded-xl my-auto'
-                classNameInput='rounded-xl border-2 w-full h-10 text-left hover:shadow-black hover:shadow-sm pl-2'
-                name='fullName'
-                register={register}
-                placeholder='Họ và Tên'
-                errorMessage={errors.fullName?.message}
-              />
-            </div>
-          </div>
-
-          <div className='mt-2 flex flex-wrap flex-col sm:flex-row'>
-            <div className='sm:w-[20%] truncate pt-3 sm:text-right capitalize'>
-              Địa chỉ
-            </div>
-            <div className='sm:w-[80%] sm:pl-5'>
-              <Input
-                className='px-3 py-auto w-full focus:border-gray-500 focus:shadow-sm rounded-xl my-auto'
-                classNameInput='rounded-xl border-2 w-full h-10 text-left hover:shadow-black hover:shadow-sm pl-2'
-                name='address'
-                register={register}
-                placeholder='Địa chỉ'
-                errorMessage={errors.address?.message}
-              />
-            </div>
-          </div>
-
-          {/* số điện thoại */}
-          <div className='mt-2 flex flex-wrap flex-col sm:flex-row'>
-            <div className='sm:w-[20%] truncate sm:text-right capitalize'>
-              Số điện thoại
-            </div>
-            <div className='sm:w-[80%] sm:pl-5'>
-              <Controller
-                control={control}
-                name='phone'
-                render={({ field }) => (
-                  <InputNumber
-                    className='px-3 w-full outline-none focus:border-gray-500 focus:shadow-sm rounded-sm'
-                    placeholder='Số điện thoại'
-                    classNameInput='rounded-xl border-2 w-full h-10 text-left pl-2 hover:shadow-black hover:shadow-sm'
-                    errorMessage={errors.phone?.message}
-                    {...field}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-            </div>
-          </div>
-
-          {/*  ngày sinh */}
-          <Controller
-            control={control}
-            name='date_of_birth'
-            render={({ field }) => (
-              <DateSelect
-                name='Ngày sinh'
-                errorMessage={errors.date_of_birth?.message}
-                onChange={field.onChange}
-                value={field.value}
-              />
-            )}
-          />
-
-          {/*  giới tính */}
-          <Controller
-            control={control}
-            name='gender'
-            render={({ field }) => (
-              <GenderSelect
-                errorMessage={errors.gender?.message}
-                onChange={field.onChange}
-                value={field.value || 'nam'}
-              />
-            )}
-          />
-
-          <div className='mt-5 flex flex-wrap flex-col sm:flex-row'>
-            <div className='sm:w-[20%] truncate pt-6 sm:text-right capitalize' />
-            <div className='sm:w-[80%] sm:pl-5 flex items-center justify-center'>
-              <Button
-                className='flex h-9 items-center w-[5rem] bg-pink-400 border-2 rounded-xl px-5 text-sm text-white hover:bg-black'
-                type='submit'
+            <div className='w-[49%] mx-auto my-2 flex'>
+              <button
+                type='button'
+                className='w-full p-3 bg-pink-500 text-white rounded-lg hover:bg-pink-300 focus:outline-none relative'
+                onClick={() => setShowUpdateOptions(!showUpdateOptions)}
               >
-                Lưu
-              </Button>
+                Cập nhật
+                {/* mũi tên */}
+                <div className='absolute right-3 top-1/2 transform -translate-y-1/2'>
+                  <FontAwesomeIcon
+                    icon={showUpdateOptions ? faArrowUp : faArrowDown}
+                  />
+                </div>
+              </button>
             </div>
+
+            {showUpdateOptions && (
+              <div className='mt-4 p-4'>
+                <button
+                  className='w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-300 focus:outline-none mb-4'
+                  onClick={() => handleUpdate('profile')}
+                >
+                  Cập nhật hồ sơ
+                </button>
+                <button
+                  className='w-full p-3 bg-green-500 text-white rounded-lg hover:bg-green-300 focus:outline-none'
+                  onClick={() => handleUpdate('major')}
+                >
+                  Cập nhật chuyên ngành
+                </button>
+              </div>
+            )}
+
+            {(selectedUpdate === 'profile' || selectedUpdate === 'major') &&
+              showUpdateOptions && (
+                <div className='mt-4 p-4'>
+                  {selectedUpdate === 'profile' && <UpdateProfile />}
+                  {selectedUpdate === 'major' && <UpdateMajorTT />}
+                </div>
+              )}
           </div>
         </div>
 
-        <div className='flex justify-center md:w-96 h-full md:border-l md:border-l-gray-200'>
+        <div className='flex justify-center md:w-72 md:border-l md:border-l-gray-200'>
           <div className='flex flex-col items-center'>
-            <div className='my-5  '>
+            <div className='my-5 h-64 w-64'>
+              <span>Ảnh bằng</span>
               <img
-                src={
-                  file
-                    ? previewImage
-                    : profileTT?.qualifications.img
-                    ? profileTT?.qualifications.img
-                    : userImage
-                }
-                className='h-full w-full  object-cover'
+                src={profileTT?.qualifications.img}
+                className='h-full w-full'
+                alt='Profile Image'
               />
             </div>
-            <InputFile onChange={handleChangeFile} />
-
-            <div className='mt-3 text-gray-400'>
-              <div>Dung lượng file tối đa 1 MB</div>
-              <div>Định dạng: .JPEG, .PNG</div>
-            </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   )
 }

@@ -4,23 +4,23 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { authApi } from '../../api/auth.api'
+import userApi from '../../api/user.api'
+import Button from '../../components/Button'
 import Input from '../../components/Input'
+import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
+import { path } from '../../constant/path'
 import { AppContext } from '../../context/app.context'
 import {
   ForgotPasswordReqBody,
   LoginReqBody
 } from '../../types/user.request.type'
 import { ErrorResponse } from '../../types/utils.type'
+import { getRefreshTokenFromLS } from '../../utils/auth'
 import { Schema, schema } from '../../utils/rules'
 import { isAxiosError } from '../../utils/utils'
-import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
-import { path } from '../../constant/path'
-import { getProfileFromLS, getRefreshTokenFromLS } from '../../utils/auth'
-import Button from '../../components/Button'
-import userApi from '../../api/user.api'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -77,27 +77,13 @@ export default function Login() {
   })
 
   const onSubmitLogin = (data: FormData) => {
-    console.log(data)
-
     loginMutation.mutate(data, {
       onSuccess: (data) => {
-        console.log('login', data)
-
-<<<<<<< HEAD
         const refreshToken = getRefreshTokenFromLS()
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
         setProfile(data.data.data.user)
         toast.success(data.data.message)
-        navigate(path.home)
-=======
-        const refreshToken = getRefreshTokenFromLS();
-        setRefreshToken(refreshToken);
-        setIsAuthenticated(true);
-        setProfile(data.data.data.user);
-        toast.success(data.data.message);
-        navigate(path.home);
->>>>>>> 2eb47b4b35ddfccb55e1f767eb52ea0936093715
       },
       onError: (error) => {
         if (
@@ -131,6 +117,7 @@ export default function Login() {
         setProfile(JSON.parse(profile))
         setIsAuthenticated(true)
         setRefreshToken(refreshToken)
+
         localStorage.setItem('profile', profile)
         localStorage.setItem('access_token', accessToken)
         localStorage.setItem('refresh_token', refreshToken)

@@ -187,12 +187,13 @@ export const schemaResAT = yup.object({
 
 export const updateTT = yup.object({
   introduction: yup.string().required('Giới thiệu bản thân là bắt buộc'),
-  qualificationName: yup.string().required('Không được bỏ trống'),
+  qualificationName: yup.string().required('Tên bằng cấp là bắt buộc'),
   type: yup
     .string()
-    .oneOf(['Chứng Chỉ', 'Bằng Cắp'], 'Phải là Chứng Chỉ hoặc bằng cấp'),
+    .required('Loại là bắt buộc')
+    .oneOf(['Chứng Chỉ', 'Bằng Cấp'], 'Loại phải là Chứng Chỉ hoặc Bằng Cấp'),
 
-  subject: yup
+  subjects: yup
     .string()
     .required('Môn học là bắt buộc')
     .oneOf(
@@ -213,9 +214,48 @@ export const updateTT = yup.object({
   experience: yup
     .number()
     .required('Số năm kinh nghiệm là bắt buộc')
-    .min(0, 'Số năm kinh nghiệm phải lớn hơn 0'),
-  specializedSkills: yup.string().required('Kỹ năng chuyên môn là bắt buộc'),
-  imageQualification: yup.string().required('Ảnh còn thiếu')
+    .min(1, 'Số năm kinh nghiệm phải lớn hơn 0'),
+  speacializedSkill: yup.string().required('Kỹ năng chuyên môn là bắt buộc'),
+  qualifications: yup.object({
+    id: yup.string().required('ID là bắt buộc'),
+    name: yup.string().required('Tên bằng cấp là bắt buộc'),
+    img: yup.string().required('Ảnh chứng chỉ là bắt buộc'),
+    type: yup.string().required('Loại là bắt buộc')
+  })
+})
+
+export const updateProfileTT = yup.object({
+  introduction: yup.string().required('Giới thiệu bản thân là bắt buộc'),
+
+  experience: yup
+    .number()
+    .required('Số năm kinh nghiệm là bắt buộc')
+    .min(1, 'Số năm kinh nghiệm phải lớn hơn 0'),
+  specializedSkill: yup.string().required('Kỹ năng chuyên môn là bắt buộc')
+})
+
+export const updateMajorTT = yup.object({
+  subjects: yup
+    .string()
+    .required('Môn học là bắt buộc')
+    .oneOf(
+      [
+        'Ngữ văn',
+        'Toán học',
+        'Vật lý',
+        'Hóa học',
+        'Sinh học',
+        'Lịch sử',
+        'Địa lý',
+        'Giáo dục công dân',
+        'Ngoại ngữ',
+        'Tin học'
+      ],
+      'Môn học không hợp lệ'
+    ),
+  name: yup.string().required('Tên bằng cấp là bắt buộc'),
+  img: yup.string().required('Ảnh chứng chỉ là bắt buộc'),
+  type: yup.string().required('Loại là bắt buộc')
 })
 
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
@@ -226,3 +266,6 @@ export type UserSchema = yup.InferType<typeof userSchema>
 export type Schema = yup.InferType<typeof schema>
 export type UpdateSchema = yup.InferType<typeof updateSchema>
 export type UpdateTTSchema = yup.InferType<typeof updateTT>
+//----------------------------------------------------------------
+export type UpdateMajorTT = yup.InferType<typeof updateMajorTT>
+export type UpdateProfileTT = yup.InferType<typeof updateProfileTT>

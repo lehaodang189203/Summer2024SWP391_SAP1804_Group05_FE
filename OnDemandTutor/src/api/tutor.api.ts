@@ -1,19 +1,19 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import { Request } from '../types/request.type'
-<<<<<<< HEAD
-import { TutorProfile, TutorType } from '../types/tutor.type'
-import { JoinClassBody } from '../types/user.request.type'
-
-import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
-=======
-import { DataService } from '../types/tutor.type'
+import {
+  AddQualification,
+  DataService,
+  TutorProfile,
+  UpdateTutorProfile
+} from '../types/tutor.type'
 import { JoinClassBody } from '../types/user.request.type'
 import { User } from '../types/user.type'
-import { SuccessResponse } from '../types/utils.type'
+
+import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
->>>>>>> 2eb47b4b35ddfccb55e1f767eb52ea0936093715
 import http from '../utils/http'
-const user = <User>getProfileFromLS();
+
+const user = <User>getProfileFromLS()
 
 export const tutorApi = {
   getProfileTT(id: string) {
@@ -41,23 +41,64 @@ export const tutorApi = {
   joinClass: async (body: JoinClassBody) =>
     await http.post<SuccessResponse<any>>(
       `tutor/join-request?requestId=${body.requestId}&id=${body.id}`
-    )
-  ,
-  createService: async (body:DataService)=> { //hiện tại tui để any trước
+    ),
+
+  createService: async (body: DataService) => {
     try {
-      console.log('check api body',body)
-      const response = await http.post<any>(//hiện tại tui để any trước
-        `/tutor/createService?id=${user.id}`,body
+      const response = await http.post<any>(
+        `/tutor/createService?id=${user.id}`,
+        body
       )
-      console.log('response',response)
+      console.log('response', response)
       if (response.status === HttpStatusCode.Ok) {
         return response.data
       } else {
         throw new Error('Danh sách trống')
       }
     } catch (error) {
-      // Handle network or API errors
       throw new Error('Failed to fetch data')
+    }
+  },
+
+  async updateProfileTT(id: string, body: UpdateTutorProfile) {
+    // console.log('body của res khi call api',body)
+    // console.log('người dùng user là',user)
+    // console.log(' id người dùng user là',user.id)
+    return await http.put<SuccessResponseReq<any>>(
+      `tutor/UpdateTutorProfile?id=${id}`,
+      body
+    )
+  },
+
+  addSubject: async (
+    id: string,
+    subjectName: string
+  ): Promise<SuccessResponseReq<any>> => {
+    try {
+      const response = await http.post<SuccessResponseReq<any>>(
+        `tutor/AddSubject?id=${id}&subjectName=${subjectName}`
+      )
+
+      return response.data // Return response data if needed
+    } catch (error) {
+      console.error('lỗi:', error)
+      throw error // Re-throw error for handling in caller function
+    }
+  },
+  addQualification: async (
+    id: string,
+    body: AddQualification
+  ): Promise<SuccessResponseReq<any>> => {
+    try {
+      const response = await http.post<SuccessResponseReq<any>>(
+        `tutor/AddQualification?id=${id}`,
+        body
+      )
+
+      return response.data // Return response data if needed
+    } catch (error) {
+      console.error('lỗi:', error)
+      throw error // Re-throw error for handling in caller function
     }
   }
 }

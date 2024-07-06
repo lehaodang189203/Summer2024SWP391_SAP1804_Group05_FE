@@ -13,6 +13,18 @@ export interface TutorType {
   introduction: string
 }
 
+export interface UpdateTutorProfile {
+  specializedSkill: string
+  experience: number
+  introduction: string
+}
+
+export interface AddQualification {
+  name: string
+  img: string
+  type: string
+}
+
 export interface TutorProfile {
   speacializedSkill: string
   experience: number
@@ -53,15 +65,15 @@ interface AdminStudentReq {
   timestart: string
   timeend: string
 }
-export interface  DataService {
-  pricePerHour: number;
-  title: string;
-  subject: string;
-  class: string;
-  description: string;
-  learningMethod: string;
+export interface DataService {
+  pricePerHour: number
+  title: string
+  subject: string
+  class: string
+  description: string
+  learningMethod: string
   schedule: {
-      timeSlots?: string[] | undefined;
-      date: string;
-  }[];
+    timeSlots?: string[] | undefined
+    date: string
+  }[]
 }

@@ -14,10 +14,7 @@ export default function MyClass() {
     queryKey: ['Account', profile?.id],
     queryFn: () => studentApi.classActive(profile?.id as string),
     placeholderData: keepPreviousData,
-    enabled: !profile?.id,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false //lưu ý :)))
+    enabled: !profile?.id
   })
 
   console.log(data?.data)
