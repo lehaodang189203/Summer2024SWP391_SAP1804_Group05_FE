@@ -121,14 +121,7 @@ export default function useRouteElements() {
             { path: path.profileTT, element: <ProfileTT /> }
           ]
         },
-        {
-          path: path.createService, //tutor and student-------------------------------------------------------------------------
-          element: (
-            <MainLayout>
-              <CreateService />
-            </MainLayout>
-          )
-        },
+
         {
           path: path.requestList, //tutor and student-------------------------------------------------------------------------
           element: (

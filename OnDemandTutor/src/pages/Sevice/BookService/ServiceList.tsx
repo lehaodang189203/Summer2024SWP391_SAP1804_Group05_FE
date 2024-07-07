@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import React, { useState } from 'react'
 import ScheduleFormToChoose from '../components/ScheduleFormToChose'
 import ModalChooseService from '../components/ModalChooseService'
 import { useQuery } from '@tanstack/react-query'
 import { studentApi } from '../../../api/student.api'
 import { ServiceTutor } from '../../../types/request.type'
+=======
+import React, { useEffect, useState } from 'react';
+import ScheduleFormToChoose from '../components/ScheduleFormToChose';
+import ModalChooseService from '../components/ModalChooseService';
+import { useQuery } from '@tanstack/react-query';
+import { studentApi } from '../../../api/student.api';
+>>>>>>> 7724be1ef4f74ee21ee82a4aebd5d5c2b70e0b1d
 
 export default function ServiceList() {
   const [selectedClassIndex, setSelectedClassIndex] = useState<number | null>(
@@ -14,6 +22,7 @@ export default function ServiceList() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [classData, setClassData] = useState<ServiceTutor[]>([])
 
+<<<<<<< HEAD
   const { data: classService } = useQuery({
     queryKey: ['allServices'],
     queryFn: () => studentApi.GetAllService()
@@ -25,6 +34,46 @@ export default function ServiceList() {
     }
   }, [classService, setClassData])
   console.log(classService?.data.data)
+=======
+interface ClassInfo {
+  id: string;
+  pricePerHour: number;
+  tittle: string;
+  subject: string;
+  class: string;
+  description: string;
+  learningMethod: string;
+  schedule: Schedule[];
+}
+
+const ServiceList: React.FC = () => {
+  const [classData, setClassData] = useState<ClassInfo[]>([]);
+  const [selectedClassIndex, setSelectedClassIndex] = useState<number | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+>>>>>>> 7724be1ef4f74ee21ee82a4aebd5d5c2b70e0b1d
+
+  const { data: fetchedClassData, refetch } = useQuery<ClassInfo[]>({
+    queryKey: ['Service'],
+    queryFn: async () => {
+      try {
+        const data = await studentApi.getAllService();
+        console.log('Fetched data:', data); // Debugging log
+        setClassData(data);
+        return data;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return [];
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (fetchedClassData) {
+      console.log('Fetched class data:', fetchedClassData);
+    }
+  }, [fetchedClassData]);
 
   const handleDateChange = (classIndex: number, date: string) => {
     setSelectedClassIndex(classIndex)
@@ -64,6 +113,7 @@ export default function ServiceList() {
   return (
     <div className='w-2/3 border mx-auto grid gap-4'>
       {classData.map((item, classIndex) => (
+<<<<<<< HEAD
         <div
           key={classIndex}
           className='w-full bg-transparent border-2 rounded-2xl grid grid-cols-2 hover:shadow-xl transition-shadow translate-x-4 duration-700'
@@ -89,6 +139,18 @@ export default function ServiceList() {
               <p>
                 <strong>Mô tả:</strong> {item.description}
               </p>
+=======
+        <div key={item.id} className="w-full bg-slate-400 rounded-lg grid grid-cols-2">
+          <div className="col-span-1 p-4">
+            <h2 className="text-xl font-bold mb-2">{item.tittle || 'No Title Available'}</h2>
+            <div className="text-left h-full mx-auto">
+              <p><strong>ID:</strong> {item.id || 'N/A'}</p>
+              <p><strong>Subject:</strong> {item.subject || 'N/A'}</p>
+              <p><strong>Class:</strong> {item.class || 'N/A'}</p>
+              <p><strong>Learning Method:</strong> {item.learningMethod || 'N/A'}</p>
+              <p><strong>Price Per Hour:</strong> {item.pricePerHour || 'N/A'} VNĐ</p>
+              <p><strong>Description:</strong> {item.description || 'No description available'}</p>
+>>>>>>> 7724be1ef4f74ee21ee82a4aebd5d5c2b70e0b1d
             </div>
           </div>
           <div className='col-span-1 p-4'>
@@ -110,6 +172,7 @@ export default function ServiceList() {
               handleDateChange={handleDateChange}
               handleTimeSlotChange={handleTimeSlotChange}
               getDayOfWeek={getDayOfWeek}
+              classData={classData} // Pass classData here
             />
             {selectedClassIndex === classIndex && selectedTimeSlot && (
               <button
