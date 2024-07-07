@@ -1,4 +1,4 @@
-import { Suspense, useContext } from 'react'
+import { useContext } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import { path } from './constant/path'
 import { AppContext } from './context/app.context'
@@ -14,8 +14,8 @@ import UserLayout from './pages/User/layout/UserLayout'
 import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/AdminConfirmRegister'
 import AdminListTutor from './pages/Admin/Components/AdminListTutor'
 import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
-import SessionList from './pages/Admin/Components/SessionList'
 import StudentList from './pages/Admin/Components/AdminStudentList'
+import SessionList from './pages/Admin/Components/SessionList'
 import CheckOut from './pages/CheckOut'
 import Deposit from './pages/Deposit'
 import ModAccountStudent from './pages/Moderator/Components/ModAccountStudent'
@@ -30,18 +30,18 @@ import TutorList from './pages/TutorList'
 import ChangPassword from './pages/User/pages/ChangePassword'
 import Profile from './pages/User/pages/Profile'
 // import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
-import PaymentFail from './pages/PaymentCallBack/PaymentFail'
-import Dashboard from './pages/Admin/Components/Dashboard'
-import ProfileTT from './pages/User/pages/ProfileTT'
-import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
 import AdminStudentReq from './pages/Admin/Components/AdminStudentReq'
 import AdminStudentReqApproved from './pages/Admin/Components/AdminStudentReqApproved'
 import AdminStudentReqRejected from './pages/Admin/Components/AdminStudentReqRejected'
-import MyClass from './pages/MyClass'
+import Dashboard from './pages/Admin/Components/Dashboard'
 import TransactionList from './pages/Admin/Components/TransactionList'
+import MyClass from './pages/MyClass'
+import PaymentFail from './pages/PaymentCallBack/PaymentFail'
+import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
+import ServiceList from './pages/Sevice/BookService'
 import CreateService from './pages/Sevice/CreateSevice'
 import Support from './pages/Support'
-import ServiceList from './pages/Sevice/BookService'
+import ProfileTT from './pages/User/pages/ProfileTT'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -95,9 +95,7 @@ export default function useRouteElements() {
           path: path.home,
           element: (
             <MainLayout>
-              <Suspense fallback={<div>loading</div>}>
-                <Home />
-              </Suspense>
+              <Home />
             </MainLayout>
           ),
           index: true
@@ -156,7 +154,7 @@ export default function useRouteElements() {
           )
         },
         {
-          path: path.Service, //student
+          path: path.service, //student
           element: (
             <MainLayout>
               <ServiceList />

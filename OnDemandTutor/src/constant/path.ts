@@ -14,10 +14,10 @@ export const path = {
   deposit: '/deposit', //student
   studentViewRequestList: '/studentViewRequestList', //student
   requestStudentCurrent: '/requestStudentCurrent', //student
-  Service:'/Service',
+  service: '/Service',
   requestList: '/requests', //tutor and student
   profileTT: '/user/profileTT', //tutor
-  createService:'/createService',//tutor
+  createService: '/createService', //tutor
   paymentSucsess: '/paymentSucsess',
   paymentFail: '/paymentFail',
   detailRequest: '/detailRequest', //chưa được sử dụng

@@ -46,7 +46,7 @@ export default function Header() {
                   className='flex items-center py-1 cursor-pointer'
                   renderPopover={
                     <div className='rounded-3xl shadow-black shadow-xl'>
-                      <div className='w-[30rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
+                      <div className='w-[20rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
                         <Link
                           to={path.registerAsTutor}
                           className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
@@ -56,15 +56,9 @@ export default function Header() {
 
                         <Link
                           to={path.requestList}
-                          className='py-2 w-[10rem] h-full bg-pink-400 text-black hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
-                        >
-                          Danh sách lớp
-                        </Link>
-                        <Link
-                          to={path.createService}
                           className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-r-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
                         >
-                          Tạo dịch vụ
+                          Danh sách lớp
                         </Link>
                       </div>
                     </div>
@@ -89,7 +83,7 @@ export default function Header() {
                 </Link>
               )}
               <Link
-                to={path.support}
+                to='/'
                 className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
                                     after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
               >
@@ -97,7 +91,7 @@ export default function Header() {
               </Link>
             </div>
           </div>
-          <nav className='h-36 pt-1 md:pt-[32px] col-span-12 md:col-span-5'>
+          <nav className='h-36 pt-4 md:pt-[48px] col-span-12 md:col-span-5'>
             <NavHeader />
           </nav>
         </div>

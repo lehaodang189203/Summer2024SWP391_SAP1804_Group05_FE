@@ -1,0 +1,38 @@
+/* MenuComponentTailwind.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.menu {
+  @apply relative flex justify-center items-center;
+  width: 200px;
+  height: 200px;
+}
+
+.menu li {
+  @apply absolute left-0 list-none transform-origin-100 transition duration-500;
+  @apply transition-delay-[calc(0.1s * var(--i))];
+  transform: rotate(0deg) translateX(80px);
+}
+
+.menu li a {
+  @apply flex justify-center items-center w-10 h-10 bg-white rounded-full;
+  @apply transform-[rotate(calc(360deg / -8 * var(--i)))] shadow-md text-black transition duration-500;
+}
+
+.menu li a:hover {
+  @apply text-red-500;
+}
+
+.menu.active li {
+  @apply transform-[rotate(calc(360deg / 8 * var(--i)))];
+}
+
+.toggle {
+  @apply absolute w-14 h-14 bg-white flex justify-center items-center rounded-full shadow-md cursor-pointer transition duration-1250 ease-in-out;
+  @apply text-3xl;
+}
+
+.menu.active .toggle {
+  @apply transform rotate-45;
+}

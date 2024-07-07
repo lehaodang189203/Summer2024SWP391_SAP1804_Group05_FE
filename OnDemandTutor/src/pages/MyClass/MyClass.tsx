@@ -1,10 +1,10 @@
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import { useContext, useState } from 'react'
+import { toast } from 'react-toastify'
 import { studentApi } from '../../api/student.api'
 import { AppContext } from '../../context/app.context'
 import { Request } from '../../types/request.type'
-import { toast } from 'react-toastify'
-import http from '../../utils/http'
+import Review from './Review'
 
 export default function MyClass() {
   const { profile } = useContext(AppContext)
@@ -14,7 +14,7 @@ export default function MyClass() {
     queryKey: ['Account', profile?.id],
     queryFn: () => studentApi.classActive(profile?.id as string),
     placeholderData: keepPreviousData,
-    enabled: !profile?.id
+    enabled: !!profile?.id
   })
 
   console.log(data?.data)
@@ -22,19 +22,23 @@ export default function MyClass() {
     mutationFn: (idReq: string) => studentApi.classCompled(idReq)
   })
 
+  const [selectedClass, setSelectedClass] = useState<string | null>(null)
+  const [hovered, setHovered] = useState<string | null>(null)
+
   const handleCompleteClass = (idRequest: string) => {
-    classMutation.mutate(idRequest, {
-      onSuccess: () => {
-        alert('Kết thúc lớp thành công')
-      },
-      onError: (data) => {
-        toast.error(data.message)
-      }
-    })
+    setSelectedClass(idRequest)
+    // Call API to complete the class
+    // classMutation.mutate(idRequest, {
+    //   onSuccess: () => {
+    //     toast.success('Kết thúc lớp thành công')
+    //   },
+    //   onError: (data) => {
+    //     toast.error(data.message)
+    //   }
+    // })
   }
 
   const requestList = data?.data.data || []
-  const [hovered, setHovered] = useState<string | null>(null)
 
   return (
     <div>
@@ -45,8 +49,8 @@ export default function MyClass() {
           onMouseEnter={() => setHovered(req.idRequest)}
           onMouseLeave={() => setHovered(null)}
         >
-          {/*  Parent */}
-          <div className='w-[33rem] h-auto rounded-3xl px-5 hover:shadow-2xl hover:shadow-black border-2 mx-auto '>
+          {/* Parent */}
+          <div className='w-[33rem] h-auto rounded-3xl px-5 hover:shadow-2xl hover:shadow-black border-2 mx-auto transition-shadow duration-500'>
             <div className='my-2'>
               <h2 className='text-red-600 text-2xl'>{req.title}</h2>
             </div>
@@ -113,15 +117,14 @@ export default function MyClass() {
             </div>
             <div className='w-[49%] flex items-center justify-center'>
               <button
-                onClick={() => {
-                  handleCompleteClass(req.idRequest)
-                }}
+                onClick={() => handleCompleteClass(req.idRequest)}
                 className='w-full bg-black text-white font-bold py-2 px-4 rounded-md hover:bg-gray-400'
               >
                 Kết thúc lớp
               </button>
             </div>
           </div>
+          {selectedClass === req.idRequest && <Review />}
         </div>
       ))}
     </div>

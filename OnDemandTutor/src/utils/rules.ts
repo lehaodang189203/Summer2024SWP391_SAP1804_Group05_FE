@@ -258,6 +258,35 @@ export const updateMajorTT = yup.object({
   type: yup.string().required('Loại là bắt buộc')
 })
 
+export const reviewTT = yup.object().shape({
+  feedback: yup.string().required('Phản hồi là bắt buộc'),
+  rating: yup.number().required('Đánh giá là bắt buộc')
+})
+
+const serviceSchema = yup.object().shape({
+  pricePerHour: yup
+    .number()
+    .required('Phải nhập giá mỗi giờ')
+    .positive('Giá phải là số dương và lớn hơn 0'),
+  title: yup.string().required('Phải nhập tiêu đề'),
+  subject: yup.string().required('Phải chọn môn học'),
+  class: yup.string().required('Phải chọn lớp'),
+  description: yup.string().required('Phải nhập mô tả'),
+  learningMethod: yup.string().required('Phải chọn phương pháp học'),
+  schedule: yup
+    .array()
+    .of(
+      yup.object().shape({
+        date: yup.string().required('Phải chọn ngày'),
+        timeSlots: yup
+          .array()
+          .of(yup.string().required())
+          .min(1, 'Phải chọn ít nhất một khung giờ')
+      })
+    )
+    .required('Phải thêm lịch học')
+})
+
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
 export type SchemaResAT = yup.InferType<typeof schemaResAT>
 
@@ -269,3 +298,6 @@ export type UpdateTTSchema = yup.InferType<typeof updateTT>
 //----------------------------------------------------------------
 export type UpdateMajorTT = yup.InferType<typeof updateMajorTT>
 export type UpdateProfileTT = yup.InferType<typeof updateProfileTT>
+//-------------------
+export type ReviewTT = yup.InferType<typeof reviewTT>
+export type ServiceSchema = yup.InferType<typeof serviceSchema>

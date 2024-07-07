@@ -11,7 +11,7 @@ import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
-import { Request } from '../types/request.type'
+import { Request, Review, ServiceTutor } from '../types/request.type'
 import { TutorType } from '../types/tutor.type'
 import { User } from '../types/user.type'
 import { useContext } from 'react'
@@ -114,13 +114,12 @@ export const studentApi = {
     return http.put<SuccessResponseReq<any>>(
       `tutor/classCompled?idRequest=${idRequest}`
     )
-  }
-  ,
-  BookingServiceLearning: async (serviceID: string,body:any) => {
+  },
+  BookingServiceLearning: async (serviceID: string, body: any) => {
     try {
-
       const response = await http.get<SuccessResponseReq<TutorType[]>>(
-        `/Student/BookingServiceLearning?idService=${serviceID}&id=${user.id}`,body
+        `/Student/BookingServiceLearning?idService=${serviceID}&id=${user.id}`,
+        body
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -131,5 +130,16 @@ export const studentApi = {
       console.error('Lỗi trong quá trình xử lý:', error)
       throw error
     }
+  },
+
+  GetAllService() {
+    return http.get<SuccessResponseReq<ServiceTutor[]>>('Student/GetAllService')
+  },
+
+  CreateReview: async (body: Review) => {
+    return await http.post<SuccessResponseReq<string>>(
+      'Student/CreateReview',
+      body
+    )
   }
 }

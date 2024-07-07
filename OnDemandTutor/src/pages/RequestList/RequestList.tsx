@@ -1,17 +1,19 @@
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { moderatorApi } from '../../api/moderator.api'
 import { tutorApi } from '../../api/tutor.api'
 import Pagination from '../../components/Pagination'
+import { roles } from '../../constant/roles'
+import { AppContext } from '../../context/app.context'
 import { Request } from '../../types/request.type'
 import { JoinClassBody } from '../../types/user.request.type'
 import { User } from '../../types/user.type'
 import { getProfileFromLS } from '../../utils/auth'
 import FormRequest from '../FormRequest/FormRequest'
-import { AppContext } from '../../context/app.context'
-import { roles } from '../../constant/roles'
-import { moderatorApi } from '../../api/moderator.api'
-import { truncateByDomain } from 'recharts/types/util/ChartUtils'
+import CreateService from '../Sevice/CreateSevice'
 
 export default function RequestList() {
   const user: User = getProfileFromLS()
@@ -19,7 +21,7 @@ export default function RequestList() {
 
   const [selectedClasses, setSelectedClasses] = useState<string[]>([])
   const [boolean, setBoolean] = useState<boolean>(false)
-  console.log(profile)
+  const [isActive, setIsActive] = useState(false) // State for button rotation
 
   const { data: requestData, refetch } = useQuery<Request[]>({
     queryKey: ['Request'],
@@ -45,8 +47,6 @@ export default function RequestList() {
             ...prevSelectedClasses,
             requestId
           ])
-          console.log(111)
-
           toast.success(data.data.message)
         }
       })
@@ -56,18 +56,14 @@ export default function RequestList() {
   const handleDeleteRequest = (idReq: string) => {
     deleteMutation.mutate(idReq)
   }
+
   const deleteMutation = useMutation({
     mutationFn: (idReq: string) => moderatorApi.deleteRequest(idReq),
     onSuccess: () => {
       toast.success('Yêu cầu đã bị xóa')
-      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
+      refetch() // Refresh the request list after deletion
     }
   })
-  useEffect(() => {
-    if (requestData) {
-      console.log(requestData)
-    }
-  }, [requestData])
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
@@ -81,14 +77,37 @@ export default function RequestList() {
   const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
 
   const [showForm, setShowForm] = useState(false)
+  const [showFormService, setShowFormSerivce] = useState(false)
+  const [showOptions, setShowOptions] = useState(false)
 
+  //  mở form đăng ký yêu cầu
   const handleOpenPopup = () => {
-    setShowForm(true)
+    setShowOptions(false)
+    setShowForm(!showForm)
   }
 
+  // các lựa chọn
+  const handleOption = () => {
+    setShowOptions((prev) => !prev)
+  }
+
+  //  fomr mở dịch vụ
+  const handleOpenPopupService = () => {
+    setShowOptions(false)
+    setShowFormSerivce(!showFormService)
+  }
+
+  //  đóng form (bấm hủy)
   const handleCloseForm = () => {
     setShowForm(false)
+    setShowFormSerivce(false)
   }
+
+  useEffect(() => {
+    if (requestData) {
+      console.log(requestData)
+    }
+  }, [requestData])
 
   return (
     <>
@@ -201,16 +220,40 @@ export default function RequestList() {
       {user?.roles.toLowerCase() !== roles.moderator &&
         user.roles.toLowerCase() !== roles.admin && (
           <div className='fixed bottom-6 right-6'>
-            <button
-              onClick={handleOpenPopup}
-              className='mb-10 bg-slate-500 text-white rounded-full p-4 shadow-lg hover:bg-transparent transition-all duration-300 hover:text-black shadow-black hover: relative group'
-            >
-              +
-              <span className='absolute bottom-full right-1/2 transform translate-x-1/2 mb-2 w-[3rem] p-2 text-white bg-black rounded-lg text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
-                Bấm vào để tạo lớp
-              </span>
-            </button>
-            {showForm && <FormRequest onClose={handleCloseForm} />}
+            <div className='relative'>
+              <button
+                onClick={handleOption}
+                className={`mb-10 bg-slate-500 text-white rounded-full p-4 shadow-lg hover:bg-transparent hover:text-black hover:shadow-xl transition-all duration-300 group ${
+                  showOptions ? 'rotate-180' : ''
+                }`}
+                style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}
+              >
+                <FontAwesomeIcon icon={faPlus} />
+              </button>
+              <div
+                className={` absolute bottom-6 right-0 bg-white p-2 shadow-lg rounded-lg overflow-hidden transition-all duration-300  ${
+                  showOptions
+                    ? 'translate-x-0 opacity-100 right-16'
+                    : 'translate-x-full opacity-0'
+                }`}
+                style={{ width: '200px' }}
+              >
+                <div
+                  onClick={handleOpenPopup}
+                  className='mb-2 p-2 transform hover:translate-y-1 hover:shadow-inner hover:shadow-black transition-shadow rounded-xl   hover:text-pink-500'
+                >
+                  Tạo yêu cầu tìm gia sư
+                </div>
+                <div
+                  onClick={handleOpenPopupService}
+                  className='mb-2 p-2 transform hover:translate-y-1 hover:shadow-inner hover:shadow-black transition-shadow rounded-xl   hover:text-pink-500 '
+                >
+                  Tạo lớp cho gia sư
+                </div>
+              </div>
+              {showForm && <FormRequest onClose={handleCloseForm} />}
+              {showFormService && <CreateService onClose={handleCloseForm} />}
+            </div>
           </div>
         )}
 
@@ -222,4 +265,7 @@ export default function RequestList() {
       />
     </>
   )
+}
+
+{
 }

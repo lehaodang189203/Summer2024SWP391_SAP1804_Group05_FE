@@ -45,3 +45,26 @@ export interface ClassType {
   User: UserSchema
   Tutor: UserSchema
 }
+
+export interface ServiceTutor {
+  id: string
+  pricePerHour: number
+  tittle: string
+  description: string
+  learningMethod: string
+  class: string
+  subject: string
+  schedule: [
+    {
+      date: string
+      timeSlots: string[]
+    }
+  ]
+}
+
+export interface Review {
+  idUser: string
+  feedBack: string
+  rating: number
+  idAccountTutor: string
+}
