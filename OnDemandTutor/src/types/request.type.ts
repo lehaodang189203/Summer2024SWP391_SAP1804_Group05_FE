@@ -62,9 +62,9 @@ export interface ServiceTutor {
   ]
 }
 
-export interface Review {
+export interface ReviewType {
   idUser: string
   feedBack: string
   rating: number
-  idAccountTutor: string
+  idClassRequest: string
 }

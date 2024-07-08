@@ -14,6 +14,14 @@ function testTime(this: yup.TestContext<yup.AnyObject>) {
   return timeStart === '' || timeEnd === ''
 }
 
+const isFutureDate = (dateString: string): boolean => {
+  const today = new Date()
+  const date = new Date(dateString)
+  // Loại bỏ phần thời gian để so sánh
+  today.setHours(0, 0, 0, 0)
+  date.setHours(0, 0, 0, 0)
+  return date >= today
+}
 const handleConfirmPasswordYup = (refString: string) => {
   return yup
     .string()
@@ -110,8 +118,9 @@ export const requestSchema = yup.object({
   price: yup
     .number()
     .transform((value, originalValue) => {
-      // Remove commas from the original value
+      //  trả về số nguyên luôn
       const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
+      // nếu là chuỗi thì là 0
       return isNaN(formattedValue) ? 0 : formattedValue
     })
     .required('Giá là bắt buộc')
@@ -263,21 +272,59 @@ export const reviewTT = yup.object().shape({
   rating: yup.number().required('Đánh giá là bắt buộc')
 })
 
-const serviceSchema = yup.object().shape({
+export const serviceSchema = yup.object().shape({
   pricePerHour: yup
     .number()
-    .required('Phải nhập giá mỗi giờ')
-    .positive('Giá phải là số dương và lớn hơn 0'),
+    .transform((value, originalValue) => {
+      //  trả về số nguyên luôn
+      const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
+      // nếu là chuỗi thì là 0
+      return isNaN(formattedValue) ? 0 : formattedValue
+    })
+    .required('Giá là bắt buộc')
+    .positive('Giá không thể là số âm'),
   title: yup.string().required('Phải nhập tiêu đề'),
-  subject: yup.string().required('Phải chọn môn học'),
-  class: yup.string().required('Phải chọn lớp'),
+  subjects: yup
+    .string()
+    .required('Môn học là bắt buộc')
+    .oneOf(
+      [
+        'Ngữ văn',
+        'Toán học',
+        'Vật lý',
+        'Hóa học',
+        'Sinh học',
+        'Lịch sử',
+        'Địa lý',
+        'Giáo dục công dân',
+        'Ngoại ngữ',
+        'Tin học'
+      ],
+      'Môn học không hợp lệ'
+    ),
+  class: yup.string().oneOf(['10', '11', '12']).required('Chọn lớp'),
   description: yup.string().required('Phải nhập mô tả'),
-  learningMethod: yup.string().required('Phải chọn phương pháp học'),
+  learningMethod: yup
+    .string()
+    .oneOf(
+      ['Dạy trực tiếp(offline)', 'Dạy trực tuyến (online)'],
+      'Phương thức học không hợp lệ'
+    )
+    .required('Hãy chọn phương thức học'),
   schedule: yup
     .array()
     .of(
       yup.object().shape({
-        date: yup.string().required('Phải chọn ngày'),
+        date: yup
+          .string()
+          .required('Phải chọn ngày')
+          .test(
+            'is-future-date',
+            'Ngày không được là ngày trong quá khứ',
+            function (value) {
+              return isFutureDate(value as string)
+            }
+          ),
         timeSlots: yup
           .array()
           .of(yup.string().required())

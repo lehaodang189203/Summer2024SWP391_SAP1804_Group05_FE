@@ -11,11 +11,9 @@ import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
-import { Request, Review, ServiceTutor } from '../types/request.type'
+import { Request, ReviewType, ServiceTutor } from '../types/request.type'
 import { TutorType } from '../types/tutor.type'
 import { User } from '../types/user.type'
-import { useContext } from 'react'
-import { AppContext } from '../context/app.context'
 
 const user = <User>getProfileFromLS()
 
@@ -83,7 +81,7 @@ export const studentApi = {
   // // Đăng ký làm gia sư
   registerAsTutor: async (body: RequestTutorBody, id: string) =>
     await http.post<SuccessResponse<any>>(
-      `User/registerAsTutorFB?id=${id}`,
+      `/User/registerAsTutor?id=${id}`,
       body
     ),
 
@@ -112,7 +110,7 @@ export const studentApi = {
 
   classCompled(idRequest: string) {
     return http.put<SuccessResponseReq<any>>(
-      `tutor/classCompled?idRequest=${idRequest}`
+      `Student/CompleteClassRequest?idClassRequest=${idRequest}`
     )
   },
   BookingServiceLearning: async (serviceID: string, body: any) => {
@@ -136,9 +134,9 @@ export const studentApi = {
     return http.get<SuccessResponseReq<ServiceTutor[]>>('Student/GetAllService')
   },
 
-  CreateReview: async (body: Review) => {
+  CreateReview: async (body: ReviewType) => {
     return await http.post<SuccessResponseReq<string>>(
-      'Student/CreateReview',
+      'Student/CreateReviewRequest',
       body
     )
   }

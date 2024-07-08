@@ -11,12 +11,18 @@ import Button from '../../../components/Button'
 import Input from '../../../components/Input'
 import { reviewTT, ReviewTT } from '../../../utils/rules'
 import { toast } from 'react-toastify'
+import { ReviewType } from '../../../types/request.type'
+
+interface Props {
+  idClassRequest: string
+}
 
 type FormData = ReviewTT
 const reviewSchema = reviewTT
 
-export default function Review() {
+export default function Review({ idClassRequest }: Props) {
   const { profile } = useContext(AppContext)
+  const idUser = profile?.id as string
 
   const [rating, setRating] = useState<number>(0)
   const [hoverRating, setHoverRating] = useState<number>(0)
@@ -25,9 +31,13 @@ export default function Review() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<FormData>({
-    resolver: yupResolver(reviewSchema)
+    resolver: yupResolver(reviewSchema),
+    defaultValues: {
+      rating: 0
+    }
   })
 
   const createReviewMutation = useMutation({
@@ -35,14 +45,23 @@ export default function Review() {
   })
 
   const onSubmit = handleSubmit((data: FormData) => {
-    console.log('Submitted data:', { ...data, rating: rating })
+    const formData: ReviewType = {
+      ...data,
+      rating: rating,
+      feedBack: data.feedback,
+      idClassRequest,
+      idUser
+    }
 
-    // createReviewMutation.mutate({ ...data, rating: rating } as FormData, {
+    console.log('formData', formData)
+
+    // createReviewMutation.mutate(formData, {
     //   onSuccess: (data) => {
-    //     toast.dark(data.data.message)
+    //     toast.success(data.data.message)
+    //     reset() // Reset form after successful submission
     //   },
     //   onError: (error) => {
-    //     console.error(error.message)
+    //     toast.error(error.message)
     //   }
     // })
   })
@@ -57,7 +76,6 @@ export default function Review() {
 
   const handleClick = (index: number) => {
     setRating(index)
-    console.log('Rating:', index)
   }
 
   return (

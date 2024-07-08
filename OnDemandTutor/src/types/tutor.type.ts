@@ -65,15 +65,15 @@ interface AdminStudentReq {
   timestart: string
   timeend: string
 }
-export interface DataService {
+export interface ServiceSchemaType {
   pricePerHour: number
   title: string
-  subject: string
+  subject: string // Add this line
   class: string
   description: string
   learningMethod: string
   schedule: {
-    timeSlots?: string[] | undefined
     date: string
+    timeSlots: string[]
   }[]
 }

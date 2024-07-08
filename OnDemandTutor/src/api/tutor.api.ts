@@ -5,7 +5,7 @@ import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 
 import {
   AddQualification,
-  DataService,
+  ServiceSchemaType,
   TutorProfile,
   UpdateTutorProfile
 } from '../types/tutor.type'
@@ -45,9 +45,9 @@ export const tutorApi = {
       `tutor/join-request?requestId=${body.requestId}&id=${body.id}`
     ),
 
-  createService: async (body: DataService) => {
+  createService: async (body: ServiceSchemaType) => {
     try {
-      const response = await http.post<any>(
+      const response = await http.post<SuccessResponseReq<string>>(
         `/tutor/createService?id=${user.id}`,
         body
       )

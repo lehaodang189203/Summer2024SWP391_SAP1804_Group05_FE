@@ -132,6 +132,7 @@ export default function FormRequest({
                 errorMessage={errors.title?.message}
               />
             </div>
+            {/* --------------- */}
             <div className='flex flex-col'>
               <label className='block text-sm font-medium'>Môn học</label>
               <select
@@ -156,6 +157,7 @@ export default function FormRequest({
                 </p>
               )}
             </div>
+            {/* -------------- */}
             <div className='flex flex-col'>
               <label className='block text-lg font-medium'>
                 Phương thức học
@@ -178,6 +180,7 @@ export default function FormRequest({
                 </p>
               )}
             </div>
+            {/* ----------- */}
             <div className='flex flex-col'>
               <label className='block text-lg font-medium'>Giá</label>
               <Controller

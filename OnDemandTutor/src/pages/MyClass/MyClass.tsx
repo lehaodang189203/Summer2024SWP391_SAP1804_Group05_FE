@@ -26,16 +26,14 @@ export default function MyClass() {
   const [hovered, setHovered] = useState<string | null>(null)
 
   const handleCompleteClass = (idRequest: string) => {
-    setSelectedClass(idRequest)
-    // Call API to complete the class
-    // classMutation.mutate(idRequest, {
-    //   onSuccess: () => {
-    //     toast.success('Kết thúc lớp thành công')
-    //   },
-    //   onError: (data) => {
-    //     toast.error(data.message)
-    //   }
-    // })
+    classMutation.mutate(idRequest, {
+      onSuccess: () => {
+        toast.success('Kết thúc lớp thành công'), setSelectedClass(idRequest)
+      },
+      onError: (data) => {
+        toast.error(data.message)
+      }
+    })
   }
 
   const requestList = data?.data.data || []
@@ -124,7 +122,7 @@ export default function MyClass() {
               </button>
             </div>
           </div>
-          {selectedClass === req.idRequest && <Review />}
+          {selectedClass === req.idRequest && <Report />}
         </div>
       ))}
     </div>
