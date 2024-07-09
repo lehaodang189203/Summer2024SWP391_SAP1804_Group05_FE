@@ -11,16 +11,23 @@ import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
-import { Request, ReviewType, ServiceTutor } from '../types/request.type'
+import {
+  Classrequest,
+  Request,
+  ReviewServiceType,
+  ReviewType,
+  ServiceTutor
+} from '../types/request.type'
 import { TutorType } from '../types/tutor.type'
 import { User } from '../types/user.type'
+import { DataType } from '../pages/Sevice/components/ModalChooseService/ModalChooseService'
 
 const user = <User>getProfileFromLS()
 
 export const studentApi = {
   // Tạo yêu cầu
-  createRequest: async (body: RequestBody) =>
-    await http.post(`student/createRequest?id=${user.id}`, body),
+  createRequest: async (id:string,body: RequestBody) =>
+    await http.post(`student/createRequest?id=${id}`, body),
 
   // Lấy danh sách yêu cầu chờ duyệt
   async pendingRequest(id: string) {
@@ -104,23 +111,45 @@ export const studentApi = {
 
   //  lấy lớp học đang diễn ra
   classActive(id: string) {
-    console.log('id', id)
-    return http.get<any>(`Student/classActive?id=${id}`)
-  },
-
-  classCompled(idRequest: string) {
-    return http.put<SuccessResponseReq<any>>(
-      `Student/CompleteClassRequest?idClassRequest=${idRequest}`
+    return http.get<SuccessResponseReq<Classrequest>>(
+      `User/ViewClassRequest?id=${id}`
     )
   },
-  BookingServiceLearning: async (serviceID: string, body: any) => {
+  createComplaint(body: {
+    idUser: string
+    description: string
+    idAccountTutor: string
+  }) {
+    return http.post<SuccessResponseReq<string>>(
+      `Student/CreateComplaint`,
+      body
+    )
+  },
+
+  classCompled(idClassRequest: string) {
+    return http.put<SuccessResponseReq<any>>(
+      `Student/CompleteClassRequest?idClassRequest=${idClassRequest}`
+    )
+  },
+  serviceCompled(idBooking: string) {
+    return http.put<SuccessResponseReq<any>>(
+      `Student/CompleteClassService?idBooking=${idBooking}`
+    )
+  },
+  BookingServiceLearning: async (
+    id: string,
+    serviceID: string,
+    body: DataType
+  ) => {
+    console.log('BookingServiceLearning', serviceID)
+
     try {
-      const response = await http.get<SuccessResponseReq<TutorType[]>>(
-        `/Student/BookingServiceLearning?idService=${serviceID}&id=${user.id}`,
+      const response = await http.post<SuccessResponseReq<string>>(
+        `Student/BookingServiceLearning?id=${id}&idService=${serviceID} `,
         body
       )
       if (response.status === HttpStatusCode.Ok) {
-        return response.data.data
+        return response
       } else {
         throw new Error('Danh sách trống')
       }
@@ -137,6 +166,12 @@ export const studentApi = {
   CreateReview: async (body: ReviewType) => {
     return await http.post<SuccessResponseReq<string>>(
       'Student/CreateReviewRequest',
+      body
+    )
+  },
+  CreateServiceReview: async (body: ReviewServiceType) => {
+    return await http.post<SuccessResponseReq<string>>(
+      'Student/CreateReviewService',
       body
     )
   }

@@ -6,9 +6,6 @@ import { adminAPI } from "../../../../api/admin.api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-
-
-const onChange=( )=>{}
 export default function AdminStudentList () {
     // Lấy danh sách học sinh
     const { data: StudentData, refetch } = useQuery<DataTypeStu[]>({
@@ -108,7 +105,6 @@ export default function AdminStudentList () {
                 columns={columns}
                 dataSource={StudentData}
                 pagination={{ pageSize: 6 }} 
-                onChange={onChange}
                 showSorterTooltip={{ target: "sorter-icon" }}
                 scroll={{ x: 1300,y: 400}}
                 />
@@ -119,9 +115,7 @@ export default function AdminStudentList () {
                     visible={visible}
                     onCancel={handleCancel}
                     footer={[
-                        <Button key="back" onClick={handleCancel}>
-                            Sửa(chưa thêm api)
-                        </Button>,
+                        
                         <Button key="back" onClick={handleDelete}>
                             Xóa
                         </Button>

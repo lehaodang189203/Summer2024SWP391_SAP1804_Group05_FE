@@ -42,6 +42,11 @@ import ServiceList from './pages/Sevice/BookService'
 import CreateService from './pages/Sevice/CreateSevice'
 import Support from './pages/Support'
 import ProfileTT from './pages/User/pages/ProfileTT'
+import DetailInfor from './pages/MyClass/Detail'
+import TutorServiceBookedLayout from './pages/TutorViewServiceList/Layout/TutorServiceBookedLayout'
+import BookedService from './pages/Sevice/BookedService'
+import ModViewComplaint from './pages/Moderator/Components/ModViewComplaint'
+import AdminViewComplaint from './pages/Admin/Components/AdminViewComplaint'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -146,6 +151,7 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
+
         {
           path: path.service, //student
           element: (
@@ -233,12 +239,11 @@ export default function useRouteElements() {
               <ReStuPending />
             </MainLayout>
           )
-        },
-        {
-          path: path.tutorViewRequestList, //student
+        },{
+          path: path.bookedService, //student
           element: (
             <MainLayout>
-              <ReStuPending />
+              <BookedService />
             </MainLayout>
           )
         },
@@ -262,6 +267,10 @@ export default function useRouteElements() {
             {
               path: path.Moderator.listAccountStudent,
               element: <ModAccountStudent />
+            },
+            {
+              path: path.Moderator.listComplant,
+              element: <ModViewComplaint />
             }
           ]
         },
@@ -274,6 +283,7 @@ export default function useRouteElements() {
               element: <Dashboard />
             },
             { path: path.Admin.sessionList, element: <SessionList /> },
+            // { path: path.Admin.viewAllComplaint, element: < /> },
             { path: path.Admin.studentlist, element: <StudentList /> },
             { path: path.Admin.adminStudentReq, element: <AdminStudentReq /> },
             { path: path.Admin.TransactionList, element: <TransactionList /> },
@@ -293,6 +303,10 @@ export default function useRouteElements() {
             {
               path: path.Admin.rejectProfileRegisterTT,
               element: <AdminRejectRegister />
+            },
+            {
+              path: path.Admin.listComplant,
+              element: <AdminViewComplaint />
             }
           ]
         },

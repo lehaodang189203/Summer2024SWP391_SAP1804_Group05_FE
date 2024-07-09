@@ -106,8 +106,8 @@ export default function RequestStudentCurrent() {
           <div>Tình Trạng</div>
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
-          {currentItems.map((request, key) => (
-            <RequestComponents key={key} request={request} refetch={refetch} />
+          {currentItems.map((service, key) => (
+            <RequestComponents key={key} request={service} refetch={refetch} />
           ))}
         </div>
       </div>

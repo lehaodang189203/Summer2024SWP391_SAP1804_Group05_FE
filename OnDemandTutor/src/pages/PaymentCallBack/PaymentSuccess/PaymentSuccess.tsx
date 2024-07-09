@@ -22,8 +22,9 @@ export default function PaymentSuccess() {
 
   return (
     <div>
-      <Link to={path.home} className='hover:text-red-400 font-medium'>
-        Bạn đã nạp tiền thành công,Nhấn vào để quay lại trang chính
+        <Link to={path.home} className='hover:text-red-200 font-medium'>
+        
+        <div className='mb-10 text-green-600 hover:text-red-600'>Bạn đã nạp tiền thành công!!</div>
       </Link>
     </div>
   )

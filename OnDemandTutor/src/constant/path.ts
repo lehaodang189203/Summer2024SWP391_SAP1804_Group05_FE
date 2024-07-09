@@ -15,22 +15,27 @@ export const path = {
   studentViewRequestList: '/studentViewRequestList', //student
   requestStudentCurrent: '/requestStudentCurrent', //student
   service: '/Service',
+  bookedService:'/bookedService',
   requestList: '/requests', //tutor and student
   profileTT: '/user/profileTT', //tutor
   createService: '/createService', //tutor
+  tutorViewServiceNotBooked:'/tutorViewServiceNotBooked',
+  tutorViewServiceBooked:'/tutorViewServiceBooked',
   paymentSucsess: '/paymentSucsess',
   paymentFail: '/paymentFail',
   detailRequest: '/detailRequest', //chưa được sử dụng
   calender: '/calender', //calender nèk
-  tutorViewRequestList: '/studentViewRequestList', //student
+  //tutorViewRequestList: '/studentViewRequestList', //student
   myClass: '/myClass',
+  DetailInfor: '/DetailInfor',
   Moderator: {
     //                                                      mod-------------------------------------
     mod: '/mod',
     listStudentRequest: '/mod/listStudentRequest', //danh sách học sinh tạo req session(phiên học)
     tutorResRegis: '/mod/tutorResRegis', //danh sách giảng viên đăng kí để approved (đang làm)
     tutorPostSession: '/mod/listTutor', // danh sách post giảng viên tạo phiên học
-    listAccountStudent: '/mod/listAccountStudent'
+    listAccountStudent: '/mod/listAccountStudent',
+    listComplant:'/mod/listComplant'
     //danh sách phiên học
     //khiếu nại
   },
@@ -46,7 +51,8 @@ export const path = {
     adminStudentReqRejected: '/admin/studentReqRejected',
     TransactionList: 'admin/TransactionList',
     sessionList: '/admin/sessionList',
-    dashBoard: '/admin/dashboard'
+    dashBoard: '/admin/dashboard',
+    listComplant:'/admin/listComplant'
   }
 } as const
 

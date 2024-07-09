@@ -65,10 +65,7 @@ function ModMenu({ kind, style }: props) {
                 Danh sách yêu cầu trở thành giáo viên
               </button>
             </Link>
-            <div className='p-5'>||</div>
-            <Link to={''}>
-              <button className='hover:bg-blue-400 p-5'>Đơn đã từ chối</button>
-            </Link>
+            
             <div></div>
           </div>
         </>

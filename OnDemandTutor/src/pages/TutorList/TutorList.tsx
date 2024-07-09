@@ -20,10 +20,14 @@ import {
   SelecTutorReqBody
 } from '../../types/user.request.type'
 
+import userAvatar from '../../assets/img/user.svg'
+
+
 export default function TutorList() {
   const [isPopupVisible, setIsPopupVisible] = useState(false)
   const [color, setColor] = useState(false)
   const [currentTutor, setCurrentTutor] = useState<TutorType | null>(null)
+  const [searchText, setSearchText] = useState('');
 
   const { idReq: idRequestParams } = useParams()
 
@@ -33,7 +37,7 @@ export default function TutorList() {
     queryKey: ['Request', idRequestParams],
     queryFn: () =>
       studentApi.viewAllTutorsJoinRequests(idRequestParams as string),
-    enabled: !!idRequestParams // chắc chắn phải có idREq thì mới gọi
+      enabled: !!idRequestParams // chắc chắn phải có idREq thì mới gọi
   })
 
   const selectTutorMutation = useMutation({
@@ -72,21 +76,32 @@ export default function TutorList() {
       console.error('Không có id của request')
     }
   }
-
+  const filteredTutors = TutorListProfile?.filter((tutor: TutorType) =>
+    tutor.fullName.toLowerCase().includes(searchText.toLowerCase())
+  );
   return (
     <div>
-      {TutorListProfile?.map((tutor, index) => (
+       <input
+          type='text'
+          placeholder='Tìm kiếm gia sư'
+          className='border border-gray-300 p-2 rounded-lg w-1/3'
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+      
+      {filteredTutors?.map((tutor, index) => (
         <div
           key={index}
           className='w-[1230px] rounded-3xl border-3 bg-transparent border-2 h-auto mx-auto my-5 px-5 hover:shadow-lg hover:shadow-gray-900'
-        >
+        > 
+
           <div className='col-span-12 flex'>
             {/* img */}
             <div className='col-span-3' onClick={() => handleItemClick(tutor)}>
               <div className='mx-8 my-5'>
                 <div className='w-[13rem] h-[15rem]'>
                   <img
-                    src={tutor.avatar}
+                    src={tutor.avatar ?  tutor.avatar:userAvatar }
                     // src={tutor.avatar}
                     alt='ảnh đại diện'
                     className='w-full h-full'
@@ -208,7 +223,7 @@ export default function TutorList() {
               {/* img */}
               <div className='flex justify-center py-4'>
                 <img
-                  src={currentTutor.avatar}
+                  src={currentTutor.avatar ? currentTutor.avatar : userAvatar  }
                   alt='gia sư'
                   className='w-32 h-32 rounded-full'
                 />

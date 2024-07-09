@@ -15,19 +15,19 @@ import { ReviewType } from '../../../types/request.type'
 
 interface Props {
   idClassRequest: string
+  onSubmit: () => void // thêm prop onSubmit
 }
 
 type FormData = ReviewTT
 const reviewSchema = reviewTT
 
-export default function Review({ idClassRequest }: Props) {
+export default function Review({ idClassRequest, onSubmit }: Props) {
   const { profile } = useContext(AppContext)
   const idUser = profile?.id as string
 
   const [rating, setRating] = useState<number>(0)
   const [hoverRating, setHoverRating] = useState<number>(0)
 
-  // Initialize useForm with the validation schema
   const {
     register,
     handleSubmit,
@@ -44,7 +44,7 @@ export default function Review({ idClassRequest }: Props) {
     mutationFn: studentApi.CreateReview
   })
 
-  const onSubmit = handleSubmit((data: FormData) => {
+  const handleFormSubmit = handleSubmit((data: FormData) => {
     const formData: ReviewType = {
       ...data,
       rating: rating,
@@ -55,15 +55,16 @@ export default function Review({ idClassRequest }: Props) {
 
     console.log('formData', formData)
 
-    // createReviewMutation.mutate(formData, {
-    //   onSuccess: (data) => {
-    //     toast.success(data.data.message)
-    //     reset() // Reset form after successful submission
-    //   },
-    //   onError: (error) => {
-    //     toast.error(error.message)
-    //   }
-    // })
+    createReviewMutation.mutate(formData, {
+      onSuccess: (data) => {
+        toast.success(data.data.message)
+        reset()
+        onSubmit() // gọi onSubmit khi form gửi thành công
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      }
+    })
   })
 
   const handleMouseEnter = (index: number) => {
@@ -80,7 +81,7 @@ export default function Review({ idClassRequest }: Props) {
 
   return (
     <div className='container border-2 h-full rounded-2xl w-full p-3 hover:shadow-xl hover:shadow-black transition-shadow duration-700'>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <h2 className='mt-4'>Phản hồi giảng dạy</h2>
 
         <div>

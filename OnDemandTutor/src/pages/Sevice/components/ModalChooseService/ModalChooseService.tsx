@@ -1,110 +1,150 @@
-import { useMutation } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import { studentApi } from '../../../../api/student.api'; // Ensure the path to your API file is correct
-import { toast } from 'react-toastify';
+import { useMutation } from '@tanstack/react-query'
+import React, { useContext, useState } from 'react'
+import { studentApi } from '../../../../api/student.api' // Ensure the path to your API file is correct
+import { toast } from 'react-toastify'
+import { AppContext } from '../../../../context/app.context'
 
 interface Props {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  selectedDate: string;
-  selectedTimeSlots: string[];
+  isOpen: boolean
+  onClose: () => void
+  onConfirm: () => void
+  selectedDate: string
+  selectedTimeSlots: string
   classInfo: {
-    id: string;
-    pricePerHour: number;
-    tittle: string;
-    subject: string;
-    class: string;
-    description: string;
-    learningMethod: string;
-  } | null;
+    idService: string
+    pricePerHour: number
+    title: string
+    subject: string
+    class: string
+    description: string
+    learningMethod: string
+  } | null
+}
+
+interface FormData {
+  idService: string
+  pricePerHour: number
+  title: string
+  subject: string
+  class: string
+  description: string
+  learningMethod: string
+}
+
+export interface DataType {
+  duration: number
+  price: number
+  date: string
+  timeAvalable: string
 }
 
 const ModalChooseService: React.FC<Props> = ({
-  isOpen, onClose, onConfirm, selectedDate, selectedTimeSlots, classInfo
+  isOpen,
+  onClose,
+  onConfirm,
+  selectedDate,
+  selectedTimeSlots,
+  classInfo
 }) => {
-  const [duration, setDuration] = useState<number>(30);
+  const [duration, setDuration] = useState<number>(30)
 
-  const handleDurationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setDuration(Number(event.target.value));
-  };
+  const { profile } = useContext(AppContext)
+
+  const handleDurationChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setDuration(Number(event.target.value))
+  }
 
   const calculateTotalPrice = () => {
-    return (classInfo?.pricePerHour || 0 ) * duration/60;
-  };
+    return ((classInfo?.pricePerHour || 0) * duration) / 60
+  }
 
-  const bookServiceMutation = useMutation({
-    mutationFn: (body: any) => studentApi.BookingServiceLearning(classInfo?.id || '', body),
-    onSuccess: (data: any) => {
-      console.log('data res', data);
-      toast.success(data.message)
-      onConfirm(); // Call the parent onConfirm function to close the modal
-    },
-    onError: (error) => {
-      console.error('lỗi trong quá trình booking:', error);
-    }
-  });
+  const bookingMutation = useMutation({
+    mutationFn: (body: DataType) =>
+      studentApi.BookingServiceLearning(
+        profile?.id as string,
+        classInfo?.idService as string,
+        body
+      )
+  })
 
   const handleConfirm = () => {
-    if (!classInfo) return;
-
-    const bookingData = {
+    if (!classInfo) return
+  
+    const bookingData: DataType = {
       duration,
       price: calculateTotalPrice(),
       date: selectedDate,
-      timeAvalable: selectedTimeSlots.join(', ')
-    };
-    console.log('bookingData', bookingData);
-    bookServiceMutation.mutate(bookingData);
-  };
+      timeAvalable: selectedTimeSlots
+    }
+    console.log('bookingData', bookingData)
+    bookingMutation.mutate(bookingData, {
+      onSuccess: (data) => {
+        toast.success(data.data.message)
+        onConfirm() // Call onConfirm to handle actions after booking
+      }
+    })
+  }
 
   if (!isOpen || !classInfo) {
-    return null;
+    return null
   }
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50">
-      <div className="bg-white p-8 rounded-lg w-1/2">
-        <h2 className="text-2xl mb-4">Confirm Selection</h2>
-        <p><strong>ID:</strong> {classInfo.id}</p>
-        <p><strong>Class:</strong> {classInfo.class}</p>
-        <p><strong>Date:</strong> {selectedDate}</p>
-        <p><strong>Time Slot:</strong> {selectedTimeSlots.join(', ')}</p>
-        <label className="block mt-4">
-          <span className="text-gray-700">Xác nhận dịch vụ000000000000000:</span>
+    <div className='fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50'>
+      <div className='bg-white p-8 rounded-lg w-1/2 text left'>
+        <h2 className='text-2xl mb-4'>Xác nhận chọn dịch vụ</h2>
+        <p>
+          <strong>Môn:</strong> {classInfo.subject}
+        </p>
+        <p>
+          <strong>Lớp:</strong> {classInfo.class}
+        </p>
+        
+        <p>
+          <strong>Ngày học:</strong> {selectedDate}
+        </p>
+        <p>
+          <strong>Giờ học:</strong> {selectedTimeSlots}
+        </p>
+        <label className='block mt-4'>
+          <span className='text-gray-700'>Chọn thời gian thuê :</span>
           <select
             value={duration}
             onChange={handleDurationChange}
-            className="block w-full mt-1 border-gray-300 rounded-md"
+            className='block w-full mt-1 border-gray-300 rounded-md'
           >
-            <option value={30}>30 minutes</option>
-            <option value={60}>60 minutes</option>
-            <option value={90}>90 minutes</option>
-            <option value={120}>120 minutes</option>
-            <option value={150}>150 minutes</option>
-            <option value={180}>180 minutes</option>
+            <option value={30}>30 phút</option>
+            <option value={60}>60 phút</option>
+            <option value={90}>90 phút</option>
+            <option value={120}>120 phút</option>
+            <option value={150}>150 phút</option>
+            <option value={180}>180 phút</option>
           </select>
         </label>
-        <p className="mt-4"><strong>Total Price:</strong> {calculateTotalPrice()} VNĐ</p>
-        <div className="mt-6 flex justify-end">
+        <p className='mt-4'>
+          <strong>Tổng tiền:</strong> {calculateTotalPrice()} VNĐ
+        </p>
+        <div className='mt-6 flex justify-end'>
           <button
-            type="button"
+            type='button'
             onClick={onClose}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2"
+            className='bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2'
           >
-            Cancel
+            Hủy
           </button>
           <button
-            type="button"
+            type='button'
             onClick={handleConfirm}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+            className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'
           >
-            Confirm
+            Chấp nhận
           </button>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ModalChooseService;
+export default ModalChooseService

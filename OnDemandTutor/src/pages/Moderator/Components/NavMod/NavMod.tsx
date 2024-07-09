@@ -40,6 +40,22 @@ export default function NavMod() {
             Kiểm duyệt đơn trở thành gia sư
           </button>
         </Link>
+        <Link to={path.Moderator.listAccountStudent}>
+          <button
+            className='text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md'
+            onClick={() => handleSetActive('tutor')}
+          >
+            Kiểm duyệt tài khoản học sinh
+          </button>
+        </Link>
+        <Link to={path.Moderator.listComplant}>
+          <button
+            className='text-xs mr-7 mb-4 ml-7 w-5/6 p-3 border border-black bg-white content-center justify-center hover:bg-pink-300 rounded-md'
+            onClick={() => handleSetActive('tutor')}
+          >
+            Kiểm duyệt Đánh giá
+          </button>
+        </Link>
       </div>
     </div>
   )

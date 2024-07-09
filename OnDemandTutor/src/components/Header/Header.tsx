@@ -46,7 +46,7 @@ export default function Header() {
                   className='flex items-center py-1 cursor-pointer'
                   renderPopover={
                     <div className='rounded-3xl shadow-black shadow-xl'>
-                      <div className='w-[20rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
+                      <div className='w-[25rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
                         <Link
                           to={path.registerAsTutor}
                           className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
@@ -56,9 +56,15 @@ export default function Header() {
 
                         <Link
                           to={path.requestList}
-                          className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-r-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
+                          className='py-2 w-[10rem] h-full bg-pink-400 text-black hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
                         >
                           Danh sách lớp
+                        </Link>
+                        <Link
+                          to={path.service}
+                          className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-r-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
+                        >
+                          Danh sách dịch vụ
                         </Link>
                       </div>
                     </div>

@@ -20,8 +20,9 @@ export default function RequestList() {
   const { profile } = useContext(AppContext)
 
   const [selectedClasses, setSelectedClasses] = useState<string[]>([])
-  const [boolean, setBoolean] = useState<boolean>(false)
   const [isActive, setIsActive] = useState(false) // State for button rotation
+  const [completedClasses, setCompletedClasses] = useState<{ [key: string]: boolean }>({})
+  const [selectedSubject, setSelectedSubject] = useState<string>('');
 
   const { data: requestData, refetch } = useQuery<Request[]>({
     queryKey: ['Request'],
@@ -42,11 +43,12 @@ export default function RequestList() {
 
       tutorApprovedReMutation.mutate(joinClass, {
         onSuccess: (data) => {
-          setBoolean(true)
+          refetch()
           setSelectedClasses((prevSelectedClasses) => [
             ...prevSelectedClasses,
             requestId
           ])
+          setCompletedClasses((prev) => ({ ...prev, [requestId]: true }))
           toast.success(data.data.message)
         }
       })
@@ -72,9 +74,13 @@ export default function RequestList() {
     setCurrentPage(page)
   }
 
+
   const items = requestData || []
+  const filteredItems = selectedSubject
+    ? items.filter(item => item.subject === selectedSubject)
+    : items;
   const startIndex = (currentPage - 1) * itemsPerPage
-  const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
+  const currentItems = filteredItems.slice(startIndex, startIndex + itemsPerPage)
 
   const [showForm, setShowForm] = useState(false)
   const [showFormService, setShowFormSerivce] = useState(false)
@@ -111,6 +117,20 @@ export default function RequestList() {
 
   return (
     <>
+          <div className='flex justify-end mb-4'>
+            <select
+              value={selectedSubject}
+              onChange={(e) => setSelectedSubject(e.target.value)}
+              className='border border-gray-300 p-2 rounded-lg'
+            >
+              <option value=''>Tất cả môn học</option>
+              {Array.from(new Set(requestData?.map(item => item.subject))).map(subject => (
+                <option key={subject} value={subject}>
+                  {subject}
+                </option>
+              ))}
+            </select>
+          </div>
       <div className='container grid grid-cols-1 md:grid-cols-2 gap-5 h-[1000px]'>
         {currentItems
           .filter((data) => data.idRequest) // Ensure idRequest is not null or undefined
@@ -180,19 +200,17 @@ export default function RequestList() {
                         role='button'
                         onClick={() => handleAcceptClass(data.idRequest)}
                         className={`rounded-lg w-full h-10 mx-auto justify-center items-center flex ${
-                          boolean
+                          completedClasses[data.idRequest]
                             ? 'bg-gray-700 cursor-not-allowed'
                             : 'bg-pink-400 hover:opacity-80'
                         }`}
                         style={{
-                          pointerEvents: selectedClasses.includes(
-                            data.idRequest!
-                          )
+                          pointerEvents: completedClasses[data.idRequest]
                             ? 'none'
                             : 'auto'
                         }}
                       >
-                        {boolean ? 'Đã nhận lớp' : 'Nhận Lớp'}
+                        {completedClasses[data.idRequest] ? 'Đã nhận lớp' : 'Nhận Lớp'}
                       </div>
                     )}
                     {user?.roles.toLowerCase() === roles.student && (
@@ -252,20 +270,18 @@ export default function RequestList() {
                 </div>
               </div>
               {showForm && <FormRequest onClose={handleCloseForm} />}
+
               {showFormService && <CreateService onClose={handleCloseForm} />}
             </div>
           </div>
         )}
 
       <Pagination
-        totalItems={items.length}
+        totalItems={filteredItems.length}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         onPageChange={handlePageChange}
       />
     </>
   )
-}
-
-{
 }

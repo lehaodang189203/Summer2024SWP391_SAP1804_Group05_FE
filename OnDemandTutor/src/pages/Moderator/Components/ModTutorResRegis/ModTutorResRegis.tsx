@@ -165,10 +165,7 @@ export default function ModTutorResRegis() {
         <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
           <div className='mb-5'>
             <Search
-            // inputText={searchText}
-            // placeHolder="Search đi nè"
-            // setInputValue={setSearchText}
-            // label="Q"
+            
             />
           </div>
           <Table
