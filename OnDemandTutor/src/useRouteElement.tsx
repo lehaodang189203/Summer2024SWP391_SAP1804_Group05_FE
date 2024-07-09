@@ -42,6 +42,7 @@ import ServiceList from './pages/Sevice/BookService'
 import CreateService from './pages/Sevice/CreateSevice'
 import Support from './pages/Support'
 import ProfileTT from './pages/User/pages/ProfileTT'
+import DetailInfor from './pages/MyClass/Detail'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -146,6 +147,7 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
+
         {
           path: path.service, //student
           element: (
@@ -274,6 +276,7 @@ export default function useRouteElements() {
               element: <Dashboard />
             },
             { path: path.Admin.sessionList, element: <SessionList /> },
+            // { path: path.Admin.viewAllComplaint, element: < /> },
             { path: path.Admin.studentlist, element: <StudentList /> },
             { path: path.Admin.adminStudentReq, element: <AdminStudentReq /> },
             { path: path.Admin.TransactionList, element: <TransactionList /> },

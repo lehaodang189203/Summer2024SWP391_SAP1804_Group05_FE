@@ -55,15 +55,15 @@ export default function Review({ idClassRequest }: Props) {
 
     console.log('formData', formData)
 
-    // createReviewMutation.mutate(formData, {
-    //   onSuccess: (data) => {
-    //     toast.success(data.data.message)
-    //     reset() // Reset form after successful submission
-    //   },
-    //   onError: (error) => {
-    //     toast.error(error.message)
-    //   }
-    // })
+    createReviewMutation.mutate(formData, {
+      onSuccess: (data) => {
+        toast.success(data.data.message)
+        reset() // Reset form after successful submission
+      },
+      onError: (error) => {
+        toast.error(error.message)
+      }
+    })
   })
 
   const handleMouseEnter = (index: number) => {
@@ -94,6 +94,7 @@ export default function Review({ idClassRequest }: Props) {
           />
         </div>
 
+        {/*  đánh sao */}
         <div className='mt-4'>
           <label htmlFor=''>Đánh giá</label>
           <div className='flex justify-center items-center gap-1'>

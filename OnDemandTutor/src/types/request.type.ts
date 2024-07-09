@@ -1,4 +1,5 @@
 import { UserSchema } from '../utils/rules'
+import { TutorRep, User, UserRep } from './user.type'
 export interface Request {
   idRequest: string
   totalSessions: number
@@ -12,6 +13,24 @@ export interface Request {
   timeStart: string
   timeEnd: string
   status: string
+}
+
+export interface Classrequest {
+  idClassRequest: string
+  totalSessions: number
+  subject: string
+  title: string
+  price: number
+  description: string
+  class: string
+  learningMethod: string
+  timeTable: string
+  timeStart: string
+  timeEnd: string
+  status: string
+
+  user: UserRep
+  tutor: TutorRep
 }
 
 export interface RequestModerator {
@@ -47,7 +66,7 @@ export interface ClassType {
 }
 
 export interface ServiceTutor {
-  id: string
+  idService: string
   pricePerHour: number
   tittle: string
   description: string

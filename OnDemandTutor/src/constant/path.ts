@@ -24,6 +24,7 @@ export const path = {
   calender: '/calender', //calender nèk
   tutorViewRequestList: '/studentViewRequestList', //student
   myClass: '/myClass',
+  DetailInfor: '/DetailInfor',
   Moderator: {
     //                                                      mod-------------------------------------
     mod: '/mod',
@@ -46,7 +47,8 @@ export const path = {
     adminStudentReqRejected: '/admin/studentReqRejected',
     TransactionList: 'admin/TransactionList',
     sessionList: '/admin/sessionList',
-    dashBoard: '/admin/dashboard'
+    dashBoard: '/admin/dashboard',
+    viewAllComplaint: '/admin/viewAllComplaint'
   }
 } as const
 

@@ -1,7 +1,8 @@
 import {
   ChangePasswordReqBody,
   ForgotPasswordReqBody,
-  UpdateProfileBody
+  UpdateProfileBody,
+  ViewClassRequestBody
 } from './../types/user.request.type'
 import { User } from '../types/user.type'
 import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
@@ -49,6 +50,12 @@ const userApi = {
 
   async forgotPassword(body: ForgotPasswordReqBody) {
     return await http.put(`user/ForgotPassword?Email=${body.email}`)
+  },
+
+  m(id: string) {
+    return http.get<SuccessResponseReq<ViewClassRequestBody>>(
+      `User/ViewClassRequest?id=${id}`
+    )
   }
 }
 

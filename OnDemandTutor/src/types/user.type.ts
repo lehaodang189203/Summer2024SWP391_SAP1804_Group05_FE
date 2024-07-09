@@ -10,3 +10,25 @@ export interface User {
   avatar: string
   accountBalance: number
 }
+
+export interface TutorRep {
+  address: string
+  avatar: string
+  date_of_birth: string
+  email: string
+  gender: string
+  idAccountTutor: string
+  name: string
+  phone: string
+}
+
+export interface UserRep {
+  address: string
+  avatar: string
+  date_of_birth: string
+  email: string
+  gender: string
+  idUser: string
+  name: string
+  phone: string
+}

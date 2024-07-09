@@ -1,3 +1,5 @@
+import { User } from './user.type'
+
 export interface LoginReqBody {
   email: string
   password: string
@@ -105,6 +107,23 @@ export interface SelecTutorReqBody {
   idRequest: string
 
   idTutor: string
+}
+
+export interface ViewClassRequestBody {
+  idClassRequest: string
+  title: string
+  subject: string
+  totalSession: 3
+  price: 100000
+  description: string
+  class: string
+  learningMethod: string
+  timeTable: string
+  timeStart: string
+  timeEnd: string
+  status: string
+  user: User
+  tutor: User
 }
 
 // idTutor là id của account có roles là tutor
