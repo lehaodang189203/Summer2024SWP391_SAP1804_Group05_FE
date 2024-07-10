@@ -5,6 +5,7 @@ import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 
 import {
   AddQualification,
+  CreatServiceType,
   DataService,
   TutorProfile,
   UpdateTutorProfile
@@ -18,16 +19,26 @@ import http from '../utils/http'
 const user = <User>getProfileFromLS()
 
 export const tutorApi = {
-  getProfileTT(id: string) {
-    return http.get<SuccessResponseReq<TutorProfile>>(
-      `tutor/GetProfileTutor?id=${id}`
-    )
+  getProfileTT: async (id: string): Promise<TutorProfile> => {
+    try {
+      const response = await http.get<SuccessResponseReq<TutorProfile>>(
+        `tutor/GetProfileTutor?id=${id}`
+      )
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      // Handle network or API errors
+      throw new Error('Failed to fetch data')
+    }
   },
 
-  viewRequest: async (): Promise<Request[]> => {
+  viewRequest: async (id: string): Promise<Request[]> => {
     try {
       const response = await http.get<SuccessResponse<Request[]>>(
-        'tutor/viewRequest'
+        `tutor/viewRequest?id=${id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -45,10 +56,10 @@ export const tutorApi = {
       `tutor/join-request?requestId=${body.requestId}&id=${body.id}`
     ),
 
-  createService: async (body: DataService) => {
+  createService: async (id: string, body: CreatServiceType) => {
     try {
-      const response = await http.post<any>(
-        `/tutor/createService?id=${user.id}`,
+      const response = await http.post<SuccessResponseReq<string>>(
+        `/tutor/createService?id=${id}`,
         body
       )
       console.log('response', response)
@@ -61,7 +72,6 @@ export const tutorApi = {
       throw new Error('Failed to fetch data')
     }
   },
-
   async updateProfileTT(id: string, body: UpdateTutorProfile) {
     // console.log('body của res khi call api',body)
     // console.log('người dùng user là',user)

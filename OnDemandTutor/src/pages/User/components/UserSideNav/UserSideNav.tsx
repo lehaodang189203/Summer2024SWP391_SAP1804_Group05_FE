@@ -82,7 +82,7 @@ export default function UserSideNav() {
               viewBox='0 0 24 24'
               strokeWidth={1.5}
               stroke='currentColor'
-              className='size-6 fill-blue-400'
+              className='size-6 '
             >
               <path
                 strokeLinecap='round'
@@ -93,24 +93,30 @@ export default function UserSideNav() {
           </div>
           Đổi mật khẩu
         </NavLink>
-        <NavLink
-          to={path.profileTT}
-          className={({ isActive }) =>
-            classNames('mt-4 flex items-center  capitalize transition-colors', {
-              'text-orange': isActive,
-              'text-gray-600': !isActive
-            })
-          }
-        >
-          <div className='mr-3 h-[22px] w-[22px]'>
-            <img
-              src='https://cf.shopee.vn/file/f0049e9df4e536bc3e7f140d071e9078'
-              alt=''
-              className='h-full w-full'
-            />
-          </div>
-          Hồ sơ giảng viên
-        </NavLink>
+
+        {profile?.roles.toLowerCase() === roles.tutor && (
+          <NavLink
+            to={path.profileTT}
+            className={({ isActive }) =>
+              classNames(
+                'mt-4 flex items-center  capitalize transition-colors',
+                {
+                  'text-orange': isActive,
+                  'text-gray-600': !isActive
+                }
+              )
+            }
+          >
+            <div className='mr-3 h-[22px] w-[22px]'>
+              <img
+                src='https://cf.shopee.vn/file/f0049e9df4e536bc3e7f140d071e9078'
+                alt=''
+                className='h-full w-full'
+              />
+            </div>
+            Hồ sơ giảng viên
+          </NavLink>
+        )}
       </div>
     </div>
   )

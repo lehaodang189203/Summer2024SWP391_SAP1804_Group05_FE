@@ -19,6 +19,7 @@ import { storage } from '../../../../utils/firebase'
 import { UpdateSchema, updateSchema } from '../../../../utils/rules'
 
 import { UpdateProfileBody } from '../../../../types/user.request.type'
+import { reset } from 'numeral'
 
 type FormData = Pick<
   UpdateSchema,
@@ -52,6 +53,7 @@ export default function Profile() {
     setValue,
     register,
     control,
+    reset,
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
@@ -173,6 +175,7 @@ export default function Profile() {
           setProfile(data.data.data)
           setProfileToLS(data.data.data)
           refetch()
+          reset()
         },
         onError: (error) => {
           toast.error(error.message)
@@ -267,6 +270,7 @@ export default function Profile() {
                     errorMessage={errors.phone?.message}
                     {...field}
                     onChange={field.onChange}
+                    value={field.value}
                   />
                 )}
               />
@@ -300,16 +304,13 @@ export default function Profile() {
             )}
           />
 
-          <div className='mt-5 flex flex-wrap flex-col sm:flex-row'>
-            <div className='sm:w-[20%] truncate pt-6 sm:text-right capitalize' />
-            <div className='sm:w-[80%] sm:pl-5 flex items-center justify-center'>
-              <Button
-                className='flex h-9 items-center w-[5rem] bg-pink-400 border-2 rounded-xl px-5 text-sm text-white hover:bg-black'
-                type='submit'
-              >
-                Lưu
-              </Button>
-            </div>
+          <div className='mt-5  '>
+            <Button
+              className='mx-auto flex h-9 justify-center items-center w-[5rem] bg-pink-400 border-2 rounded-xl px-5 text-sm text-white hover:bg-black'
+              type='submit'
+            >
+              <span>Lưu</span>
+            </Button>
           </div>
         </div>
 

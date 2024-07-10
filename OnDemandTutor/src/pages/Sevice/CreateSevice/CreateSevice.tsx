@@ -1,208 +1,69 @@
-import React, { useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useContext, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import ScheduleItemForm from '../components/ScheduleItemForm'
+import Schedule from '../components/Schedule/Schedule'
+import { serviceSchema } from '../../../utils/rules'
 import { useMutation } from '@tanstack/react-query'
+import { AppContext } from '../../../context/app.context'
 import { tutorApi } from '../../../api/tutor.api'
 import { toast } from 'react-toastify'
+import { reset } from 'numeral'
 
 interface Props {
   onClose: () => void
 }
 
-const schema = yup.object().shape({
-  pricePerHour: yup
-    .number()
-    .required('Phải nhập giá mỗi giờ')
-    .positive('Giá phải là số dương và lớn hơn 0'),
-  title: yup.string().required('Phải nhập tiêu đề'),
-  subject: yup.string().required('Phải chọn môn học'),
-  class: yup.string().required('Phải chọn lớp'),
-  description: yup.string().required('Phải nhập mô tả'),
-  learningMethod: yup.string().required('Phải chọn phương pháp học'),
-  schedule: yup
-    .array()
-    .of(
-      yup.object().shape({
-        date: yup.string().required('Phải chọn ngày'),
-        timeSlots: yup
-          .array()
-          .of(yup.string().required())
-          .min(1, 'Phải chọn ít nhất một khung giờ')
-      })
-    )
-    .required('Phải thêm lịch học')
-})
+interface FormData {
+  pricePerHour: number
+  title: string
+  subject: string
+  class: string
+  description: string
+  learningMethod: string
+  schedule: ScheduleType[]
+}
 
-type FormDataService = yup.InferType<typeof schema>
+interface ScheduleType {
+  date: string
+  timeSlots: (string | undefined)[]
+}
 
+const schema = serviceSchema
 export default function ServiceForm({ onClose }: Props) {
-  const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
-
+  const { profile } = useContext(AppContext)
   const {
-    control,
+    register,
     handleSubmit,
     setValue,
-    watch,
-    formState: { errors },
-    reset
-  } = useForm<FormDataService>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      pricePerHour: 0,
-      title: '',
-      subject: '',
-      class: '',
-      description: '',
-      learningMethod: '',
-      schedule: []
-    }
+    formState: { errors }
+  } = useForm<FormData>({
+    resolver: yupResolver(schema)
   })
 
-  const formData = watch()
-  const [currentWeekStart, setCurrentWeekStart] = React.useState<Date>(
-    new Date()
-  )
-
-  const subjects = ['Toán học', 'Văn học', 'Anh văn']
-  const classes = ['11', '12', '10']
-  const learningMethods = ['Online', 'Offline']
-  const hours = [
-    '01:30',
-    '08:00',
-    '08:30',
-    '09:00',
-    '09:30',
-    '10:00',
-    '10:30',
-    '11:00',
-    '11:30',
-    '12:00',
-    '12:30',
-    '13:00',
-    '13:30',
-    '14:00',
-    '14:30',
-    '15:00',
-    '15:30',
-    '16:00',
-    '16:30',
-    '17:00',
-    '17:30',
-    '18:00',
-    '18:30',
-    '19:00',
-    '19:30',
-    '20:00',
-    '20:30',
-    '21:00',
-    '21:30',
-    '22:00'
-  ]
-
-  const getDayOfWeek = (dateString: string) => {
-    const date = new Date(dateString)
-    const daysOfWeek = [
-      'Chủ nhật',
-      'Thứ hai',
-      'Thứ ba',
-      'Thứ tư',
-      'Thứ năm',
-      'Thứ sáu',
-      'Thứ bảy'
-    ]
-    return daysOfWeek[date.getDay()]
-  }
-
-  const generateWeekDates = (startDate: Date) => {
-    const dates: Date[] = []
-    const startDay = startDate.getDay()
-    const daysUntilMonday = startDay === 0 ? -6 : 1 - startDay
-    const monday = new Date(startDate)
-    monday.setDate(startDate.getDate() + daysUntilMonday)
-
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(monday)
-      date.setDate(monday.getDate() + i)
-      dates.push(date)
-    }
-    return dates
-  }
-
-  const handlePreviousWeek = () => {
-    setCurrentWeekStart((prevDate) => {
-      const newDate = new Date(prevDate)
-      newDate.setDate(prevDate.getDate() - 7)
-      return newDate
-    })
-  }
-
-  const handleNextWeek = () => {
-    setCurrentWeekStart((prevDate) => {
-      const newDate = new Date(prevDate)
-      newDate.setDate(prevDate.getDate() + 7)
-      return newDate
-    })
-  }
-
-  const handleAddSchedule = () => {
-    setValue('schedule', [...formData.schedule, { date: '', timeSlots: [] }])
-  }
-
-  const handleRemoveSchedule = (index: number) => {
-    const updatedSchedule = [...formData.schedule]
-    updatedSchedule.splice(index, 1)
-    setValue('schedule', updatedSchedule)
-  }
-
-  const handleDateChange = (index: number, date: string) => {
-    const updatedSchedule = [...formData.schedule]
-    if (index >= 0 && index < updatedSchedule.length) {
-      updatedSchedule[index].date = date
-      updatedSchedule[index].timeSlots = []
-      setValue('schedule', updatedSchedule)
-    } else {
-      console.error('Index out of bounds')
-    }
-  }
-
-  const handleScheduleChange = (date: string, timeSlot: string) => {
-    const updatedSchedule = formData.schedule.map((item) => {
-      if (item.date === date) {
-        const timeSlots = item.timeSlots || []
-        const timeSlotIndex = timeSlots.indexOf(timeSlot)
-        if (timeSlotIndex > -1) {
-          timeSlots.splice(timeSlotIndex, 1)
-        } else {
-          timeSlots.push(timeSlot)
-        }
-        return { ...item, timeSlots }
-      }
-      return item
-    })
-    setValue('schedule', updatedSchedule)
-  }
-
-  const weekDates = generateWeekDates(currentWeekStart)
+  const [formData, setFormData] = useState<FormData>({
+    pricePerHour: 0,
+    title: '',
+    subject: '',
+    class: '',
+    description: '',
+    learningMethod: '',
+    schedule: []
+  })
 
   const createServiceMutation = useMutation({
-    mutationFn: (body: FormDataService) => tutorApi.createService(body)
+    mutationFn: (body: FormData) =>
+      tutorApi.createService(profile?.id as string, body)
   })
 
-  const handleConfirmCancel = () => {
-    setShowConfirmation(false)
-    onClose()
-  }
-
-  const onSubmit = (data: FormDataService) => {
-    // hàm gọi api nhé
-    console.log('Form đã gửi đi nè:', data)
+  const onSubmit = (data: FormData) => {
+    // Handle form submission with formData state
+    console.log(data)
     createServiceMutation.mutate(data, {
       onSuccess: (res: any) => {
-        console.log('data trả về khi create service nè', res)
         toast.success(res.message)
         reset() // reset lại form khi gửi đi thành công
+        onClose()
       },
       onError: (errors) => {
         console.log(errors)
@@ -210,259 +71,190 @@ export default function ServiceForm({ onClose }: Props) {
     })
   }
 
+  const handleScheduleChange = (updatedSchedule: ScheduleType[]) => {
+    setValue('schedule', updatedSchedule)
+    setFormData({
+      ...formData,
+      schedule: updatedSchedule
+    })
+  }
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target
+    setValue(name, value)
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+  }
+
   return (
-    <div className='  fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
-      <div className='p-6 h-[45rem] w-full max-w-4xl  overflow-y-auto'>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className='mx-auto bg-slate-50 rounded-lg shadow-lg p-5 '
-          noValidate
-        >
+    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+      <div className='p-6 h-[42rem] w-full max-w-4xl bg-slate-50 overflow-y-auto shadow-lg mx-auto rounded-lg transition-shadow hover:border-white'>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h1 className='text-3xl font-bold mb-4'>Tạo dịch vụ</h1>
+
+          {/* Price Per Hour */}
           <div className='mb-4'>
-            <label className='block text-gray-700 text-sm font-bold mb-2'>
-              Tiêu đề:
-              <Controller
-                name='title'
-                control={control}
-                render={({ field }) => (
-                  <input
-                    type='text'
-                    {...field}
-                    placeholder='Tiêu đề'
-                    required
-                    className='form-input mt-1 mx-auto block w-4/6 p-2 border rounded-md'
-                  />
-                )}
-              />
-            </label>
-            {errors.title && (
-              <p className='text-red-500 text-xs mt-1'>
-                {errors.title.message}
-              </p>
-            )}
-          </div>
-          <div className='flex w-4/6 mx-auto gap-10'>
-            <div className='mb-4 w-full'>
-              <label className=' text-gray-700 text-sm font-bold mb-2'>
-                <Controller
-                  name='subject'
-                  control={control}
-                  render={({ field }) => (
-                    <select
-                      {...field}
-                      required
-                      className='form-select mt-1 block w-full p-2 rounded-md border'
-                    >
-                      <option value=''>Chọn môn</option>
-                      {subjects.map((subject, index) => (
-                        <option key={index} value={subject}>
-                          {subject}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                />
-              </label>
-              {errors.subject && (
-                <p className='text-red-500 text-xs mt-1'>
-                  {errors.subject.message}
-                </p>
-              )}
-            </div>
-            <div className='mb-4 w-full'>
-              <label className=' text-gray-700 text-sm font-bold mb-2'>
-                <Controller
-                  name='class'
-                  control={control}
-                  render={({ field }) => (
-                    <select
-                      {...field}
-                      required
-                      className='form-select mt-1 block w-full p-2 rounded-md border'
-                    >
-                      <option value=''>Chọn lớp</option>
-                      {classes.map((cls, index) => (
-                        <option key={index} value={cls}>
-                          {cls}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                />
-              </label>
-              {errors.class && (
-                <span className='text-red-500 text-xs mt-1'>
-                  {errors.class.message}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className='mb-4 w-4/6 mx-auto pl-2'>
-            <label className='text-gray-700 text-sm font-bold mb-2 flex gap-12'>
-              <div>Phương thức học: </div>
-              <Controller
-                name='learningMethod'
-                control={control}
-                render={({ field }) => (
-                  <div className='flex space-x-2'>
-                    {learningMethods.map((method, index) => (
-                      <button
-                        key={index}
-                        type='button'
-                        onClick={() => field.onChange(method)}
-                        className={`bg-pink-200 hover:bg-pink-500 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline ${
-                          formData.learningMethod === method
-                            ? 'bg-pink-600'
-                            : ''
-                        }`}
-                      >
-                        {method}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              />
-            </label>
-            {errors.learningMethod && (
-              <span className='text-red-500 text-xs mt-1'>
-                {errors.learningMethod.message}
-              </span>
-            )}
-          </div>
-          <div className='mb-4 w-4/6 mx-auto'>
-            <label className='text-gray-700 text-sm font-bold mb-2 flex mt-auto'>
-              <div className='my-auto'>Giá thuê mỗi tiếng: vd:200.000 VNĐ</div>
-              <Controller
-                name='pricePerHour'
-                control={control}
-                render={({ field }) => (
-                  <div className='flex'>
-                    <input
-                      type='text'
-                      {...field}
-                      required
-                      className='form-input mt-1 block w-full p-2 rounded-md border '
-                    />
-                    <p className='my-auto'>VNĐ</p>
-                  </div>
-                )}
-              />
-            </label>
-            {errors.pricePerHour && (
-              <p className='text-red-500 text-xs mt-1'>
-                {errors.pricePerHour.message}
-              </p>
-            )}
-          </div>
-
-          <hr />
-
-          <div className='mb-4 w-4/6 mx-auto border '>
-            <label className='block text-gray-700 text-sm font-bold mb-2'>
-              Chọn lịch:
-            </label>
-            <div className=''>
-              {formData.schedule &&
-                formData.schedule.map((item, index) => (
-                  <ScheduleItemForm
-                    key={index}
-                    index={index}
-                    item={item} // chưa biết fix nhé
-                    weekDates={weekDates}
-                    hours={hours}
-                    handleDateChange={handleDateChange}
-                    handleScheduleChange={handleScheduleChange}
-                    handleRemoveSchedule={handleRemoveSchedule}
-                    getDayOfWeek={getDayOfWeek}
-                    handlePreviousWeek={handlePreviousWeek}
-                    handleNextWeek={handleNextWeek}
-                    errors={errors.schedule && errors.schedule[index]}
-                  />
-                ))}
-              {errors.schedule && typeof errors.schedule === 'string' && (
-                <div className='text-red-500 text-xs mt-1'>
-                  {errors.schedule}
-                </div>
-              )}
-            </div>
-
-            <button
-              type='button'
-              onClick={handleAddSchedule}
-              className='bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2'
+            <label
+              htmlFor='pricePerHour'
+              className='block text-sm font-medium text-gray-700'
             >
-              Thêm ngày
-            </button>
-          </div>
-          <hr />
-          <div className='mt-4 w-2/3 mx-auto'>
-            <label className='block text-gray-700 text-sm font-bold mb-2'>
-              Mô tả về dịch vụ này:
-              <Controller
-                name='description'
-                control={control}
-                render={({ field }) => (
-                  <textarea
-                    {...field}
-                    required
-                    className='form-textarea mt-1 block w-full p-2'
-                  ></textarea>
-                )}
-              />
+              Giá mỗi giờ
             </label>
-            {errors.description && (
-              <p className='text-red-500 text-xs mt-1'>
-                {errors.description.message}
-              </p>
-            )}
+            <input
+              type='number'
+              id='pricePerHour'
+              {...register('pricePerHour')}
+              value={formData.pricePerHour}
+              onChange={handleInputChange}
+              className='border-2  w-full rounded-lg hover:border-pink-400 '
+            />
+            <p className='text-red-500'>{errors.pricePerHour?.message}</p>
           </div>
-          <div className='col-span-2 flex justify-between'>
+
+          {/* Title */}
+          <div className='mb-4'>
+            <label
+              htmlFor='title'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Tiêu đề
+            </label>
+            <input
+              type='text'
+              id='title'
+              {...register('title')}
+              value={formData.title}
+              onChange={handleInputChange}
+              className='border-2  w-full rounded-lg hover:border-pink-400 '
+            />
+            <p className='text-red-500'>{errors.title?.message}</p>
+          </div>
+
+          {/* Subject */}
+          <div className='mb-4'>
+            <label
+              htmlFor='subject'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Môn học
+            </label>
+            <select
+              id='subject'
+              {...register('subject')}
+              value={formData.subject}
+              onChange={handleInputChange}
+              className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+            >
+              <option value=''>Chọn môn học</option>
+              <option value='Ngữ văn'>Ngữ văn</option>
+              <option value='Toán học'>Toán học</option>
+              <option value='Vật lý'>Vật lý</option>
+              <option value='Hóa học'>Hóa học</option>
+              <option value='Sinh học'>Sinh học</option>
+              <option value='Lịch sử'>Lịch sử</option>
+              <option value='Địa lý'>Địa lý</option>
+              <option value='Giáo dục công dân'>Giáo dục công dân</option>
+              <option value='Ngoại ngữ'>Ngoại ngữ</option>
+              <option value='Tin học'>Tin học</option>
+            </select>
+            <p className='text-red-500'>{errors.subject?.message}</p>
+          </div>
+
+          {/* Class */}
+          <div className='mb-4'>
+            <label
+              htmlFor='class'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Lớp học
+            </label>
+            <select
+              id='class'
+              {...register('class')}
+              value={formData.class}
+              onChange={handleInputChange}
+              className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+            >
+              <option value='10'>Lớp 10</option>
+              <option value='11'>Lớp 11</option>
+              <option value='12'>Lớp 12</option>
+            </select>
+            <p className='text-red-500'>{errors.class?.message}</p>
+          </div>
+
+          {/* Description */}
+          <div className='mb-4'>
+            <label
+              htmlFor='description'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Mô tả
+            </label>
+            <textarea
+              id='description'
+              {...register('description')}
+              value={formData.description}
+              onChange={handleInputChange}
+              rows={3}
+              className='border-2  w-full rounded-lg hover:border-pink-400 '
+            />
+            <p className='text-red-500'>{errors.description?.message}</p>
+          </div>
+
+          {/* Learning Method */}
+          <div className='mb-4'>
+            <label
+              htmlFor='learningMethod'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Phương thức học
+            </label>
+            <select
+              id='learningMethod'
+              {...register('learningMethod')}
+              value={formData.learningMethod}
+              onChange={handleInputChange}
+              className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+            >
+              <option value=''>Chọn phương thức học</option>
+              <option value='Dạy trực tiếp(offline)'>
+                Dạy trực tiếp (offline)
+              </option>
+              <option value='Dạy trực tuyến (online)'>
+                Dạy trực tuyến (online)
+              </option>
+            </select>
+            <p className='text-red-500'>{errors.learningMethod?.message}</p>
+          </div>
+
+          {/* Schedule */}
+          <Schedule value={formData.schedule} onChange={handleScheduleChange} />
+          <p className='text-red-500'>{errors.schedule?.message}</p>
+
+          <div className='col-span-2 flex justify-between mt-4'>
             <div className='w-[49%]'>
               <button
                 type='submit'
-                className='w-full p-3 bg-pink-500 text-white rounded-lg hover:bg-pink-300 focus:outline-none'
+                className='w-full p-3 bg-pink-600 text-white font-bold rounded-md hover:bg-pink-700'
               >
-                Nộp
+                Tạo
               </button>
             </div>
             <div className='w-[49%]'>
               <button
                 type='button'
-                onClick={() => setShowConfirmation(true)}
-                className='w-full p-3 bg-black text-white rounded-lg hover:bg-gray-500 hover:shadow-lg focus:outline-none'
+                onClick={onClose}
+                className='w-full p-3 bg-gray-300 text-gray-800 font-bold rounded-md hover:bg-gray-400'
               >
                 Hủy
               </button>
             </div>
           </div>
         </form>
-        {showConfirmation && (
-          <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center'>
-            <div className='bg-white p-4 rounded-lg'>
-              <p className='text-lg mb-4'>Bạn có chắc chắn muốn hủy không?</p>
-              <div className='flex justify-end'>
-                <button
-                  className='px-4 py-2 bg-red-500 text-white rounded-lg mr-2 hover:bg-red-600'
-                  role='submit'
-                  onClick={() => {
-                    setShowConfirmation(false)
-                  }}
-                >
-                  Hủy
-                </button>
-                <button
-                  className='px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600'
-                  type='button'
-                  onClick={handleConfirmCancel}
-                >
-                  Đồng ý
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )

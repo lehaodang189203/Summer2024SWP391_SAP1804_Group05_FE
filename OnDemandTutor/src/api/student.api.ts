@@ -14,6 +14,7 @@ import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
 import {
   Classrequest,
   Request,
+  ReviewServiceType,
   ReviewType,
   ServiceTutor
 } from '../types/request.type'
@@ -25,8 +26,8 @@ const user = <User>getProfileFromLS()
 
 export const studentApi = {
   // Tạo yêu cầu
-  createRequest: async (body: RequestBody) =>
-    await http.post(`student/createRequest?id=${user.id}`, body),
+  createRequest: async (id: string, body: RequestBody) =>
+    await http.post(`student/createRequest?id=${id}`, body),
 
   // Lấy danh sách yêu cầu chờ duyệt
   async pendingRequest(id: string) {
@@ -130,6 +131,11 @@ export const studentApi = {
       `Student/CompleteClassRequest?idClassRequest=${idClassRequest}`
     )
   },
+  serviceCompled(idBooking: string) {
+    return http.put<SuccessResponseReq<any>>(
+      `Student/CompleteClassService?idBooking=${idBooking}`
+    )
+  },
   BookingServiceLearning: async (
     id: string,
     serviceID: string,
@@ -160,6 +166,12 @@ export const studentApi = {
   CreateReview: async (body: ReviewType) => {
     return await http.post<SuccessResponseReq<string>>(
       'Student/CreateReviewRequest',
+      body
+    )
+  },
+  CreateServiceReview: async (body: ReviewServiceType) => {
+    return await http.post<SuccessResponseReq<string>>(
+      'Student/CreateReviewService',
       body
     )
   }

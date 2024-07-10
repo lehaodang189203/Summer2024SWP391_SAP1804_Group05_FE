@@ -13,6 +13,7 @@ export interface Request {
   timeStart: string
   timeEnd: string
   status: string
+  current?: string
 }
 
 export interface Classrequest {
@@ -68,7 +69,7 @@ export interface ClassType {
 export interface ServiceTutor {
   idService: string
   pricePerHour: number
-  tittle: string
+  title: string
   description: string
   learningMethod: string
   class: string
@@ -86,4 +87,42 @@ export interface ReviewType {
   feedBack: string
   rating: number
   idClassRequest: string
+}
+export interface ReviewServiceType {
+  idUser: string
+  feedBack: string
+  rating: number
+  idBooking: string
+}
+export interface BookedServices {
+  idBooking: string
+  title: string
+  subject: string
+  price: 50000
+  description: string
+  class: string
+  learningMethod: string
+  date: string
+  timeSlot: string
+  status: string
+  user: {
+    idUser: string
+    name: string
+    email: string
+    date_of_birth: string
+    gender: string
+    avatar: string
+    address: string
+    phone: string
+  }
+  tutor: {
+    idAccountTutor: string
+    name: string
+    email: string
+    date_of_birth: string
+    gender: string
+    avatar: string
+    address: string
+    phone: string
+  }
 }

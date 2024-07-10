@@ -8,8 +8,7 @@ import { AdminTutorType } from "../../../../types/tutor.type";
 import { toast } from "react-toastify";
 import { adminAPI } from "../../../../api/admin.api";
 
-
-const onChange=( )=>{}
+    
 function AdminListTutor () {
     const { data: TutorList, refetch } = useQuery<AdminTutorType[]>({
         queryKey: ['TutorList'],
@@ -34,6 +33,24 @@ function AdminListTutor () {
         }
       }, [TutorList])
     
+      const [selectedRecord, setSelectedRecord] = useState<AdminTutorType | null>(null);
+      const [visible, setVisible] = useState(false);
+      const [isDetails, setIsDetails] = useState(false)
+      const onChange=( )=>{}
+      const showImg = (record:AdminTutorType) =>{
+        setIsDetails(false)
+        setVisible(true)
+        setSelectedRecord(record)
+      }
+      const showDetail = (record: AdminTutorType) => {
+        setSelectedRecord(record);
+        setVisible(true);
+        setIsDetails
+      };
+      const handleCancel = () => {
+          setVisible(false);
+          setSelectedRecord(null);
+      };
       const handleDelete = () => {
         if (selectedRecord) {
           removeMutation.mutate(selectedRecord.id)
@@ -43,17 +60,9 @@ function AdminListTutor () {
     
       
     //const [searchText, setSearchText] = useState('');// liên quan đến giá trị input vào search
-    const [selectedRecord, setSelectedRecord] = useState<AdminTutorType | null>(null);
-    const [visible, setVisible] = useState(false);
+    
 
-    const showDetail = (record: AdminTutorType) => {
-        setSelectedRecord(record);
-        setVisible(true);
-    };
-    const handleCancel = () => {
-        setVisible(false);
-        setSelectedRecord(null);
-    };
+    
     const columns: TableColumnsType<AdminTutorType> = [{// định nghĩa từng cột
         title: "Tên", // tên của cột hay còn gọi là header của cột
         dataIndex: "fullName",// xác định trường nào trong interface DataType
@@ -69,12 +78,8 @@ function AdminListTutor () {
         defaultSortOrder: "descend",
         width:200,
         sorter: (a, b) => new Date(a.date_of_birth).getTime() - new Date(b.date_of_birth).getTime()
-      },{
-        title:"Email",
-        dataIndex:"email",
-        defaultSortOrder: "descend",
-        width:200,
-      },{
+      },
+      {
         title:"Giới Tính",
         dataIndex:"gender",
         sorter: (a, b) => parseInt(a.gender) - parseInt(b.gender),
@@ -91,10 +96,16 @@ function AdminListTutor () {
         width:200,
         sorter: (a, b) => (a.experience - b.experience)
       },{
-        title:"Tên Bằng Cấp(Chứng chỉ)",
-        dataIndex:"QualificationName",
+        title:"Ảnh Bằng Cấp(Chứng chỉ)",
+        dataIndex:"imageQualification",
         defaultSortOrder: "descend",
-        width:400
+        width:150,
+        render: (text :string,record: AdminTutorType) => (<div className="flex gap-1">
+          <button className=" border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700"
+          onClick={() => showImg(record)}
+          >Xem bằng</button></div>
+        ),
+        fixed:"right"
       },
       {
         title: "Detail",
@@ -142,9 +153,6 @@ function AdminListTutor () {
                     visible={visible}
                     onCancel={handleCancel}
                     footer={[
-                        <Button key="back" onClick={handleCancel}>
-                            Sửa(chưa nốiapi)
-                        </Button>,
                         <Button key="back" onClick={handleDelete}>
                             Xóa
                         </Button>
@@ -152,16 +160,25 @@ function AdminListTutor () {
                 >
                     {selectedRecord && (
                         <div>
-                            <p> Tên : {selectedRecord.fullName}</p>
-                            {/* <p> Email : {selectedRecord.email ?selectedRecord.email : 'Chưa cập nhập'}</p> */}
-                            <p> Ngày sinh : {selectedRecord.date_of_birth ?selectedRecord.date_of_birth : 'Chưa cập nhập'}</p>
-                            <p> Giới tính : {selectedRecord.gender? selectedRecord.gender:'Chưa cập nhập'}</p>
-                            <p> Môn : {selectedRecord.subject ?selectedRecord.subject:'Chưa cập nhập'}</p>
-                            <p>Bằng cấp(Chứng chỉ) : {selectedRecord.type ? selectedRecord.type : 'Chưa cập nhập'}</p>
-                            <p> Tên bằng Cấp : {selectedRecord.qualifiCationName ?selectedRecord.qualifiCationName : 'Chưa cập nhập'}</p>
-                            <p> Kĩ năng đặc biệt : {selectedRecord.specializedSkills ?selectedRecord.specializedSkills : 'Chưa cập nhập'}</p>
-                            {/* <img src={selectedRecord.Img}> : {selectedRecord.Img}</img>    // ảnh nè  */}
-                            <p> Kinh nghiệm dạy : {selectedRecord.experience ?selectedRecord.experience :'Chưa cập nhập số '} Năm</p> 
+                          {isDetails ? (
+                            <div>
+                                <p> Tên : {selectedRecord.fullName}</p>
+                                <p> Ngày sinh : {selectedRecord.date_of_birth ?selectedRecord.date_of_birth : 'Chưa cập nhập'}</p>
+                                <p> Giới tính : {selectedRecord.gender? selectedRecord.gender:'Chưa cập nhập'}</p>
+                                <p> Môn : {selectedRecord.subject ?selectedRecord.subject:'Chưa cập nhập'}</p>
+                                <p>Bằng cấp(Chứng chỉ) : {selectedRecord.type ? selectedRecord.type : 'Chưa cập nhập'}</p>
+                                <p> Tên bằng Cấp : {selectedRecord.qualifiCationName ?selectedRecord.qualifiCationName : 'Chưa cập nhập'}</p>
+                                <p> Kĩ năng đặc biệt : {selectedRecord.specializedSkills ?selectedRecord.specializedSkills : 'Chưa cập nhập'}</p>
+                                {/* <img src={selectedRecord.Img}> : {selectedRecord.Img}</img>    // ảnh nè  */}
+                                <p> Kinh nghiệm dạy : {selectedRecord.experience ?selectedRecord.experience :'Chưa cập nhập số '} Năm</p> 
+                            </div>
+                            
+                          ) : (
+                            <p>
+                              Ảnh :{' '}
+                              <img src={selectedRecord.imageQualification} alt='ảnh' />
+                            </p>
+                          )}
                         </div>
                         )}
                 </Modal>

@@ -13,7 +13,7 @@ interface Props {
   classInfo: {
     idService: string
     pricePerHour: number
-    tittle: string
+    title: string
     subject: string
     class: string
     description: string
@@ -24,7 +24,7 @@ interface Props {
 interface FormData {
   idService: string
   pricePerHour: number
-  tittle: string
+  title: string
   subject: string
   class: string
   description: string
@@ -82,6 +82,7 @@ const ModalChooseService: React.FC<Props> = ({
     bookingMutation.mutate(bookingData, {
       onSuccess: (data) => {
         toast.success(data.data.message)
+        onConfirm() // Call onConfirm to handle actions after booking
       }
     })
   }
@@ -92,22 +93,23 @@ const ModalChooseService: React.FC<Props> = ({
 
   return (
     <div className='fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50'>
-      <div className='bg-white p-8 rounded-lg w-1/2'>
-        <h2 className='text-2xl mb-4'>Confirm Selection</h2>
+      <div className='bg-white p-8 rounded-lg w-1/2 text left'>
+        <h2 className='text-2xl mb-4'>Xác nhận chọn dịch vụ</h2>
         <p>
-          <strong>ID:</strong> {classInfo.idService}
+          <strong>Môn:</strong> {classInfo.subject}
         </p>
         <p>
           <strong>Lớp:</strong> {classInfo.class}
         </p>
+
         <p>
           <strong>Ngày học:</strong> {selectedDate}
         </p>
         <p>
-          <strong>Giờ học</strong> {selectedTimeSlots}
+          <strong>Giờ học:</strong> {selectedTimeSlots}
         </p>
         <label className='block mt-4'>
-          <span className='text-gray-700'>Xác nhận dịch vụ :</span>
+          <span className='text-gray-700'>Chọn thời gian thuê :</span>
           <select
             value={duration}
             onChange={handleDurationChange}

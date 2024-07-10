@@ -4,6 +4,7 @@ import { SuccessResponseReq } from '../types/utils.type'
 import http from '../utils/http'
 import { RequestModerator } from '../types/request.type'
 import { ChartData } from '../types/chart.type'
+import { complaintType } from '../types/complaint.type'
 
 export const adminAPI = {
   async getTutorList() {
@@ -181,6 +182,21 @@ export const adminAPI = {
       if (response.status === HttpStatusCode.Ok) {
         console.log(' response.data.data', response.data.data)
         return response.data.data
+      } else {
+        throw new Error('Failed to fetch data')
+      }
+    } catch (error) {
+      throw new Error('Failed to fetch data')
+    }
+  },
+  async getComplaintList() {
+    try {
+      const response = await http.get<SuccessResponseReq<complaintType[]>>(
+        `/Admin/ViewAllComplaint`
+      )
+      if (response.status === HttpStatusCode.Ok) {
+        console.log(' response.data.data', response.data.data)
+        return response.data
       } else {
         throw new Error('Failed to fetch data')
       }

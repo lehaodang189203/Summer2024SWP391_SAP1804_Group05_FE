@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AppContext } from '../../../context/app.context'
 import { TutorRep, User, UserRep } from '../../../types/user.type'
 import Report from '../Report'
+import userAvatar from '../../../assets/img/user.svg'
 
 interface Props {
   User: UserRep
@@ -30,11 +31,11 @@ export default function DetailInfor({ User, Tutor }: Props) {
       {/*  user */}
       {/*  Ảnh bản thân */}
       <div className=' border-2   w-[45%]  rounded-2xl hover:shadow-pink-300 hover:shadow-2xl transition-shadow duration-700'>
-        <div className=' h-[7rem] pt-2  bg-black  rounded-2xl'>
+        <div className=' h-[7rem] pt-2   rounded-2xl'>
           <div className=' py-auto h-44 w-44 mx-auto '>
             {/* ảnh đại diện */}
             <img
-              src={user?.avatar ? user.avatar : user?.avatar || ''}
+              src={user?.avatar ? user.avatar : user?.avatar || userAvatar}
               className=' h-full w-full rounded-full object-cover border-4 border-pink-400 my-auto '
               alt='Profile'
             />
@@ -100,7 +101,7 @@ export default function DetailInfor({ User, Tutor }: Props) {
           <div className='py-auto h-44 w-44 mx-auto'>
             {/* ảnh đại diện */}
             <img
-              src={tutor?.avatar ? tutor.avatar : tutor?.avatar || ''}
+              src={tutor?.avatar ? tutor.avatar : tutor?.avatar || userAvatar}
               className='h-full w-full rounded-full object-cover border-4 my-auto'
               alt='Profile'
             />

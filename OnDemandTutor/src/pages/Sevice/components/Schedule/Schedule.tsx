@@ -3,76 +3,82 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState, useEffect } from 'react'
 
 interface ScheduleProps {
-  value: { date: string; timeSlots: string[] }[] // Adjusted type
-  onChange: (value: { date: string; timeSlots: string[] }[]) => void // Adjusted type
+  value: { date: string; timeSlots: string[] }[]
+  onChange: (value: { date: string; timeSlots: string[] }[]) => void
 }
 
 export default function Schedule({ value, onChange }: ScheduleProps) {
   const [weekDates, setWeekDates] = useState<Date[]>([])
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedTimes, setSelectedTimes] = useState<string[]>([])
 
-  const generateWeekDates = () => {
+  useEffect(() => {
     const today = new Date()
-    const startDate = new Date(today)
+    setSelectedDate(today) // Set default value to today
+    generateWeekDates(today)
+  }, [])
+
+  const generateWeekDates = (start: Date) => {
     const dates: Date[] = []
     for (let i = 0; i < 7; i++) {
-      const date = new Date(startDate)
-      date.setDate(startDate.getDate() + i)
+      const date = new Date(start)
+      date.setDate(start.getDate() + i)
       dates.push(date)
     }
     setWeekDates(dates)
   }
 
-  useEffect(() => {
-    generateWeekDates()
-  }, [])
-
   const handleSelectDate = (date: Date) => {
+    // Không cần kiểm tra điều kiện ngày hiện tại ở đây
+
+    // Nếu chọn lại ngày đã chọn, hủy chọn
+    if (selectedDate && date.getTime() === selectedDate.getTime()) {
+      setSelectedDate(null)
+      setSelectedTimes([])
+
+      // Xóa ngày đó khỏi danh sách nếu có trong value
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
+      const newValue = value.filter((v) => v.date !== formattedDate)
+      onChange(newValue)
+      return
+    }
+
     setSelectedDate(date)
+
     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
       .toString()
       .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
 
-    const newSchedule = [...value]
-    const existingDateIndex = newSchedule.findIndex(
+    const existingDateIndex = value.findIndex(
       (scheduleItem) => scheduleItem.date === formattedDate
     )
     if (existingDateIndex >= 0) {
-      newSchedule[existingDateIndex].date = formattedDate
+      setSelectedTimes(value[existingDateIndex].timeSlots)
     } else {
-      newSchedule.push({ date: formattedDate, timeSlots: [] })
+      setSelectedTimes([])
     }
-    onChange(newSchedule)
+
+    if (existingDateIndex === -1) {
+      onChange([...value, { date: formattedDate, timeSlots: [] }])
+    }
   }
 
   const handlePreviousWeek = () => {
-    setWeekDates((prevWeekDates) => {
-      const newDates = [...prevWeekDates]
-      const firstDate = newDates[0]
-      const newStartDate = new Date(firstDate)
-      newStartDate.setDate(firstDate.getDate() - 7)
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(newStartDate)
-        date.setDate(newStartDate.getDate() + i)
-        newDates[i] = date
-      }
-      return newDates
-    })
+    if (!weekDates.length) return
+    const firstDate = weekDates[0]
+    const newStartDate = new Date(firstDate)
+    newStartDate.setDate(firstDate.getDate() - 7)
+    generateWeekDates(newStartDate)
   }
 
   const handleNextWeek = () => {
-    setWeekDates((prevWeekDates) => {
-      const newDates = [...prevWeekDates]
-      const firstDate = newDates[0]
-      const newStartDate = new Date(firstDate)
-      newStartDate.setDate(firstDate.getDate() + 7)
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(newStartDate)
-        date.setDate(newStartDate.getDate() + i)
-        newDates[i] = date
-      }
-      return newDates
-    })
+    if (!weekDates.length) return
+    const firstDate = weekDates[0]
+    const newStartDate = new Date(firstDate)
+    newStartDate.setDate(firstDate.getDate() + 7)
+    generateWeekDates(newStartDate)
   }
 
   const getDayOfWeek = (date: Date | undefined) => {
@@ -89,56 +95,124 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
     return daysOfWeek[date.getDay()]
   }
 
+  const handleTimeClick = (time: string) => {
+    if (!selectedDate) return
+
+    let newSelectedTimes = selectedTimes
+    if (selectedTimes.includes(time)) {
+      newSelectedTimes = selectedTimes.filter((t) => t !== time)
+    } else {
+      newSelectedTimes = [...selectedTimes, time]
+    }
+    setSelectedTimes(newSelectedTimes)
+
+    const formattedDate = `${selectedDate.getFullYear()}-${(
+      selectedDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`
+
+    const newValue = value.map((v) =>
+      v.date === formattedDate ? { ...v, timeSlots: newSelectedTimes } : v
+    )
+    onChange(newValue)
+  }
+
+  const renderTimeSlots = (slots: { time: string; selected: boolean }[]) => (
+    <div className='flex flex-wrap mt-2 mx-[2rem]'>
+      {slots.map((slot, index) => (
+        <div
+          key={index}
+          className={`px-2 py-2 border-2 mr-2 mb-2 cursor-pointer rounded-lg hover:bg-slate-200 transition duration-75 ${
+            slot.selected ? 'bg-blue-300' : 'bg-white'
+          }`}
+          onClick={() => handleTimeClick(slot.time)}
+        >
+          {slot.time}
+        </div>
+      ))}
+    </div>
+  )
+
+  const morningSlots = []
+  const afternoonSlots = []
+
+  for (let hour = 0; hour < 12; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      const time = `${hour.toString().padStart(2, '0')}:${minute
+        .toString()
+        .padStart(2, '0')}`
+      morningSlots.push({
+        time,
+        selected: selectedTimes.includes(time)
+      })
+    }
+  }
+
+  for (let hour = 12; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      const time = `${hour.toString().padStart(2, '0')}:${minute
+        .toString()
+        .padStart(2, '0')}`
+      afternoonSlots.push({
+        time,
+        selected: selectedTimes.includes(time)
+      })
+    }
+  }
+
   return (
-    <div className='mb-4 w-full mx-auto'>
+    <div>
       <label className='block text-gray-700 text-sm font-bold mb-2'>
-        Chọn lịch:
+        Chọn ngày học:
       </label>
       <div className='flex justify-between items-center mb-2'>
         <button
-          type='button'
+          className='hover:shadow-lg transition duration-75 rounded-lg'
           onClick={handlePreviousWeek}
-          className='bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded focus:outline-none'
         >
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
-        <span>
-          {weekDates.length > 0 &&
-            `${weekDates[0].getDate()}/${
-              weekDates[0].getMonth() + 1
-            } - ${weekDates[6].getDate()}/${
-              weekDates[6].getMonth() + 1
-            }, ${weekDates[6].getFullYear()} `}
-        </span>
+        <div className='flex-1 flex justify-center'>
+          {weekDates.map((date, index) => (
+            <div
+              key={index}
+              className={`w-16 p-2 mx-1 cursor-pointer rounded-lg hover:shadow-lg transition duration-75 ${
+                selectedDate?.toDateString() === date.toDateString()
+                  ? 'bg-pink-500 text-white'
+                  : date < new Date() // Kiểm tra ngày trong quá khứ
+                  ? 'bg-gray-400 text-gray-700 cursor-not-allowed'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+              onClick={() => date > new Date() && handleSelectDate(date)} // Chỉ cho phép chọn ngày trong tương lai
+            >
+              <div className='text-center text-sm'>
+                {date.getDate().toString().padStart(2, '0')}/
+                {(date.getMonth() + 1).toString().padStart(2, '0')}
+              </div>
+              <div className='text-center text-xs'>{getDayOfWeek(date)}</div>
+            </div>
+          ))}
+        </div>
         <button
-          type='button'
+          className='hover:shadow-lg transition duration-75 rounded-lg'
           onClick={handleNextWeek}
-          className='bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded focus:outline-none'
         >
           <FontAwesomeIcon icon={faArrowRight} />
         </button>
       </div>
-      <div className='flex flex-wrap'>
-        {weekDates.map((date, index) => (
-          <div
-            key={index}
-            className={`flex items-center justify-center space-x-2 mb-2 p-2 w-[22%] px-auto border-2 mx-2 my-1 rounded-xl hover:bg-slate-200 transition duration-150 ${
-              selectedDate?.getTime() === date.getTime() ? 'bg-blue-200' : ''
-            }`}
-            onClick={() => handleSelectDate(date)}
-          >
-            <div className='flex items-center flex-col'>
-              <span className='font-bold'>{getDayOfWeek(date)}</span>
-              <div className='p-1 mt-2'>
-                <span>{date.getDate()}</span>
-                <span>/</span>
-                <span>{date.getMonth() + 1}</span>
-                <span>/</span>
-                <span>{date.getFullYear()}</span>
-              </div>
-            </div>
+      <div className='w-full mx-auto'>
+        <label className='block text-gray-700 text-sm font-bold my-5'>
+          Thời gian lịch hẹn:
+        </label>
+        {selectedDate && (
+          <div>
+            <h3 className='text-center font-bold'>Buổi sáng</h3>
+            {renderTimeSlots(morningSlots)}
+            <h3 className='text-center font-bold mt-4'>Buổi chiều</h3>
+            {renderTimeSlots(afternoonSlots)}
           </div>
-        ))}
+        )}
       </div>
     </div>
   )

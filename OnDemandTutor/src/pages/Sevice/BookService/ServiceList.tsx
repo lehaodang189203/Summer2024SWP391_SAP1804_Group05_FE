@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-
-import ModalChooseService from '../components/ModalChooseService'
+import React, { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import ModalChooseService from '../components/ModalChooseService'
+import ScheduleFormToChoose from '../components/ScheduleFormToChose'
 import { studentApi } from '../../../api/student.api'
 import { ServiceTutor } from '../../../types/request.type'
-import ScheduleFormToChoose from '../components/ScheduleFormToChose'
 
 export default function ServiceList() {
   const [selectedClassIndex, setSelectedClassIndex] = useState<number | null>(
@@ -15,17 +14,16 @@ export default function ServiceList() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [classData, setClassData] = useState<ServiceTutor[]>([])
 
-  const { data: classService } = useQuery({
+  const { data: classService, refetch } = useQuery({
     queryKey: ['allServices'],
     queryFn: () => studentApi.GetAllService()
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (classService) {
       setClassData(classService.data.data)
     }
-  }, [classService, setClassData])
-  console.log(classService?.data.data)
+  }, [classService])
 
   const handleDateChange = (classIndex: number, date: string) => {
     setSelectedClassIndex(classIndex)
@@ -49,8 +47,8 @@ export default function ServiceList() {
     newClassData[selectedClassIndex].schedule[scheduleIndex].timeSlots =
       selectedTimeSlot ? [selectedTimeSlot] : []
     setClassData(newClassData)
-    console.log('Selected time slot:', selectedTimeSlot) // Handle the actual submission logic
     setIsModalOpen(false)
+    refetch() // Refetch the data
   }
 
   const getDayOfWeek = (dateString: string) => {
@@ -64,16 +62,21 @@ export default function ServiceList() {
 
   return (
     <div className='w-2/3 border mx-auto grid gap-4'>
+      <div className='text-wrap border-b-2 border bg-slate-50 '>
+        Danh sách dịch vụ của giảng viên
+      </div>
+      <hr />
       {classData.map((item, classIndex) => (
         <div
           key={classIndex}
           className='w-full bg-transparent border-2 rounded-2xl grid grid-cols-2 hover:shadow-xl transition-shadow translate-x-4 duration-700'
         >
           <div className='col-span-1 p-4'>
-            <h2 className='text-xl font-bold mb-2'>{item.tittle}</h2>
+            <h2 className='text-xl font-bold mb-2'>{item.title}</h2>
             <div className='text-left h-full mx-auto'>
               <p>
-                <strong>ID:</strong> {item.idService}
+                <strong>Title:</strong>{' '}
+                {item.title ? item.title : 'Title trống '}
               </p>
               <p>
                 <strong>Môn học:</strong> {item.subject}

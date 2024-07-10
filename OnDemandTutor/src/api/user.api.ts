@@ -8,6 +8,7 @@ import { User } from '../types/user.type'
 import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
+import { HttpStatusCode } from 'axios'
 
 const user = getProfileFromLS()
 
@@ -52,10 +53,20 @@ const userApi = {
     return await http.put(`user/ForgotPassword?Email=${body.email}`)
   },
 
-  m(id: string) {
-    return http.get<SuccessResponseReq<ViewClassRequestBody>>(
-      `User/ViewClassRequest?id=${id}`
-    )
+  ViewClassService: async (id: string) => {
+    try {
+      const response = await http.get<SuccessResponseReq<any>>(
+        `/User/ViewClassService?id=${id}`
+      )
+      console.log('response', response)
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      throw new Error('Failed to fetch data')
+    }
   }
 }
 

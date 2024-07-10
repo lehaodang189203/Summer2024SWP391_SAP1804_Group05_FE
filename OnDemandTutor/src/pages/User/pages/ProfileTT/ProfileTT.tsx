@@ -1,70 +1,31 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
+import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useContext, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { tutorApi } from '../../../../api/tutor.api'
 import { AppContext } from '../../../../context/app.context'
-import { UpdateTTSchema, updateTT } from '../../../../utils/rules'
 import UpdateMajorTT from './components/UpdateMajorTT'
 import UpdateProfile from './components/UpdateProfileTT'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
-
-type FormData = UpdateTTSchema
-const updateTTSchema = updateTT
 
 export default function ProfileTT() {
-  const { profile } = useContext(AppContext)
   const [showUpdateOptions, setShowUpdateOptions] = useState(false)
+  const { profile } = useContext(AppContext)
   const [selectedUpdate, setSelectedUpdate] = useState<string | null>(null)
 
   const { data: profileTutor, refetch } = useQuery({
-    queryKey: ['Account'],
-    queryFn: () => tutorApi.getProfileTT(profile?.id as string),
+    queryKey: ['Account', profile?.id as string],
+    queryFn: async () => await tutorApi.getProfileTT(profile?.id as string),
+
+    enabled: !!profile?.id,
     placeholderData: keepPreviousData,
-    enabled: !!profile?.id
+    refetchOnWindowFocus: false
   })
 
   useEffect(() => {
     refetch()
-  }, [profileTutor])
+  }, [profile])
 
-  const profileTT = profileTutor?.data.data
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue
-  } = useForm<FormData>({
-    resolver: yupResolver(updateTTSchema),
-    defaultValues: {
-      experience: profileTT?.experience || 0,
-      subjects: profileTT?.subjects || '',
-      introduction: profileTT?.introduction || '',
-      qualificationName: profileTT?.qualifications.name || '',
-      speacializedSkill: profileTT?.speacializedSkill || '', // Fixed spelling error
-      type: profileTT?.qualifications.type || '', // Ensure correct default value
-      qualifications: {
-        id: profileTT?.qualifications.id || '',
-        type: profileTT?.qualifications.type || '',
-        name: profileTT?.qualifications.name || '',
-        img: profileTT?.qualifications.img || ''
-      }
-    }
-  })
-
-  useEffect(() => {
-    if (profileTT) {
-      setValue('speacializedSkill', profileTT.speacializedSkill || '') // Fixed spelling error
-      setValue('experience', profileTT.experience || 0)
-      setValue('introduction', profileTT.introduction || '')
-      setValue('subjects', profileTT.subjects || '')
-      setValue('qualifications', profileTT.qualifications || '')
-      setValue('type', profileTT.qualifications.type || '')
-    }
-    refetch()
-  }, [profileTT, setValue])
+  useEffect(() => {}, [profileTutor])
 
   const handleUpdate = (option: string) => {
     if (showUpdateOptions && selectedUpdate === option) {
@@ -77,8 +38,8 @@ export default function ProfileTT() {
   }
 
   return (
-    <div className='pb-10 rounded-sm bg-transparent px-2 shadow-md:px-7 md:pb-20 shadow-black'>
-      <div className='border-b border-b-gray py-6'>
+    <div className='pb-10 rounded-sm bg-transparent px-2 md:px-7 md:pb-20 shadow-black'>
+      <div className='border-b border-gray-300 py-6'>
         <h1 className='text-lg font-medium capitalize text-gray-900'>
           Hồ Sơ của tôi
         </h1>
@@ -87,60 +48,42 @@ export default function ProfileTT() {
         </div>
       </div>
 
-      <div className='mt-8 flex flex-col-reverse md:flex-row md:items-start'>
-        <div className='mt-6 flex-grow md:mt-0'>
-          {/* Khung bọc profileTT */}
+      <div className='mt-8 flex flex-col md:flex-row md:items-start'>
+        <div className='flex-grow'>
           <div className='border rounded-lg p-6 shadow-lg bg-white'>
-            {/* email */}
-            <div className='flex   flex-row'>
-              <div className='w-[20%] truncate pt-3 text-right capitalize'>
-                Email
-              </div>
-              <div className='w-[80%] pl-5'>
-                <div className='pt-3 text-gray-700 text-left ml-3'>
-                  {profile?.email}
-                </div>
+            <div className='flex flex-row mb-4'>
+              <div className='w-1/5 text-right capitalize'>Email</div>
+              <div className='w-4/5 pl-5 text-gray-700'>{profile?.email}</div>
+            </div>
+
+            <div className='flex mb-4'>
+              <div className='w-1/5 text-right capitalize'>Môn dạy</div>
+              <div className='w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+                {profileTutor?.subjects}
               </div>
             </div>
 
-            <div className='mt-6 flex   flex-row'>
-              <div className='w-[20%] truncate pt-3 text-right capitalize mr-2'>
-                Môn dạy
-              </div>
-              <div className='w-[80%] rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
-                {profileTT?.subjects}
+            <div className='flex mb-4'>
+              <div className='w-1/5 text-right capitalize'>Kinh nghiệm</div>
+              <div className='w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+                {profileTutor?.experience}
               </div>
             </div>
 
-            <div className='mt-2 flex   flex-row'>
-              <div className='w-[20%] truncate pt-3 text-right capitalize mr-2'>
-                Kinh nghiệm
-              </div>
-
-              <div className='w-[80%] rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
-                {profileTT?.experience}
+            <div className='flex mb-4'>
+              <div className='w-1/5 text-right capitalize'>Giới thiệu</div>
+              <div className='w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+                {profileTutor?.introduction}
               </div>
             </div>
 
-            {/* giới thiệu */}
-            <div className='mt-2 flex   flex-row '>
-              <div className='w-[20%] truncate pt-3 text-right capitalize mr-2'>
-                Giới thiệu
-              </div>
-
-              <div className='w-[80%] rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
-                {profileTT?.introduction}
-              </div>
-            </div>
-
-            <div className='w-[49%] mx-auto my-2 flex'>
+            <div className='w-1/2 mx-auto my-2'>
               <button
                 type='button'
                 className='w-full p-3 bg-pink-500 text-white rounded-lg hover:bg-pink-300 focus:outline-none relative'
                 onClick={() => setShowUpdateOptions(!showUpdateOptions)}
               >
                 Cập nhật
-                {/* mũi tên */}
                 <div className='absolute right-3 top-1/2 transform -translate-y-1/2'>
                   <FontAwesomeIcon
                     icon={showUpdateOptions ? faArrowUp : faArrowDown}
@@ -176,16 +119,14 @@ export default function ProfileTT() {
           </div>
         </div>
 
-        <div className='flex justify-center md:w-72 md:border-l md:border-l-gray-200'>
-          <div className='flex flex-col items-center'>
-            <div className='my-5 h-64 w-64'>
-              <span>Ảnh bằng</span>
-              <img
-                src={profileTT?.qualifications.img}
-                className='h-full w-full'
-                alt='Profile Image'
-              />
-            </div>
+        <div className='hidden md:flex md:w-72 md:border-l md:border-l-gray-200 md:flex-col md:items-center md:justify-center'>
+          <div className='my-5 h-64 w-64'>
+            <span>Ảnh bằng</span>
+            <img
+              src={profileTutor?.qualifications.img}
+              className='h-full w-full'
+              alt='Qualification Image'
+            />
           </div>
         </div>
       </div>

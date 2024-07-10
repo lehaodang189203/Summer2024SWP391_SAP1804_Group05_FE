@@ -89,7 +89,7 @@ export default function NavHeader() {
                 </Link>
               )}
               {(profile?.roles.toLowerCase() === roles.student ||
-                profile?.roles.toLowerCase() === roles.tutor) && (
+                profile?.roles.toLowerCase() === roles.tutor) && ( // phân đôi này ra
                 <div>
                   <Link
                     to={path.deposit}
@@ -103,17 +103,18 @@ export default function NavHeader() {
                   >
                     Xem đơn của bạn (Học Sinh)
                   </Link>
-                  <Link
-                    to={path.tutorViewRequestList}
-                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                  >
-                    Xem hồ sơ giảng viên
-                  </Link>
+                  
                   <Link
                     to={path.myClass}
                     className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                  >
+                  > 
                     Lớp học của bạn
+                  </Link>
+                  <Link
+                    to={path.bookedService}
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    Dịch vụ đã đăng kí
                   </Link>
                 </div>
               )}

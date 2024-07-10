@@ -15,19 +15,19 @@ import { ReviewType } from '../../../types/request.type'
 
 interface Props {
   idClassRequest: string
+  onSubmit: () => void // thêm prop onSubmit
 }
 
 type FormData = ReviewTT
 const reviewSchema = reviewTT
 
-export default function Review({ idClassRequest }: Props) {
+export default function Review({ idClassRequest, onSubmit }: Props) {
   const { profile } = useContext(AppContext)
   const idUser = profile?.id as string
 
   const [rating, setRating] = useState<number>(0)
   const [hoverRating, setHoverRating] = useState<number>(0)
 
-  // Initialize useForm with the validation schema
   const {
     register,
     handleSubmit,
@@ -44,7 +44,7 @@ export default function Review({ idClassRequest }: Props) {
     mutationFn: studentApi.CreateReview
   })
 
-  const onSubmit = handleSubmit((data: FormData) => {
+  const handleFormSubmit = handleSubmit((data: FormData) => {
     const formData: ReviewType = {
       ...data,
       rating: rating,
@@ -58,7 +58,8 @@ export default function Review({ idClassRequest }: Props) {
     createReviewMutation.mutate(formData, {
       onSuccess: (data) => {
         toast.success(data.data.message)
-        reset() // Reset form after successful submission
+        reset()
+        onSubmit() // gọi onSubmit khi form gửi thành công
       },
       onError: (error) => {
         toast.error(error.message)
@@ -79,49 +80,51 @@ export default function Review({ idClassRequest }: Props) {
   }
 
   return (
-    <div className='container border-2 h-full rounded-2xl w-full p-3 hover:shadow-xl hover:shadow-black transition-shadow duration-700'>
-      <form onSubmit={onSubmit}>
-        <h2 className='mt-4'>Phản hồi giảng dạy</h2>
-
-        <div>
-          <label htmlFor='feedback'>Phản hồi của bạn</label>
-          <Input
-            name='feedback'
-            type='text'
-            register={register}
-            className='rounded-md p-2 w-full'
-            errorMessage={errors.feedback?.message}
-          />
-        </div>
-
-        {/*  đánh sao */}
-        <div className='mt-4'>
-          <label htmlFor=''>Đánh giá</label>
-          <div className='flex justify-center items-center gap-1'>
-            {[1, 2, 3, 4, 5].map((index) => (
-              <FontAwesomeIcon
-                key={index}
-                icon={faStar}
-                className={`cursor-pointer transition-colors duration-200 ${
-                  (hoverRating || rating) >= index
-                    ? 'text-yellow-400'
-                    : 'text-gray-400'
-                }`}
-                onMouseEnter={() => handleMouseEnter(index)}
-                onMouseLeave={handleMouseLeave}
-                onClick={() => handleClick(index)}
-              />
-            ))}
+    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+      <div className='container border-2 bg-white rounded-2xl  p-3 hover:shadow-xl hover:shadow-black transition-shadow duration-700'>
+        <form onSubmit={handleFormSubmit}>
+          <h2 className='mt-4'>Phản hồi giảng dạy</h2>
+          {/*  đánh sao */}
+          <div className='mt-4'>
+            <label htmlFor=''>Đánh giá</label>
+            <div className='flex justify-center items-center gap-1'>
+              {[1, 2, 3, 4, 5].map((index) => (
+                <FontAwesomeIcon
+                  key={index}
+                  icon={faStar}
+                  className={`cursor-pointer transition-colors duration-200 ${
+                    (hoverRating || rating) >= index
+                      ? 'text-yellow-400'
+                      : 'text-gray-400'
+                  }`}
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={handleMouseLeave}
+                  onClick={() => handleClick(index)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
 
-        <Button
-          type='submit'
-          className='w-full rounded-xl text-center bg-pink-300 py-3 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
-        >
-          Gửi
-        </Button>
-      </form>
+          {/*  đánh giá */}
+          <div>
+            <Input
+              placeholder='Phản hồi gia sư của bạn'
+              name='feedback'
+              type='text'
+              register={register}
+              className='rounded-md p-2 w-full my-2'
+              errorMessage={errors.feedback?.message}
+            />
+          </div>
+
+          <Button
+            type='submit'
+            className='w-full my-2 rounded-xl text-center bg-pink-300 py-3 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
+          >
+            Gửi
+          </Button>
+        </form>
+      </div>
     </div>
   )
 }

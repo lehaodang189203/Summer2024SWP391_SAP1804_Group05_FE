@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, forwardRef, useState } from 'react'
+import { InputHTMLAttributes, forwardRef, useState, useEffect } from 'react'
 
 export interface InputNumberProps
   extends InputHTMLAttributes<HTMLInputElement> {
@@ -26,11 +26,14 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
   ) {
     const [localValue, setLocalValue] = useState<string>(value as string)
 
+    useEffect(() => {
+      setLocalValue(value as string)
+    }, [value])
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       let value = event.target.value
 
       if (inputType === 'price') {
-        // Remove commas from the input value
         value = value.replace(/,/g, '')
       }
 
@@ -44,10 +47,7 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
         (inputType === 'phone' && phoneRegex.test(value)) ||
         value === ''
       ) {
-        // Update local state
         setLocalValue(value)
-
-        // Call onChange callback if provided
         onChange && onChange(event)
       }
     }
@@ -61,7 +61,6 @@ export const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
 
     const handleBlur = () => {
       if (inputType === 'price') {
-        // Format the value with commas before blur
         setLocalValue((prev) => formatMoney(prev))
       }
     }

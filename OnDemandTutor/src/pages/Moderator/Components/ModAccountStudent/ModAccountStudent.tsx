@@ -21,7 +21,7 @@ import { User } from '../../../../types/user.type'
 export default function ModAccountStudent() {
   //Lấy danh sách yêu cầu từ API
   const { data: Data } = useQuery<User[]>({
-    queryKey: ['Account'],                     // chỗ này tui vẫn chưa hỉu, tại sao phải xài query key
+    queryKey: ['Account'],                    
     queryFn: () => moderatorApi.getAccount()
   })
   useEffect(() => {

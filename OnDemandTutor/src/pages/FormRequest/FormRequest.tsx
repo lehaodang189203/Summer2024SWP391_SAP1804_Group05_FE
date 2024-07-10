@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Requestchema, requestSchema } from '../../utils/rules'
 import Input from '../../components/Input'
@@ -9,6 +9,7 @@ import { studentApi } from '../../api/student.api'
 import { useMutation } from '@tanstack/react-query'
 import { RequestBody } from '../../types/user.request.type'
 import { toast } from 'react-toastify'
+import { AppContext } from '../../context/app.context'
 
 type FormData = Pick<
   Requestchema,
@@ -62,8 +63,11 @@ export default function FormRequest({
     resolver: yupResolver(schema)
   })
 
+
+  const { profile } = useContext(AppContext)
+
   const ReqMutation = useMutation({
-    mutationFn: (body: RequestBody) => studentApi.createRequest(body)
+    mutationFn: (body: RequestBody) => studentApi.createRequest(profile?.id as string,body)
   })
 
   const UpdateReqMutation = useMutation({
