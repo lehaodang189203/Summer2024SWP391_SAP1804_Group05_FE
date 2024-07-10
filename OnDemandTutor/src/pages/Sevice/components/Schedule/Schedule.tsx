@@ -14,7 +14,7 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
 
   useEffect(() => {
     const today = new Date();
-    setSelectedDate(today);
+    setSelectedDate(today); // Set default value to today
     generateWeekDates(today);
   }, []);
 
@@ -29,19 +29,19 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
   };
 
   const handleSelectDate = (date: Date) => {
+    if (!date) return;
+
     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
       .toString()
       .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 
-    // Nếu chọn lại ngày đã chọn, hủy chọn
     if (selectedDate && date.getTime() === selectedDate.getTime()) {
-      setSelectedDate(null)
-      setSelectedTimes([])
+      setSelectedDate(null);
+      setSelectedTimes([]);
 
-      // Xóa ngày đó khỏi danh sách nếu có trong value
-      const newValue = value.filter((v) => v.date !== formattedDate)
-      onChange(newValue)
-      return
+      const newValue = value.filter((v) => v.date !== formattedDate);
+      onChange(newValue);
+      return;
     }
 
     setSelectedDate(date);
@@ -53,9 +53,6 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
       setSelectedTimes(value[existingDateIndex].timeSlots);
     } else {
       setSelectedTimes([]);
-    }
-
-    if (existingDateIndex === -1) {
       onChange([...value, { date: formattedDate, timeSlots: [] }]);
     }
   };
@@ -85,7 +82,7 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
       'Thứ tư',
       'Thứ năm',
       'Thứ sáu',
-      'Thứ bảy'
+      'Thứ bảy',
     ];
     return daysOfWeek[date.getDay()];
   };
@@ -139,7 +136,7 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
         .padStart(2, '0')}`;
       morningSlots.push({
         time,
-        selected: selectedTimes.includes(time)
+        selected: selectedTimes.includes(time),
       });
     }
   }
@@ -151,7 +148,7 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
         .padStart(2, '0')}`;
       afternoonSlots.push({
         time,
-        selected: selectedTimes.includes(time)
+        selected: selectedTimes.includes(time),
       });
     }
   }
@@ -202,8 +199,9 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
         </label>
         {selectedDate && (
           <div>
-            <h3 className='text-center font-bold'>Buổi sáng & Buổi chiều</h3>
+            <h3 className='text-center font-bold'>Buổi sáng</h3>
             {renderTimeSlots(morningSlots)}
+            <h3 className='text-center font-bold mt-4'>Buổi chiều</h3>
             {renderTimeSlots(afternoonSlots)}
           </div>
         )}

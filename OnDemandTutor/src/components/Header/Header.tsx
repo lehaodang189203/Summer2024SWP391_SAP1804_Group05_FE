@@ -49,23 +49,32 @@ export default function Header() {
                       <div className='w-[25rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
                         <Link
                           to={path.registerAsTutor}
-                          className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
+                          className='py-2 w-[15rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
                         >
                           Đăng ký thành giảng viên
                         </Link>
-
-                        <Link
-                          to={path.requestList}
-                          className='py-2 w-[10rem] h-full bg-pink-400 text-black hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
-                        >
-                          Danh sách lớp
-                        </Link>
-                        <Link
-                          to={path.service}
-                          className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-r-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
-                        >
-                          Danh sách dịch vụ
-                        </Link>
+                        {user?.roles.toLowerCase() === roles.tutor ?
+                          <Link
+                            to={path.requestList}
+                            className='py-2 w-[15rem] h-full bg-pink-400 text-black rounded-r-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
+                          >
+                            Danh sách lớp
+                          </Link>
+                        : <>
+                          <Link
+                              to={path.requestList}
+                              className='py-2 w-[10rem] h-full bg-pink-400 text-black hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
+                            >
+                              Danh sách lớp
+                          </Link>
+                          <Link
+                            to={path.service}
+                            className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-r-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
+                          >
+                            Danh sách dịch vụ
+                          </Link>
+                          </>
+                        }
                       </div>
                     </div>
                   }
@@ -89,7 +98,7 @@ export default function Header() {
                 </Link>
               )}
               <Link
-                to='/'
+                to={path.support}
                 className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
                                     after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
               >

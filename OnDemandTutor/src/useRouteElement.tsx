@@ -47,6 +47,9 @@ import TutorServiceBookedLayout from './pages/TutorViewServiceList/Layout/TutorS
 import BookedService from './pages/Sevice/BookedService'
 import ModViewComplaint from './pages/Moderator/Components/ModViewComplaint'
 import AdminViewComplaint from './pages/Admin/Components/AdminViewComplaint'
+import MyService from './pages/Sevice/MyService'
+import TutorViewOwnService from './pages/Sevice/TutorViewOwnService'
+import MyClasLayout from './pages/MyClass/MyClassLayout'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -144,6 +147,22 @@ export default function useRouteElements() {
           )
         },
         {
+          path: path.myService, //student
+          element: (
+            <MainLayout>
+              <MyService />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.tutorviewAllOwnService, //student
+          element: (
+            <MainLayout>
+              <TutorViewOwnService />
+            </MainLayout>
+          )
+        },
+        {
           path: path.support, //student
           element: (
             <MainLayout>
@@ -190,6 +209,14 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <ReStuCurrentPage />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.myService, //student
+          element: (
+            <MainLayout>
+              <MyService />
             </MainLayout>
           )
         },
@@ -246,6 +273,15 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <MyClass />
+            </MainLayout>
+          )
+        },
+        
+        {
+          path: path.myClassLayout, //student
+          element: (
+            <MainLayout>
+              <MyClasLayout />
             </MainLayout>
           )
         },

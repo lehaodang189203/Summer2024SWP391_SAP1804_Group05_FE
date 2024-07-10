@@ -41,7 +41,7 @@ export default function ReviewService({ idBooking }: Props) {
   })
 
   const createReviewMutation = useMutation({
-    mutationFn: studentApi.CreateServiceReview
+    mutationFn:studentApi.CreateServiceReview
   })
 
   const onSubmit = handleSubmit((data: FormData) => {

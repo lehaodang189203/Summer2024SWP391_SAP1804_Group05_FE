@@ -65,7 +65,28 @@ export interface ClassType {
   User: UserSchema
   Tutor: UserSchema
 }
-
+export interface ServiceTutorGet{
+  id:string
+  serviceDetails: {
+    idService: string
+    pricePerHour: number
+    title: string
+    description: string
+    learningMethod: string
+    class: string
+    subject: string
+    schedule: [
+      {
+        date: string
+        timeSlots: string[]
+      }
+    ]
+  }
+}
+export interface Schedule{
+  date:string
+  timeSlots : string[]
+}
 export interface ServiceTutor {
   idService: string
   pricePerHour: number

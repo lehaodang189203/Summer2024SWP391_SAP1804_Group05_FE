@@ -6,6 +6,7 @@ import { AppContext } from '../../../context/app.context'
 import { TutorRep, User, UserRep } from '../../../types/user.type'
 import Report from '../Report'
 import userAvatar from '../../../assets/img/user.svg'
+import { roles } from '../../../constant/roles'
 
 interface Props {
   User: UserRep
@@ -157,6 +158,7 @@ export default function DetailInfor({ User, Tutor }: Props) {
         </div>
         {/* Nút Report */}
         <div className='absolute top-0 right-0 m-2'>
+        {profile?.roles.toLowerCase()=== roles.student ? <>
           <button className='relative group' onClick={() => handleOpenForm()}>
             <FontAwesomeIcon
               icon={faCircleExclamation}
@@ -166,6 +168,10 @@ export default function DetailInfor({ User, Tutor }: Props) {
               Tố cáo
             </div>
           </button>
+        </>:
+        <div></div>
+        }
+          
           {/* Report Form */}
           {showForm && (
             <Report

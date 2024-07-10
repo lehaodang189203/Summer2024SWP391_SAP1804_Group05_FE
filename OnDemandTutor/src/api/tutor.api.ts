@@ -1,12 +1,12 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
-import { Request } from '../types/request.type'
+import { Request, ServiceTutor, ServiceTutorGet } from '../types/request.type'
 
 import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 
 import {
   AddQualification,
   CreatServiceType,
-  DataService,
+  // DataService,
   TutorProfile,
   UpdateTutorProfile
 } from '../types/tutor.type'
@@ -107,6 +107,32 @@ export const tutorApi = {
         body
       )
 
+      return response.data // Return response data if needed
+    } catch (error) {
+      console.error('lỗi:', error)
+      throw error // Re-throw error for handling in caller function
+    }
+  },
+  getAllTutorService: async (
+    idTutor:string
+  ): Promise <ServiceTutorGet[]> => {
+    try {
+      const response = await http.get<SuccessResponseReq<ServiceTutorGet[]>>(
+        `/tutor/getServices?id=${idTutor}`
+      )
+      return response.data.data // Return response data if needed
+    } catch (error) {
+      console.error('lỗi:', error)
+      throw error // Re-throw error for handling in caller function
+    }
+  },
+  deleteTutorService: async (
+    idService:string
+  ): Promise <SuccessResponseReq<ServiceTutor[]>> => {
+    try {
+      const response = await http.delete<SuccessResponseReq<any>>(
+        `/tutor/deleteService?serviceId=${idService}`
+      )
       return response.data // Return response data if needed
     } catch (error) {
       console.error('lỗi:', error)
