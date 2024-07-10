@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { studentApi } from '../../../../api/student.api' // Ensure the path to your API file is correct
 import { toast } from 'react-toastify'
 import { AppContext } from '../../../../context/app.context'
@@ -47,8 +47,15 @@ const ModalChooseService: React.FC<Props> = ({
   classInfo
 }) => {
   const [duration, setDuration] = useState<number>(30)
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([])
 
   const { profile } = useContext(AppContext)
+
+  useEffect(() => {
+    if (selectedTimeSlots) {
+      setAvailableTimeSlots(selectedTimeSlots.split(', '))
+    }
+  }, [selectedTimeSlots])
 
   const handleDurationChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -93,56 +100,75 @@ const ModalChooseService: React.FC<Props> = ({
 
   return (
     <div className='fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center z-50'>
-      <div className='bg-white p-8 rounded-lg w-1/2 text left'>
-        <h2 className='text-2xl mb-4'>Xác nhận chọn dịch vụ</h2>
+      <div className='bg-white p-8 rounded-lg w-1/2 text-left shadow-lg'>
+  <h2 className='text-2xl mb-4 text-gray-800 font-semibold text-center'>Xác nhận chọn dịch vụ</h2>
+  <div className='text-gray-700 mb-5'>
+    <p className='mb-2'>
+      <strong>Môn:</strong> {classInfo.subject}
+    </p>
+    <p className='mb-2'>
+      <strong>Lớp:</strong> {classInfo.class}
+    </p>
+    <p className='mb-2'>
+      <strong>Ngày học:</strong> {selectedDate}
+    </p>
+    <div className='flex mx-auto gap-1'>
         <p>
-          <strong>Môn:</strong> {classInfo.subject}
+          <strong>Giờ học:</strong>
         </p>
-        <p>
-          <strong>Lớp:</strong> {classInfo.class}
-        </p>
-
-        <p>
-          <strong>Ngày học:</strong> {selectedDate}
-        </p>
-        <p>
-          <strong>Giờ học:</strong> {selectedTimeSlots}
-        </p>
-        <label className='block mt-4'>
-          <span className='text-gray-700'>Chọn thời gian thuê :</span>
-          <select
-            value={duration}
-            onChange={handleDurationChange}
-            className='block w-full mt-1 border-gray-300 rounded-md'
-          >
-            <option value={30}>30 phút</option>
-            <option value={60}>60 phút</option>
-            <option value={90}>90 phút</option>
-            <option value={120}>120 phút</option>
-            <option value={150}>150 phút</option>
-            <option value={180}>180 phút</option>
-          </select>
-        </label>
-        <p className='mt-4'>
-          <strong>Tổng tiền:</strong> {calculateTotalPrice()} VNĐ
-        </p>
-        <div className='mt-6 flex justify-end'>
-          <button
-            type='button'
-            onClick={onClose}
-            className='bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2'
-          >
-            Hủy
-          </button>
-          <button
-            type='button'
-            onClick={handleConfirm}
-            className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'
-          >
-            Chấp nhận
-          </button>
+        {' '}
+        <div className=''>
+          {availableTimeSlots.map((timeSlot, index) => (
+            <div key={index} className=''>
+              {timeSlot}
+            </div>
+          ))}
         </div>
-      </div>
+    </div>
+    
+  </div>
+  <hr />
+  <div className='mx-auto'>
+    <div className='text-gray-700 font-semibold text-center'>Chọn thời gian thuê:</div>
+    <div className='flex space-x-2 mt-2  '>
+      {[30, 60, 90, 120, 150, 180].map((time) => (
+        <button
+          key={time}
+          type='button'
+          onClick={() => setDuration(time)}
+          className={`py-2 px-4 rounded-md border ${
+            duration === time
+              ? 'bg-pink-500 text-white border border-black'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          {time} phút
+        </button>
+      ))}
+    </div>
+  </div>
+  <p className='mt-4 text-gray-700 '>
+    <strong>Tổng tiền:</strong> <span className='text-green-600'>{calculateTotalPrice()} VNĐ</span>
+  </p>
+  <div className='mt-6 flex justify-end'>
+    <button
+      type='button'
+      onClick={onClose}
+      className='bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mr-2 transition duration-200'
+    >
+      Hủy
+    </button>
+    <button
+      type='button'
+      onClick={handleConfirm}
+      className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-200'
+    >
+      Chấp nhận
+    </button>
+  </div>
+</div>
+
+
     </div>
   )
 }

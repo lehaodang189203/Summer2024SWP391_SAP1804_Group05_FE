@@ -271,20 +271,20 @@ export const reviewTT = yup.object().shape({
   feedback: yup.string().required('Phản hồi là bắt buộc'),
   rating: yup.number().required('Đánh giá là bắt buộc')
 })
-
+  
 export const serviceSchema = yup.object().shape({
   pricePerHour: yup
     .number()
     .transform((value, originalValue) => {
-      //  trả về số nguyên luôn
-      const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
-      // nếu là chuỗi thì là 0
-      return isNaN(formattedValue) ? 0 : formattedValue
+      // Trả về số nguyên luôn
+      const formattedValue = parseFloat(originalValue.replace(/,/g, ''));
+      // Nếu là chuỗi thì là 0
+      return isNaN(formattedValue) ? 0 : formattedValue;
     })
     .required('Giá là bắt buộc')
     .positive('Giá không thể là số âm'),
   title: yup.string().required('Phải nhập tiêu đề'),
-  subjects: yup
+  subject: yup
     .string()
     .required('Môn học là bắt buộc')
     .oneOf(
@@ -322,17 +322,17 @@ export const serviceSchema = yup.object().shape({
             'is-future-date',
             'Ngày không được là ngày trong quá khứ',
             function (value) {
-              return isFutureDate(value as string)
+              return isFutureDate(value as string);
             }
           ),
         timeSlots: yup
           .array()
-          .of(yup.string().required())
+          .of(yup.string().required('Phải chọn ít nhất một khung giờ'))
           .min(1, 'Phải chọn ít nhất một khung giờ')
       })
     )
     .required('Phải thêm lịch học')
-})
+});
 
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
 export type SchemaResAT = yup.InferType<typeof schemaResAT>

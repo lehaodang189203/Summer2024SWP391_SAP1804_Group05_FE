@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
 interface FormData {
-  date: string
-  timeSlots: string[]
+  date: string;
+  timeSlots: string[];
 }
 
 interface Props {
-  classIndex: number
-  selectedDate: string
-  handleDateChange: (classIndex: number, date: string) => void
-  handleTimeSlotChange: (timeSlot: string) => void
-  getDayOfWeek: (dateString: string) => string
-  schedule: FormData[]
+  classIndex: number;
+  selectedDate: string;
+  handleDateChange: (classIndex: number, date: string) => void;
+  handleTimeSlotChange: (timeSlot: string) => void;
+  getDayOfWeek: (dateString: string) => string;
+  schedule: FormData[];
 }
 
 export default function ScheduleFormToChoose({
@@ -20,66 +20,64 @@ export default function ScheduleFormToChoose({
   handleDateChange,
   handleTimeSlotChange,
   getDayOfWeek,
-  schedule
+  schedule,
 }: Props) {
-  const [currentWeekStart, setCurrentWeekStart] = useState<Date>(new Date())
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null)
+  const [currentWeekStart, setCurrentWeekStart] = useState<Date>(new Date());
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
 
   const toggleTimeSlot = (timeSlot: string) => {
     if (selectedTimeSlot === timeSlot) {
-      setSelectedTimeSlot(null)
-      handleTimeSlotChange('')
+      setSelectedTimeSlot(null);
+      handleTimeSlotChange('');
     } else {
-      setSelectedTimeSlot(timeSlot)
-      handleTimeSlotChange(timeSlot)
+      setSelectedTimeSlot(timeSlot);
+      handleTimeSlotChange(timeSlot);
     }
-  }
+  };
 
   useEffect(() => {
-    setSelectedTimeSlot(null)
-  }, [selectedDate])
+    setSelectedTimeSlot(null);
+  }, [selectedDate]);
 
   const handlePreviousWeek = () => {
     setCurrentWeekStart((prevDate) => {
-      const newDate = new Date(prevDate)
-      newDate.setDate(prevDate.getDate() - 7)
-      return newDate
-    })
-  }
+      const newDate = new Date(prevDate);
+      newDate.setDate(prevDate.getDate() - 7);
+      return newDate;
+    });
+  };
 
   const handleNextWeek = () => {
     setCurrentWeekStart((prevDate) => {
-      const newDate = new Date(prevDate)
-      newDate.setDate(prevDate.getDate() + 7)
-      return newDate
-    })
-  }
+      const newDate = new Date(prevDate);
+      newDate.setDate(prevDate.getDate() + 7);
+      return newDate;
+    });
+  };
 
   const weekDates = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(currentWeekStart)
-    date.setDate(currentWeekStart.getDate() + i)
-    return date
-  })
+    const date = new Date(currentWeekStart);
+    date.setDate(currentWeekStart.getDate() + i);
+    return date;
+  });
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    const year = date.getFullYear()
-    return { formattedDate: `${month}-${day}`, month, year }
-  }
+    const date = new Date(dateString);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    return { formattedDate: `${month}-${day}`, month, year };
+  };
 
-  const { month, year } = formatDate(
-    currentWeekStart.toISOString().split('T')[0]
-  )
+  const { month, year } = formatDate(currentWeekStart.toISOString().split('T')[0]);
 
   // Get available hours for the selected date
   const availableHours = selectedDate
     ? schedule.find((s) => s.date === selectedDate)?.timeSlots || []
-    : []
+    : [];
 
   return (
-    <div className='mb-2 border p-4 rounded-xl bg-slate-50'>
+    <div className='mb-2 border p-4 rounded-xl bg-slate-50 m-1'>
       <p className='text-center text-lg font-semibold'>
         Tháng {month}-{year}
       </p>
@@ -92,31 +90,30 @@ export default function ScheduleFormToChoose({
           {'<'}
         </button>
         <div className='mt-2 space-x-2 space-y-2'>
-          {weekDates.map((date) => (
-            <div
-              key={date.toISOString()}
-              className='inline-block text-center border rounded-sm'
-            >
-              <button
-                type='button'
-                onClick={() =>
-                  handleDateChange(classIndex, date.toISOString().split('T')[0])
-                }
-                className={`bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline ${
-                  selectedDate === date.toISOString().split('T')[0]
-                    ? 'bg-gray-500'
-                    : ''
-                }`}
+          {weekDates.map((date) => {
+            const dateString = date.toISOString().split('T')[0];
+            const hasTimeSlots = schedule.some((s) => s.date === dateString && s.timeSlots.length > 0);
+
+            return (
+              <div
+                key={date.toISOString()}
+                className='inline-block text-center border rounded-sm'
               >
-                <div>
-                  {formatDate(date.toISOString().split('T')[0]).formattedDate}
-                </div>
-                <p className='bg-slate-50 p-0.5 rounded-md'>
-                  {getDayOfWeek(date.toISOString().split('T')[0])}
-                </p>
-              </button>
-            </div>
-          ))}
+                <button
+                  type='button'
+                  onClick={() => handleDateChange(classIndex, dateString)}
+                  className={`bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline ${
+                    selectedDate === dateString ? 'bg-gray-500 border-2 border-black' : ''
+                  } ${hasTimeSlots ? 'bg-green-500' : ''}`}
+                >
+                  <div>{formatDate(dateString).formattedDate}</div>
+                  <p className='bg-slate-50 p-0.5 rounded-md'>
+                    {getDayOfWeek(dateString)}
+                  </p>
+                </button>
+              </div>
+            );
+          })}
         </div>
         <button
           type='button'
@@ -137,9 +134,7 @@ export default function ScheduleFormToChoose({
               type='button'
               onClick={() => toggleTimeSlot(hour)}
               className={`bg-pink-200 border hover:bg-pink-500 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline ${
-                selectedTimeSlot === hour
-                  ? 'bg-pink-600 border-stone-600 border'
-                  : ''
+                selectedTimeSlot === hour ? 'bg-pink-600 border-stone-600 border' : ''
               }`}
             >
               {hour}
@@ -152,5 +147,5 @@ export default function ScheduleFormToChoose({
         )}
       </div>
     </div>
-  )
+  );
 }

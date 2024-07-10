@@ -59,7 +59,20 @@ export default function ServiceList() {
   const openModal = () => {
     setIsModalOpen(true)
   }
+  // phần hiện xem thêm cho decription
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
+  const toggleDescription = () => {
+    setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
+
+  const renderDescription = (description:string) => {
+    const maxLength = 100;
+    if (description.length <= maxLength) {
+      return description;
+    }
+    return isDescriptionExpanded ? description : `${description.slice(0, maxLength)}...`;
+  };
   return (
     <div className='w-2/3 border mx-auto grid gap-4'>
       <div className='text-wrap border-b-2 border bg-slate-50 '>
@@ -69,30 +82,47 @@ export default function ServiceList() {
       {classData.map((item, classIndex) => (
         <div
           key={classIndex}
-          className='w-full bg-transparent border-2 rounded-2xl grid grid-cols-2 hover:shadow-xl transition-shadow translate-x-4 duration-700'
+          className='w-full bg-transparent border-2 rounded-2xl grid grid-cols-2 hover:shadow-xl transition-shadow translate-x-4 duration-700 shadow-md gap-2 bg-white'
         >
           <div className='col-span-1 p-4'>
             <h2 className='text-xl font-bold mb-2'>{item.title}</h2>
-            <div className='text-left h-full mx-auto'>
-              <p>
-                <strong>Title:</strong>{' '}
-                {item.title ? item.title : 'Title trống '}
-              </p>
-              <p>
-                <strong>Môn học:</strong> {item.subject}
-              </p>
-              <p>
-                <strong>Lớp:</strong> {item.class}
-              </p>
-              <p>
-                <strong>Phương thức học:</strong> {item.learningMethod}
-              </p>
-              <p>
-                <strong>Giá(1giờ):</strong> {item.pricePerHour} VNĐ
-              </p>
-              <p>
-                <strong>Mô tả:</strong> {item.description}
-              </p>
+            <div className='pl-10 p-7 bg-gray-100 rounded-lg shadow-md'>
+              <div className='text-left h-full mx-auto'>
+                <p className='mb-2'>
+                  <strong className='text-pink-500'>Tiêu đề:</strong>{' '}
+                  <span className={item.title ? 'text-gray-800' : 'text-red-500'}>
+                    {item.title ? item.title : 'Title trống'}
+                  </span>
+                </p>
+                <p className='mb-2'>
+                  <strong className='text-blue-700'>Môn học:</strong>{' '}
+                  <span className='text-gray-800'>{item.subject}</span>
+                </p>
+                <p className='mb-2'>
+                  <strong className='text-blue-700'>Lớp:</strong>{' '}
+                  <span className='text-gray-800'>{item.class}</span>
+                </p>
+                <p className='mb-2'>
+                  <strong className='text-blue-700'>Phương thức học:</strong>{' '}
+                  <span className='text-gray-800'>{item.learningMethod}</span>
+                </p>
+                <p className='mb-2'>
+                  <strong className='text-blue-700'>Giá trên một giờ:</strong>{' '}
+                  <span className='text-green-700'>{item.pricePerHour} VNĐ</span>
+                </p>
+                <p>
+                  <strong className='text-blue-700'>Mô tả:</strong>{' '}
+                  <span className='text-gray-800'>{renderDescription(item.description)}</span>
+                  {item.description.length > 100 && (
+                    <button
+                      onClick={toggleDescription}
+                      className='text-blue-500 ml-2 hover:underline'
+                    >
+                      {isDescriptionExpanded ? 'Ẩn bớt' : 'Xem thêm'}
+                    </button>
+                  )}
+                </p>
+              </div>
             </div>
           </div>
           <div className='col-span-1 p-4'>

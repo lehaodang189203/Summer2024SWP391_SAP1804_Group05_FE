@@ -1,94 +1,93 @@
-import { useContext, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import Schedule from '../components/Schedule/Schedule'
-import { serviceSchema } from '../../../utils/rules'
-import { useMutation } from '@tanstack/react-query'
-import { AppContext } from '../../../context/app.context'
-import { tutorApi } from '../../../api/tutor.api'
-import { toast } from 'react-toastify'
-import { reset } from 'numeral'
+import { useContext, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Schedule from '../components/Schedule/Schedule';
+import { serviceSchema } from '../../../utils/rules';
+import { useMutation } from '@tanstack/react-query';
+import { AppContext } from '../../../context/app.context';
+import { tutorApi } from '../../../api/tutor.api';
+import { toast } from 'react-toastify';
 
 interface Props {
-  onClose: () => void
+  onClose: () => void;
 }
 
 interface FormData {
-  pricePerHour: number
-  title: string
-  subject: string
-  class: string
-  description: string
-  learningMethod: string
-  schedule: ScheduleType[]
+  pricePerHour: number;
+  title: string;
+  subject: string;
+  class: '10' | '11' | '12';
+  description: string;
+  learningMethod: 'Dạy trực tiếp(offline)' | 'Dạy trực tuyến (online)' | '';
+  schedule: ScheduleType[];
 }
 
 interface ScheduleType {
-  date: string
-  timeSlots: (string | undefined)[]
+  date: string;
+  timeSlots: string[];
 }
 
-const schema = serviceSchema
+const schema = serviceSchema;
+
 export default function ServiceForm({ onClose }: Props) {
-  const { profile } = useContext(AppContext)
+  const { profile } = useContext(AppContext);
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors }
+    formState: { errors },
+    reset,
   } = useForm<FormData>({
-    resolver: yupResolver(schema)
-  })
+    resolver: yupResolver(schema),
+  });
 
   const [formData, setFormData] = useState<FormData>({
     pricePerHour: 0,
     title: '',
     subject: '',
-    class: '',
+    class: '10',
     description: '',
     learningMethod: '',
-    schedule: []
-  })
+    schedule: [],
+  });
 
   const createServiceMutation = useMutation({
     mutationFn: (body: FormData) =>
-      tutorApi.createService(profile?.id as string, body)
-  })
+      tutorApi.createService(profile?.id as string, body),
+  });
 
   const onSubmit = (data: FormData) => {
-    // Handle form submission with formData state
-    console.log(data)
+    console.log('data', data)
     createServiceMutation.mutate(data, {
       onSuccess: (res: any) => {
-        toast.success(res.message)
-        reset() // reset lại form khi gửi đi thành công
-        onClose()
+        toast.success(res.message);
+        reset();
+        onClose();
       },
       onError: (errors) => {
-        console.log(errors)
-      }
-    })
-  }
+        console.log(errors);
+      },
+    });
+  };
 
   const handleScheduleChange = (updatedSchedule: ScheduleType[]) => {
-    setValue('schedule', updatedSchedule)
+    setValue('schedule', updatedSchedule, { shouldValidate: true });
     setFormData({
       ...formData,
-      schedule: updatedSchedule
-    })
-  }
+      schedule: updatedSchedule,
+    });
+  };
 
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = event.target
-    setValue(name, value)
+    const { name, value } = event.target;
+    setValue(name as keyof FormData, value, { shouldValidate: true });
     setFormData({
       ...formData,
-      [name]: value
-    })
-  }
+      [name]: value,
+    });
+  };
 
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
@@ -96,7 +95,6 @@ export default function ServiceForm({ onClose }: Props) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <h1 className='text-3xl font-bold mb-4'>Tạo dịch vụ</h1>
 
-          {/* Price Per Hour */}
           <div className='mb-4'>
             <label
               htmlFor='pricePerHour'
@@ -115,7 +113,6 @@ export default function ServiceForm({ onClose }: Props) {
             <p className='text-red-500'>{errors.pricePerHour?.message}</p>
           </div>
 
-          {/* Title */}
           <div className='mb-4'>
             <label
               htmlFor='title'
@@ -134,7 +131,6 @@ export default function ServiceForm({ onClose }: Props) {
             <p className='text-red-500'>{errors.title?.message}</p>
           </div>
 
-          {/* Subject */}
           <div className='mb-4'>
             <label
               htmlFor='subject'
@@ -164,7 +160,6 @@ export default function ServiceForm({ onClose }: Props) {
             <p className='text-red-500'>{errors.subject?.message}</p>
           </div>
 
-          {/* Class */}
           <div className='mb-4'>
             <label
               htmlFor='class'
@@ -186,7 +181,6 @@ export default function ServiceForm({ onClose }: Props) {
             <p className='text-red-500'>{errors.class?.message}</p>
           </div>
 
-          {/* Description */}
           <div className='mb-4'>
             <label
               htmlFor='description'
@@ -205,7 +199,6 @@ export default function ServiceForm({ onClose }: Props) {
             <p className='text-red-500'>{errors.description?.message}</p>
           </div>
 
-          {/* Learning Method */}
           <div className='mb-4'>
             <label
               htmlFor='learningMethod'
@@ -231,7 +224,6 @@ export default function ServiceForm({ onClose }: Props) {
             <p className='text-red-500'>{errors.learningMethod?.message}</p>
           </div>
 
-          {/* Schedule */}
           <Schedule value={formData.schedule} onChange={handleScheduleChange} />
           <p className='text-red-500'>{errors.schedule?.message}</p>
 
@@ -257,5 +249,5 @@ export default function ServiceForm({ onClose }: Props) {
         </form>
       </div>
     </div>
-  )
+  );
 }
