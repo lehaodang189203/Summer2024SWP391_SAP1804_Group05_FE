@@ -164,8 +164,10 @@ export const studentApi = {
     }
   },
 
-  GetAllService() {
-    return http.get<SuccessResponseReq<ServiceTutor[]>>('Student/GetAllService')
+  async GetAllService() {
+    return await http.get<SuccessResponseReq<ServiceTutor[]>>(
+      'Student/GetAllService'
+    )
   },
 
   CreateReview: async (body: ReviewType) => {

@@ -1,5 +1,10 @@
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
-import { Request } from '../types/request.type'
+import {
+  Request,
+  ServiceTutor,
+  ServiceTutorGet,
+  ViewReviewRequestBody
+} from '../types/request.type'
 
 import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 
@@ -71,6 +76,23 @@ export const tutorApi = {
       throw new Error('Failed to fetch data')
     }
   },
+
+  getReview: async (idTutor: string) => {
+    try {
+      const response = await http.get<
+        SuccessResponseReq<ViewReviewRequestBody[]>
+      >(`tutor/GetReview?id=${idTutor}`)
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      // Handle network or API errors
+      throw new Error('Failed to fetch data')
+    }
+  },
+
   async updateProfileTT(id: string, body: UpdateTutorProfile) {
     // console.log('body của res khi call api',body)
     // console.log('người dùng user là',user)
@@ -106,6 +128,30 @@ export const tutorApi = {
         body
       )
 
+      return response.data // Return response data if needed
+    } catch (error) {
+      console.error('lỗi:', error)
+      throw error // Re-throw error for handling in caller function
+    }
+  },
+  getAllTutorService: async (idTutor: string): Promise<ServiceTutorGet[]> => {
+    try {
+      const response = await http.get<SuccessResponseReq<ServiceTutorGet[]>>(
+        `/tutor/getServices?id=${idTutor}`
+      )
+      return response.data.data // Return response data if needed
+    } catch (error) {
+      console.error('lỗi:', error)
+      throw error // Re-throw error for handling in caller function
+    }
+  },
+  deleteTutorService: async (
+    idService: string
+  ): Promise<SuccessResponseReq<ServiceTutor[]>> => {
+    try {
+      const response = await http.delete<SuccessResponseReq<any>>(
+        `/tutor/deleteService?serviceId=${idService}`
+      )
       return response.data // Return response data if needed
     } catch (error) {
       console.error('lỗi:', error)

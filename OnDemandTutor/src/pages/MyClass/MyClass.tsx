@@ -34,7 +34,6 @@ export default function MyClass() {
   const [selectedClass, setSelectedClass] = useState<string | null>(null)
   const [hovered, setHovered] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
   const [showReview, setShowReview] = useState<string | null>(null)
   const [reviewSubmitted, setReviewSubmitted] = useState<string | null>(null)
 
@@ -51,12 +50,6 @@ export default function MyClass() {
     })
   }
 
-  const viewReview = useQuery({
-    queryKey: ['Review', showReview],
-    queryFn: () => studentApi.getReview(showReview as string),
-    enabled: !!showReview
-  })
-
   const handleOpenModal = (idRequest: string) => {
     setSelectedClass(idRequest)
     setIsModalOpen(true)
@@ -66,19 +59,9 @@ export default function MyClass() {
     setIsModalOpen(false)
   }
 
-  const handleOpenReviewModal = (idRequest: string) => {
-    setShowReview(idRequest)
-    setIsReviewModalOpen(true)
-  }
-
-  const handleCloseReviewModal = () => {
-    setIsReviewModalOpen(false)
-  }
-
   const handleReviewSubmit = (idRequest: string) => {
     setReviewSubmitted(idRequest)
     setShowReview(null)
-    setIsReviewModalOpen(false)
   }
 
   const requestList = data?.data?.data || []
@@ -195,18 +178,13 @@ export default function MyClass() {
                     </button>
                   </div>
                 )}
-              {reviewSubmitted !== req.idClassRequest &&
-                req.status.toLowerCase() === statusClass.complete && (
-                  <div className='w-[49%] flex items-center justify-center'>
-                    <button
-                      onClick={() => handleOpenReviewModal(req.idClassRequest)}
-                      className='w-full bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-200'
-                    >
-                      Đánh giá lớp
-                    </button>
-                  </div>
-                )}
             </div>
+            {showReview === req.idClassRequest && (
+              <Review
+                idClassRequest={req.idClassRequest}
+                onSubmit={() => handleReviewSubmit(req.idClassRequest)}
+              />
+            )}
             {selectedClass === req.idClassRequest && isModalOpen && (
               <Modal
                 title='Chi tiết lớp học'
@@ -223,20 +201,6 @@ export default function MyClass() {
             )}
           </div>
         ))}
-      {showReview && isReviewModalOpen && (
-        <Modal
-          title='Đánh giá lớp học'
-          visible={isReviewModalOpen}
-          onCancel={handleCloseReviewModal}
-          footer={null}
-          centered
-        >
-          <Review
-            idClassRequest={showReview}
-            onSubmit={() => handleReviewSubmit(showReview)}
-          />
-        </Modal>
-      )}
     </div>
   )
 }

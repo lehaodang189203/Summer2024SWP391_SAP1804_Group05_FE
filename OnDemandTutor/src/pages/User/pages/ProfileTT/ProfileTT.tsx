@@ -156,14 +156,19 @@ export default function ProfileTT() {
         </div>
 
         <div className='hidden md:flex md:w-72 md:border-l md:border-l-gray-200 md:flex-col md:items-center md:justify-center'>
-          <div className='my-5 h-64 w-64'>
+          <div className='my-5 h-64 w-64 overflow-y-auto'>
             <span>Ảnh bằng</span>
-            {profileTutor?.qualifications?.img ? (
-              <img
-                src={profileTutor.qualifications.img}
-                className='h-full w-full'
-                alt='Ảnh bằng'
-              />
+            {profileTutor?.qualifications?.length ? (
+              profileTutor.qualifications.map((qualification) => (
+                <div key={qualification.id} className='my-2'>
+                  <label htmlFor=''>{qualification.name}</label>
+                  <img
+                    src={qualification.img}
+                    className='h-full w-full'
+                    alt={`Ảnh bằng ${qualification.name}`}
+                  />
+                </div>
+              ))
             ) : (
               <span>No Image Available</span>
             )}

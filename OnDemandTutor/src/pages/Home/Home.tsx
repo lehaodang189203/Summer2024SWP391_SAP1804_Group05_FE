@@ -1,19 +1,6 @@
-import { useContext } from 'react'
 import home from '../../assets/img/home.jpg'
-import { AppContext } from '../../context/app.context'
-import { useQuery } from '@tanstack/react-query'
 
 export default function Home() {
-  const { profile } = useContext(AppContext)
-
-  const { data } = useQuery<any, Error>({
-    queryKey: ['Account', profile?.id as string], // Provide a query key here
-    queryFn: () =>
-      `http://localhost:7133/api/Student/classActive?id=f8860fc8-de5a-4bd3-8c00-e9324837d2f5`
-  })
-
-  console.log(data)
-
   return (
     <div className='h-[100rem] bg-white rounded-3xl shadow-2xl border-red-500   '>
       <div className='relative w-full h-[50%]  '>

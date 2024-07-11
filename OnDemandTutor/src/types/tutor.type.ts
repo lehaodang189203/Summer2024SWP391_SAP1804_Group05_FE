@@ -11,6 +11,7 @@ export interface TutorType {
   type: string
   imageQualification: string
   introduction: string
+  rating: number
 }
 
 export interface UpdateTutorProfile {
@@ -35,7 +36,7 @@ export interface TutorProfile {
     name: string
     img: string
     type: string
-  }
+  }[]
 }
 
 export interface AdminTutorType {

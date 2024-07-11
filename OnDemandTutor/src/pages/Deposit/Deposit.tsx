@@ -22,10 +22,6 @@ export default function Deposit() {
     setProfile
   } = useContext(AppContext)
 
-  const updateProfileMutation = useMutation({
-    mutationFn: userApi.updateProfile
-  })
-
   const depositMutation = useMutation({
     mutationFn: (body: reqDeposit) => paymentApi.deposit(body)
   })

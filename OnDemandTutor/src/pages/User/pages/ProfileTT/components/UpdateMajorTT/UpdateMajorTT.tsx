@@ -150,7 +150,7 @@ export default function UpdateMajorTT() {
           onChange={handleChange}
           type='text'
           className=' mt-3 min-w-[18rem] h-14 hover:transition duration-700 hover:border-blue-400 p-3 w-full outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
-          placeholder='Tên ảnh'
+          placeholder='Tên bằng cắp/ chứng chỉ'
         />
 
         <label className='block my-3'>

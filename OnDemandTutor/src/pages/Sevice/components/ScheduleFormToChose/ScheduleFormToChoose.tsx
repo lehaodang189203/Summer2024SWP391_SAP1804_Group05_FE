@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AppContext } from '../../../../context/app.context';
 
 interface FormData {
   date: string;
@@ -24,6 +25,7 @@ export default function ScheduleFormToChoose({
 }: Props) {
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
+  const {profile} = useContext(AppContext)
 
   const toggleTimeSlot = (timeSlot: string) => {
     if (selectedTimeSlot === timeSlot) {
@@ -125,7 +127,9 @@ export default function ScheduleFormToChoose({
       </div>
 
       <hr />
-      <div className='text-left mt-2 ml-2'>Chọn giờ bắt đầu:</div>
+      {profile?.roles === 'Học sinh' ?
+      <div className='text-left mt-2 ml-2'>Chọn giờ bắt đầu:</div> :
+      <div className='text-left mt-2 ml-2'>Giờ bắt đầu:</div>}
       <div className='space-x-1'>
         {availableHours.length > 0 ? (
           availableHours.map((hour) => (

@@ -1,36 +1,40 @@
-
-import {  useState } from "react"
-import { TutorRep, User, UserRep } from "../../../types/user.type"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { studentApi } from "../../../api/student.api"
-import userApi from "../../../api/user.api"
-import { toast } from "react-toastify"
-import { getProfileFromLS } from "../../../utils/auth"
-import DetailInfor from "../../MyClass/Detail" // sửa lại để xài chung 
-import { BookedServices } from "../../../types/request.type"
-import ReviewService from "../ReviewService"
-
+import { useContext, useState } from 'react'
+import { TutorRep, User, UserRep } from '../../../types/user.type'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { studentApi } from '../../../api/student.api'
+import userApi from '../../../api/user.api'
+import { toast } from 'react-toastify'
+import DetailInfor from '../../MyClass/Detail' // sửa lại để xài chung
+import { BookedServices } from '../../../types/request.type'
+import ReviewService from '../ReviewService'
+import { AppContext } from '../../../context/app.context'
+import { Modal } from 'antd'
+import { roles } from '../../../constant/roles'
+import { statusClass } from '../../../constant/status.class'
 
 export default function BookedService() {
-  const  profile = getProfileFromLS()// bí quá rồi mới xài nha 
+  const { profile } = useContext(AppContext) // bí quá rồi mới xài nha
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['Account'],
-    queryFn: () => userApi.ViewClassService(profile.id as string)
+    queryFn: () => userApi.ViewClassService(profile?.id as string)
   })
 
   const serviceMutation = useMutation({
-    mutationFn: (idBook: string) => studentApi.serviceCompled(idBook)
+    mutationFn: (idBook: string) => studentApi.serviceCompled(idBook) // chưa sửa n
   })
 
   const [selectedService, setSelectedService] = useState<string | null>(null)
   const [hovered, setHovered] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showReviewModal, setShowReviewModal] = useState(false)
 
   const handleCompleteClass = (id: string) => {
     serviceMutation.mutate(id, {
       onSuccess: () => {
         toast.success('Kết thúc lớp thành công'), setSelectedService(id)
+        setShowReviewModal(true)
+        refetch()
       },
       onError: (data) => {
         toast.error(data.message)
@@ -38,26 +42,37 @@ export default function BookedService() {
     })
   }
 
-  const handleOpenModal = (idBoking: string) => {
-    setSelectedService(idBoking)
+  const handleOpenModal = (idBooking: string) => {
+    setSelectedService(idBooking)
     setIsModalOpen(true)
   }
 
   const handleCloseModal = () => {
     setIsModalOpen(false)
+    setShowReviewModal(false) // Close review modal
   }
-
   const serviceList = data || []
 
   return (
     <div className=''>
-      <div className="text-left">Dịch vụ đã đăng kí</div>
+      {profile?.roles.includes('gia sư') ? (
+        <>
+          <div className='text-left text-wrap border-b-2 border bg-slate-50 '>
+            Danh sách dịch vụ của bạn đã được đăng kí bởi học sinh
+          </div>
+        </>
+      ) : (
+        <div className='text-left text-wrap border-b-2 border bg-slate-50 '>
+          Dịch vụ bạn đã đăng kí
+        </div>
+      )}
+
       {data &&
         (Array.isArray(serviceList) ? serviceList : []).map(
-          (service: BookedServices) => ( //
+          (service: BookedServices) => (
             <div
               key={service.idBooking}
-              className='rounded-3xl my-5'
+              className='rounded-3xl my-5 grid-cols-2'
               onMouseEnter={() => setHovered(service.idBooking)}
               onMouseLeave={() => setHovered(null)}
             >
@@ -83,8 +98,8 @@ export default function BookedService() {
                     Giá toàn dịch vụ:{' '}
                     <span className='text-red-400 font-bold text-md'>
                       {service.price}
-                    </span>
-                    {' '}VNĐ
+                    </span>{' '}
+                    VNĐ
                   </div>
                   <div className='my-1'>
                     Ngày học:{' '}
@@ -98,6 +113,7 @@ export default function BookedService() {
                       {service.timeSlot}
                     </span>
                   </div>
+
                   <div className='my-1'>
                     Hình thức:{' '}
                     <span className='text-black font-bold text-md'>
@@ -125,32 +141,50 @@ export default function BookedService() {
                     : 'max-h-0 overflow-hidden'
                 }`}
               >
-                <div className='w-[49%] flex items-center justify-center'>
+                <div className='w-full flex items-center justify-center'>
                   <button
                     onClick={() => handleOpenModal(service.idBooking)}
-                    className='w-full bg-pink-400 text-white font-bold py-2 px-4 rounded-md hover:bg-pink-200'
+                    className={`w-full bg-pink-400 text-white font-bold py-2 px-4 rounded-md hover:bg-pink-200 ${
+                      service.status === statusClass.complete ? '' : 'w-full'
+                    }`}
                   >
                     Chi tiết
                   </button>
                 </div>
-                <div className='w-[49%] flex items-center justify-center'>
-                  <button
-                    onClick={() => handleCompleteClass(service.idBooking)}
-                    className='w-full bg-black text-white font-bold py-2 px-4 rounded-md hover:bg-gray-400'
-                  >
-                    Kết thúc lớp
-                  </button>
-                </div>
+                {profile?.roles.toLowerCase() !== roles.tutor && (
+                  <>
+                    {service.status !== statusClass.complete && (
+                      <div className='w-[49%] flex items-center justify-center'>
+                        <button
+                          onClick={() => handleCompleteClass(service.idBooking)}
+                          className='w-full bg-black text-white font-bold py-2 px-4 rounded-md hover:bg-gray-400'
+                        >
+                          Kết thúc lớp
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+                <hr />
               </div>
-              {selectedService === service.idBooking && (
+              {isModalOpen && selectedService === service.idBooking && (
+                <Modal
+                  title='Chi tiết lớp học'
+                  visible={isModalOpen}
+                  onCancel={handleCloseModal}
+                  className='min-w-[90rem]'
+                  footer={null}
+                >
+                  <DetailInfor
+                    User={service.user as UserRep}
+                    Tutor={service.tutor as TutorRep}
+                  />
+                </Modal>
+              )}
+              {showReviewModal && selectedService === service.idBooking && (
                 <ReviewService idBooking={service.idBooking} />
               )}
-              {isModalOpen && (
-                <DetailInfor
-                  User={service.user as UserRep}
-                  Tutor={service.tutor as TutorRep}
-                />
-              )}
+              <hr />
             </div>
           )
         )}

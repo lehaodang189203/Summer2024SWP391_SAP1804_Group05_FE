@@ -20,6 +20,7 @@ export interface TutorRep {
   idAccountTutor: string
   name: string
   phone: string
+  roles: string
 }
 
 export interface UserRep {
@@ -31,4 +32,5 @@ export interface UserRep {
   idUser: string
   name: string
   phone: string
+  roles: string
 }

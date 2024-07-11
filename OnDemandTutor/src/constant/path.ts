@@ -25,6 +25,9 @@ export const path = {
   paymentFail: '/paymentFail',
   detailRequest: '/detailRequest', //chưa được sử dụng
   calender: '/calender', //calender nèk
+  myService:'/myService',
+  tutorviewAllOwnService:'/ttService',
+  myClassLayout: '/myClassLayout',
   //tutorViewRequestList: '/studentViewRequestList', //student
   myClass: '/myClass',
   DetailInfor: '/DetailInfor',

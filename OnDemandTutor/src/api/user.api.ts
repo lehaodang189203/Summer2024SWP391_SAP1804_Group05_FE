@@ -25,7 +25,7 @@ const user = getProfileFromLS()
 
 const userApi = {
   getProfile(id: string) {
-    return http.get<SuccessResponseReq<User>>(`user/getProfile?id=${id}`)
+    return http.get<SuccessResponseReq<User>>(`User/getProfile?id=${id}`)
   },
   async updateProfile(body: UpdateProfileBody) {
     // console.log('body của res khi call api',body)

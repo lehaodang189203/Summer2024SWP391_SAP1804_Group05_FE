@@ -14,14 +14,6 @@ function testTime(this: yup.TestContext<yup.AnyObject>) {
   return timeStart === '' || timeEnd === ''
 }
 
-const isFutureDate = (dateString: string): boolean => {
-  const today = new Date()
-  const date = new Date(dateString)
-  // Loại bỏ phần thời gian để so sánh
-  today.setHours(0, 0, 0, 0)
-  date.setHours(0, 0, 0, 0)
-  return date >= today
-}
 const handleConfirmPasswordYup = (refString: string) => {
   return yup
     .string()
@@ -271,15 +263,15 @@ export const reviewTT = yup.object().shape({
   feedback: yup.string().required('Phản hồi là bắt buộc'),
   rating: yup.number().required('Đánh giá là bắt buộc')
 })
-  
+
 export const serviceSchema = yup.object().shape({
   pricePerHour: yup
     .number()
     .transform((value, originalValue) => {
       // Trả về số nguyên luôn
-      const formattedValue = parseFloat(originalValue.replace(/,/g, ''));
+      const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
       // Nếu là chuỗi thì là 0
-      return isNaN(formattedValue) ? 0 : formattedValue;
+      return isNaN(formattedValue) ? 0 : formattedValue
     })
     .required('Giá là bắt buộc')
     .positive('Giá không thể là số âm'),
@@ -315,16 +307,8 @@ export const serviceSchema = yup.object().shape({
     .array()
     .of(
       yup.object().shape({
-        date: yup
-          .string()
-          .required('Phải chọn ngày')
-          .test(
-            'is-future-date',
-            'Ngày không được là ngày trong quá khứ',
-            function (value) {
-              return isFutureDate(value as string);
-            }
-          ),
+        date: yup.string().required('Phải chọn ngày'),
+
         timeSlots: yup
           .array()
           .of(yup.string().required('Phải chọn ít nhất một khung giờ'))
@@ -332,7 +316,7 @@ export const serviceSchema = yup.object().shape({
       })
     )
     .required('Phải thêm lịch học')
-});
+})
 
 // này là mình export cái schema (đinhj dạng lỗi) của mình ra để qua bên Input bắt lỗi
 export type SchemaResAT = yup.InferType<typeof schemaResAT>

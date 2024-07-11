@@ -1,45 +1,45 @@
-import { useContext, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import Schedule from '../components/Schedule/Schedule';
-import { serviceSchema } from '../../../utils/rules';
-import { useMutation } from '@tanstack/react-query';
-import { AppContext } from '../../../context/app.context';
-import { tutorApi } from '../../../api/tutor.api';
-import { toast } from 'react-toastify';
+import { useContext, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import Schedule from '../components/Schedule/Schedule'
+import { serviceSchema } from '../../../utils/rules'
+import { useMutation } from '@tanstack/react-query'
+import { AppContext } from '../../../context/app.context'
+import { tutorApi } from '../../../api/tutor.api'
+import { toast } from 'react-toastify'
 
 interface Props {
-  onClose: () => void;
+  onClose: () => void
 }
 
 interface FormData {
-  pricePerHour: number;
-  title: string;
-  subject: string;
-  class: '10' | '11' | '12';
-  description: string;
-  learningMethod: 'Dạy trực tiếp(offline)' | 'Dạy trực tuyến (online)' | '';
-  schedule: ScheduleType[];
+  pricePerHour: number
+  title: string
+  subject: string
+  class: '10' | '11' | '12'
+  description: string
+  learningMethod: 'Dạy trực tiếp(offline)' | 'Dạy trực tuyến (online)' | ''
+  schedule: ScheduleType[]
 }
 
 interface ScheduleType {
-  date: string;
-  timeSlots: string[];
+  date: string
+  timeSlots: string[]
 }
 
-const schema = serviceSchema;
+const schema = serviceSchema
 
 export default function ServiceForm({ onClose }: Props) {
-  const { profile } = useContext(AppContext);
+  const { profile } = useContext(AppContext)
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-    reset,
+    reset
   } = useForm<FormData>({
-    resolver: yupResolver(schema),
-  });
+    resolver: yupResolver(schema)
+  })
 
   const [formData, setFormData] = useState<FormData>({
     pricePerHour: 0,
@@ -48,46 +48,48 @@ export default function ServiceForm({ onClose }: Props) {
     class: '10',
     description: '',
     learningMethod: '',
-    schedule: [],
-  });
+    schedule: []
+  })
 
   const createServiceMutation = useMutation({
     mutationFn: (body: FormData) =>
-      tutorApi.createService(profile?.id as string, body),
-  });
+      tutorApi.createService(profile?.id as string, body)
+  })
 
   const onSubmit = (data: FormData) => {
     console.log('data', data)
     createServiceMutation.mutate(data, {
       onSuccess: (res: any) => {
-        toast.success(res.message);
-        reset();
-        onClose();
+        toast.success(res.message)
+        reset()
+        onClose()
       },
       onError: (errors) => {
-        console.log(errors);
-      },
-    });
-  };
+        console.log(errors)
+      }
+    })
+  }
 
   const handleScheduleChange = (updatedSchedule: ScheduleType[]) => {
-    setValue('schedule', updatedSchedule, { shouldValidate: true });
+    setValue('schedule', updatedSchedule, { shouldValidate: true })
     setFormData({
       ...formData,
-      schedule: updatedSchedule,
-    });
-  };
+      schedule: updatedSchedule
+    })
+  }
 
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
-    const { name, value } = event.target;
-    setValue(name as keyof FormData, value, { shouldValidate: true });
+    const { name, value } = event.target
+    setValue(name as keyof FormData, value, { shouldValidate: true })
     setFormData({
       ...formData,
-      [name]: value,
-    });
-  };
+      [name]: value
+    })
+  }
 
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
@@ -249,5 +251,5 @@ export default function ServiceForm({ onClose }: Props) {
         </form>
       </div>
     </div>
-  );
+  )
 }

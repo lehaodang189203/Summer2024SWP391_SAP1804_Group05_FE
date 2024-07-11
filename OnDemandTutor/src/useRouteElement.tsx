@@ -33,20 +33,20 @@ import Profile from './pages/User/pages/Profile'
 import AdminStudentReq from './pages/Admin/Components/AdminStudentReq'
 import AdminStudentReqApproved from './pages/Admin/Components/AdminStudentReqApproved'
 import AdminStudentReqRejected from './pages/Admin/Components/AdminStudentReqRejected'
+import AdminViewComplaint from './pages/Admin/Components/AdminViewComplaint'
 import Dashboard from './pages/Admin/Components/Dashboard'
 import TransactionList from './pages/Admin/Components/TransactionList'
+import ModViewComplaint from './pages/Moderator/Components/ModViewComplaint'
 import MyClass from './pages/MyClass'
+import MyClasLayout from './pages/MyClass/MyClassLayout'
 import PaymentFail from './pages/PaymentCallBack/PaymentFail'
 import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
+import BookedService from './pages/Sevice/BookedService'
 import ServiceList from './pages/Sevice/BookService'
-import CreateService from './pages/Sevice/CreateSevice'
+import MyService from './pages/Sevice/MyService'
+import TutorViewOwnService from './pages/Sevice/TutorViewOwnService'
 import Support from './pages/Support'
 import ProfileTT from './pages/User/pages/ProfileTT'
-import DetailInfor from './pages/MyClass/Detail'
-import TutorServiceBookedLayout from './pages/TutorViewServiceList/Layout/TutorServiceBookedLayout'
-import BookedService from './pages/Sevice/BookedService'
-import ModViewComplaint from './pages/Moderator/Components/ModViewComplaint'
-import AdminViewComplaint from './pages/Admin/Components/AdminViewComplaint'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -85,9 +85,9 @@ export default function useRouteElements() {
         {
           path: path.home, //auth user
           element: (
-            <MainLayout>
+            <RegisterLayout>
               <Home />
-            </MainLayout>
+            </RegisterLayout>
           )
         }
       ]
@@ -144,6 +144,22 @@ export default function useRouteElements() {
           )
         },
         {
+          path: path.myService, //student
+          element: (
+            <MainLayout>
+              <MyService />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.tutorviewAllOwnService, //student
+          element: (
+            <MainLayout>
+              <TutorViewOwnService />
+            </MainLayout>
+          )
+        },
+        {
           path: path.support, //student
           element: (
             <MainLayout>
@@ -190,6 +206,14 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <ReStuCurrentPage />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.myService, //student
+          element: (
+            <MainLayout>
+              <MyService />
             </MainLayout>
           )
         },
@@ -246,6 +270,15 @@ export default function useRouteElements() {
           element: (
             <MainLayout>
               <MyClass />
+            </MainLayout>
+          )
+        },
+
+        {
+          path: path.myClassLayout, //student
+          element: (
+            <MainLayout>
+              <MyClasLayout />
             </MainLayout>
           )
         },

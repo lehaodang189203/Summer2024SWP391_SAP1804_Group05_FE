@@ -59,7 +59,10 @@ export default function RequestList() {
   }
 
   const handleDeleteRequest = (idReq: string) => {
-    deleteMutation.mutate(idReq)
+    const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa không?')
+    if (isConfirmed) {
+      deleteMutation.mutate(idReq)
+    }
   }
 
   const deleteMutation = useMutation({
