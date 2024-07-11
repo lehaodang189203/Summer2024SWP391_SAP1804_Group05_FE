@@ -6,7 +6,6 @@ import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 import {
   AddQualification,
   CreatServiceType,
-  DataService,
   TutorProfile,
   UpdateTutorProfile
 } from '../types/tutor.type'

@@ -7,15 +7,32 @@ import { AppContext } from '../../../../context/app.context'
 import UpdateMajorTT from './components/UpdateMajorTT'
 import UpdateProfile from './components/UpdateProfileTT'
 
+interface TutorProfileType {
+  speacializedSkill: string
+  experience: number
+  introduction: string
+  subjects: string
+  qualifications: {
+    id: string
+    name: string
+    img: string
+    type: string
+  }
+}
+
 export default function ProfileTT() {
   const [showUpdateOptions, setShowUpdateOptions] = useState(false)
   const { profile } = useContext(AppContext)
   const [selectedUpdate, setSelectedUpdate] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
-  const { data: profileTutor, refetch } = useQuery({
+  const {
+    data: profileTutor,
+    refetch,
+    error: queryError
+  } = useQuery({
     queryKey: ['Account', profile?.id as string],
-    queryFn: async () => await tutorApi.getProfileTT(profile?.id as string),
-
+    queryFn: () => tutorApi.getProfileTT(profile?.id as string),
     enabled: !!profile?.id,
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false
@@ -23,18 +40,26 @@ export default function ProfileTT() {
 
   useEffect(() => {
     refetch()
-  }, [profile])
-
-  useEffect(() => {}, [profileTutor])
+  }, [profile, refetch])
 
   const handleUpdate = (option: string) => {
-    if (showUpdateOptions && selectedUpdate === option) {
-      setShowUpdateOptions(false)
+    if (selectedUpdate === option) {
       setSelectedUpdate(null)
     } else {
-      setShowUpdateOptions(true)
       setSelectedUpdate(option)
     }
+  }
+
+  if (error) {
+    return (
+      <div className='pb-10 rounded-sm bg-transparent px-2 md:px-7 md:pb-20 shadow-black'>
+        <div className='border-b border-gray-300 py-6'>
+          <h1 className='text-lg font-medium capitalize text-gray-900'>
+            Đã xảy ra lỗi, trang sẽ được làm mới...
+          </h1>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -55,6 +80,12 @@ export default function ProfileTT() {
               <div className='w-1/5 text-right capitalize'>Email</div>
               <div className='w-4/5 pl-5 text-gray-700'>{profile?.email}</div>
             </div>
+            <div className='flex mb-4'>
+              <div className='w-1/5 text-right capitalize'>Giới thiệu</div>
+              <div className='w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+                {profileTutor?.introduction}
+              </div>
+            </div>
 
             <div className='flex mb-4'>
               <div className='w-1/5 text-right capitalize'>Môn dạy</div>
@@ -71,16 +102,18 @@ export default function ProfileTT() {
             </div>
 
             <div className='flex mb-4'>
-              <div className='w-1/5 text-right capitalize'>Giới thiệu</div>
+              <div className='w-1/5 text-right capitalize'>
+                Kỹ năng chuyên môn
+              </div>
               <div className='w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
-                {profileTutor?.introduction}
+                {profileTutor?.speacializedSkill}
               </div>
             </div>
 
             <div className='w-1/2 mx-auto my-2'>
               <button
                 type='button'
-                className='w-full p-3 bg-pink-500 text-white rounded-lg hover:bg-pink-300 focus:outline-none relative'
+                className='w-full p-3 bg-gray-500  text-white rounded-lg hover:bg-black focus:outline-none relative hover:shadow-2xl hover:border-black'
                 onClick={() => setShowUpdateOptions(!showUpdateOptions)}
               >
                 Cập nhật
@@ -95,13 +128,13 @@ export default function ProfileTT() {
             {showUpdateOptions && (
               <div className='mt-4 p-4'>
                 <button
-                  className='w-full p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-300 focus:outline-none mb-4'
+                  className='w-full p-3 bg-green-700 text-white rounded-lg hover:bg-green-500 focus:outline-none mb-4'
                   onClick={() => handleUpdate('profile')}
                 >
                   Cập nhật hồ sơ
                 </button>
                 <button
-                  className='w-full p-3 bg-green-500 text-white rounded-lg hover:bg-green-300 focus:outline-none'
+                  className='w-full p-3 bg-blue-700 text-white rounded-lg hover:bg-blue-900 focus:outline-none'
                   onClick={() => handleUpdate('major')}
                 >
                   Cập nhật chuyên ngành
@@ -109,24 +142,31 @@ export default function ProfileTT() {
               </div>
             )}
 
-            {(selectedUpdate === 'profile' || selectedUpdate === 'major') &&
-              showUpdateOptions && (
-                <div className='mt-4 p-4'>
-                  {selectedUpdate === 'profile' && <UpdateProfile />}
-                  {selectedUpdate === 'major' && <UpdateMajorTT />}
-                </div>
-              )}
+            {selectedUpdate === 'profile' && (
+              <div className='mt-4 p-4'>
+                <UpdateProfile refetch={refetch} />
+              </div>
+            )}
+            {selectedUpdate === 'major' && (
+              <div className='mt-4 p-4'>
+                <UpdateMajorTT />
+              </div>
+            )}
           </div>
         </div>
 
         <div className='hidden md:flex md:w-72 md:border-l md:border-l-gray-200 md:flex-col md:items-center md:justify-center'>
           <div className='my-5 h-64 w-64'>
             <span>Ảnh bằng</span>
-            <img
-              src={profileTutor?.qualifications.img}
-              className='h-full w-full'
-              alt='Qualification Image'
-            />
+            {profileTutor?.qualifications?.img ? (
+              <img
+                src={profileTutor.qualifications.img}
+                className='h-full w-full'
+                alt='Ảnh bằng'
+              />
+            ) : (
+              <span>No Image Available</span>
+            )}
           </div>
         </div>
       </div>

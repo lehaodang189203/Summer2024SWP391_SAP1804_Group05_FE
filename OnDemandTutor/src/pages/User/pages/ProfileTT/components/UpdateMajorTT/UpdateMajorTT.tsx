@@ -55,12 +55,20 @@ export default function UpdateMajorTT() {
         const url = await uploadAvatar(file)
         setFile(file)
         setPreviewImage(url)
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          img: url
+        }))
       } catch (error) {
         console.error('Error uploading file:', error)
       }
     } else {
       setFile(null)
       setPreviewImage(undefined)
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        img: ''
+      }))
     }
   }
 
@@ -68,14 +76,6 @@ export default function UpdateMajorTT() {
     e.preventDefault()
 
     try {
-      // Upload avatar if file is selected
-      if (file) {
-        setFormData({
-          ...formData,
-          img: await uploadAvatar(file)
-        })
-      }
-
       // Example usage: add subject
       if (formData.subjects && profile?.id) {
         await tutorApi
@@ -84,11 +84,11 @@ export default function UpdateMajorTT() {
             toast.success(response.message)
           })
           .catch((error) => {
-            console.error('lỗi', error)
+            console.error('Error:', error)
+            toast.error('Failed to add subject')
           })
       }
 
-      // Example usage: add qualification
       const { name, type, img } = formData
       if (name && type && profile?.id) {
         await tutorApi
@@ -102,14 +102,17 @@ export default function UpdateMajorTT() {
           })
           .catch((error) => {
             console.error('Failed to add qualification:', error)
+            toast.error('Failed to add qualification')
           })
       }
 
       console.log('Submitted data:', formData)
     } catch (error) {
       console.error('Submit error:', error)
+      toast.error('Failed to submit form')
     }
   }
+
   return (
     <div className='container border-2 h-full rounded-2xl min:w-[18rem] p-3 hover:shadow-xl hover:shadow-black transition-shadow duration-700'>
       <form onSubmit={onSubmit}>

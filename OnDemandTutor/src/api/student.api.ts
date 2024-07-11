@@ -131,6 +131,11 @@ export const studentApi = {
       `Student/CompleteClassRequest?idClassRequest=${idClassRequest}`
     )
   },
+
+  getReview(id: string) {
+    return http.get<SuccessResponseReq<any>>(`tutor/GetReview?id=1${id}`)
+  },
+
   serviceCompled(idBooking: string) {
     return http.put<SuccessResponseReq<any>>(
       `Student/CompleteClassService?idBooking=${idBooking}`
