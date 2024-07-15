@@ -34,3 +34,10 @@ export interface UserRep {
   phone: string
   roles: string
 }
+
+export interface Notificate {
+  idNotification: string
+  description: string
+  createDate: string
+  status: string
+}

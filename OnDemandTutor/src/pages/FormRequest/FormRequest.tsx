@@ -63,11 +63,11 @@ export default function FormRequest({
     resolver: yupResolver(schema)
   })
 
-
   const { profile } = useContext(AppContext)
 
   const ReqMutation = useMutation({
-    mutationFn: (body: RequestBody) => studentApi.createRequest(profile?.id as string,body)
+    mutationFn: (body: RequestBody) =>
+      studentApi.createRequest(profile?.id as string, body)
   })
 
   const UpdateReqMutation = useMutation({
@@ -123,6 +123,11 @@ export default function FormRequest({
           onSubmit={onSubmit}
           className='w-full h-auto space-y-4 border-2 rounded-xl p-4 bg-white shadow-black shadow-lg'
         >
+          <div>
+            <h1 className='text-lg text-red-500'>
+              {idRequest ? 'Chỉnh sửa yêu cầu' : 'Đăng ký yêu cầu'}
+            </h1>
+          </div>
           <div className='grid grid-cols-2 gap-4'>
             <div className='flex flex-col'>
               <label className='block text-sm font-medium'>Tựa đề</label>

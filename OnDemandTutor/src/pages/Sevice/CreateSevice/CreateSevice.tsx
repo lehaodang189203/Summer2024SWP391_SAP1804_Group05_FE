@@ -1,15 +1,18 @@
-import { useContext, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import Schedule from '../components/Schedule/Schedule'
-import { serviceSchema } from '../../../utils/rules'
 import { useMutation } from '@tanstack/react-query'
-import { AppContext } from '../../../context/app.context'
-import { tutorApi } from '../../../api/tutor.api'
+import { useContext, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { tutorApi } from '../../../api/tutor.api'
+import InputNumber from '../../../components/InputNumber'
+import { AppContext } from '../../../context/app.context'
+import { serviceSchema } from '../../../utils/rules'
+import Schedule from '../components/Schedule/Schedule'
 
 interface Props {
   onClose: () => void
+  idService?: string
+  refetch?: () => void | undefined
 }
 
 interface FormData {
@@ -29,12 +32,13 @@ interface ScheduleType {
 
 const schema = serviceSchema
 
-export default function ServiceForm({ onClose }: Props) {
+export default function ServiceForm({ onClose, idService, refetch }: Props) {
   const { profile } = useContext(AppContext)
   const {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
     reset
   } = useForm<FormData>({
@@ -56,18 +60,38 @@ export default function ServiceForm({ onClose }: Props) {
       tutorApi.createService(profile?.id as string, body)
   })
 
-  const onSubmit = (data: FormData) => {
-    console.log('data', data)
-    createServiceMutation.mutate(data, {
-      onSuccess: (res: any) => {
-        toast.success(res.message)
-        reset()
-        onClose()
-      },
-      onError: (errors) => {
-        console.log(errors)
-      }
-    })
+  const updateServiceMutation = useMutation({
+    mutationFn: (body: FormData) =>
+      tutorApi.updateService(idService as string, body)
+  })
+
+  const onSubmit = (body: FormData) => {
+    if (idService) {
+      console.log('data', body)
+      updateServiceMutation.mutate(body, {
+        onSuccess: (data) => {
+          toast.success(data.data.message)
+          reset()
+          refetch
+          onClose()
+        },
+        onError: (errors) => {
+          console.log(errors.message)
+        }
+      })
+    } else {
+      console.log('data', body)
+      createServiceMutation.mutate(body, {
+        onSuccess: (data) => {
+          toast.success(data.data.message)
+          reset()
+          onClose()
+        },
+        onError: (errors) => {
+          console.log(errors.message)
+        }
+      })
+    }
   }
 
   const handleScheduleChange = (updatedSchedule: ScheduleType[]) => {
@@ -95,25 +119,9 @@ export default function ServiceForm({ onClose }: Props) {
     <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
       <div className='p-6 h-[42rem] w-full max-w-4xl bg-slate-50 overflow-y-auto shadow-lg mx-auto rounded-lg transition-shadow hover:border-white'>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h1 className='text-3xl font-bold mb-4'>Tạo dịch vụ</h1>
-
-          <div className='mb-4'>
-            <label
-              htmlFor='pricePerHour'
-              className='block text-sm font-medium text-gray-700'
-            >
-              Giá mỗi giờ
-            </label>
-            <input
-              type='number'
-              id='pricePerHour'
-              {...register('pricePerHour')}
-              value={formData.pricePerHour}
-              onChange={handleInputChange}
-              className='border-2  w-full rounded-lg hover:border-pink-400 '
-            />
-            <p className='text-red-500'>{errors.pricePerHour?.message}</p>
-          </div>
+          <h1 className='text-3xl font-bold mb-4'>
+            {idService ? 'Chỉnh sửa dịch vụ' : 'Tạo dịch vụ mới'}
+          </h1>
 
           <div className='mb-4'>
             <label
@@ -122,15 +130,32 @@ export default function ServiceForm({ onClose }: Props) {
             >
               Tiêu đề
             </label>
-            <input
-              type='text'
+            <textarea
               id='title'
               {...register('title')}
               value={formData.title}
               onChange={handleInputChange}
-              className='border-2  w-full rounded-lg hover:border-pink-400 '
+              className='border-2 p-2  w-full rounded-lg hover:border-pink-400 '
             />
             <p className='text-red-500'>{errors.title?.message}</p>
+          </div>
+
+          <div className='flex flex-col'>
+            <label className='block text-lg font-medium'>Giá mỗi giờ</label>
+            <Controller
+              control={control}
+              name='pricePerHour'
+              render={({ field }) => (
+                <InputNumber
+                  inputType='price'
+                  placeholder='Nhập học phí'
+                  classNameInput='w-full h-[2.75rem] border-2  rounded-xl p-3 hover:border-pink-400  '
+                  classNameError='text-red-600 mt-1 text-[0.75rem] text-center'
+                  errorMessage={errors.pricePerHour?.message}
+                  {...field}
+                />
+              )}
+            />
           </div>
 
           <div className='mb-4'>
@@ -145,7 +170,7 @@ export default function ServiceForm({ onClose }: Props) {
               {...register('subject')}
               value={formData.subject}
               onChange={handleInputChange}
-              className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+              className=' hover:border-pink-400  mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
             >
               <option value=''>Chọn môn học</option>
               <option value='Ngữ văn'>Ngữ văn</option>
@@ -174,7 +199,7 @@ export default function ServiceForm({ onClose }: Props) {
               {...register('class')}
               value={formData.class}
               onChange={handleInputChange}
-              className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+              className=' hover:border-pink-400  mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
             >
               <option value='10'>Lớp 10</option>
               <option value='11'>Lớp 11</option>
@@ -196,7 +221,7 @@ export default function ServiceForm({ onClose }: Props) {
               value={formData.description}
               onChange={handleInputChange}
               rows={3}
-              className='border-2  w-full rounded-lg hover:border-pink-400 '
+              className='border-2 p-2 w-full rounded-lg hover:border-pink-400 '
             />
             <p className='text-red-500'>{errors.description?.message}</p>
           </div>
@@ -213,7 +238,7 @@ export default function ServiceForm({ onClose }: Props) {
               {...register('learningMethod')}
               value={formData.learningMethod}
               onChange={handleInputChange}
-              className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+              className=' hover:border-pink-400  mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
             >
               <option value=''>Chọn phương thức học</option>
               <option value='Dạy trực tiếp(offline)'>

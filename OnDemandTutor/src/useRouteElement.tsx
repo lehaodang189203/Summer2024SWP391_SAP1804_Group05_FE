@@ -26,7 +26,7 @@ import RegisterAsTuTor from './pages/RegisterAsTutor/RegisterAsTutor'
 import RequestList from './pages/RequestList'
 import ReStuCurrentPage from './pages/StudentViewRequestList/Layout/ReStuCurrentPage'
 import ReStuPending from './pages/StudentViewRequestList/Layout/ReStuPending'
-import TutorList from './pages/TutorList'
+
 import ChangPassword from './pages/User/pages/ChangePassword'
 import Profile from './pages/User/pages/Profile'
 // import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
@@ -42,11 +42,21 @@ import MyClasLayout from './pages/MyClass/MyClassLayout'
 import PaymentFail from './pages/PaymentCallBack/PaymentFail'
 import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSuccess'
 import BookedService from './pages/Sevice/BookedService'
-import ServiceList from './pages/Sevice/BookService'
+
+import SidebarMenu from './components/SidebarMenu'
+import MainLayoutApplicationTutor from './pages/ApplicationTutor/MainLayoutApplicationTutor'
 import MyService from './pages/Sevice/MyService'
+import ServiceList from './pages/Sevice/ServiceList'
 import TutorViewOwnService from './pages/Sevice/TutorViewOwnService'
+import ReStuReject from './pages/StudentViewRequestList/Layout/ReStuReject'
 import Support from './pages/Support'
+import TutorList from './pages/TutorList'
+import ServiceListOfTutor from './pages/TutorList/components/ServiceListOfTutor'
+import TutorListInClass from './pages/TutorListInClass'
 import ProfileTT from './pages/User/pages/ProfileTT'
+import ApplicationReject from './pages/ApplicationTutor/ApplicationReject'
+import ApplicationSpending from './pages/ApplicationTutor/ApplicationSpending'
+import ApplicationSuccess from './pages/ApplicationTutor/ApplicationSuccess'
 
 function ProtectedRoute() {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -60,6 +70,15 @@ function RejectedRoute() {
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
+    {
+      path: path.home,
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      ),
+      index: true
+    },
     {
       path: '',
       element: <RejectedRoute />,
@@ -80,31 +99,14 @@ export default function useRouteElements() {
               <Login />
             </RegisterLayout>
           )
-        },
-
-        {
-          path: path.home, //auth user
-          element: (
-            <RegisterLayout>
-              <Home />
-            </RegisterLayout>
-          )
         }
       ]
     },
+
     {
       path: '',
       element: <ProtectedRoute />,
       children: [
-        {
-          path: path.home,
-          element: (
-            <MainLayout>
-              <Home />
-            </MainLayout>
-          ),
-          index: true
-        },
         {
           path: path.registerAsTutor, //student
           element: (
@@ -135,14 +137,7 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-        {
-          path: path.tutors, //student
-          element: (
-            <MainLayout>
-              <TutorList />
-            </MainLayout>
-          )
-        },
+
         {
           path: path.myService, //student
           element: (
@@ -167,7 +162,14 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-
+        {
+          path: path.sideBarMenu, //student
+          element: (
+            <MainLayout>
+              <SidebarMenu />
+            </MainLayout>
+          )
+        },
         {
           path: path.service, //student
           element: (
@@ -192,12 +194,27 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
-
+        {
+          path: path.tutorList,
+          element: (
+            <MainLayout>
+              <TutorList />
+            </MainLayout>
+          )
+        },
         {
           path: '/tutors/:idReq', //student--------------------------------------------------------------------------
           element: (
             <MainLayout>
-              <TutorList />
+              <TutorListInClass />
+            </MainLayout>
+          )
+        },
+        {
+          path: '/services/:tutorId', //student--------------------------------------------------------------------------
+          element: (
+            <MainLayout>
+              <ServiceListOfTutor />
             </MainLayout>
           )
         },
@@ -242,7 +259,7 @@ export default function useRouteElements() {
           )
         },
         {
-          path: path.paymentFail, // student // này là hiển thị thông báo nạp tiền thành công nha fen
+          path: path.paymentFail, // student // này là hiển thị thông báo nạp tiền thất bại nha fen
           element: (
             <MainLayout>
               <PaymentFail />
@@ -257,6 +274,15 @@ export default function useRouteElements() {
             </MainLayout>
           )
         },
+        {
+          path: path.requestStudentReject, //student
+          element: (
+            <MainLayout>
+              <ReStuReject />
+            </MainLayout>
+          )
+        },
+
         {
           path: path.bookedService, //student
           element: (
@@ -345,6 +371,38 @@ export default function useRouteElements() {
               <Deposit />
             </MainLayout>
           )
+        },
+        // {
+        //   path: path.applicationTutor, //student
+        //   element: (
+        //     <MainLayout>
+        //       <MainLayoutApplicationTutor />
+        //     </MainLayout>
+        //   )
+        // },
+        {
+          path: path.tutorViewApplicationReject, //student
+          element: (
+            <MainLayout>
+              <ApplicationReject />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.tutorViewApplicationSpending, //student
+          element: (
+            <MainLayout>
+              <ApplicationSpending />
+            </MainLayout>
+          )
+        },
+        {
+          path: path.tutorViewApplication, //student
+          element: (
+            <MainLayout>
+              <ApplicationSuccess />
+            </MainLayout>
+          )
         }
       ]
     }
@@ -352,209 +410,3 @@ export default function useRouteElements() {
 
   return routeElements
 }
-
-// import { Navigate, Outlet, useRoutes } from 'react-router-dom'
-// import { useContext } from 'react'
-// import { AppContext } from './context/app.context'
-// import { path } from './constant/path'
-// import MainLayout from './layout/MainLayout'
-// import RegisterLayout from './layout/RegisterLayout/RegisterLayout'
-// import AdminLayout from './pages/Admin/AdminLayout'
-// import ModeratorLayout from './pages/Moderator/ModeratorLayout/ModeratorLayout'
-// import UserLayout from './pages/User/layout/UserLayout'
-// import Home from './pages/Home'
-// import Login from './pages/Login'
-// import Register from './pages/Register'
-// import RequestList from './pages/RequestList'
-// import TutorList from './pages/TutorList'
-// import Calendar from './pages/Calendar'
-// import CheckOut from './pages/CheckOut'
-// import ChangePassword from './pages/User/pages/ChangePassword'
-// import Profile, { default as ProfileTT } from './pages/User/pages/Profile'
-// import SessionList from './pages/Admin/Components/SessionList'
-// import StudentList from './pages/Admin/Components/StudentList'
-// import AdminListTutor from './pages/Admin/Components/AdminListTutor'
-// import AdminConfirmRegister from './pages/Admin/Components/AdminConfirmRegister/AdminConfirmRegister'
-// import AdminRejectRegister from './pages/Admin/Components/AdminRejectRegister'
-// import StudentRes from './pages/Moderator/Components/StudentRes'
-// import ModTutorResRegis from './pages/Moderator/Components/ModTutorResRegis/ModTutorResRegis'
-// import ReStuPending from './pages/StudentViewRequestList/Layout/ReStuPending'
-// import ReStuCurrentPage from './pages/StudentViewRequestList/Layout/ReStuCurrentPage'
-
-// function ProtectedRoute({ roles }) {
-//   const { isAuthenticated, profile } = useContext(AppContext)
-//   if (!isAuthenticated) {
-//     return <Navigate to={path.login} />
-//   }
-//   if (roles && !roles.includes(profile.role)) {
-//     return <Navigate to={path.home} />
-//   }
-//   return <Outlet />
-// }
-
-// function RejectedRoute() {
-//   const { isAuthenticated } = useContext(AppContext)
-//   return !isAuthenticated ? <Outlet /> : <Navigate to={path.home} />
-// }
-
-// export default function useRouteElements() {
-//   const routeElements = useRoutes([
-//     {
-//       path: '',
-//       element: <RejectedRoute />,
-//       children: [
-//         {
-//           path: path.register,
-//           element: (
-//             <RegisterLayout>
-//               <Register />
-//             </RegisterLayout>
-//           )
-//         },
-//         {
-//           path: path.login,
-//           element: (
-//             <RegisterLayout>
-//               <Login />
-//             </RegisterLayout>
-//           )
-//         },
-//         {
-//           path: path.home,
-//           element: (
-//             <MainLayout>
-//               <Home />
-//             </MainLayout>
-//           )
-//         }
-//       ]
-//     },
-//     {
-//       path: '',
-//       element: <ProtectedRoute />,
-//       children: [
-//         {
-//           path: path.home,
-//           element: (
-//             <MainLayout>
-//               <Home />
-//             </MainLayout>
-//           ),
-//           index: true
-//         },
-//         {
-//           path: path.hocSinh,
-//           element: (
-//             <ProtectedRoute roles={['Học sinh']}>
-//               <MainLayout>
-//                 <UserLayout />
-//               </MainLayout>
-//             </ProtectedRoute>
-//           ),
-//           children: [
-//             { index: true, element: <Profile /> },
-//             { path: path.changePassword, element: <ChangePassword /> }
-//           ]
-//         },
-//         {
-//           path: path.requestList,
-//           element: (
-//             <ProtectedRoute roles={['Gia sư', 'Học sinh']}>
-//               <MainLayout>
-//                 <RequestList />
-//               </MainLayout>
-//             </ProtectedRoute>
-//           )
-//         },
-//         {
-//           path: path.tutors,
-//           element: (
-//             <ProtectedRoute roles={['Học sinh']}>
-//               <MainLayout>
-//                 <TutorList />
-//               </MainLayout>
-//             </ProtectedRoute>
-//           )
-//         },
-//         {
-//           path: path.checkOut,
-//           element: (
-//             <ProtectedRoute roles={['Học sinh']}>
-//               <MainLayout>
-//                 <CheckOut />
-//               </MainLayout>
-//             </ProtectedRoute>
-//           )
-//         },
-//         {
-//           path: path.profileTT,
-//           element: (
-//             <ProtectedRoute roles={['Gia sư']}>
-//               <MainLayout>
-//                 <ProfileTT />
-//               </MainLayout>
-//             </ProtectedRoute>
-//           )
-//         },
-//         {
-//           path: path.requestStudentCurrent,
-//           element: (
-//             <ProtectedRoute roles={['Học sinh']}>
-//               <MainLayout>
-//                 <ReStuCurrentPage />
-//               </MainLayout>
-//             </ProtectedRoute>
-//           )
-//         },
-//         {
-//           path: path.studentViewRequestList,
-//           element: (
-//             <ProtectedRoute roles={['Học sinh']}>
-//               <MainLayout>
-//                 <ReStuPending />
-//               </MainLayout>
-//             </ProtectedRoute>
-//           )
-//         },
-//         {
-//           path: path.Moderator.mod,
-//           element: (
-//             <ProtectedRoute roles={['Điều hành viên']}>
-//               <ModeratorLayout />
-//             </ProtectedRoute>
-//           ),
-//           children: [
-//             { index: true, element: <StudentRes /> },
-//             {
-//               path: path.Moderator.tutorResRegis,
-//               element: <ModTutorResRegis />
-//             }
-//           ]
-//         },
-//         {
-//           path: path.Admin.admin,
-//           element: (
-//             <ProtectedRoute roles={['Quản trị viên']}>
-//               <AdminLayout />
-//             </ProtectedRoute>
-//           ),
-//           children: [
-//             { path: path.Admin.sessionList, element: <SessionList /> },
-//             { path: path.Admin.studentlist, element: <StudentList /> },
-//             { path: path.Admin.tutorList, element: <AdminListTutor /> },
-//             {
-//               path: path.Admin.confirmProfileRegisterTT,
-//               element: <AdminConfirmRegister />
-//             },
-//             {
-//               path: path.Admin.rejectProfileRegisterTT,
-//               element: <AdminRejectRegister />
-//             }
-//           ]
-//         }
-//       ]
-//     }
-//   ])
-
-//   return routeElements
-// }

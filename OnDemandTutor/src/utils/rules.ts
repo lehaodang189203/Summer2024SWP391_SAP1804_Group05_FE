@@ -109,6 +109,7 @@ export const requestSchema = yup.object({
   class: yup.string().oneOf(['10', '11', '12']).required('Chọn lớp'),
   price: yup
     .number()
+    .min(30000, 'Mỗi buổi giá ít nhất là 30,000 VNĐ')
     .transform((value, originalValue) => {
       //  trả về số nguyên luôn
       const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
@@ -267,12 +268,14 @@ export const reviewTT = yup.object().shape({
 export const serviceSchema = yup.object().shape({
   pricePerHour: yup
     .number()
+    .min(20000, 'Giá mỗi giờ tối thiểu là 20,000 VND')
     .transform((value, originalValue) => {
       // Trả về số nguyên luôn
       const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
       // Nếu là chuỗi thì là 0
       return isNaN(formattedValue) ? 0 : formattedValue
     })
+
     .required('Giá là bắt buộc')
     .positive('Giá không thể là số âm'),
   title: yup.string().required('Phải nhập tiêu đề'),

@@ -1,9 +1,8 @@
-import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { tutorApi } from '../../../api/tutor.api'
 import { useQuery } from '@tanstack/react-query'
+import { tutorApi } from '../../../api/tutor.api'
 
 import userImage from '../../../assets/img/user.svg'
 import { ViewReviewRequestBody } from '../../../types/request.type'
@@ -34,7 +33,7 @@ export default function ViewFeedback({ onClose, idTutor }: ViewFeedbackProps) {
 
         {/* Hiển thị danh sách đánh giá */}
         <div className='h-full overflow-y-auto'>
-          {ReviewList &&
+          {ReviewList && ReviewList.length > 0 ? (
             ReviewList.map((review: ViewReviewRequestBody, index: number) => (
               <div
                 key={index}
@@ -75,7 +74,12 @@ export default function ViewFeedback({ onClose, idTutor }: ViewFeedbackProps) {
                   <div className='text-black p-2'>{review.feedback}</div>
                 </div>
               </div>
-            ))}
+            ))
+          ) : (
+            <p className='text-center text-gray-600 font-bold mt-4'>
+              Gia sư này chưa được đánh giá.
+            </p>
+          )}
         </div>
       </div>
     </div>

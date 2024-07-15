@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ServiceTutor, ServiceTutorGet } from '../../../types/request.type'
+import { ServiceTutorGet } from '../../../types/request.type'
 import { tutorApi } from '../../../api/tutor.api'
 import { AppContext } from '../../../context/app.context'
-import ScheduleFormToChoose from '../components/ScheduleFormToChose'
+
 import { toast } from 'react-toastify'
+import CreateService from '../CreateSevice'
+import ScheduleFormToChoose from '../components/ScheduleFormToChose'
 
 export default function TutorViewOwnService() {
   const { profile } = useContext(AppContext)
@@ -13,19 +15,19 @@ export default function TutorViewOwnService() {
   )
   const [selectedDate, setSelectedDate] = useState<string>('')
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>('')
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [classData, setClassData] = useState<ServiceTutorGet[]>([])
+  const [editingServiceId, setEditingServiceId] = useState<string | null>(null)
 
-  const { data: Services, refetch } = useQuery({
+  const { data: services, refetch } = useQuery({
     queryKey: ['allServiceOfTutor'],
-    queryFn: () => tutorApi.getAllTutorService(profile?.id || '')
+    queryFn: () => tutorApi.getSerivceByTutor(profile?.id || '')
   })
 
   useEffect(() => {
-    if (Services) {
-      setClassData(Services)
+    if (services) {
+      setClassData(services)
     }
-  }, [Services])
+  }, [services])
 
   const handleDateChange = (classIndex: number, date: string) => {
     setSelectedClassIndex(classIndex)
@@ -42,29 +44,10 @@ export default function TutorViewOwnService() {
     return date.toLocaleDateString('vi-VN', { weekday: 'long' })
   }
 
-  const openModal = () => {
-    setIsModalOpen(true)
-  }
-  // phần hiện xem thêm cho decription
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
-
-  const toggleDescription = () => {
-    setIsDescriptionExpanded(!isDescriptionExpanded)
-  }
-
-  const renderDescription = (description: string) => {
-    const maxLength = 100
-    if (description.length <= maxLength) {
-      return description
-    }
-    return isDescriptionExpanded
-      ? description
-      : `${description.slice(0, maxLength)}...`
-  }
-
   const deleteServiceMutation = useMutation({
     mutationFn: (idService: string) => tutorApi.deleteTutorService(idService)
   })
+
   const handleDeleteService = (id: string) => {
     deleteServiceMutation.mutate(id, {
       onSuccess: () => {
@@ -76,10 +59,15 @@ export default function TutorViewOwnService() {
       }
     })
   }
+
+  const handleEditService = (id: string) => {
+    setEditingServiceId(id) // Set editingServiceId when editing a service
+  }
+
   return (
     <div className='w-2/3 border mx-auto grid gap-4'>
-      <div className='text-wrap border-b-2 border bg-slate-50 '>
-        Danh sách dịch vụ bạn
+      <div className='text-wrap border-b-2 border bg-slate-50'>
+        Danh sách dịch vụ của bạn
       </div>
       <hr />
       {classData.map((item, classIndex) => (
@@ -134,27 +122,21 @@ export default function TutorViewOwnService() {
                 <p>
                   <strong className='text-blue-700'>Mô tả:</strong>{' '}
                   <span className='text-gray-800'>
-                    {renderDescription(item.serviceDetails.description)}
+                    {item.serviceDetails.description}
                   </span>
-                  {item.serviceDetails.description.length > 100 && (
-                    <button
-                      onClick={toggleDescription}
-                      className='text-blue-500 ml-2 hover:underline'
-                    >
-                      {isDescriptionExpanded ? 'Ẩn bớt' : 'Xem thêm'}
-                    </button>
-                  )}
                 </p>
               </div>
             </div>
-            <button
-              onClick={() => handleDeleteService(item.id)}
-              className='w-full bg-red-500 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700 mt-16'
-            >
-              Xóa dịch vụ
-            </button>
+            <div>
+              <button
+                onClick={() => handleEditService(item.id)} // Pass service id to handleEditService
+                className='w-full bg-yellow-600 text-white font-bold py-2 px-4 rounded-md hover:bg-yellow-700 mt-16'
+              >
+                Chỉnh sửa
+              </button>
+            </div>
           </div>
-          <div className='col-span-1 p-4'>
+          <div className='col-span-1 p-4 '>
             <p>
               <strong>Thời gian:</strong>
             </p>
@@ -168,19 +150,22 @@ export default function TutorViewOwnService() {
               handleTimeSlotChange={handleTimeSlotChange}
               getDayOfWeek={getDayOfWeek}
             />
-            {/* {item.serviceDetails.schedule.map((date,index)=>(
-                <div key={index} className='flex'>
-                    <div>{date.date} có slots là :</div>
-                    <div>
-                        {date.timeSlots.map((timesl,indexT)=>(<div key={indexT}>
-                            {timesl},
-                        </div>))}
-                    </div>
-                </div>
-            ))} */}
+            <button
+              onClick={() => handleDeleteService(item.id)} // Pass service id to handleDeleteService
+              className='w-full  bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700 mt-14'
+            >
+              Xóa dịch vụ
+            </button>
           </div>
         </div>
       ))}
+      {editingServiceId && (
+        <CreateService
+          refetch={refetch}
+          idService={editingServiceId} // Pass editing service id to CreateService
+          onClose={() => setEditingServiceId(null)} // Reset editingServiceId to null to close modal
+        />
+      )}
     </div>
   )
 }

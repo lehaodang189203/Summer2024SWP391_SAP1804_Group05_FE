@@ -12,6 +12,9 @@ export default function ModTutorResRegis() {
   const [selectedRecord, setSelectedRecord] = useState<TutorType | null>(null)
   const [open, setOpen] = useState(false)
   const [isDetails, setIsDetails] = useState(false)
+  const [showRejectReason, setShowRejectReason] = useState(false)
+  const [rejectReason, setRejectReason] = useState('')
+
   // Lấy danh sách yêu cầu từ API
   const { data: requestData, refetch } = useQuery({
     queryKey: ['RequestTutorReg'],
@@ -27,14 +30,24 @@ export default function ModTutorResRegis() {
       setOpen(false)
     }
   })
+
   const rejectMutation = useMutation({
-    mutationFn: (idReg: string) => moderatorApi.rejectTutorReg(idReg),
+    mutationFn: ({
+      tutorReqID,
+      reason
+    }: {
+      tutorReqID: string
+      reason: string
+    }) => moderatorApi.rejectTutorReg({ tutorReqID, reason }),
     onSuccess: () => {
       toast.success('Yêu cầu đã bị từ chối')
       refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
       setOpen(false)
+      setShowRejectReason(false)
+      setRejectReason('')
     }
   })
+
   useEffect(() => {
     if (requestData) {
       console.log(requestData)
@@ -43,16 +56,17 @@ export default function ModTutorResRegis() {
 
   const handleApprove = () => {
     if (selectedRecord) {
-      console.log('selectedRecord nè', selectedRecord)
-      console.log('id selectedRecord nè', selectedRecord.id)
       approveMutation.mutate(selectedRecord.id)
     }
   }
   const handleReject = () => {
-    if (selectedRecord) {
-      console.log('selectedRecord nè', selectedRecord)
-      console.log('id selectedRecord nè', selectedRecord.id)
-      rejectMutation.mutate(selectedRecord.id)
+    if (selectedRecord && rejectReason.trim() !== '') {
+      rejectMutation.mutate({
+        tutorReqID: selectedRecord.id as string,
+        reason: rejectReason as string
+      })
+    } else {
+      toast.error('Vui lòng nhập lý do từ chối')
     }
   }
   const columns: TableColumnsType<TutorType> = [
@@ -60,9 +74,6 @@ export default function ModTutorResRegis() {
       // định nghĩa từng cột
       title: 'Tên', // tên của cột hay còn gọi là header của cột
       dataIndex: 'fullName', // xác định trường nào trong interface DataType
-      //defaultSortOrder: "descend",
-      //onFilter: (value, record) => record.FullName.indexOf(value as string) === 0,
-      //sorter: (a, b) => a.FullName.length - b.FullName.length,
       width: 200,
       fixed: 'left'
     },
@@ -70,33 +81,25 @@ export default function ModTutorResRegis() {
       title: 'Ngày sinh',
       dataIndex: 'date_of_birth',
       width: 150
-      //defaultSortOrder: "descend",
-      //sorter: (a, b) => new Date(a.Date_Of_Birth).getTime() - new Date(b.Date_Of_Birth).getTime()
     },
     {
       title: 'Giới Tính',
       dataIndex: 'gender',
-      //sorter: (a, b) => parseInt(a.Gender) - parseInt(b.Gender),
       width: 100
     },
     {
       title: 'Tên Môn Học',
       dataIndex: 'subject',
-      //defaultSortOrder: "descend",
       width: 150
-      //sorter: (a, b) => parseInt(a.SubjectName) - parseInt(b.SubjectName),
     },
     {
       title: 'Kinh Nghiệm(Năm)',
       dataIndex: 'experience',
       width: 200
-      //defaultSortOrder: "descend",
-      //sorter: (a, b) => (a.Experience - b.Experience)
     },
     {
       title: 'Tên Bằng Cấp(Chứng chỉ)',
       dataIndex: 'qualifiCationName',
-      //defaultSortOrder: "descend"
       width: 200
     },
     {
@@ -150,6 +153,8 @@ export default function ModTutorResRegis() {
   const handleCancel = () => {
     setOpen(false)
     setSelectedRecord(null)
+    setShowRejectReason(false)
+    setRejectReason('')
   }
   const showImg = (record: TutorType) => {
     setSelectedRecord(record)
@@ -164,9 +169,7 @@ export default function ModTutorResRegis() {
         <ModMenu kind='tutor' style='Option1' />
         <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
           <div className='mb-5'>
-            <Search
-            
-            />
+            <Search />
           </div>
           <Table
             className=''
@@ -176,6 +179,7 @@ export default function ModTutorResRegis() {
             onChange={onChange}
             showSorterTooltip={{ target: 'sorter-icon' }}
             scroll={{ x: 1300, y: 400 }}
+            rowKey={(record) => record.id}
           />
           <div>
             <Modal
@@ -183,10 +187,10 @@ export default function ModTutorResRegis() {
               open={open}
               onCancel={handleCancel}
               footer={[
-                <Button key='back' onClick={handleApprove}>
+                <Button key='approve' onClick={handleApprove}>
                   Xác nhận
                 </Button>,
-                <Button key='back' onClick={handleReject}>
+                <Button key='reject' onClick={() => setShowRejectReason(true)}>
                   Từ chối
                 </Button>
               ]}
@@ -204,7 +208,6 @@ export default function ModTutorResRegis() {
                       <p>
                         Kĩ năng đặc biệt : {selectedRecord.specializedSkills}
                       </p>
-                      {/* <img src={selectedRecord.imageQualification} alt="ảnh" />    // ảnh nè   */}
                       <p>Kinh nghiệm dạy : {selectedRecord.experience} Năm</p>
                     </div>
                   ) : (
@@ -213,6 +216,23 @@ export default function ModTutorResRegis() {
                       <img src={selectedRecord.imageQualification} alt='ảnh' />
                     </p>
                   )}
+                </div>
+              )}
+              {showRejectReason && (
+                <div className='mt-4'>
+                  <textarea
+                    placeholder='Nhập lý do từ chối'
+                    value={rejectReason}
+                    onChange={(e) => setRejectReason(e.target.value)}
+                    className='w-full p-2 border rounded'
+                  />
+                  <Button
+                    className='mt-2'
+                    type='primary'
+                    onClick={handleReject}
+                  >
+                    Xác nhận từ chối
+                  </Button>
                 </div>
               )}
             </Modal>

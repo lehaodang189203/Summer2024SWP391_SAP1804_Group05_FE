@@ -1,6 +1,6 @@
+import React, { useRef, useState, useContext } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { useContext, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 import { studentApi } from '../../api/student.api'
@@ -8,8 +8,20 @@ import InputFile from '../../components/InputFile'
 import { RequestTutorBody } from '../../types/user.request.type'
 import { storage } from '../../utils/firebase'
 import { AppContext } from '../../context/app.context'
+import TextArea from 'antd/es/input/TextArea'
+import { useLocation } from 'react-router-dom'
 
-export default function RegisterAsTutor() {
+interface Props {
+  ReSignUp?: string
+  refetch?: (() => void) | undefined
+  isVisible?: boolean
+}
+
+export default function RegisterAsTutor({
+  ReSignUp,
+  refetch,
+  isVisible = true
+}: Props) {
   const [file, setFile] = useState<File | null>(null)
   const [experience, setExperience] = useState<number | null>(null)
   const [imageQualification, setImageQualification] = useState<string>('')
@@ -19,14 +31,39 @@ export default function RegisterAsTutor() {
   const [subject, setSubject] = useState<string>('')
   const [type, setType] = useState<string>('')
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [imageError, setImageError] = useState<string>('')
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
+  const { state } = useLocation()
+
   const { profile } = useContext(AppContext)
+
   const ReqMutation = useMutation({
     mutationFn: (body: RequestTutorBody) =>
-      studentApi.registerAsTutor(body, profile?.id as string)
+      studentApi.registerAsTutor(body, profile?.id as string),
+    onSuccess: () => {
+      toast.success('Đăng ký thành công')
+      resetForm()
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    }
   })
+
+  const ReSignUpMutation = useMutation({
+    mutationFn: (body: RequestTutorBody) =>
+      studentApi.reSignUpofTutor(body, profile?.id as string),
+    onSuccess: () => {
+      toast.success('Đăng ký lại thành công')
+      resetForm()
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    }
+  })
+
+  const mutation = ReSignUp ? ReSignUpMutation : ReqMutation
 
   const handleChangeFile = (file?: File) => {
     setFile(file || null)
@@ -42,8 +79,6 @@ export default function RegisterAsTutor() {
   }
 
   const uploadAvatar = async (file: File): Promise<string> => {
-    console.log(12111)
-
     const imageRef = ref(storage, `certificate/${file.name + uuidv4()}`)
     const snapshot = await uploadBytes(imageRef, file)
     const url = await getDownloadURL(snapshot.ref)
@@ -65,15 +100,16 @@ export default function RegisterAsTutor() {
       return
     }
 
+    if (!file && !imageQualification) {
+      setImageError('Ảnh là bắt buộc')
+      return
+    }
+
     try {
       let imageUrl = imageQualification
       if (file) {
-        console.log(file)
-
         imageUrl = await uploadAvatar(file)
-        console.log(imageUrl)
-
-        setImageQualification(imageUrl) // Set the URL in the state
+        setImageQualification(imageUrl)
         setFile(null)
         if (fileInputRef.current) {
           fileInputRef.current.value = ''
@@ -90,18 +126,15 @@ export default function RegisterAsTutor() {
         type
       }
 
-      console.log('formData', formData)
-      ReqMutation.mutate(formData, {
+      console.log(formData)
+
+      mutation.mutate(formData, {
         onSuccess: (data) => {
           toast.success(data.data.message)
-          setExperience(null)
-          setImageQualification('')
-          setIntroduction('')
-          setQualificationName('')
-          setSpecializedSkills('')
-          setSubject('')
-          setType('')
-          setPreviewUrl(null)
+          resetForm()
+          if (refetch) {
+            refetch()
+          }
         },
         onError: (error) => {
           toast.error(error.message)
@@ -112,18 +145,35 @@ export default function RegisterAsTutor() {
     }
   }
 
+  const resetForm = () => {
+    setExperience(null)
+    setImageQualification('')
+    setIntroduction('')
+    setQualificationName('')
+    setSpecializedSkills('')
+    setSubject('')
+    setType('')
+    setPreviewUrl(null)
+    setImageError('')
+  }
+
   return (
-    <div className='flex items-center justify-center bg-black bg-opacity-50'>
+    <div className='flex items-center justify-center'>
       <div className='p-6'>
         <form
           onSubmit={handleSubmit}
           className='w-[50rem] space-y-4 border-2 rounded-xl p-4 bg-white shadow-black shadow-lg'
         >
+          <div>
+            <h1 className='text-lg text-red-500'>
+              {ReSignUp ? 'Chỉnh sửa đơn Gia Sư' : 'Đăng ký gia sư'}
+            </h1>
+          </div>
+
           <div className='space-y-2'>
             <label className='block mb-2'>
               Giới thiệu :
-              <input
-                type='text'
+              <TextArea
                 value={introduction}
                 onChange={(e) => setIntroduction(e.target.value)}
                 className='w-full p-2 border rounded'
@@ -131,19 +181,8 @@ export default function RegisterAsTutor() {
               />
             </label>
 
-            <label className='block  mb-2'>
-              Kĩ năng đặc biệt:
-              <input
-                type='text'
-                value={specializedSkills}
-                onChange={(e) => setSpecializedSkills(e.target.value)}
-                className='w-full p-2 border rounded'
-                required
-              />
-            </label>
-
-            <label className='block  mb-2'>
-              Số năm kinh nghiệm(số):
+            <label className='block mb-2'>
+              Số năm kinh nghiệm (số):
               <input
                 type='number'
                 value={experience || ''}
@@ -153,23 +192,12 @@ export default function RegisterAsTutor() {
               />
             </label>
 
-            <label className='block  mb-2'>
-              Tên bằng cắp(chứng chỉ):
-              <input
-                type='text'
-                value={qualifiCationName}
-                onChange={(e) => setQualificationName(e.target.value)}
-                className='w-full p-2 border rounded'
-                required
-              />
-            </label>
-
-            <label className='block  mb-2'>
+            <label className='block mb-2'>
               Môn học:
               <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className='w-full p-2 border rounded  '
+                className='w-full p-2 border rounded'
                 required
               >
                 <option value=''>Chọn môn học</option>
@@ -185,7 +213,29 @@ export default function RegisterAsTutor() {
                 <option value='Tin học'>Tin học</option>
               </select>
             </label>
-            <label className='block  mb-2'>
+
+            <label className='block mb-2'>
+              Kĩ năng đặc biệt:
+              <TextArea
+                value={specializedSkills}
+                onChange={(e) => setSpecializedSkills(e.target.value)}
+                className='w-full p-2 border rounded'
+                required
+              />
+            </label>
+
+            <label className='block mb-2'>
+              Tên bằng cắp (chứng chỉ):
+              <input
+                type='text'
+                value={qualifiCationName}
+                onChange={(e) => setQualificationName(e.target.value)}
+                className='w-full p-2 border rounded'
+                required
+              />
+            </label>
+
+            <label className='block mb-2'>
               Loại :
               <select
                 value={type}
@@ -199,13 +249,20 @@ export default function RegisterAsTutor() {
               </select>
             </label>
 
-            <div className=' mb-2'>
+            <div className='mb-2 justify-center '>
               <label htmlFor=''>Hãy chọn ảnh chứng chỉ</label>
-              <InputFile onChange={handleChangeFile} />
+              <div className='justify-center mt-2   flex'>
+                <InputFile onChange={handleChangeFile} />
+                {imageError && <p className='text-red-500'>{imageError}</p>}
+              </div>
             </div>
-            <div>
+            <div className='mb-2 justify-center '>
               {previewUrl && (
-                <img src={previewUrl} alt='Ảnh chứng chỉ' className='mt-4' />
+                <img
+                  src={previewUrl}
+                  alt='Ảnh chứng chỉ'
+                  className='mt-4 mx-auto'
+                />
               )}
             </div>
           </div>
@@ -213,9 +270,18 @@ export default function RegisterAsTutor() {
             <div className='w-[49%]'>
               <button
                 type='submit'
-                className='w-full p-3 bg-pink-500 text-white rounded-lg hover:bg-pink-300 focus:outline-none'
+                className='w-full p-3 bg-pink-400 text-white rounded-lg hover:bg-pink-500'
               >
-                Nộp
+                {ReSignUp ? 'Chỉnh sửa đơn gia sư' : 'Đăng ký'}
+              </button>
+            </div>
+            <div className='w-[49%]'>
+              <button
+                onClick={resetForm}
+                type='button'
+                className='w-full p-3 bg-black text-white rounded-lg hover:bg-red-500'
+              >
+                Xóa tất cả
               </button>
             </div>
           </div>

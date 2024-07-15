@@ -1,5 +1,5 @@
 import { HttpStatusCode } from 'axios'
-import { AdminTutorType } from '../types/tutor.type'
+import { AdminTutorProfile, AdminTutorType } from '../types/tutor.type'
 import { SuccessResponseReq } from '../types/utils.type'
 import http from '../utils/http'
 import { RequestModerator } from '../types/request.type'
@@ -9,7 +9,7 @@ import { complaintType } from '../types/complaint.type'
 export const adminAPI = {
   async getTutorList() {
     try {
-      const response = await http.get<SuccessResponseReq<AdminTutorType[]>>(
+      const response = await http.get<SuccessResponseReq<AdminTutorProfile[]>>(
         `/Admin/viewAllTutor`
       )
       if (response.status === HttpStatusCode.Ok) {

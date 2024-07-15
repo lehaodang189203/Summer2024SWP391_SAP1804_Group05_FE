@@ -4,7 +4,7 @@ import {
   UpdateProfileBody,
   ViewClassRequestBody
 } from './../types/user.request.type'
-import { User } from '../types/user.type'
+import { Notificate, User } from '../types/user.type'
 import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
@@ -67,6 +67,27 @@ const userApi = {
     } catch (error) {
       throw new Error('Failed to fetch data')
     }
+  },
+
+  getNotification: async (id: string) => {
+    try {
+      const response = await http.get<SuccessResponseReq<Notificate[]>>(
+        `User/ViewAllNotification?id=${id}`
+      )
+      console.log('response', response)
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      throw new Error('Failed to fetch data')
+    }
+  },
+  updateNotification: async (id: string) => {
+    return await http.put<SuccessResponse<any>>(
+      `User/UpdateStatusNotification?id=${id}`
+    )
   }
 }
 

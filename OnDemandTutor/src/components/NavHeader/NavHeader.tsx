@@ -8,10 +8,11 @@ import userImage from '../../assets/img/user.svg'
 import { path } from '../../constant/path'
 import { roles } from '../../constant/roles'
 import { AppContext } from '../../context/app.context'
-import { clearLS } from '../../utils/auth'
+import { clearLS, getProfileFromLS } from '../../utils/auth'
 import Popover from '../Popover/Popover'
 import UserButton from '../UserBotton'
 import { LogoutReqBody } from '../../types/user.request.type'
+import { User } from '../../types/user.type'
 
 export default function NavHeader() {
   //const [count, setCount] = useState(0) // State để quản lý số lượng thông báo
@@ -20,7 +21,11 @@ export default function NavHeader() {
   //   setCount(count + 1)
   // }
 
+  const navigate = useNavigate()
+
   const queryClient = useQueryClient()
+
+  const user: User = getProfileFromLS()
 
   const {
     isAuthenticated,
@@ -41,6 +46,7 @@ export default function NavHeader() {
         onSuccess: () => {
           setProfile(null)
           queryClient.removeQueries({ queryKey: ['Request'] })
+          navigate(path.login)
           setIsAuthenticated(false)
         }
       }
@@ -58,8 +64,12 @@ export default function NavHeader() {
   }, [profile])
 
   return (
-    <div className='hidden md:flex justify-end gap-5'>
-      <UserButton isAuthenticated={isAuthenticated} profile={profile} />
+    <div className='hidden md:flex justify-start  gap-5'>
+      <UserButton
+        isAuthenticated={isAuthenticated}
+        profile={profile ? profile : user}
+      />
+
       {isAuthenticated && (
         <Popover
           className='flex my-2 items-center hover:text-pink-400 cursor-pointer '
@@ -96,6 +106,25 @@ export default function NavHeader() {
                     className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
                   >
                     Nạp tiền
+                  </Link>
+                  <Link
+                    to={path.support}
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    Hỗ trợ
+                  </Link>
+
+                  <Link
+                    to={path.tutorViewApplicationSpending}
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    Xem đơn của gia sư
+                  </Link>
+                  <Link
+                    to={path.studentViewRequestList}
+                    className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                  >
+                    Xem yêu cầu của bạn
                   </Link>
 
                   {profile.roles.toLowerCase() == roles.student ? (
@@ -147,7 +176,7 @@ export default function NavHeader() {
             </div>
           }
         >
-          <div className='w-5 h-5 mr-2 flex-shink-0'>
+          <div className='w-6 h-6 mr-2 ml-10 flex-shink-0 '>
             <img
               src={profile?.avatar ? profile.avatar : userImage}
               alt='avatar'
@@ -161,7 +190,7 @@ export default function NavHeader() {
         </Popover>
       )}
       {!isAuthenticated && (
-        <div className='flex items-center ml-[2rem]'>
+        <div className='flex items-end justify-end ml-[20rem]'>
           <Link
             to={path.login}
             className='transition duration-150 ease-in-out border-black border-2 px-2 py-2 rounded-lg hover:bg-gray-200 mr-1 '

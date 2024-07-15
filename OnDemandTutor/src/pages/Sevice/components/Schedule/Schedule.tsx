@@ -14,8 +14,9 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
 
   useEffect(() => {
     const today = new Date()
-    setSelectedDate(today) // Set default value to today
+    setSelectedDate(today)
     generateWeekDates(today)
+    handleSelectDate(today)
   }, [])
 
   const generateWeekDates = (start: Date) => {
@@ -35,15 +36,6 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
       .toString()
       .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
 
-    if (selectedDate && date.getTime() === selectedDate.getTime()) {
-      setSelectedDate(null)
-      setSelectedTimes([])
-
-      const newValue = value.filter((v) => v.date !== formattedDate)
-      onChange(newValue)
-      return
-    }
-
     setSelectedDate(date)
 
     const existingDateIndex = value.findIndex(
@@ -53,7 +45,6 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
       setSelectedTimes(value[existingDateIndex].timeSlots)
     } else {
       setSelectedTimes([])
-      onChange([...value, { date: formattedDate, timeSlots: [] }])
     }
   }
 
@@ -90,24 +81,38 @@ export default function Schedule({ value, onChange }: ScheduleProps) {
   const handleTimeClick = (time: string) => {
     if (!selectedDate) return
 
-    let newSelectedTimes = selectedTimes
-    if (selectedTimes.includes(time)) {
-      newSelectedTimes = selectedTimes.filter((t) => t !== time)
-    } else {
-      newSelectedTimes = [...selectedTimes, time]
-    }
-    setSelectedTimes(newSelectedTimes)
+    setSelectedTimes((prevSelectedTimes) => {
+      let newSelectedTimes
+      if (prevSelectedTimes.includes(time)) {
+        newSelectedTimes = prevSelectedTimes.filter((t) => t !== time)
+      } else {
+        newSelectedTimes = [...prevSelectedTimes, time]
+      }
 
-    const formattedDate = `${selectedDate.getFullYear()}-${(
-      selectedDate.getMonth() + 1
-    )
-      .toString()
-      .padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`
+      const formattedDate = `${selectedDate.getFullYear()}-${(
+        selectedDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, '0')}-${selectedDate
+        .getDate()
+        .toString()
+        .padStart(2, '0')}`
 
-    const newValue = value.map((v) =>
-      v.date === formattedDate ? { ...v, timeSlots: newSelectedTimes } : v
-    )
-    onChange(newValue)
+      const newValue = value.map((v) =>
+        v.date === formattedDate ? { ...v, timeSlots: newSelectedTimes } : v
+      )
+      // Nếu không có thời gian nào được chọn cho ngày hiện tại, hãy loại bỏ ngày đó khỏi lịch trình
+      if (newSelectedTimes.length === 0) {
+        onChange(newValue.filter((v) => v.date !== formattedDate))
+      } else {
+        if (!newValue.find((v) => v.date === formattedDate)) {
+          newValue.push({ date: formattedDate, timeSlots: newSelectedTimes })
+        }
+        onChange(newValue)
+      }
+
+      return newSelectedTimes
+    })
   }
 
   const renderTimeSlots = (slots: { time: string; selected: boolean }[]) => (

@@ -35,8 +35,8 @@ export const moderatorApi = {
       `modaretor/approvedRequest?requestId=${ReqID}`
     ),
 
-  rejectRequest: async (ReqID: string) =>
-    await http.put(`modaretor/rejectRequest?requestId=${ReqID}`),
+  rejectRequest: async ({ idReq, reason }: { idReq: string; reason: string }) =>
+    await http.put(`modaretor/rejectRequest?requestId=${idReq}`, { reason }),
 
   getRequestTutorReg: async (): Promise<TutorType[]> => {
     try {
@@ -56,8 +56,13 @@ export const moderatorApi = {
   approvedTutorReg: async (tutorReqID: string) =>
     await http.put(`modaretor/approveProfile?id=${tutorReqID}`),
 
-  rejectTutorReg: async (tutorReqID: string) =>
-    await http.put(`modaretor/rejectProfile?id=${tutorReqID}`),
+  rejectTutorReg: async ({
+    tutorReqID,
+    reason
+  }: {
+    tutorReqID: string
+    reason: string
+  }) => await http.put(`modaretor/rejectProfile?id=${tutorReqID}`, { reason }),
 
   getAccount: async (): Promise<User[]> => {
     try {
@@ -76,5 +81,11 @@ export const moderatorApi = {
   deleteRequest: async (idRequest: string) =>
     await http.delete<SuccessResponse<any>>(
       `modaretor/DeleteRequest?idRequest=${idRequest}`
+    ),
+
+  //  chưa có
+  deleteService: async (idService: string) =>
+    await http.delete<SuccessResponse<any>>(
+      `modaretor/DeleteService?idRequest=${idService}`
     )
 }

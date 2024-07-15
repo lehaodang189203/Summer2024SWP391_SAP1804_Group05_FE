@@ -43,16 +43,17 @@ export interface DataType {
   timeAvalable: string
 }
 
+//  cái này chỗ để hóc sinh chọn ngày
 const user: User = getProfileFromLS()
 
-const ModalChooseService: React.FC<Props> = ({
+export default function ModalChooseService({
   isOpen,
   onClose,
   onConfirm,
   selectedDate,
   selectedTimeSlots,
   classInfo
-}) => {
+}: Props) {
   const { profile, setProfile } = useContext(AppContext)
 
   const { data: ProfileData } = useQuery({
@@ -201,5 +202,3 @@ const ModalChooseService: React.FC<Props> = ({
     </div>
   )
 }
-
-export default ModalChooseService

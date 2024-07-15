@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Table, Button } from 'antd'
+import { Modal, Table, Button, Input } from 'antd'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { moderatorApi } from '../../../../api/moderator.api'
 import { toast } from 'react-toastify'
 import { RequestModerator } from '../../../../types/request.type'
 
 export default function StudentRes() {
+  const [rejectReason, setRejectReason] = useState('')
+  const [selectedRecord, setSelectedRecord] = useState<RequestModerator | null>(
+    null
+  )
+  const [visible, setVisible] = useState(false)
+  const [rejectVisible, setRejectVisible] = useState(false)
+
   const { data: RequestData, refetch } = useQuery<RequestModerator[]>({
     queryKey: ['Request'],
     queryFn: () => moderatorApi.viewRequests()
@@ -21,11 +28,12 @@ export default function StudentRes() {
   })
 
   const rejectMutation = useMutation({
-    mutationFn: (idReq: string) => moderatorApi.rejectRequest(idReq),
+    mutationFn: ({ idReq, reason }: { idReq: string; reason: string }) =>
+      moderatorApi.rejectRequest({ idReq, reason }),
     onSuccess: (data) => {
       toast.success(data.data.message)
       refetch()
-      setVisible(false)
+      setRejectVisible(false)
     }
   })
 
@@ -36,7 +44,7 @@ export default function StudentRes() {
     }
     if (rejectMutation.isSuccess) {
       refetch()
-      setVisible(false)
+      setRejectVisible(false)
     }
   }, [approveMutation.isSuccess, rejectMutation.isSuccess])
 
@@ -47,14 +55,18 @@ export default function StudentRes() {
   }
 
   const handleReject = () => {
-    if (selectedRecord) {
-      rejectMutation.mutate(selectedRecord.idRequest)
+    if (selectedRecord && rejectReason) {
+      rejectMutation.mutate({
+        idReq: selectedRecord.idRequest,
+        reason: rejectReason
+      })
     }
   }
 
   const handleDelete = (idReq: string) => {
     deleteMutation.mutate(idReq)
   }
+
   const deleteMutation = useMutation({
     mutationFn: (idReq: string) => moderatorApi.deleteRequest(idReq),
     onSuccess: (data) => {
@@ -131,19 +143,14 @@ export default function StudentRes() {
           </Button>
           <Button
             className='border w-1/3 border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
-            onClick={() => handleDelete(record.idRequest)}
+            onClick={() => showRejectForm(record)}
           >
-            Xóa
+            Từ chối
           </Button>
         </div>
       )
     }
   ]
-
-  const [selectedRecord, setSelectedRecord] = useState<RequestModerator | null>(
-    null
-  )
-  const [visible, setVisible] = useState(false)
 
   const showDetail = (id: string) => {
     const record = RequestData?.find((item) => item.idRequest === id) || null
@@ -151,9 +158,16 @@ export default function StudentRes() {
     setVisible(true)
   }
 
+  const showRejectForm = (record: RequestModerator) => {
+    setSelectedRecord(record)
+    setRejectVisible(true)
+  }
+
   const handleCancel = () => {
     setVisible(false)
+    setRejectVisible(false)
     setSelectedRecord(null)
+    setRejectReason('')
   }
 
   return (
@@ -173,7 +187,10 @@ export default function StudentRes() {
             <Button key='approve' onClick={handleApprove}>
               Xác nhận
             </Button>,
-            <Button key='reject' onClick={handleReject}>
+            <Button
+              key='reject'
+              onClick={() => showRejectForm(selectedRecord!)}
+            >
               Từ chối
             </Button>
           ]}
@@ -212,6 +229,26 @@ export default function StudentRes() {
                   {selectedRecord.price}
                 </span>
               </p>
+            </div>
+          )}
+        </Modal>
+        <Modal
+          title='Từ chối yêu cầu'
+          visible={rejectVisible}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          {selectedRecord && (
+            <div className='mt-4'>
+              <textarea
+                placeholder='Nhập lý do từ chối'
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                className='w-full p-2 border rounded'
+              />
+              <Button className='mt-2' type='primary' onClick={handleReject}>
+                Xác nhận từ chối
+              </Button>
             </div>
           )}
         </Modal>

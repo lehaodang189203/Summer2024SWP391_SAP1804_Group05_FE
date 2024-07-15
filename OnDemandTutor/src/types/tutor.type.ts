@@ -27,7 +27,8 @@ export interface AddQualification {
 }
 
 export interface TutorProfile {
-  speacializedSkill: string
+  avatar: string
+  specializedSkills: string
   experience: number
   introduction: string
   subjects: string
@@ -37,6 +38,22 @@ export interface TutorProfile {
     img: string
     type: string
   }[]
+}
+
+export interface CensorShipTutor {
+  id: string
+  specializedSkills: string
+  introduction: string
+  date_of_birth: string
+  fullName: string
+  gender: string
+  experience: number
+  subject: string
+  qualifiCationName: string
+  type: string
+  imageQualification: string
+  status: string
+  reason: string
 }
 
 export interface AdminTutorType {
@@ -51,6 +68,8 @@ export interface AdminTutorType {
   type: string
   imageQualification: string
   introduction: string
+  avatar: string
+  rating: number
 }
 interface AdminStudentReq {
   idrequest: string
@@ -79,4 +98,25 @@ export interface CreatServiceType {
 interface ScheduleType {
   date: string
   timeSlots: (string | undefined)[]
+}
+
+export interface AdminTutorProfile {
+  id: string
+  avatar: string
+  fullName: string
+  date_of_birth: string
+  gender: string
+  specializedSkills: string
+  experience: number
+  subjects: string
+  rating: number
+  qualifications: [
+    {
+      idQualifications: string
+      qualificationName: string
+      img: string
+      type: string
+    }
+  ]
+  introduction: string
 }

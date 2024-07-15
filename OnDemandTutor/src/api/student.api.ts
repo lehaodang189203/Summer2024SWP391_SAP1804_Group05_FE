@@ -30,6 +30,23 @@ export const studentApi = {
     await http.post(`student/createRequest?id=${id}`, body),
 
   // Lấy danh sách yêu cầu chờ duyệt
+  async rejectRequest(id: string) {
+    try {
+      const response = await http.get<SuccessResponseReq<Request[]>>(
+        `Student/rejectRequest?id=${id}`
+      )
+      if (response.status === HttpStatusCode.Ok) {
+        return response.data.data
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      console.error('Error fetching pending requests:', error)
+      throw error
+    }
+  },
+
+  // Lấy danh sách yêu cầu chờ duyệt
   async pendingRequest(id: string) {
     try {
       const response = await http.get<SuccessResponseReq<Request[]>>(
@@ -89,6 +106,13 @@ export const studentApi = {
   registerAsTutor: async (body: RequestTutorBody, id: string) =>
     await http.post<SuccessResponse<any>>(
       `/User/registerAsTutor?id=${id}`,
+      body
+    ),
+
+  //  chỉnh sửa cập nhật gia sư
+  reSignUpofTutor: async (body: RequestTutorBody, id: string) =>
+    await http.put<SuccessResponse<any>>(
+      `/tutor/ReSignUpOftutor?id=${id}`,
       body
     ),
 
@@ -181,5 +205,11 @@ export const studentApi = {
       'Student/CreateReviewService',
       body
     )
-  }
+  },
+
+  //  xóa đơn
+  deleteRegisterTutor: async (id: string) =>
+    await http.delete<SuccessResponse<any>>(
+      `Student/DeleteSignUpTutor?id=${id} `
+    )
 }

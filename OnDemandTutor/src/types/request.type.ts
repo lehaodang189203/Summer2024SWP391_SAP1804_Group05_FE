@@ -1,6 +1,7 @@
 import { UserSchema } from '../utils/rules'
 import { TutorRep, User, UserRep } from './user.type'
 export interface Request {
+  id: string
   idRequest: string
   totalSessions: number
   subject: string
@@ -14,6 +15,8 @@ export interface Request {
   timeEnd: string
   status: string
   current?: string
+
+  reason: string
 }
 
 export interface ViewReviewRequestBody {
@@ -105,6 +108,7 @@ export interface Schedule {
 }
 export interface ServiceTutor {
   idService: string
+  idAccountTutor: string
   pricePerHour: number
   title: string
   description: string

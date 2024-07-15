@@ -78,25 +78,27 @@ export default function ProfileTT() {
           <div className='border rounded-lg p-6 shadow-lg bg-white'>
             <div className='flex flex-row mb-4'>
               <div className='w-1/5 text-right capitalize'>Email</div>
-              <div className='w-4/5 pl-5 text-gray-700'>{profile?.email}</div>
+              <div className='w-4/5 pl-5 text-gray-700 text-bold'>
+                {profile?.email}
+              </div>
             </div>
             <div className='flex mb-4'>
               <div className='w-1/5 text-right capitalize'>Giới thiệu</div>
-              <div className='w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+              <div className='mx-2 w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
                 {profileTutor?.introduction}
               </div>
             </div>
 
             <div className='flex mb-4'>
               <div className='w-1/5 text-right capitalize'>Môn dạy</div>
-              <div className='w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+              <div className='mx-2  w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
                 {profileTutor?.subjects}
               </div>
             </div>
 
             <div className='flex mb-4'>
               <div className='w-1/5 text-right capitalize'>Kinh nghiệm</div>
-              <div className='w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+              <div className='mx-2  w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
                 {profileTutor?.experience}
               </div>
             </div>
@@ -105,8 +107,8 @@ export default function ProfileTT() {
               <div className='w-1/5 text-right capitalize'>
                 Kỹ năng chuyên môn
               </div>
-              <div className='w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
-                {profileTutor?.speacializedSkill}
+              <div className='mx-2  w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+                {profileTutor?.specializedSkills}
               </div>
             </div>
 
@@ -170,7 +172,7 @@ export default function ProfileTT() {
                 </div>
               ))
             ) : (
-              <span>No Image Available</span>
+              <span>Ảnh không phù hợp</span>
             )}
           </div>
         </div>

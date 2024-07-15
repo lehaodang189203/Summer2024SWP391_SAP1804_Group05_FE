@@ -1,14 +1,13 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { Select } from 'antd'
-import Search from 'antd/es/transfer/search'
-import { useContext, useState } from 'react'
-import { FaSearch } from 'react-icons/fa'
-
+import React, { useContext, useEffect, useState } from 'react'
 import { studentApi } from '../../../api/student.api'
+import Search from 'antd/es/transfer/search'
+import { Select } from 'antd'
+import { FaSearch } from 'react-icons/fa'
+import RequestComponents from '../components'
 import Pagination from '../../../components/Pagination'
 import { AppContext } from '../../../context/app.context'
 import { Request } from '../../../types/request.type'
-import ServiceComponents from '../components'
 
 const options1 = [
   { label: 'Lọc theo thời gian' },
@@ -29,15 +28,19 @@ const options3 = [
   { value: 'cherry', label: 'Tiếng Anh' }
 ]
 
-export default function TutorViewServiceBooked() {
+export default function RequestStudentReject() {
   const { profile } = useContext(AppContext)
 
   const { data: RequestData, refetch } = useQuery<Request[]>({
     queryKey: ['Request'],
-    queryFn: () => studentApi.approvedRequest(profile?.id as string),
-    enabled: !!profile?.id, // tránh bị dữ liệu cũ còn , mà kh fetch kịp
+    queryFn: () => studentApi.rejectRequest(profile?.id as string),
+    enabled: !!profile?.id,
     placeholderData: keepPreviousData
   })
+
+  useEffect(() => {
+    refetch()
+  }, [RequestData, profile])
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
@@ -63,6 +66,9 @@ export default function TutorViewServiceBooked() {
   const handleSelectChange3 = (option: any) => {
     setSelectedOption3(option)
   }
+
+  console.log('profile', profile)
+  console.log('RequestData', RequestData)
 
   return (
     <div className='bg-gray-200 w-full p-3'>
@@ -106,8 +112,12 @@ export default function TutorViewServiceBooked() {
           <div>Tình Trạng</div>
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
-          {currentItems.map((service, key) => (
-            <ServiceComponents key={key} request={service} refetch={refetch} />
+          {currentItems.map((request, key) => (
+            <RequestComponents
+              key={request.idRequest}
+              request={request}
+              refetch={refetch}
+            />
           ))}
         </div>
       </div>

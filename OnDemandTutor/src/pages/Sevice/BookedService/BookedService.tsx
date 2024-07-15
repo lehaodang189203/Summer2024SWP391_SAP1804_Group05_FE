@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { TutorRep, User, UserRep } from '../../../types/user.type'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import { studentApi } from '../../../api/student.api'
 import userApi from '../../../api/user.api'
 import { toast } from 'react-toastify'
@@ -9,30 +9,37 @@ import { BookedServices } from '../../../types/request.type'
 import ReviewService from '../ReviewService'
 import { AppContext } from '../../../context/app.context'
 import { Modal } from 'antd'
-import { roles } from '../../../constant/roles'
+
 import { statusClass } from '../../../constant/status.class'
+import Pagination from '../../../components/Pagination'
+import { roles } from '../../../constant/roles'
 
 export default function BookedService() {
-  const { profile } = useContext(AppContext) // bí quá rồi mới xài nha
+  const { profile } = useContext(AppContext)
 
   const { data, refetch } = useQuery({
     queryKey: ['Account'],
-    queryFn: () => userApi.ViewClassService(profile?.id as string)
+    queryFn: () => userApi.ViewClassService(profile?.id as string),
+    enabled: !!profile?.id,
+    placeholderData: keepPreviousData
   })
 
   const serviceMutation = useMutation({
-    mutationFn: (idBook: string) => studentApi.serviceCompled(idBook) // chưa sửa n
+    mutationFn: (idBook: string) => studentApi.serviceCompled(idBook)
   })
 
   const [selectedService, setSelectedService] = useState<string | null>(null)
   const [hovered, setHovered] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4 // Số phần tử trên mỗi trang
 
   const handleCompleteClass = (id: string) => {
     serviceMutation.mutate(id, {
       onSuccess: () => {
-        toast.success('Kết thúc lớp thành công'), setSelectedService(id)
+        toast.success('Kết thúc lớp thành công')
+        setSelectedService(id)
         setShowReviewModal(true)
         refetch()
       },
@@ -51,25 +58,40 @@ export default function BookedService() {
     setIsModalOpen(false)
     setShowReviewModal(false) // Close review modal
   }
+
   const serviceList = data || []
+
+  // Tính toán số lượng phần tử trên từng trang
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const currentItems = serviceList.slice(indexOfFirstItem, indexOfLastItem)
+
+  // Xử lý thay đổi trang
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+  }
 
   return (
     <div className=''>
-      {profile?.roles.includes('gia sư') ? (
+      {profile?.roles === roles.tutor ? (
         <>
-          <div className='text-left text-wrap border-b-2 border bg-slate-50 '>
+          <div className='text-center text-wrap border-b-2 border bg-slate-50 '>
             Danh sách dịch vụ của bạn đã được đăng kí bởi học sinh
           </div>
         </>
       ) : (
-        <div className='text-left text-wrap border-b-2 border bg-slate-50 '>
+        <div className='text-center text-wrap border-b-2 border bg-slate-50 '>
           Dịch vụ bạn đã đăng kí
         </div>
       )}
 
-      {data &&
-        (Array.isArray(serviceList) ? serviceList : []).map(
-          (service: BookedServices) => (
+      {serviceList.length === 0 ? (
+        <div className='text-center text-red-500 mt-10 text-lg'>
+          Bạn không có lớp học nào
+        </div>
+      ) : (
+        <>
+          {currentItems.map((service: BookedServices) => (
             <div
               key={service.idBooking}
               className='rounded-3xl my-5 grid-cols-2'
@@ -186,8 +208,15 @@ export default function BookedService() {
               )}
               <hr />
             </div>
-          )
-        )}
+          ))}
+          <Pagination
+            totalItems={serviceList.length}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        </>
+      )}
     </div>
   )
 }

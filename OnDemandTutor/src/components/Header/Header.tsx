@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import BUMBUM from '../../assets/img/BUMBUM.png'
 import { path } from '../../constant/path'
@@ -31,10 +31,10 @@ export default function Header() {
               </div>
             </Link>
           </nav>
-          <div className='h-36 col-span-12 md:col-span-4 text-2xl'>
-            <div className='min-w-56 pr-0 md:pr-[50px] pt-4 md:pt-[40px] justify-around items-center flex flex-wrap'>
+          <div className='h-36 col-span-12 md:col-span-4 text-2xl  w-[35rem]'>
+            <div className=' min-w-56 pr-0 md:pr-[50px] pt-4 md:pt-[40px] justify-around items-center flex flex-wrap'>
               <Link
-                to='/'
+                to={path.home}
                 className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
                                     after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
               >
@@ -42,71 +42,81 @@ export default function Header() {
               </Link>
               {(user?.roles.toLowerCase() === roles.student ||
                 user?.roles.toLowerCase() === roles.tutor) && (
-                <Popover
-                  className='flex items-center py-1 cursor-pointer'
-                  renderPopover={
-                    <div className='rounded-3xl shadow-black shadow-xl'>
-                      <div className='w-[25rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
-                        <Link
-                          to={path.registerAsTutor}
-                          className='py-2 w-[15rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
-                        >
-                          Đăng ký thành giảng viên
-                        </Link>
-                        {user?.roles.toLowerCase() === roles.tutor ?
+                <React.Fragment>
+                  <Popover
+                    className='flex items-center py-1 cursor-pointer'
+                    renderPopover={
+                      <div className='rounded-3xl shadow-black shadow-xl'>
+                        <div className='w-[25rem] flex mt-0.5 items-center justify-between text-center text-[10px] px-auto rounded-sm'>
                           <Link
-                            to={path.requestList}
+                            to={path.registerAsTutor}
+                            className='py-2 w-[15rem] h-full bg-pink-400 text-black rounded-l-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
+                          >
+                            Đăng ký thành giảng viên
+                          </Link>
+                          <Link
+                            to={path.sideBarMenu}
                             className='py-2 w-[15rem] h-full bg-pink-400 text-black rounded-r-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
                           >
                             Danh sách lớp
                           </Link>
-                        : <>
-                          <Link
-                              to={path.requestList}
-                              className='py-2 w-[10rem] h-full bg-pink-400 text-black hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
-                            >
-                              Danh sách lớp
-                          </Link>
-                          <Link
-                            to={path.service}
-                            className='py-2 w-[10rem] h-full bg-pink-400 text-black rounded-r-3xl hover:text-white hover:bg-black hover:shadow-xl hover:shadow-white'
-                          >
-                            Danh sách dịch vụ
-                          </Link>
-                          </>
-                        }
+                        </div>
                       </div>
+                    }
+                  >
+                    <div
+                      className='mx-2 text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
+                    >
+                      Loại dịch vụ
                     </div>
-                  }
-                >
-                  <div
-                    className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                  </Popover>
+                  <Link
+                    to={path.tutorList}
+                    className='mx-2 text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
                                     after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
                   >
-                    Loại dịch vụ
-                  </div>
-                </Popover>
+                    Danh sách các gia sư
+                  </Link>
+                </React.Fragment>
               )}
               {(user?.roles.toLowerCase() === roles.moderator ||
                 user?.roles.toLowerCase() === roles.admin) && (
-                <Link
-                  to={path.requestList}
-                  className='text-sm font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
-                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
-                >
-                  Danh sách lớp
-                </Link>
+                <React.Fragment>
+                  <Link
+                    to={path.sideBarMenu}
+                    className=' text-sm font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
+                  >
+                    Danh sách lớp
+                  </Link>
+                  <Link
+                    to={path.tutorList}
+                    className=' text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
+                  >
+                    Danh sách các gia sư
+                  </Link>
+                </React.Fragment>
               )}
-              <Link
-                to={path.support}
-                className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
-                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
-              >
-                Hỗ trợ
-              </Link>
+
+              {!(
+                user?.roles.toLowerCase() === roles.moderator ||
+                user?.roles.toLowerCase() === roles.admin ||
+                user?.roles.toLowerCase() === roles.student ||
+                user?.roles.toLowerCase() === roles.tutor
+              ) && (
+                <div
+                  className=' mt-1 text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                     '
+                >
+                  Các tính năng và hỗ trợ sẽ được kích hoạt ngay khi bạn đăng
+                  nhập hoặc đăng ký
+                </div>
+              )}
             </div>
           </div>
-          <nav className='h-36 pt-4 md:pt-[48px] col-span-12 md:col-span-5'>
+          <nav className='h-36 pt-2 md:pt-[40px] col-span-12 md:col-span-5'>
             <NavHeader />
           </nav>
         </div>

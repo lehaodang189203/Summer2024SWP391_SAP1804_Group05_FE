@@ -10,6 +10,7 @@ import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 
 import {
   AddQualification,
+  CensorShipTutor,
   CreatServiceType,
   TutorProfile,
   UpdateTutorProfile
@@ -35,7 +36,7 @@ export const tutorApi = {
       }
     } catch (error) {
       // Handle network or API errors
-      throw new Error('Failed to fetch data')
+      throw new Error('Thất bại trong việc lấy dữ liệu ')
     }
   },
 
@@ -51,7 +52,7 @@ export const tutorApi = {
       }
     } catch (error) {
       // Handle network or API errors
-      throw new Error('Failed to fetch data')
+      throw new Error('Thất bại trong việc lấy dữ liệu ')
     }
   },
   //  tham gia lớp
@@ -61,20 +62,17 @@ export const tutorApi = {
     ),
 
   createService: async (id: string, body: CreatServiceType) => {
-    try {
-      const response = await http.post<SuccessResponseReq<string>>(
-        `/tutor/createService?id=${id}`,
-        body
-      )
-      console.log('response', response)
-      if (response.status === HttpStatusCode.Ok) {
-        return response.data
-      } else {
-        throw new Error('Danh sách trống')
-      }
-    } catch (error) {
-      throw new Error('Failed to fetch data')
-    }
+    return await http.post<SuccessResponseReq<string>>(
+      `tutor/createService?id=${id}`,
+      body
+    )
+  },
+
+  updateService: async (idService: string, body: CreatServiceType) => {
+    return await http.put<SuccessResponseReq<string>>(
+      `tutor/updateService?idService=${idService}`,
+      body
+    )
   },
 
   getReview: async (idTutor: string) => {
@@ -89,7 +87,7 @@ export const tutorApi = {
       }
     } catch (error) {
       // Handle network or API errors
-      throw new Error('Failed to fetch data')
+      throw new Error('Thất bại trong việc lấy dữ liệu ')
     }
   },
 
@@ -114,7 +112,6 @@ export const tutorApi = {
 
       return response.data // Return response data if needed
     } catch (error) {
-      console.error('lỗi:', error)
       throw error // Re-throw error for handling in caller function
     }
   },
@@ -130,19 +127,17 @@ export const tutorApi = {
 
       return response.data // Return response data if needed
     } catch (error) {
-      console.error('lỗi:', error)
       throw error // Re-throw error for handling in caller function
     }
   },
-  getAllTutorService: async (idTutor: string): Promise<ServiceTutorGet[]> => {
+  getSerivceByTutor: async (idTutor: string): Promise<ServiceTutorGet[]> => {
     try {
       const response = await http.get<SuccessResponseReq<ServiceTutorGet[]>>(
         `/tutor/getServices?id=${idTutor}`
       )
-      return response.data.data // Return response data if needed
+      return response.data.data
     } catch (error) {
-      console.error('lỗi:', error)
-      throw error // Re-throw error for handling in caller function
+      throw error
     }
   },
   deleteTutorService: async (
@@ -154,8 +149,19 @@ export const tutorApi = {
       )
       return response.data // Return response data if needed
     } catch (error) {
-      console.error('lỗi:', error)
       throw error // Re-throw error for handling in caller function
+    }
+  },
+
+  //  lấy đơn
+  getRegisterTutor: async (id: string) => {
+    try {
+      const response = await http.get<SuccessResponseReq<CensorShipTutor>>(
+        `tutor/GetRegisterTutor?id=${id}`
+      )
+      return response.data
+    } catch (error) {
+      throw new Error('Thất bại trong việc lấy dữ liệu ')
     }
   }
 }

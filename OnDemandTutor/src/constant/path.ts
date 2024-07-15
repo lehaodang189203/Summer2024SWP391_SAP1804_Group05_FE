@@ -8,13 +8,24 @@ export const path = {
   profile: '/user/profile', //user
   registerAsTutor: '/registerAsTutor', //student
   support: '/support', //student
-  tutors: '/tutors', //student
+  sideBarMenu: '/requestsAndservices',
+  // xem đơn tutor
+  tutorViewApplication: '/tutorViewApplication',
+  tutorViewApplicationSpending: '/tutorViewApplicationSpending',
+  tutorViewApplicationReject: '/tutorViewApplicationReject',
+  // tổng (không cần nữa)
+  applicationTutor: '/applicationTutor',
+
+  tutorList: '/tutorList',
+  services: '/services',
+  tutors: '/tutors', //xem tutor trong lớp
   checkOut: '/checkout', //student
   paymentcallback: '/paymentcallback', //student
   deposit: '/deposit', //student
   studentViewRequestList: '/studentViewRequestList', //student
   requestStudentCurrent: '/requestStudentCurrent', //student
-  service: '/Service',
+  requestStudentReject: '/requestStudentReject', //student
+  service: '/services',
   bookedService: '/bookedService',
   requestList: '/requests', //tutor and student
   profileTT: '/user/profileTT', //tutor
@@ -25,8 +36,8 @@ export const path = {
   paymentFail: '/paymentFail',
   detailRequest: '/detailRequest', //chưa được sử dụng
   calender: '/calender', //calender nèk
-  myService:'/myService',
-  tutorviewAllOwnService:'/ttService',
+  myService: '/myService',
+  tutorviewAllOwnService: '/ttService',
   myClassLayout: '/myClassLayout',
   //tutorViewRequestList: '/studentViewRequestList', //student
   myClass: '/myClass',

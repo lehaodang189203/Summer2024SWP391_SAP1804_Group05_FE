@@ -1,3 +1,5 @@
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import classNames from 'classnames'
 
 interface Props {
@@ -27,7 +29,8 @@ export default function Pagination({
         return (
           <span
             key={`dot-before-${index}`}
-            className='mx-2 rounded border bg-white px-3 py-2 shadow-sm'
+            className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'
+            onClick={() => onPageChange(index + 1)}
           >
             ...
           </span>
@@ -35,13 +38,15 @@ export default function Pagination({
       }
       return null
     }
+
     const renderDotAfter = (index: number) => {
       if (!dotAfter) {
         dotAfter = true
         return (
           <span
             key={`dot-after-${index}`}
-            className='mx-2 rounded border bg-white px-3 py-2 shadow-sm'
+            className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'
+            onClick={() => onPageChange(index + 1)}
           >
             ...
           </span>
@@ -100,32 +105,32 @@ export default function Pagination({
   }
 
   return (
-    <div className='mt-6 flex flex-wrap justify-center'>
+    <div className='mt-6 flex flex-wrap justify-center items-center'>
       {currentPage === 1 ? (
-        <span className='mx-2 cursor-not-allowed rounded border bg-white/60 px-3 py-2  shadow-sm'>
-          Prev
+        <span className='mx-2 cursor-not-allowed rounded border bg-white/60 px-3 py-2 shadow-sm'>
+          <FontAwesomeIcon icon={faArrowLeft} />
         </span>
       ) : (
         <span
           onClick={() => onPageChange(currentPage - 1)}
-          className='mx-2 cursor-pointer rounded border bg-white px-3 py-2  shadow-sm'
+          className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'
         >
-          Prev
+          <FontAwesomeIcon icon={faArrowLeft} />
         </span>
       )}
 
       {renderPagination()}
 
       {currentPage === totalPages ? (
-        <span className='mx-2 cursor-not-allowed rounded border bg-white/60 px-3 py-2  shadow-sm'>
-          Next
+        <span className='mx-2 cursor-not-allowed rounded border bg-white/60 px-3 py-2 shadow-sm'>
+          <FontAwesomeIcon icon={faArrowRight} />
         </span>
       ) : (
         <span
           onClick={() => onPageChange(currentPage + 1)}
-          className='mx-2 cursor-pointer rounded border bg-white px-3 py-2  shadow-sm'
+          className='mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm'
         >
-          Next
+          <FontAwesomeIcon icon={faArrowRight} />
         </span>
       )}
     </div>
