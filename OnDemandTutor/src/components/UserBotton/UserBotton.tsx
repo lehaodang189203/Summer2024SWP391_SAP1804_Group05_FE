@@ -22,10 +22,7 @@ const formatCurrency = (amount: number) => {
   })
 }
 
-export default function UserButton({
-  isAuthenticated,
-  profile
-}: UserButtonProps) {
+export default function ({ profile, isAuthenticated }: UserButtonProps) {
   const [showNotificationWindow, setShowNotificationWindow] = useState(false)
   const notificationRef = useRef<HTMLDivElement>(null)
   const isFetchingRef = useRef(false) // Ref to track if refetch is in progress

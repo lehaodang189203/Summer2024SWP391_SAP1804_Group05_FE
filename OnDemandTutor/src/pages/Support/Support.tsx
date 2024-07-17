@@ -1,72 +1,8 @@
 import React, { useEffect } from 'react'
 
 // Extend the window object to include subiz
-declare global {
-  interface Window {
-    subiz: any
-  }
-}
 
 export default function SupportPage() {
-  // đoạn chat AI
-  useEffect(() => {
-    if (!window.subiz) {
-      ;(function (s: any, u: Document, b: string, i: string, z: string) {
-        var o:
-            | ((k: any, t: any) => any)
-            | ((arg0: number, arg1: number) => string),
-          t: string,
-          r: string[],
-          y: { (k: number): void }
-        if (s && !s[i]) {
-          // Ensure `s` is not void before checking `s[i]`
-          s._sbzaccid = z
-          s[i] = function () {
-            s[i].q.push(arguments)
-          }
-          s[i].q = []
-          s[i]('setAccount', z)
-          r = [
-            'widget.subiz.net',
-            'storage.googleapis' + (t = '.com'),
-            'app.sbz.workers.dev',
-            i +
-              'a' +
-              ((o = function (k: any, t: number) {
-                var n = t <= 6 ? 5 : o(k, t - 1) + o(k, t - 3)
-                return k !== t ? n : n.toString(32)
-              })(20, 20) +
-                t),
-            i + 'b' + o(30, 30) + t,
-            i + 'c' + o(40, 40) + t
-          ]
-          y = function (k: number) {
-            var t: HTMLScriptElement, n: HTMLElement
-            if (!s._subiz_init_2094850928430) {
-              if (r[k]) {
-                t = u.createElement(b) as HTMLScriptElement
-                n = u.getElementsByTagName(b)[0] as HTMLElement
-                t.async = true
-                t.src = 'https://' + r[k] + '/sbz/app.js?accid=' + z
-                n.parentNode?.insertBefore(t, n)
-                setTimeout(y, 2000, k + 1)
-              }
-            }
-          }
-          y(0)
-        }
-      })(window, document, 'script', 'subiz', 'acsaxihpajizodvvwfvi')
-    }
-
-    // Cleanup function to stop Subiz when the component is unmounted
-    return () => {
-      if (window.subiz && typeof window.subiz === 'function') {
-        window.subiz('destroy')
-        delete window.subiz
-      }
-    }
-  }, [])
-
   return (
     <div className='bg-white container'>
       <section className='text-center py-12 px-4'>

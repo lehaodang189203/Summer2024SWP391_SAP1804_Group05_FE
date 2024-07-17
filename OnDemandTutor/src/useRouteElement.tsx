@@ -71,15 +71,6 @@ function RejectedRoute() {
 export default function useRouteElements() {
   const routeElements = useRoutes([
     {
-      path: path.home,
-      element: (
-        <MainLayout>
-          <Home />
-        </MainLayout>
-      ),
-      index: true
-    },
-    {
       path: '',
       element: <RejectedRoute />,
       children: [
@@ -107,6 +98,15 @@ export default function useRouteElements() {
       path: '',
       element: <ProtectedRoute />,
       children: [
+        {
+          path: path.home,
+          element: (
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          ),
+          index: true
+        },
         {
           path: path.registerAsTutor, //student
           element: (

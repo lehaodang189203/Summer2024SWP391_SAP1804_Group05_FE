@@ -84,7 +84,7 @@ const SidebarMenu = () => {
             <div className='relative'>
               <button
                 onClick={handleOption}
-                className={`mb-10 bg-slate-500 text-white rounded-full p-4 shadow-lg hover:bg-transparent hover:text-black hover:shadow-xl transition-all duration-300 group ${
+                className={`mb-24 bg-slate-500 text-white rounded-full p-4 shadow-lg hover:bg-transparent hover:text-black hover:shadow-xl transition-all duration-300 group ${
                   showOptions ? 'rotate-180' : ''
                 }`}
                 style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}
@@ -92,7 +92,7 @@ const SidebarMenu = () => {
                 <FontAwesomeIcon icon={faPlus} />
               </button>
               <div
-                className={` absolute bottom-6 right-0 bg-white p-2 shadow-lg rounded-lg overflow-hidden transition-all duration-300  ${
+                className={` absolute bottom-24 right-0 bg-white p-2 shadow-lg rounded-lg overflow-hidden transition-all duration-300  ${
                   showOptions
                     ? 'translate-x-0 opacity-100 right-16'
                     : 'translate-x-full opacity-0'
