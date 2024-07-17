@@ -23,6 +23,8 @@ export default function TutorViewOwnService() {
     queryFn: () => tutorApi.getSerivceByTutor(profile?.id || '')
   })
 
+  console.log(services)
+
   useEffect(() => {
     if (services) {
       setClassData(services)
@@ -127,12 +129,18 @@ export default function TutorViewOwnService() {
                 </p>
               </div>
             </div>
-            <div>
+            <div className='flex justify-between mt-4'>
               <button
                 onClick={() => handleEditService(item.id)} // Pass service id to handleEditService
-                className='w-full bg-yellow-600 text-white font-bold py-2 px-4 rounded-md hover:bg-yellow-700 mt-16'
+                className='bg-yellow-600 text-white font-bold py-2 px-4 rounded-md hover:bg-yellow-700'
               >
                 Chỉnh sửa
+              </button>
+              <button
+                onClick={() => handleDeleteService(item.id)} // Pass service id to handleDeleteService
+                className='bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700'
+              >
+                Xóa dịch vụ
               </button>
             </div>
           </div>
@@ -150,18 +158,12 @@ export default function TutorViewOwnService() {
               handleTimeSlotChange={handleTimeSlotChange}
               getDayOfWeek={getDayOfWeek}
             />
-            <button
-              onClick={() => handleDeleteService(item.id)} // Pass service id to handleDeleteService
-              className='w-full  bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700 mt-14'
-            >
-              Xóa dịch vụ
-            </button>
           </div>
         </div>
       ))}
       {editingServiceId && (
         <CreateService
-          refetch={refetch}
+          refetch={() => refetch()}
           idService={editingServiceId} // Pass editing service id to CreateService
           onClose={() => setEditingServiceId(null)} // Reset editingServiceId to null to close modal
         />

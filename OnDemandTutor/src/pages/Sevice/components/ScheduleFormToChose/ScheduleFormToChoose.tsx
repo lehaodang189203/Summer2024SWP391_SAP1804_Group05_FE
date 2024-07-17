@@ -64,17 +64,16 @@ export default function ScheduleFormToChoose({
     return date
   })
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
+  const formatDate = (date: Date) => {
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const day = String(date.getDate()).padStart(2, '0')
     const year = date.getFullYear()
-    return { formattedDate: `${month}-${day}`, month, year }
+    return { formattedDate: `${day}-${month}`, month, year }
   }
 
-  const { month, year } = formatDate(
-    currentWeekStart.toISOString().split('T')[0]
-  )
+  const { month, year } = formatDate(currentWeekStart)
+
+  console.log('Schedule:', schedule)
 
   // Get only dates that have available time slots
   const datesWithTimeSlots = weekDates.filter((date) => {
@@ -82,10 +81,22 @@ export default function ScheduleFormToChoose({
     return schedule.some((s) => s.date === dateString && s.timeSlots.length > 0)
   })
 
+  console.log(
+    'Week Dates:',
+    weekDates.map((date) => date.toISOString().split('T')[0])
+  )
+  console.log(
+    'Dates with Time Slots:',
+    datesWithTimeSlots.map((date) => date.toISOString().split('T')[0])
+  )
+
   // Get available hours for the selected date
   const availableHours = selectedDate
     ? schedule.find((s) => s.date === selectedDate)?.timeSlots || []
     : []
+
+  console.log('Selected Date:', selectedDate)
+  console.log('Available Hours:', availableHours)
 
   return (
     <div className='mb-2 border p-4 rounded-xl bg-slate-50 m-1'>
@@ -103,10 +114,9 @@ export default function ScheduleFormToChoose({
         <div className='mt-2 space-x-2 space-y-2'>
           {datesWithTimeSlots.map((date) => {
             const dateString = date.toISOString().split('T')[0]
-            //  thứ
             return (
               <div
-                key={date.toISOString()}
+                key={dateString}
                 className='inline-block text-center border rounded-sm'
               >
                 <button
@@ -116,10 +126,8 @@ export default function ScheduleFormToChoose({
                     selectedDate === dateString ? 'bg-green-500' : ''
                   }`}
                 >
-                  {/* ngày */}
-                  <div>{formatDate(dateString).formattedDate}</div>
+                  <div>{formatDate(date).formattedDate}</div>
                   <p className='bg-slate-50 p-0.5 rounded-md'>
-                    {/*  thứ */}
                     {getDayOfWeek(dateString)}
                   </p>
                 </button>

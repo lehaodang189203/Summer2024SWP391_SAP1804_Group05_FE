@@ -30,7 +30,6 @@ export default function Login() {
   const { setIsAuthenticated, setRefreshToken, setProfile } =
     useContext(AppContext)
   const navigate = useNavigate()
-  const location = useLocation()
 
   const [showForgotPassword, setShowForgotPassword] = useState(false)
 
@@ -82,6 +81,8 @@ export default function Login() {
         console.log('login', data)
 
         const refreshToken = getRefreshTokenFromLS()
+        console.log(refreshToken)
+
         setRefreshToken(refreshToken)
         setIsAuthenticated(true)
         setProfile(data.data.data.user)

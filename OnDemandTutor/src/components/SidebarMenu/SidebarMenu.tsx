@@ -1,6 +1,6 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { roles } from '../../constant/roles'
 import FormRequest from '../../pages/FormRequest/FormRequest'
 import RequestList from '../../pages/RequestList'
@@ -8,9 +8,10 @@ import CreateService from '../../pages/Sevice/CreateSevice'
 import ServiceList from '../../pages/Sevice/ServiceList'
 import { User } from '../../types/user.type'
 import { getProfileFromLS } from '../../utils/auth'
+import { AppContext } from '../../context/app.context'
 
 const SidebarMenu = () => {
-  const user: User = getProfileFromLS()
+  const { profile } = useContext(AppContext)
   const [activePage, setActivePage] = useState('requestList')
 
   const [showForm, setShowForm] = useState(false)
@@ -78,8 +79,8 @@ const SidebarMenu = () => {
       </div>
       <div className='w-3/4 p-4'>{renderContent()}</div>
 
-      {user?.roles.toLowerCase() !== roles.moderator &&
-        user.roles.toLowerCase() !== roles.admin && (
+      {profile?.roles.toLowerCase() !== roles.moderator &&
+        profile?.roles.toLowerCase() !== roles.admin && (
           <div className='fixed bottom-6 right-6'>
             <div className='relative'>
               <button

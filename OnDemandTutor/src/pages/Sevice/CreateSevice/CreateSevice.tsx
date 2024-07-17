@@ -12,7 +12,7 @@ import Schedule from '../components/Schedule/Schedule'
 interface Props {
   onClose: () => void
   idService?: string
-  refetch?: () => void | undefined
+  refetch?: () => void
 }
 
 interface FormData {

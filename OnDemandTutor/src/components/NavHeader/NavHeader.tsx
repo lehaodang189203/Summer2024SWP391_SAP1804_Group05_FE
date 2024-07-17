@@ -129,12 +129,6 @@ export default function NavHeader() {
 
                   {profile.roles.toLowerCase() == roles.student ? (
                     <>
-                      <Link
-                        to={path.studentViewRequestList}
-                        className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
-                      >
-                        Xem yêu cầu của bạn
-                      </Link>
                       {/* <Link
                         to={path.bookedService}
                         className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'

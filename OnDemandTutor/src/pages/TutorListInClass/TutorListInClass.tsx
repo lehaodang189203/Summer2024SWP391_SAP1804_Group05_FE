@@ -56,6 +56,9 @@ export default function TutorListInClass() {
 
   const handleApproved = (idTutor: string) => {
     if (idRequestParams) {
+      console.log('idRequestParams', idRequestParams)
+      console.log('idTutor', idTutor)
+
       selectTutorMutation.mutate(
         { idRequest: idRequestParams, idTutor },
         {

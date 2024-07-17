@@ -153,41 +153,42 @@ export default function MyClass() {
                   </div>
                   <div className='my-1'>
                     Trạng thái:{' '}
-                    <span className='text-black font-bold text-md'>
+                    <span className='text-green-600 font-bold text-md '>
                       {req.status}
                     </span>
                   </div>
                 </div>
-              </div>
-              <div
-                className={`w-full flex justify-between transition-max-height duration-300 ease-in-out mx-auto ${
-                  hovered === req.idClassRequest
-                    ? 'max-h-20'
-                    : 'max-h-0 overflow-hidden'
-                }`}
-              >
                 <div
-                  className={`w-[49%] flex items-center justify-center ${
-                    reviewSubmitted === req.idClassRequest ||
-                    req.status.toLowerCase() === statusClass.complete
-                      ? 'w-full'
-                      : 'w-[49%]'
+                  className={`w-full border-2 mt-2 flex justify-between transition-max-height duration-300 ease-in-out mx-auto ${
+                    hovered === req.idClassRequest
+                      ? 'max-h-20'
+                      : 'max-h-0 overflow-hidden'
                   }`}
                 >
-                  <button
-                    onClick={() => handleOpenModal(req.idClassRequest)}
-                    className='w-full bg-pink-400 text-white font-bold py-2 px-4 rounded-md hover:bg-pink-200'
-                    style={{
-                      width:
-                        reviewSubmitted === req.idClassRequest ||
-                        req.status.toLowerCase() === statusClass.complete
-                          ? '100%'
-                          : '50%'
-                    }}
+                  <div
+                    className={`w-[49%] flex items-center justify-center ${
+                      reviewSubmitted === req.idClassRequest ||
+                      req.status.toLowerCase() === statusClass.complete
+                        ? 'w-full'
+                        : 'w-[49%]'
+                    }`}
                   >
-                    Chi tiết
-                  </button>
+                    <button
+                      onClick={() => handleOpenModal(req.idClassRequest)}
+                      className='w-full bg-pink-400 text-white font-bold py-2 px-4 rounded-md hover:bg-pink-200'
+                      style={{
+                        width:
+                          reviewSubmitted === req.idClassRequest ||
+                          req.status.toLowerCase() === statusClass.complete
+                            ? '100%'
+                            : '50%'
+                      }}
+                    >
+                      Chi tiết
+                    </button>
+                  </div>
                 </div>
+
                 {reviewSubmitted !== req.idClassRequest &&
                   req.status.toLowerCase() !== statusClass.complete && (
                     <div className='w-[49%] flex items-center justify-center'>

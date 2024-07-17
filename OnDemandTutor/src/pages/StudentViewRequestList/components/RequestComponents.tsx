@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { studentApi } from '../../../api/student.api'
@@ -17,6 +17,7 @@ import { statusReq } from '../../../constant/status.Req'
 import { Request as RequestType } from '../../../types/request.type'
 import FormRequest from '../../FormRequest/FormRequest'
 import Status from '../status'
+import { AppContext } from '../../../context/app.context'
 
 interface Props {
   request: RequestType
@@ -27,6 +28,7 @@ export default function RequestComponents({ request, refetch }: Props) {
   const [showButtons, setShowButtons] = useState(false)
   const [showForm, setShowForm] = useState(false)
   const navigate = useNavigate()
+  const { profile } = useContext(AppContext)
 
   const handleMouseEnter = () => {
     setShowButtons(true)
@@ -45,13 +47,14 @@ export default function RequestComponents({ request, refetch }: Props) {
   }
 
   const handleChangePath = (idRe: string) => {
-    if (request.status === statusReq.approved) {
+    if (request.status.toLowerCase() === statusReq.approved) {
       navigate(`${path.tutors}/${idRe}`)
     }
   }
 
   const handleDeleteRequest = useMutation({
-    mutationFn: (idRequest: string) => studentApi.deleteRequest(idRequest),
+    mutationFn: (idRequest: string) =>
+      studentApi.deleteRequest(profile?.id as string, idRequest),
     onSuccess: (data) => {
       if (refetch) {
         toast.success(data.data.message)
@@ -84,8 +87,10 @@ export default function RequestComponents({ request, refetch }: Props) {
 
   return (
     <div
-      className={`hover:shadow-xl hover:shadow-black rounded-xl ${
-        request.reason ? 'h-[22rem]' : 'h-[19rem]'
+      className={`hover:shadow-xl hover:shadow-black rounded-xl my-5 ${
+        request.reason && request.status === statusReq.reject
+          ? 'h-[22rem]'
+          : 'h-[20rem]'
       } border-2 ${getStatusColor()}`}
     >
       <div
