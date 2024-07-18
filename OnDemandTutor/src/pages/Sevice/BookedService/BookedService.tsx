@@ -33,6 +33,9 @@ export default function BookedService() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+  const [completedServiceId, setCompletedServiceId] = useState<string | null>(
+    null
+  )
   const itemsPerPage = 4 // Số phần tử trên mỗi trang
 
   const handleCompleteClass = (id: string) => {
@@ -41,6 +44,7 @@ export default function BookedService() {
         toast.success('Kết thúc lớp thành công')
         setSelectedService(id)
         setShowReviewModal(true)
+        setCompletedServiceId(id) // Mark service as completed
         refetch()
       },
       onError: (data) => {
@@ -72,15 +76,15 @@ export default function BookedService() {
   }
 
   return (
-    <div className=''>
-      {profile?.roles === roles.tutor ? (
+    <div className='container'>
+      {profile?.roles.toLowerCase() === roles.tutor ? (
         <>
           <div className='text-center text-wrap border-b-2 border bg-slate-50 '>
             Danh sách dịch vụ của bạn đã được đăng kí bởi học sinh
           </div>
         </>
       ) : (
-        <div className='text-center text-wrap border-b-2 border bg-slate-50 '>
+        <div className='text-center text-lg text-wrap bg-slate-50 '>
           Dịch vụ bạn đã đăng kí
         </div>
       )}
@@ -99,7 +103,7 @@ export default function BookedService() {
               onMouseLeave={() => setHovered(null)}
             >
               {/* Parent */}
-              <div className='w-[33rem] h-auto rounded-3xl px-5 hover:shadow-2xl hover:shadow-black border-2 mx-auto transition-shadow duration-500'>
+              <div className='w-[33rem] py-auto h-auto rounded-3xl px-5 hover:shadow-2xl hover:shadow-black   mx-auto transition-shadow duration-500'>
                 <div className='my-2'>
                   <h2 className='text-red-600 text-2xl'>{service.title}</h2>
                 </div>
@@ -155,39 +159,32 @@ export default function BookedService() {
                     </span>
                   </div>
                 </div>
-              </div>
-              <div
-                className={`w-[33rem] flex justify-between transition-max-height duration-300 ease-in-out mx-auto ${
-                  hovered === service.idBooking
-                    ? 'max-h-20'
-                    : 'max-h-0 overflow-hidden'
-                }`}
-              >
-                <div className='w-full flex items-center justify-center'>
-                  <button
-                    onClick={() => handleOpenModal(service.idBooking)}
-                    className={`w-full bg-pink-400 text-white font-bold py-2 px-4 rounded-md hover:bg-pink-200 ${
-                      service.status === statusClass.complete ? '' : 'w-full'
-                    }`}
-                  >
-                    Chi tiết
-                  </button>
-                </div>
-                {profile?.roles.toLowerCase() !== roles.tutor && (
-                  <>
-                    {service.status !== statusClass.complete && (
-                      <div className='w-[49%] flex items-center justify-center'>
-                        <button
-                          onClick={() => handleCompleteClass(service.idBooking)}
-                          className='w-full bg-black text-white font-bold py-2 px-4 rounded-md hover:bg-gray-400'
-                        >
-                          Kết thúc lớp
-                        </button>
-                      </div>
+                <div
+                  className={`flex mt-2 justify-between transition-max-height duration-300 ease-in-out mx-auto ${
+                    hovered === service.idBooking
+                      ? 'max-h-20'
+                      : 'max-h-0 overflow-hidden'
+                  }`}
+                >
+                  <div className='w-full flex items-center justify-center'>
+                    {service.status.toLowerCase() === statusClass.complete ? (
+                      <button
+                        onClick={() => handleOpenModal(service.idBooking)}
+                        className='w-full bg-pink-400 text-white font-bold py-2 px-4 rounded-md hover:bg-pink-200'
+                      >
+                        Chi tiết
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleCompleteClass(service.idBooking)}
+                        className='w-[49%] bg-black text-white font-bold py-2 px-4 rounded-md hover:bg-gray-400'
+                      >
+                        Kết thúc lớp
+                      </button>
                     )}
-                  </>
-                )}
-                <hr />
+                  </div>
+                  <hr />
+                </div>
               </div>
               {isModalOpen && selectedService === service.idBooking && (
                 <Modal

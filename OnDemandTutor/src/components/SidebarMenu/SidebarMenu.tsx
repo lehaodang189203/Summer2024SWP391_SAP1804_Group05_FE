@@ -2,13 +2,11 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useContext, useState } from 'react'
 import { roles } from '../../constant/roles'
+import { AppContext } from '../../context/app.context'
 import FormRequest from '../../pages/FormRequest/FormRequest'
 import RequestList from '../../pages/RequestList'
 import CreateService from '../../pages/Sevice/CreateSevice'
 import ServiceList from '../../pages/Sevice/ServiceList'
-import { User } from '../../types/user.type'
-import { getProfileFromLS } from '../../utils/auth'
-import { AppContext } from '../../context/app.context'
 
 const SidebarMenu = () => {
   const { profile } = useContext(AppContext)

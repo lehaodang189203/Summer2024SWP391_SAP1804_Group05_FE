@@ -197,7 +197,7 @@ export default function RequestComponents({ request, refetch }: Props) {
             }`}
           >
             {request.reason &&
-              request.reason.toLowerCase() === statusReq.reject && (
+              request.status.toLowerCase() === statusReq.reject && (
                 <div className='border-2 rounded-xl p-2 flex bg-slate-50 w-full'>
                   <div className='text-gray-700 font-medium'>Lý do:</div>
                   <span className='font-semibold ml-2 text-red-500'>
@@ -224,6 +224,7 @@ export default function RequestComponents({ request, refetch }: Props) {
 
         {showForm && (
           <FormRequest
+            request={request}
             idRequest={request.idRequest}
             onClose={handleCloseForm}
             refetch={refetch}

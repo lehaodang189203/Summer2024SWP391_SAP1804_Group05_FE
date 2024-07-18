@@ -10,6 +10,7 @@ import { useMutation } from '@tanstack/react-query'
 import { RequestBody } from '../../types/user.request.type'
 import { toast } from 'react-toastify'
 import { AppContext } from '../../context/app.context'
+import { Request } from '../../types/request.type'
 
 type FormData = Pick<
   Requestchema,
@@ -24,47 +25,46 @@ type FormData = Pick<
   | 'title'
   | 'totalSessions'
 >
-const schema = requestSchema.pick([
-  'title',
-  'timeTable',
-  'learningMethod',
-  'class',
-  'price',
-  'subject',
-  'timeEnd',
-  'timeStart',
-  'description',
-  'totalSessions'
-])
 
 interface FormRequestProps {
   onClose: () => void
   idRequest?: string
   refetch?: (() => void) | undefined
+  request?: Request
 }
 
 export default function FormRequest({
   onClose,
   idRequest,
-  refetch
+  refetch,
+  request
 }: FormRequestProps) {
-  const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
-
+  const { profile } = useContext(AppContext)
   const {
-    register,
-    handleSubmit,
-    trigger,
     control,
-    formState: { errors }
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    trigger,
+    register
   } = useForm<FormData>({
+    resolver: yupResolver(requestSchema),
     defaultValues: {
-      class: '10'
-    },
-    resolver: yupResolver(schema)
+      title: request?.title,
+      subject: request?.subject,
+      class: (request?.class ?? '10') as '10' | '11' | '12',
+      learningMethod: request?.learningMethod as
+        | 'Dạy trực tiếp(offline)'
+        | 'Dạy trực tuyến (online)',
+      price: request?.price,
+      timeStart: request?.timeStart,
+      timeEnd: request?.timeEnd,
+      description: request?.description,
+      timeTable: request?.timeTable
+    }
   })
 
-  const { profile } = useContext(AppContext)
-
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false)
   const ReqMutation = useMutation({
     mutationFn: (body: RequestBody) =>
       studentApi.createRequest(profile?.id as string, body)

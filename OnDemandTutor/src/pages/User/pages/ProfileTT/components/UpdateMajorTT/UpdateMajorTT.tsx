@@ -15,7 +15,11 @@ type FormData = {
   img: string
 }
 
-export default function UpdateMajorTT() {
+interface Props {
+  refetch?: () => void
+}
+
+export default function UpdateMajorTT({ refetch }: Props) {
   const { profile } = useContext(AppContext)
   const [formData, setFormData] = useState<FormData>({
     subjects: '',
@@ -74,42 +78,45 @@ export default function UpdateMajorTT() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (refetch) {
+      try {
+        // Example usage: add subject
+        if (formData.subjects && profile?.id) {
+          await tutorApi
+            .addSubject(profile.id, formData.subjects)
+            .then((response) => {
+              toast.success(response.message)
+              refetch()
+            })
+            .catch((error) => {
+              console.error('Error:', error)
+              toast.error('Failed to add subject')
+            })
+        }
 
-    try {
-      // Example usage: add subject
-      if (formData.subjects && profile?.id) {
-        await tutorApi
-          .addSubject(profile.id, formData.subjects)
-          .then((response) => {
-            toast.success(response.message)
-          })
-          .catch((error) => {
-            console.error('Error:', error)
-            toast.error('Failed to add subject')
-          })
+        const { name, type, img } = formData
+        if (name && type && profile?.id) {
+          await tutorApi
+            .addQualification(profile.id, {
+              name: name,
+              type: type,
+              img: img
+            })
+            .then((response) => {
+              toast.success(response.message)
+              refetch()
+            })
+            .catch((error) => {
+              console.error('Failed to add qualification:', error)
+              toast.error('Failed to add qualification')
+            })
+        }
+
+        console.log('Submitted data:', formData)
+      } catch (error) {
+        console.error('Submit error:', error)
+        toast.error('Failed to submit form')
       }
-
-      const { name, type, img } = formData
-      if (name && type && profile?.id) {
-        await tutorApi
-          .addQualification(profile.id, {
-            name: name,
-            type: type,
-            img: img
-          })
-          .then((response) => {
-            toast.success(response.message)
-          })
-          .catch((error) => {
-            console.error('Failed to add qualification:', error)
-            toast.error('Failed to add qualification')
-          })
-      }
-
-      console.log('Submitted data:', formData)
-    } catch (error) {
-      console.error('Submit error:', error)
-      toast.error('Failed to submit form')
     }
   }
 

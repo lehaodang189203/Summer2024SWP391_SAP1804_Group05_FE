@@ -10,7 +10,7 @@ export const adminAPI = {
   async getTutorList() {
     try {
       const response = await http.get<SuccessResponseReq<AdminTutorProfile[]>>(
-        `/Admin/viewAllTutor`
+        `Tutor/viewAllTutor`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -38,12 +38,12 @@ export const adminAPI = {
   async deleteAccount(id: string) {
     try {
       const response = await http.delete<SuccessResponseReq<any>>(
-        `/Admin/DeleteAccount?id=${id}`
+        `Account/DeleteAccount?id=${id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
       } else {
-        throw new Error('responece trống')
+        throw new Error('Danh sách  trống')
       }
     } catch (error) {
       throw new Error('Lỗi khi sử dụng api')
@@ -94,7 +94,7 @@ export const adminAPI = {
   async getStudentList() {
     try {
       const response = await http.get<SuccessResponseReq<DataTypeStu[]>>(
-        `/Admin/viewAllStudent`
+        `Student/GetAllStudent`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -120,7 +120,7 @@ export const adminAPI = {
   async getAmountStudents() {
     try {
       const response = await http.get<SuccessResponseReq<number>>(
-        `/Admin/ViewAmountStudent`
+        `/Student/GetAmountStudent`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -134,7 +134,7 @@ export const adminAPI = {
   async getAmountTutors() {
     try {
       const response = await http.get<SuccessResponseReq<number>>(
-        `/Admin/ViewAmountTutor`
+        `/Tutor/ViewAmountTutor`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -145,10 +145,11 @@ export const adminAPI = {
       throw new Error('Failed to fetch data')
     }
   },
+  // lấy theo tháng này(this month)
   async getMonthlyRevenue() {
     try {
       const response = await http.get<SuccessResponseReq<number>>(
-        `/Admin/ViewRevenueThisMonth`
+        `/Revenue/ViewRevenueThisMonth`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -159,10 +160,11 @@ export const adminAPI = {
       throw new Error('Failed to fetch data')
     }
   },
+  //  theo năm
   async getRevenueByYear(year: number) {
     try {
       const response = await http.get<SuccessResponseReq<ChartData[]>>(
-        `/Admin/ViewRevenueByYear?year=${year}`
+        `/Revenue/ViewRevenueByYear?year=${year}`
       )
       if (response.status === HttpStatusCode.Ok) {
         console.log(' response.data.data', response.data.data)
@@ -177,10 +179,9 @@ export const adminAPI = {
   async getTransaction() {
     try {
       const response = await http.get<SuccessResponseReq<any>>(
-        `/Admin/ViewAllTransaction`
+        `Transaction/ViewAllTransaction`
       )
       if (response.status === HttpStatusCode.Ok) {
-        console.log(' response.data.data', response.data.data)
         return response.data.data
       } else {
         throw new Error('Failed to fetch data')
@@ -189,10 +190,12 @@ export const adminAPI = {
       throw new Error('Failed to fetch data')
     }
   },
+
+  //  viewAllReivew của admin
   async getComplaintList() {
     try {
       const response = await http.get<SuccessResponseReq<complaintType[]>>(
-        `/Admin/ViewAllComplaint`
+        'Complaint/ViewAllComplaint'
       )
       if (response.status === HttpStatusCode.Ok) {
         console.log(' response.data.data', response.data.data)
@@ -204,4 +207,21 @@ export const adminAPI = {
       throw new Error('Failed to fetch data')
     }
   }
+
+  //  //  viewAllReivew
+  // async getComplaintList() {
+  //   try {
+  //     const response = await http.get<SuccessResponseReq<complaintType[]>>(
+  //       'Complaint/ViewAllComplaint'
+  //     )
+  //     if (response.status === HttpStatusCode.Ok) {
+  //       console.log(' response.data.data', response.data.data)
+  //       return response.data
+  //     } else {
+  //       throw new Error('Failed to fetch data')
+  //     }
+  //   } catch (error) {
+  //     throw new Error('Failed to fetch data')
+  //   }
+  // }
 }

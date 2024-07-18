@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import BUMBUM from '../../assets/img/BUMBUM.png'
+import aaa from '../../assets/img/aaaaaa.jpg'
 import { path } from '../../constant/path'
 import { roles } from '../../constant/roles'
 import { User } from '../../types/user.type'
@@ -26,7 +26,7 @@ export default function Header() {
             <Link to={path.home}>
               <div className='min-w-16  w-32 pt-[100%] mt-2 relative'>
                 <div className='absolute top-0 left-0 w-[250px] h-full object-cover'>
-                  <img src={BUMBUM} alt='logo' />
+                  <img src={aaa} alt='logo' />
                 </div>
               </div>
             </Link>

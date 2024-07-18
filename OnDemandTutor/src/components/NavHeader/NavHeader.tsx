@@ -40,6 +40,8 @@ export default function NavHeader() {
   })
 
   const handleLogout = () => {
+    console.log(222)
+
     logoutMutation.mutate(
       { refresh_token: refreshToken },
       {

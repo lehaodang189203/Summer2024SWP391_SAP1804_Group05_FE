@@ -15,7 +15,7 @@ import InputNumber from '../../components/InputNumber'
 import { Schema, schema } from '../../utils/rules'
 import { toast } from 'react-toastify'
 import { AppContext } from '../../context/app.context'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { path } from '../../constant/path'
 import { HttpStatusCode } from '../../constant/HttpStatusCode.enum'
 import { ErrorResponse } from '../../types/utils.type'
@@ -46,7 +46,8 @@ const registerSchema = schema.pick([
 
 export default function Register() {
   const navigate = useNavigate()
-  const { setIsAuthenticated, setProfile } = useContext(AppContext)
+  const { setIsAuthenticated, setRefreshToken, setProfile } =
+    useContext(AppContext)
   const {
     register,
     handleSubmit,
@@ -126,6 +127,47 @@ export default function Register() {
       }
     })
   })
+
+  const handleGoogleCallback = (event: {
+    origin: string
+    data: { profile: any; accessToken: any; refreshToken: any }
+  }) => {
+    if (event.origin === 'http://localhost:7133') {
+      const { profile, accessToken, refreshToken } = event.data
+      if (profile && accessToken && refreshToken) {
+        setProfile(JSON.parse(profile))
+        setIsAuthenticated(true)
+        setRefreshToken(refreshToken)
+
+        localStorage.setItem('profile', profile)
+        localStorage.setItem('access_token', accessToken)
+        localStorage.setItem('refresh_token', refreshToken)
+        navigate(path.home)
+        toast.success('Đăng nhập thành công')
+      } else {
+        toast.error('Đăng nhập bại')
+      }
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('message', handleGoogleCallback)
+    return () => {
+      window.removeEventListener('message', handleGoogleCallback)
+    }
+  }, [])
+
+  const signInGoogle = () => {
+    const googleAuthWindow = window.open(
+      'http://localhost:7133/api/Account/signin-google',
+      '_blank',
+      'width=500,height=600'
+    )
+
+    if (!googleAuthWindow) {
+      alert('Popup blocked. Please allow popups for this website.')
+    }
+  }
 
   return (
     <div className='py-10 w-[25rem] rounded-2xl border-2 mx-auto my-[2rem] bg-transparent hover:shadow-xl hover:shadow-black'>
@@ -226,7 +268,10 @@ export default function Register() {
           <span>---------------------------</span>
         </div>
         <div className='justify-center flex py-2'>
-          <button className='bg-black text-white border-black border-2 w-[300px] rounded-lg justify-center items-center flex py-2 shadow-2xl hover:bg-white hover:text-black'>
+          <button
+            onClick={signInGoogle}
+            className='bg-black text-white border-black border-2 w-[300px] rounded-lg justify-center items-center flex py-2 shadow-2xl hover:bg-white hover:text-black'
+          >
             <div className='pr-2'>
               <FontAwesomeIcon icon={faGoogle} />
             </div>

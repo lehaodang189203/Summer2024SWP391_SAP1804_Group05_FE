@@ -25,38 +25,33 @@ const user = getProfileFromLS()
 
 const userApi = {
   getProfile(id: string) {
-    return http.get<SuccessResponseReq<User>>(`User/getProfile?id=${id}`)
+    return http.get<SuccessResponseReq<User>>(`Account/getProfile?id=${id}`)
   },
+
+  // cập nhật
   async updateProfile(body: UpdateProfileBody) {
     // console.log('body của res khi call api',body)
     // console.log('người dùng user là',user)
     // console.log(' id người dùng user là',user.id)
     return await http.put<SuccessResponseReq<User>>(
-      `user/updateProfile?id=${user.id}`,
+      `Account/updateProfile?id=${user.id}`,
       body
-    )
-  },
-
-  async uploadAvatar(avatar: string) {
-    return await http.put<SuccessResponse<string>>(
-      `user/UpdateAvatar?id=${user.id}`,
-      avatar
     )
   },
 
   async changePassword(body: ChangePasswordReqBody) {
     // Gửi yêu cầu HTTP PUT
-    return await http.put(`user/ChangePassword?id=${user.id}`, body)
+    return await http.put(`Account/ChangePassword?id=${user.id}`, body)
   },
 
   async forgotPassword(body: ForgotPasswordReqBody) {
-    return await http.put(`user/ForgotPassword?Email=${body.email}`)
+    return await http.put(`Account/ForgotPassword?Email=${body.email}`)
   },
 
   ViewClassService: async (id: string) => {
     try {
       const response = await http.get<SuccessResponseReq<any>>(
-        `/User/ViewClassService?id=${id}`
+        `/Class/ViewClassService?id=${id}`
       )
       console.log('response', response)
       if (response.status === HttpStatusCode.Ok) {
@@ -72,7 +67,7 @@ const userApi = {
   getNotification: async (id: string) => {
     try {
       const response = await http.get<SuccessResponseReq<Notificate[]>>(
-        `User/ViewAllNotification?id=${id}`
+        `Notification/ViewAllNotification?id=${id}`
       )
       console.log('response', response)
       if (response.status === HttpStatusCode.Ok) {
@@ -84,9 +79,10 @@ const userApi = {
       throw new Error('Failed to fetch data')
     }
   },
+
   updateNotification: async (id: string) => {
     return await http.put<SuccessResponse<any>>(
-      `User/UpdateStatusNotification?id=${id}`
+      `Notification/UpdateStatusNotification?id=${id}`
     )
   }
 }

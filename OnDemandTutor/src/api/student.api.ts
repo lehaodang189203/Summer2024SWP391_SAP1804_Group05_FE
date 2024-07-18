@@ -27,13 +27,13 @@ const user = <User>getProfileFromLS()
 export const studentApi = {
   // Tạo yêu cầu
   createRequest: async (id: string, body: RequestBody) =>
-    await http.post(`student/createRequest?id=${id}`, body),
+    await http.post(`Request/createRequest?id=${id}`, body),
 
   // Lấy danh sách yêu cầu chờ duyệt
   async rejectRequest(id: string) {
     try {
       const response = await http.get<SuccessResponseReq<Request[]>>(
-        `Student/rejectRequest?id=${id}`
+        `Request/getRejectRequest?id=${id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -50,7 +50,7 @@ export const studentApi = {
   async pendingRequest(id: string) {
     try {
       const response = await http.get<SuccessResponseReq<Request[]>>(
-        `Student/pedingRequest?id=${id}`
+        `Request/getPedingRequest?id=${id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -66,7 +66,7 @@ export const studentApi = {
   // Lấy danh sách yêu cầu đã duyệt
   async approvedRequest(id: string) {
     try {
-      const response = await http.get(`Student/appovedRequest?id=${id}`)
+      const response = await http.get(`Request/getAppovedRequest?id=${id}`)
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
       } else {
@@ -82,7 +82,7 @@ export const studentApi = {
   viewAllTutorsJoinRequests: async (requestId: string) => {
     try {
       const response = await http.get<SuccessResponseReq<TutorType[]>>(
-        `Student/viewAllTutorsJoinRequest?idRequest=${requestId}`
+        `Request/getAllTutorsJoinRequest?idRequest=${requestId}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -98,71 +98,72 @@ export const studentApi = {
   // // Chấp nhận yêu cầu từ một gia sư cụ thể
   acceptTutor: async (body: AcceptTutorBody) => {
     await http.post(
-      `student/SelectTutor?idrequest=${body.idRequest}&idaccounttutor=${body.idTutor}`
+      `Request/selectTutor?idRequest=${body.idRequest}&idaccounttutor=${body.idTutor}`
     )
   },
 
   // // Đăng ký làm gia sư
   registerAsTutor: async (body: RequestTutorBody, id: string) =>
     await http.post<SuccessResponse<any>>(
-      `/User/registerAsTutor?id=${id}`,
+      `Tutor/registerAsTutor?id=${id}`,
       body
     ),
 
   //  chỉnh sửa cập nhật gia sư
   reSignUpofTutor: async (body: RequestTutorBody, id: string) =>
     await http.put<SuccessResponse<any>>(
-      `/tutor/ReSignUpOftutor?id=${id}`,
+      `/Tutor/reSignUpOfTutor?id=${id}`,
       body
     ),
 
   updateRequest: async (body: UpdateRequest) =>
     await http.put<SuccessResponse<RequestBody>>(
-      `Student/updateRequest?IDRequest=${body.idReq}`,
+      `Request/updateRequest?idRequest=${body.idReq}`,
       body.dataUpdate
     ),
 
   deleteRequest: async (id: string, idRequest: string) =>
     await http.delete<SuccessResponse<any>>(
-      `Student/deleteRequest?id=${id}&idRequest=${idRequest}`
+      `Request/deleteRequest?id=${id}&idRequest=${idRequest}`
     ),
 
   // select Tutor
   selectTutor: async (body: SelecTutorReqBody) =>
     await http.post<SuccessResponse<any>>(
-      `Student/SelectTutor?idRequest=${body.idRequest}&idaccounttutor=${body.idTutor}`
+      `Request/selectTutor?idRequest=${body.idRequest}&idaccounttutor=${body.idTutor}`
     ),
 
   //  lấy lớp học đang diễn ra
   classActive(id: string) {
     return http.get<SuccessResponseReq<Classrequest>>(
-      `User/ViewClassRequest?id=${id}`
+      `Class/ViewClassRequest?id=${id}`
     )
   },
+
   createComplaint(body: {
     idUser: string
     description: string
     idAccountTutor: string
   }) {
     return http.post<SuccessResponseReq<string>>(
-      `Student/CreateComplaint`,
+      `Complaint/CreateComplaint`,
       body
     )
   },
 
   classCompled(idClassRequest: string) {
     return http.put<SuccessResponseReq<any>>(
-      `Student/CompleteClassRequest?idClassRequest=${idClassRequest}`
+      `Class/completeClassRequest?idClassRequest=${idClassRequest}`
     )
   },
 
   getReview(id: string) {
-    return http.get<SuccessResponseReq<any>>(`tutor/GetReview?id=1${id}`)
+    return http.get<SuccessResponseReq<any>>(`Review/GetReview?id=${id}`)
   },
 
   serviceCompled(idBooking: string) {
     return http.put<SuccessResponseReq<any>>(
-      `Student/CompleteClassService?idBooking=${idBooking}`
+      `Class/completeClassService?idBooking=${idBooking}`
     )
   },
   BookingServiceLearning: async (
@@ -174,7 +175,7 @@ export const studentApi = {
 
     try {
       const response = await http.post<SuccessResponseReq<string>>(
-        `Student/BookingServiceLearning?id=${id}&idService=${serviceID} `,
+        `Service/bookingService?id=${id}&idService=${serviceID} `,
         body
       )
       if (response.status === HttpStatusCode.Ok) {
@@ -190,26 +191,24 @@ export const studentApi = {
 
   async GetAllService() {
     return await http.get<SuccessResponseReq<ServiceTutor[]>>(
-      'Student/GetAllService'
+      'Service/getAllService'
     )
   },
 
   CreateReview: async (body: ReviewType) => {
     return await http.post<SuccessResponseReq<string>>(
-      'Student/CreateReviewRequest',
+      'Review/CreateReviewRequest',
       body
     )
   },
   CreateServiceReview: async (body: ReviewServiceType) => {
     return await http.post<SuccessResponseReq<string>>(
-      'Student/CreateReviewService',
+      'Review/CreateReviewService',
       body
     )
   },
 
   //  xóa đơn
   deleteRegisterTutor: async (id: string) =>
-    await http.delete<SuccessResponse<any>>(
-      `Student/DeleteSignUpTutor?id=${id} `
-    )
+    await http.delete<SuccessResponse<any>>(`Tutor/deleteSignUpTutor?id=${id} `)
 }

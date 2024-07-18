@@ -67,18 +67,20 @@ export default function ServiceForm({ onClose, idService, refetch }: Props) {
 
   const onSubmit = (body: FormData) => {
     if (idService) {
-      console.log('data', body)
-      updateServiceMutation.mutate(body, {
-        onSuccess: (data) => {
-          toast.success(data.data.message)
-          reset()
-          refetch
-          onClose()
-        },
-        onError: (errors) => {
-          console.log(errors.message)
-        }
-      })
+      if (refetch) {
+        console.log('data', body)
+        updateServiceMutation.mutate(body, {
+          onSuccess: (data) => {
+            toast.success(data.data.message)
+            reset()
+            refetch()
+            onClose()
+          },
+          onError: (errors) => {
+            console.log(errors.message)
+          }
+        })
+      }
     } else {
       console.log('data', body)
       createServiceMutation.mutate(body, {

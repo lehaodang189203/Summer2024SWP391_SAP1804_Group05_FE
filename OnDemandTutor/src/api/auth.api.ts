@@ -10,13 +10,13 @@ import http from '../utils/http'
 
 export const authApi = {
   loginAccount: async (body: LoginReqBody) =>
-    await http.post<AuthResponse>('user/login', body), // nhận vào một đối tượng body có kiểu LoginReqBody, hàm sử dụng phương thức post của axios gửi yêu cầu đăng nhập đến endpoint
+    await http.post<AuthResponse>('/Account/login', body), // nhận vào một đối tượng body có kiểu LoginReqBody, hàm sử dụng phương thức post của axios gửi yêu cầu đăng nhập đến endpoint
 
   registerAccount: async (body: ResReqBody) =>
-    await http.post<AuthResponse>('user/register', body),
+    await http.post<AuthResponse>('/Account/register', body),
 
-  loginGG: async () => await http.post<AuthResponse>('User/google-callback'),
+  loginGG: async () => await http.post<AuthResponse>('Account/signin-google'),
 
   logoutAccount: async (body: LogoutReqBody) =>
-    await http.post('user/logout', body)
+    await http.post('Account/logout', body)
 }

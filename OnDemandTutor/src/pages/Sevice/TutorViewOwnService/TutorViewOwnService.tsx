@@ -163,7 +163,7 @@ export default function TutorViewOwnService() {
       ))}
       {editingServiceId && (
         <CreateService
-          refetch={() => refetch()}
+          refetch={refetch}
           idService={editingServiceId} // Pass editing service id to CreateService
           onClose={() => setEditingServiceId(null)} // Reset editingServiceId to null to close modal
         />

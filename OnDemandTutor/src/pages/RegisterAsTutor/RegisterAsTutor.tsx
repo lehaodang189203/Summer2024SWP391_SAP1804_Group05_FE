@@ -54,8 +54,8 @@ export default function RegisterAsTutor({
   const ReSignUpMutation = useMutation({
     mutationFn: (body: RequestTutorBody) =>
       studentApi.reSignUpofTutor(body, profile?.id as string),
-    onSuccess: () => {
-      toast.success('Đăng ký lại thành công')
+    onSuccess: (data) => {
+      toast.success(data.data.message)
       resetForm()
     },
     onError: (error) => {

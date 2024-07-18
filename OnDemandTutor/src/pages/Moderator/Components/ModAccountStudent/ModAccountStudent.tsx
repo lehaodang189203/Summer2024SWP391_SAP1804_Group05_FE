@@ -2,7 +2,7 @@ import Search from 'antd/es/transfer/search'
 import ModMenu from '../ModMenu/ModMenu'
 import { useEffect } from 'react'
 import { Table, TableColumnsType } from 'antd'
-import {  useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { moderatorApi } from '../../../../api/moderator.api'
 import { User } from '../../../../types/user.type'
 
@@ -10,7 +10,7 @@ import { User } from '../../../../types/user.type'
 //   id:string,
 //   fullName: string
 //   email:string,
-//   dateOfBirth: string 
+//   dateOfBirth: string
 //   gender:string,
 //   roles:string,
 //   address:string,
@@ -21,17 +21,16 @@ import { User } from '../../../../types/user.type'
 export default function ModAccountStudent() {
   //Lấy danh sách yêu cầu từ API
   const { data: Data } = useQuery<User[]>({
-    queryKey: ['Account'],                    
+    queryKey: ['Account'],
     queryFn: () => moderatorApi.getAccount()
   })
   useEffect(() => {
     if (Data) {
       console.log(Data)
-    }else console.log('Data')
+    } else console.log('Data')
   }, [Data])
   // })
-  const handleDelete = () => {
-  }
+  const handleDelete = () => {}
   const columns: TableColumnsType<User> = [
     {
       title: 'Tên Học Sinh',
@@ -77,8 +76,7 @@ export default function ModAccountStudent() {
       title: 'Số dư',
       dataIndex: 'accountBalance',
       width: 150
-    }
-    ,
+    },
     {
       title: 'Hành động',
       dataIndex: 'delete',
@@ -117,7 +115,6 @@ export default function ModAccountStudent() {
 
   return (
     <>
-      
       <ModMenu kind='student' style='Option2' />
       <div className='text-left'>Quản lí tài khoản</div>
       <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>

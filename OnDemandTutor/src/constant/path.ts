@@ -72,11 +72,11 @@ export const path = {
 
 export const pathAuth = {
   home: '/',
-  login: 'user/login',
+  login: '/Account/login',
   user: '/user',
-  register: 'user/register',
+  register: '/Account/register',
   registerAsTutor: '/registerAT',
-  logout: 'user/logout',
+  logout: 'Account/logout',
   tutors: '/tutors',
   profileTT: '/profile',
   requestList: '/requests',

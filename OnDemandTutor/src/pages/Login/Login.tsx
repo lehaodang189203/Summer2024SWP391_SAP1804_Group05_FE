@@ -76,6 +76,8 @@ export default function Login() {
   })
 
   const onSubmitLogin = (data: FormData) => {
+    console.log('login', data)
+
     loginMutation.mutate(data, {
       onSuccess: (data) => {
         console.log('login', data)
@@ -142,7 +144,7 @@ export default function Login() {
 
   const signInGoogle = () => {
     const googleAuthWindow = window.open(
-      'http://localhost:7133/api/user/signin-google',
+      'http://localhost:7133/api/Account/signin-google',
       '_blank',
       'width=500,height=600'
     )

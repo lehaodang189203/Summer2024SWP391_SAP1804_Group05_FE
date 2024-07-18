@@ -44,7 +44,9 @@ import PaymentSuccess from './pages/PaymentCallBack/PaymentSuccess/PaymentSucces
 import BookedService from './pages/Sevice/BookedService'
 
 import SidebarMenu from './components/SidebarMenu'
-import MainLayoutApplicationTutor from './pages/ApplicationTutor/MainLayoutApplicationTutor'
+import ApplicationReject from './pages/ApplicationTutor/ApplicationReject'
+import ApplicationSpending from './pages/ApplicationTutor/ApplicationSpending'
+import ApplicationSuccess from './pages/ApplicationTutor/ApplicationSuccess'
 import MyService from './pages/Sevice/MyService'
 import ServiceList from './pages/Sevice/ServiceList'
 import TutorViewOwnService from './pages/Sevice/TutorViewOwnService'
@@ -54,12 +56,9 @@ import TutorList from './pages/TutorList'
 import ServiceListOfTutor from './pages/TutorList/components/ServiceListOfTutor'
 import TutorListInClass from './pages/TutorListInClass'
 import ProfileTT from './pages/User/pages/ProfileTT'
-import ApplicationReject from './pages/ApplicationTutor/ApplicationReject'
-import ApplicationSpending from './pages/ApplicationTutor/ApplicationSpending'
-import ApplicationSuccess from './pages/ApplicationTutor/ApplicationSuccess'
 
 function ProtectedRoute() {
-  const { isAuthenticated, profile } = useContext(AppContext)
+  const { isAuthenticated } = useContext(AppContext)
   return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
 }
 

@@ -83,8 +83,8 @@ export default function ProfileTT() {
               </div>
             </div>
             <div className='flex mb-4'>
-              <div className='w-1/5 text-right capitalize'>Giới thiệu</div>
-              <div className='mx-2 w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+              <div className='w-1/5   text-right capitalize'>Giới thiệu</div>
+              <div className='mx-2 w-4/5 rounded-xl border-2 min-h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
                 {profileTutor?.introduction}
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function ProfileTT() {
               <div className='w-1/5 text-right capitalize'>
                 Kỹ năng chuyên môn
               </div>
-              <div className='mx-2  w-4/5 rounded-xl border-2 h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+              <div className='mx-2    w-4/5 rounded-xl border-2 min-h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
                 {profileTutor?.specializedSkills}
               </div>
             </div>
@@ -151,7 +151,7 @@ export default function ProfileTT() {
             )}
             {selectedUpdate === 'major' && (
               <div className='mt-4 p-4'>
-                <UpdateMajorTT />
+                <UpdateMajorTT refetch={refetch} />
               </div>
             )}
           </div>
@@ -162,7 +162,7 @@ export default function ProfileTT() {
             <span>Ảnh bằng</span>
             {profileTutor?.qualifications?.length ? (
               profileTutor.qualifications.map((qualification) => (
-                <div key={qualification.id} className='my-2'>
+                <div key={qualification.id} className='mx-2  my-2 border-2 w-'>
                   <label htmlFor=''>{qualification.name}</label>
                   <img
                     src={qualification.img}

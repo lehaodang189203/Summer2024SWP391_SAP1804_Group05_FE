@@ -27,7 +27,7 @@ export const tutorApi = {
   getProfileTT: async (id: string): Promise<TutorProfile> => {
     try {
       const response = await http.get<SuccessResponseReq<TutorProfile>>(
-        `tutor/GetProfileTutor?id=${id}`
+        `TutorProfile/getProfileTutor?id=${id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -43,7 +43,7 @@ export const tutorApi = {
   viewRequest: async (id: string): Promise<Request[]> => {
     try {
       const response = await http.get<SuccessResponse<Request[]>>(
-        `tutor/viewRequest?id=${id}`
+        `Request/getAllApprovedRequest?id=${id}`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -58,19 +58,19 @@ export const tutorApi = {
   //  tham gia lớp
   joinClass: async (body: JoinClassBody) =>
     await http.post<SuccessResponse<any>>(
-      `tutor/join-request?requestId=${body.requestId}&id=${body.id}`
+      `Request/join-request?requestId=${body.requestId}&id=${body.id}`
     ),
 
   createService: async (id: string, body: CreatServiceType) => {
     return await http.post<SuccessResponseReq<string>>(
-      `tutor/createService?id=${id}`,
+      `Service/createService?id=${id}`,
       body
     )
   },
 
   updateService: async (idService: string, body: CreatServiceType) => {
     return await http.put<SuccessResponseReq<string>>(
-      `tutor/updateService?idService=${idService}`,
+      `Service/updateService?idService=${idService}`,
       body
     )
   },
@@ -79,7 +79,7 @@ export const tutorApi = {
     try {
       const response = await http.get<
         SuccessResponseReq<ViewReviewRequestBody[]>
-      >(`tutor/GetReview?id=${idTutor}`)
+      >(`Review/GetReview?id=${idTutor}`)
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
       } else {
@@ -96,7 +96,7 @@ export const tutorApi = {
     // console.log('người dùng user là',user)
     // console.log(' id người dùng user là',user.id)
     return await http.put<SuccessResponseReq<any>>(
-      `tutor/UpdateTutorProfile?id=${id}`,
+      `TutorProfile/updateTutorProfile?id=${id}`,
       body
     )
   },
@@ -107,7 +107,7 @@ export const tutorApi = {
   ): Promise<SuccessResponseReq<any>> => {
     try {
       const response = await http.post<SuccessResponseReq<any>>(
-        `tutor/AddSubject?id=${id}&subjectName=${subjectName}`
+        `TutorProfile/addSubject?id=${id}&subjectName=${subjectName}`
       )
 
       return response.data // Return response data if needed
@@ -121,7 +121,7 @@ export const tutorApi = {
   ): Promise<SuccessResponseReq<any>> => {
     try {
       const response = await http.post<SuccessResponseReq<any>>(
-        `tutor/AddQualification?id=${id}`,
+        `TutorProfile/addQualification?id=${id}`,
         body
       )
 
@@ -133,7 +133,7 @@ export const tutorApi = {
   getSerivceByTutor: async (idTutor: string): Promise<ServiceTutorGet[]> => {
     try {
       const response = await http.get<SuccessResponseReq<ServiceTutorGet[]>>(
-        `/tutor/getServices?id=${idTutor}`
+        `Service/getServices?id=${idTutor}`
       )
       return response.data.data
     } catch (error) {
@@ -145,7 +145,7 @@ export const tutorApi = {
   ): Promise<SuccessResponseReq<ServiceTutor[]>> => {
     try {
       const response = await http.delete<SuccessResponseReq<any>>(
-        `/tutor/deleteService?serviceId=${idService}`
+        `Service/deleteService?idService=${idService}`
       )
       return response.data // Return response data if needed
     } catch (error) {
@@ -157,7 +157,7 @@ export const tutorApi = {
   getRegisterTutor: async (id: string) => {
     try {
       const response = await http.get<SuccessResponseReq<CensorShipTutor>>(
-        `tutor/GetRegisterTutor?id=${id}`
+        `Tutor/getSignUpTutor?id=${id}`
       )
       return response.data
     } catch (error) {

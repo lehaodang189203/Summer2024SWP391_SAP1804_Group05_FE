@@ -204,10 +204,10 @@ export default function TutorListInClass() {
                     Chấp nhận
                   </button>
                 </div>
-                <div className='capitalize border-[3px] rounded-lg w-full h-10 bg-white hover:bg-slate-200 mt-2 mx-auto'>
+                <div className='capitalize border-[3px] rounded-lg w-full h-10 bg-white hover:bg-slate-200 mt-2 mx-auto flex justify-center items-center'>
                   <button
                     onClick={() => handleViewFeedback(tutor.id)}
-                    className='flex justify-center items-center py-2 text-center'
+                    className='py-2 text-center w-full'
                   >
                     Xem phản hồi
                   </button>

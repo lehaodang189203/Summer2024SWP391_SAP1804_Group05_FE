@@ -15,10 +15,11 @@ import http from '../utils/http'
 // }
 //DataType[]
 export const moderatorApi = {
+  //  morderator xem toàn bộ request
   async viewRequests() {
     try {
       const response = await http.get<SuccessResponseReq<RequestModerator[]>>(
-        `/modaretor/viewRequest`
+        `/Request/getAllRequestPending`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -32,16 +33,16 @@ export const moderatorApi = {
   },
   approvedRequest: async (ReqID: string) =>
     await http.put<SuccessResponse<any>>(
-      `modaretor/approvedRequest?requestId=${ReqID}`
+      `Request/approvedRequest?idRequest=${ReqID}`
     ),
 
   rejectRequest: async ({ idReq, reason }: { idReq: string; reason: string }) =>
-    await http.put(`modaretor/rejectRequest?requestId=${idReq}`, { reason }),
+    await http.put(`Request/rejectRequest?idRequest=${idReq}`, { reason }),
 
   getRequestTutorReg: async (): Promise<TutorType[]> => {
     try {
       const response = await http.get<SuccessResponseReq<TutorType[]>>(
-        'modaretor/viewListTutor'
+        'Tutor/getAllSignUpTutor'
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -54,7 +55,7 @@ export const moderatorApi = {
     }
   },
   approvedTutorReg: async (tutorReqID: string) =>
-    await http.put(`modaretor/approveProfile?id=${tutorReqID}`),
+    await http.put(`Tutor/approveProfile?id=${tutorReqID}`),
 
   rejectTutorReg: async ({
     tutorReqID,
@@ -62,7 +63,7 @@ export const moderatorApi = {
   }: {
     tutorReqID: string
     reason: string
-  }) => await http.put(`modaretor/rejectProfile?id=${tutorReqID}`, { reason }),
+  }) => await http.put(`Tutor/rejectProfile?id=${tutorReqID}`, { reason }),
 
   getAccount: async (): Promise<User[]> => {
     try {
@@ -78,6 +79,7 @@ export const moderatorApi = {
     }
   },
 
+  // xóa này của morderator
   deleteRequest: async (idRequest: string) =>
     await http.delete<SuccessResponse<any>>(
       `modaretor/DeleteRequest?idRequest=${idRequest}`

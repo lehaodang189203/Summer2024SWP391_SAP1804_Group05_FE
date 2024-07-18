@@ -111,14 +111,15 @@ export const requestSchema = yup.object({
     .number()
     .min(30000, 'Mỗi buổi giá ít nhất là 30,000 VNĐ')
     .transform((value, originalValue) => {
-      //  trả về số nguyên luôn
-      const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
-      // nếu là chuỗi thì là 0
-      return isNaN(formattedValue) ? 0 : formattedValue
+      // Ensure originalValue is a string before calling replace
+      if (typeof originalValue === 'string') {
+        const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
+        return isNaN(formattedValue) ? 0 : formattedValue
+      }
+      return originalValue
     })
     .required('Giá là bắt buộc')
     .positive('Giá không thể là số âm'),
-
   subject: yup
     .string()
     .required('Môn học là bắt buộc')
