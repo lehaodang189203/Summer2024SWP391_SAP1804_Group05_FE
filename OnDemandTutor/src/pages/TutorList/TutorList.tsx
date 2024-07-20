@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useQuery } from '@tanstack/react-query'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { adminAPI } from '../../api/admin.api'
 import userAvatar from '../../assets/img/user.svg'
 import Pagination from '../../components/Pagination'
@@ -28,11 +28,21 @@ export default function TutorList() {
   const [selectedTutorId, setSelectedTutorId] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
+  const [uniqueSubjects, setUniqueSubjects] = useState<string[]>([])
 
   const { data: TutorListProfile, refetch } = useQuery({
     queryKey: ['tutorList'],
     queryFn: () => adminAPI.getTutorList()
   })
+
+  useEffect(() => {
+    if (TutorListProfile) {
+      const subjects = TutorListProfile.flatMap((tutor) =>
+        tutor.subjects.split(';').map((subject) => subject.trim())
+      )
+      setUniqueSubjects(Array.from(new Set(subjects)))
+    }
+  }, [TutorListProfile])
 
   const handleClosePopup = () => {
     setIsPopupVisible(false)
@@ -62,7 +72,10 @@ export default function TutorList() {
     (tutor: AdminTutorProfile) =>
       tutor.fullName.toLowerCase().includes(searchText.toLowerCase()) &&
       (selectedSubject === '' ||
-        tutor.subjects.toLowerCase().includes(selectedSubject.toLowerCase()))
+        tutor.subjects
+          .split(';')
+          .map((subject) => subject.trim())
+          .includes(selectedSubject))
   )
 
   const indexOfLastItem = currentPage * itemsPerPage
@@ -89,13 +102,11 @@ export default function TutorList() {
           <div className='ml-2'>
             <select
               value={selectedSubject}
-              onChange={(e) => setSelectedSubject(e.target.value)}
+              onChange={(e) => handleSubjectChange(e.target.value)}
               className='border border-gray-300 p-2 rounded-lg'
             >
               <option value=''>Tất cả môn học</option>
-              {Array.from(
-                new Set(TutorListProfile?.map((item) => item.subjects))
-              ).map((subject) => (
+              {uniqueSubjects.map((subject) => (
                 <option key={subject} value={subject}>
                   {subject}
                 </option>

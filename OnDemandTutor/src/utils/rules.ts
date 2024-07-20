@@ -269,14 +269,16 @@ export const reviewTT = yup.object().shape({
 export const serviceSchema = yup.object().shape({
   pricePerHour: yup
     .number()
-    .min(20000, 'Giá mỗi giờ tối thiểu là 20,000 VND')
     .transform((value, originalValue) => {
-      // Trả về số nguyên luôn
-      const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
-      // Nếu là chuỗi thì là 0
-      return isNaN(formattedValue) ? 0 : formattedValue
+      // Nếu originalValue không phải là chuỗi, trả về giá trị ban đầu
+      if (typeof originalValue === 'string') {
+        // Loại bỏ dấu phẩy và chuyển đổi thành số
+        const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
+        return isNaN(formattedValue) ? 0 : formattedValue
+      }
+      return value // Trả về giá trị nếu không phải chuỗi
     })
-
+    .min(20000, 'Giá mỗi giờ tối thiểu là 20,000 VND')
     .required('Giá là bắt buộc')
     .positive('Giá không thể là số âm'),
   title: yup.string().required('Phải nhập tiêu đề'),

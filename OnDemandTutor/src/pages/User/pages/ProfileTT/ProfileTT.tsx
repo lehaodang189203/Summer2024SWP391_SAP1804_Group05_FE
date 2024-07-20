@@ -38,6 +38,8 @@ export default function ProfileTT() {
     refetchOnWindowFocus: false
   })
 
+  console.log(profileTutor?.subjects)
+
   useEffect(() => {
     refetch()
   }, [profile, refetch])

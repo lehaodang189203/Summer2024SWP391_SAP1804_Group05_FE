@@ -5,7 +5,7 @@ import { roles } from '../../constant/roles'
 import { AppContext } from '../../context/app.context'
 import FormRequest from '../../pages/FormRequest/FormRequest'
 import RequestList from '../../pages/RequestList'
-import CreateService from '../../pages/Sevice/CreateSevice'
+import CreateService from '../../pages/Sevice/ServiceForm'
 import ServiceList from '../../pages/Sevice/ServiceList'
 
 const SidebarMenu = () => {

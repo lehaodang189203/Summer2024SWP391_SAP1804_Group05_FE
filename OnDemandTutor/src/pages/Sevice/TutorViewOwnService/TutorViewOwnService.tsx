@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ServiceTutorGet } from '../../../types/request.type'
+import { useContext, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import { tutorApi } from '../../../api/tutor.api'
 import { AppContext } from '../../../context/app.context'
-
-import { toast } from 'react-toastify'
-import CreateService from '../CreateSevice'
+import { ServiceTutorGet } from '../../../types/request.type'
 import ScheduleFormToChoose from '../components/ScheduleFormToChose'
+import ServiceForm from '../ServiceForm'
 
 export default function TutorViewOwnService() {
   const { profile } = useContext(AppContext)
@@ -17,19 +16,35 @@ export default function TutorViewOwnService() {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>('')
   const [classData, setClassData] = useState<ServiceTutorGet[]>([])
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null)
+  const [editingServiceData, setEditingServiceData] =
+    useState<ServiceTutorGet | null>(null)
+
+  const [showFormService, setShowFormSerivce] = useState(false)
+
+  //  đóng form (bấm hủy)
+  const handleCloseForm = () => {
+    setShowFormSerivce(false)
+  }
 
   const { data: services, refetch } = useQuery({
     queryKey: ['allServiceOfTutor'],
     queryFn: () => tutorApi.getSerivceByTutor(profile?.id || '')
   })
 
-  console.log(services)
-
   useEffect(() => {
     if (services) {
       setClassData(services)
     }
   }, [services])
+
+  useEffect(() => {
+    if (editingServiceId) {
+      const selectedService = classData.find(
+        (service) => service.id === editingServiceId
+      )
+      setEditingServiceData(selectedService || null)
+    }
+  }, [editingServiceId, classData])
 
   const handleDateChange = (classIndex: number, date: string) => {
     setSelectedClassIndex(classIndex)
@@ -64,6 +79,7 @@ export default function TutorViewOwnService() {
 
   const handleEditService = (id: string) => {
     setEditingServiceId(id) // Set editingServiceId when editing a service
+    setShowFormSerivce(true)
   }
 
   return (
@@ -144,7 +160,7 @@ export default function TutorViewOwnService() {
               </button>
             </div>
           </div>
-          <div className='col-span-1 p-4 '>
+          <div className='col-span-1 p-4'>
             <p>
               <strong>Thời gian:</strong>
             </p>
@@ -161,11 +177,12 @@ export default function TutorViewOwnService() {
           </div>
         </div>
       ))}
-      {editingServiceId && (
-        <CreateService
+      {editingServiceData && showFormService && (
+        <ServiceForm
           refetch={refetch}
-          idService={editingServiceId} // Pass editing service id to CreateService
-          onClose={() => setEditingServiceId(null)} // Reset editingServiceId to null to close modal
+          idService={editingServiceId as string} // Pass editing service id to CreateService
+          onClose={handleCloseForm} // Reset editingServiceId to null to close modal
+          initialData={editingServiceData as ServiceTutorGet} // Pass the initial data to CreateService
         />
       )}
     </div>

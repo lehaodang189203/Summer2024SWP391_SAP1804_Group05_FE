@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import aaa from '../../assets/img/aaaaaa.jpg'
+import aaa from '../../assets/img/BUMBUM.png'
 import { path } from '../../constant/path'
 import { roles } from '../../constant/roles'
 import { User } from '../../types/user.type'
