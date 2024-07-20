@@ -28,7 +28,8 @@ export default function TutorViewOwnService() {
 
   const { data: services, refetch } = useQuery({
     queryKey: ['allServiceOfTutor'],
-    queryFn: () => tutorApi.getSerivceByTutor(profile?.id || '')
+    queryFn: () => tutorApi.getSerivceByTutor(profile?.id as string),
+    enabled: !!profile?.id
   })
 
   useEffect(() => {

@@ -110,7 +110,7 @@ export default function ServiceForm({
           onSuccess: (data) => {
             toast.success(data.data.message)
             onClose()
-            refetch
+            refetch()
           },
           onError: (error) => {
             toast.error(error.message)
@@ -156,10 +156,16 @@ export default function ServiceForm({
               >
                 Tiêu đề
               </label>
-              <TextArea
-                id='title'
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 '
-                {...register('title')}
+              <Controller
+                name='title'
+                control={control}
+                render={({ field }) => (
+                  <TextArea
+                    id='title'
+                    className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500'
+                    {...field}
+                  />
+                )}
               />
               {errors.title && (
                 <p className='text-red-500'>{errors.title.message}</p>
@@ -266,14 +272,14 @@ export default function ServiceForm({
             <div>
               <label
                 htmlFor='description'
-                className='block text-sm font-medium text-gray-700'
+                className='block text-sm font-medium text-gray-700  '
               >
                 Mô tả
               </label>
               <textarea
                 id='description'
                 rows={4}
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-2'
                 {...register('description')}
               ></textarea>
               {errors.description && (

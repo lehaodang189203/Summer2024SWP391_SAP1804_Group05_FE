@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { moderatorApi } from '../../../api/moderator.api'
 import { studentApi } from '../../../api/student.api'
@@ -10,10 +10,10 @@ import { User } from '../../../types/user.type'
 import { getProfileFromLS } from '../../../utils/auth'
 import ModalChooseService from '../components/ModalChooseService'
 import ScheduleFormToChoose from '../components/ScheduleFormToChose'
+import { AppContext } from '../../../context/app.context'
 
 export default function ServiceList() {
-  const user: User = getProfileFromLS()
-
+  const { profile } = useContext(AppContext)
   const [selectedClassIndex, setSelectedClassIndex] = useState<number | null>(
     null
   )
@@ -24,15 +24,35 @@ export default function ServiceList() {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedSubject, setSelectedSubject] = useState<string>('')
   const [searchServiceId, setSearchServiceId] = useState<string>('') // State for search service ID
+  const [hasError, setHasError] = useState<boolean>(false) // State for error
   const itemsPerPage = 4
 
-  const { data: classService, refetch } = useQuery<ServiceTutor[]>({
+  const {
+    data: classService,
+    refetch,
+    isLoading,
+    isError,
+    error
+  } = useQuery<ServiceTutor[], Error>({
     queryKey: ['allServices'],
     queryFn: () =>
       studentApi.GetAllService().then((response) => response.data.data)
   })
+  useEffect(() => {
+    if (isError) {
+      setHasError(true)
+    }
+  }, [isError])
 
-  const items = classService || []
+  useEffect(() => {
+    if (hasError) {
+      const timeout = setTimeout(() => {
+        window.location.reload()
+      }, 3000)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [hasError])
 
   useEffect(() => {
     if (classService) {
@@ -83,7 +103,6 @@ export default function ServiceList() {
     handleSubmit()
   }
 
-  // Toggle description logic
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   const toggleDescription = () => {
@@ -100,7 +119,6 @@ export default function ServiceList() {
       : `${description.slice(0, maxLength)}...`
   }
 
-  // Pagination logic
   const totalItems = classData.length
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
@@ -110,7 +128,6 @@ export default function ServiceList() {
     setCurrentPage(page)
   }
 
-  // Delete service logic
   const handleDeleteService = (idSer: string) => {
     const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa không?')
     if (isConfirmed) {
@@ -126,164 +143,184 @@ export default function ServiceList() {
     }
   })
 
-  // Filter data by service ID logic
   const filteredData = searchServiceId
     ? classData.filter((item) =>
         item.idService?.toLowerCase().includes(searchServiceId.toLowerCase())
       )
+    : selectedSubject
+    ? classData.filter((item) => item.subject === selectedSubject)
     : classData
 
   return (
     <div className='p-4'>
-      <div className='flex justify-center mb-4'>
-        <select
-          value={selectedSubject}
-          onChange={(e) => setSelectedSubject(e.target.value)}
-          className='border border-gray-300 p-2 rounded-lg'
-        >
-          <option value=''>Tất cả môn học</option>
-          {Array.from(new Set(classService?.map((item) => item.subject))).map(
-            (subject) => (
-              <option key={subject} value={subject}>
-                {subject}
-              </option>
-            )
-          )}
-        </select>
-        <input
-          type='text'
-          value={searchServiceId}
-          onChange={(e) => setSearchServiceId(e.target.value)}
-          placeholder='Nhập mã dịch vụ...'
-          className='ml-4 border border-gray-300 p-2 rounded-lg'
-        />
-      </div>
-      {filteredData.length === 0 && (
-        <div className='text-center text-gray-600 font-bold mt-4'>
-          Hiện tại chưa có dịch vụ nào
+      {isLoading ? (
+        <div className='flex justify-center items-center h-40'>
+          <span className='text-xl font-bold text-gray-600'>Loading...</span>
         </div>
-      )}
-      {filteredData.map((item, classIndex) => (
-        <div
-          key={classIndex}
-          className='w-full bg-transparent border-2 rounded-2xl grid grid-cols-2 hover:shadow-xl transition-shadow translate-x-4 duration-700 shadow-md gap-2 bg-white'
-        >
-          <div className='col-span-1 p-4'>
-            <h2 className='text-xl font-bold mb-2'>{item.title}</h2>
-            <div className='pl-10 p-7 bg-gray-100 rounded-lg shadow-md'>
-              <div className='text-left h-full mx-auto'>
-                <p className='mb-2'>
-                  <strong className='text-pink-500'>Tiêu đề:</strong>{' '}
-                  <span
-                    className={item.title ? 'text-gray-800' : 'text-red-500'}
-                  >
-                    {item.title ? item.title : 'Title trống'}
-                  </span>
-                </p>
-                <p className='mb-2'>
-                  <strong className='text-blue-700'>Mã dịch vụ:</strong>{' '}
-                  <span className='text-gray-800'>{item.idService}</span>
-                </p>
-                <p className='mb-2'>
-                  <strong className='text-blue-700'>Môn học:</strong>{' '}
-                  <span className='text-gray-800'>{item.subject}</span>
-                </p>
-                <p className='mb-2'>
-                  <strong className='text-blue-700'>Lớp:</strong>{' '}
-                  <span className='text-gray-800'>{item.class}</span>
-                </p>
-                <p className='mb-2'>
-                  <strong className='text-blue-700'>Phương thức học:</strong>{' '}
-                  <span className='text-gray-800'>{item.learningMethod}</span>
-                </p>
-                <p className='mb-2'>
-                  <strong className='text-blue-700'>Giá trên một giờ:</strong>{' '}
-                  <span className='text-green-700'>
-                    {item.pricePerHour} VNĐ
-                  </span>
-                </p>
+      ) : (
+        <div>
+          <div className='flex justify-center mb-4'>
+            <select
+              value={selectedSubject}
+              onChange={(e) => {
+                console.log('Selected Subject:', e.target.value) // Debugging
+                setSelectedSubject(e.target.value)
+              }}
+              className='border border-gray-300 p-2 rounded-lg'
+            >
+              <option value=''>Tất cả môn học</option>
+              {Array.from(
+                new Set(classService?.map((item) => item.subject))
+              ).map((subject) => (
+                <option key={subject} value={subject}>
+                  {subject}
+                </option>
+              ))}
+            </select>
+            <input
+              type='text'
+              value={searchServiceId}
+              onChange={(e) => setSearchServiceId(e.target.value)}
+              placeholder='Nhập mã dịch vụ...'
+              className='ml-4 border border-gray-300 p-2 rounded-lg'
+            />
+          </div>
+          {filteredData.length === 0 && (
+            <div className='text-center text-gray-600 font-bold mt-4'>
+              Hiện tại chưa có dịch vụ nào
+            </div>
+          )}
+          {filteredData.map((item, classIndex) => (
+            <div
+              key={classIndex}
+              className='w-full  mb-3 bg-transparent border-2 rounded-2xl grid grid-cols-2 hover:shadow-xl transition-shadow translate-x-4 duration-700 shadow-md gap-2 bg-white'
+            >
+              <div className='col-span-1 p-4'>
+                <h2 className='text-xl font-bold mb-2'>{item.title}</h2>
+                <div className='pl-10 p-7 bg-gray-100 rounded-lg shadow-md'>
+                  <div className='text-left h-full mx-auto'>
+                    <p className='mb-2'>
+                      <strong className='text-pink-500'>Tiêu đề:</strong>{' '}
+                      <span
+                        className={
+                          item.title ? 'text-gray-800' : 'text-red-500'
+                        }
+                      >
+                        {item.title ? item.title : 'Title trống'}
+                      </span>
+                    </p>
+                    <p className='mb-2'>
+                      <strong className='text-blue-700'>Mã dịch vụ:</strong>{' '}
+                      <span className='text-gray-800'>{item.idService}</span>
+                    </p>
+                    <p className='mb-2'>
+                      <strong className='text-blue-700'>Môn học:</strong>{' '}
+                      <span className='text-gray-800'>{item.subject}</span>
+                    </p>
+                    <p className='mb-2'>
+                      <strong className='text-blue-700'>Lớp:</strong>{' '}
+                      <span className='text-gray-800'>{item.class}</span>
+                    </p>
+                    <p className='mb-2'>
+                      <strong className='text-blue-700'>
+                        Phương thức học:
+                      </strong>{' '}
+                      <span className='text-gray-800'>
+                        {item.learningMethod}
+                      </span>
+                    </p>
+                    <p className='mb-2'>
+                      <strong className='text-blue-700'>
+                        Giá trên một giờ:
+                      </strong>{' '}
+                      <span className='text-green-700'>
+                        {item.pricePerHour} VNĐ
+                      </span>
+                    </p>
+                    <p>
+                      <strong className='text-blue-700'>Mô tả:</strong>{' '}
+                      <span className='text-gray-800'>
+                        {renderDescription(item.description)}
+                      </span>
+                      {item.description.length > 100 && (
+                        <button
+                          onClick={toggleDescription}
+                          className='text-blue-500 ml-2 hover:underline'
+                        >
+                          {isDescriptionExpanded ? 'Ẩn bớt' : 'Xem thêm'}
+                        </button>
+                      )}
+                    </p>
+                  </div>
+                  {profile?.roles.toLowerCase() === roles.moderator && (
+                    <div className='flex justify-end mt-2'>
+                      <button
+                        onClick={() => handleDeleteService(item.idService!)}
+                        className='bg-red-700 text-white px-4 py-2 rounded-md w-full hover:bg-slate-600 hover:shadow-xl hover:shadow-black mb-2'
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className='col-span-1 p-4'>
                 <p>
-                  <strong className='text-blue-700'>Mô tả:</strong>{' '}
-                  <span className='text-gray-800'>
-                    {renderDescription(item.description)}
-                  </span>
-                  {item.description.length > 100 && (
+                  <strong>Thời gian:</strong>
+                </p>
+                <ScheduleFormToChoose
+                  schedule={item.schedule}
+                  classIndex={classIndex}
+                  selectedDate={
+                    selectedClassIndex === classIndex ? selectedDate : ''
+                  }
+                  handleDateChange={handleDateChange}
+                  handleTimeSlotChange={handleTimeSlotChange}
+                  getDayOfWeek={getDayOfWeek}
+                />
+                {selectedClassIndex === classIndex &&
+                  selectedTimeSlot &&
+                  item.idAccountTutor !== profile?.id && (
                     <button
-                      onClick={toggleDescription}
-                      className='text-blue-500 ml-2 hover:underline'
+                      type='button'
+                      onClick={openModal}
+                      className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4'
                     >
-                      {isDescriptionExpanded ? 'Ẩn bớt' : 'Xem thêm'}
+                      Xác nhận chọn
                     </button>
                   )}
-                </p>
+                {selectedClassIndex === classIndex &&
+                  selectedTimeSlot &&
+                  item.idAccountTutor === profile?.id && (
+                    <button
+                      type='button'
+                      onClick={openModal}
+                      className='bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-4 rounded mt-4 '
+                    >
+                      Lớp học này là của bạn
+                    </button>
+                  )}
               </div>
-              {user?.roles.toLowerCase() === roles.moderator && (
-                <div className='flex justify-end mt-2'>
-                  <button
-                    onClick={() => handleDeleteService(item.idService!)}
-                    className='bg-red-700 text-white px-4 py-2 rounded-md w-full hover:bg-slate-600 hover:shadow-xl hover:shadow-black mb-2'
-                  >
-                    Xóa
-                  </button>
-                </div>
-              )}
             </div>
-          </div>
-          <div className='col-span-1 p-4'>
-            <p>
-              <strong>Thời gian:</strong>
-            </p>
-            <ScheduleFormToChoose
-              schedule={item.schedule}
-              classIndex={classIndex}
-              selectedDate={
-                selectedClassIndex === classIndex ? selectedDate : ''
-              }
-              handleDateChange={handleDateChange}
-              handleTimeSlotChange={handleTimeSlotChange}
-              getDayOfWeek={getDayOfWeek}
-            />
-            {selectedClassIndex === classIndex &&
-              selectedTimeSlot &&
-              item.idAccountTutor !== user.id && (
-                <button
-                  type='button'
-                  onClick={openModal}
-                  className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4'
-                >
-                  Xác nhận chọn
-                </button>
-              )}
-            {selectedClassIndex === classIndex &&
-              selectedTimeSlot &&
-              item.idAccountTutor === user.id && (
-                <button
-                  type='button'
-                  onClick={openModal}
-                  className='bg-slate-500 hover:bg-slate-400 text-white font-bold py-2 px-4 rounded mt-4 '
-                >
-                  Lớp học này là của bạn
-                </button>
-              )}
-          </div>
+          ))}
+          <ModalChooseService
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            onConfirm={onConfirm}
+            selectedDate={selectedDate}
+            selectedTimeSlots={selectedTimeSlot || ''}
+            classInfo={
+              selectedClassIndex !== null ? classData[selectedClassIndex] : null
+            }
+          />
+          <Pagination
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
         </div>
-      ))}
-      <ModalChooseService
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onConfirm={onConfirm}
-        selectedDate={selectedDate}
-        selectedTimeSlots={selectedTimeSlot || ''}
-        classInfo={
-          selectedClassIndex !== null ? classData[selectedClassIndex] : null
-        }
-      />
-      <Pagination
-        totalItems={totalItems}
-        itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
+      )}
     </div>
   )
 }

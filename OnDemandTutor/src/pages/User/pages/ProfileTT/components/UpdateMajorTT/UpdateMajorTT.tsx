@@ -123,7 +123,9 @@ export default function UpdateMajorTT({ refetch }: Props) {
   return (
     <div className='container border-2 h-full rounded-2xl min:w-[18rem] p-3 hover:shadow-xl hover:shadow-black transition-shadow duration-700'>
       <form onSubmit={onSubmit}>
-        <h2 className='mt-4'>Cập nhật môn học của giảng viên</h2>
+        <h2 className='mt-4 text-2xl text-red-500'>
+          Cập nhật môn học của giảng viên
+        </h2>
 
         <div className='flex flex-col mt-5'>
           <select

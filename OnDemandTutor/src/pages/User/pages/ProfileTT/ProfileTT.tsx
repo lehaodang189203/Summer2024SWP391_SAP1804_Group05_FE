@@ -8,7 +8,7 @@ import UpdateMajorTT from './components/UpdateMajorTT'
 import UpdateProfile from './components/UpdateProfileTT'
 
 interface TutorProfileType {
-  speacializedSkill: string
+  specializedSkills: string
   experience: number
   introduction: string
   subjects: string
@@ -19,6 +19,11 @@ interface TutorProfileType {
     type: string
   }
 }
+
+type profile = Pick<
+  TutorProfileType,
+  'introduction' | 'experience' | 'specializedSkills'
+>
 
 export default function ProfileTT() {
   const [showUpdateOptions, setShowUpdateOptions] = useState(false)
@@ -52,6 +57,18 @@ export default function ProfileTT() {
     }
   }
 
+  const profileTT: profile = profileTutor
+    ? {
+        introduction: profileTutor?.introduction,
+        experience: profileTutor?.experience,
+        specializedSkills: profileTutor?.specializedSkills
+      }
+    : {
+        introduction: '',
+        experience: 0,
+        specializedSkills: ''
+      }
+
   if (error) {
     return (
       <div className='pb-10 rounded-sm bg-transparent px-2 md:px-7 md:pb-20 shadow-black'>
@@ -78,13 +95,13 @@ export default function ProfileTT() {
       <div className='mt-8 flex flex-col md:flex-row md:items-start'>
         <div className='flex-grow'>
           <div className='border rounded-lg p-6 shadow-lg bg-white'>
-            <div className='flex flex-row mb-4'>
-              <div className='w-1/5 text-right capitalize'>Email</div>
-              <div className='w-4/5 pl-5 text-gray-700 text-bold'>
+            <div className='flex flex-row mb-6'>
+              <div className='w-1/5 text-right capitalize mr-2'>Email</div>
+              <div className='wmx-2 w-4/5 rounded-xl border-2 min-h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
                 {profile?.email}
               </div>
             </div>
-            <div className='flex mb-4'>
+            <div className='flex mb-6'>
               <div className='w-1/5   text-right capitalize'>Giới thiệu</div>
               <div className='mx-2 w-4/5 rounded-xl border-2 min-h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
                 {profileTutor?.introduction}
@@ -148,7 +165,7 @@ export default function ProfileTT() {
 
             {selectedUpdate === 'profile' && (
               <div className='mt-4 p-4'>
-                <UpdateProfile refetch={refetch} />
+                <UpdateProfile refetch={refetch} profileTT={profileTT} />
               </div>
             )}
             {selectedUpdate === 'major' && (

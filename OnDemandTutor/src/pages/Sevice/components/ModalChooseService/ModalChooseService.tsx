@@ -61,9 +61,12 @@ export default function ModalChooseService({
     queryFn: () => userApi.getProfile(profile?.id as string)
   })
 
+  // Cập nhật giá trị chỉ khi ProfileData và ProfileData.data đều có giá trị
   useEffect(() => {
-    setProfile(ProfileData ? ProfileData.data.data : profile)
-    setProfileToLS(ProfileData ? ProfileData.data.data : user)
+    if (ProfileData?.data) {
+      setProfile(ProfileData.data.data)
+      setProfileToLS(ProfileData.data.data)
+    }
   }, [ProfileData])
 
   const [duration, setDuration] = useState<number>(30)

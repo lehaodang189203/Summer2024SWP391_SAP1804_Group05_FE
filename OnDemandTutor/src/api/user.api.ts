@@ -9,6 +9,7 @@ import { SuccessResponse, SuccessResponseReq } from '../types/utils.type'
 import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 import { HttpStatusCode } from 'axios'
+import { BookedServices } from '../types/request.type'
 
 const user = getProfileFromLS()
 
@@ -50,8 +51,8 @@ const userApi = {
 
   ViewClassService: async (id: string) => {
     try {
-      const response = await http.get<SuccessResponseReq<any>>(
-        `/Class/ViewClassService?id=${id}`
+      const response = await http.get<SuccessResponseReq<BookedServices[]>>(
+        `Class/ViewClassService?id=${id}`
       )
       console.log('response', response)
       if (response.status === HttpStatusCode.Ok) {

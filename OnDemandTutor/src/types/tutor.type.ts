@@ -15,7 +15,7 @@ export interface TutorType {
 }
 
 export interface UpdateTutorProfile {
-  specializedSkill: string
+  specializedSkills: string
   experience: number
   introduction: string
 }

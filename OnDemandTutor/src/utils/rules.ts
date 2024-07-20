@@ -234,7 +234,7 @@ export const updateProfileTT = yup.object({
     .number()
     .required('Số năm kinh nghiệm là bắt buộc')
     .min(1, 'Số năm kinh nghiệm phải lớn hơn 0'),
-  specializedSkill: yup.string().required('Kỹ năng chuyên môn là bắt buộc')
+  specializedSkills: yup.string().required('Kỹ năng chuyên môn là bắt buộc')
 })
 
 export const updateMajorTT = yup.object({

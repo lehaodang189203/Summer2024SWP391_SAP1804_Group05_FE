@@ -13,11 +13,18 @@ import { toast } from 'react-toastify'
 type FormData = UpdateProfileTT
 const updateTTSchema = updateProfileTT
 
-interface Props {
-  refetch?: (() => void) | undefined
+interface FromData {
+  introduction: string
+  experience: number
+  specializedSkills: string
 }
 
-export default function UpdateProfile({ refetch }: Props) {
+interface Props {
+  refetch?: (() => void) | undefined
+  profileTT: FromData
+}
+
+export default function UpdateProfile({ refetch, profileTT }: Props) {
   const { profile } = useContext(AppContext)
   const {
     register,
@@ -25,7 +32,8 @@ export default function UpdateProfile({ refetch }: Props) {
     control,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(updateTTSchema)
+    resolver: yupResolver(updateTTSchema),
+    defaultValues: profileTT
   })
 
   const updateTTMutation = useMutation({
@@ -55,7 +63,9 @@ export default function UpdateProfile({ refetch }: Props) {
       <form onSubmit={handleSubmit(onSubmit)}>
         {' '}
         {/* Corrected here */}
-        <h2 className='mt-4'>Cập nhật hồ sơ của giảng viên</h2>
+        <h2 className='mt-4 text-2xl text-red-500'>
+          Cập nhật hồ sơ của giảng viên
+        </h2>
         <Input
           name='introduction'
           type='text-area' // Assuming 'text-area' is a custom type for text areas
@@ -85,14 +95,14 @@ export default function UpdateProfile({ refetch }: Props) {
           </div>
         )}
         <Input
-          name='specializedSkill'
+          name='specializedSkills'
           type='text'
           classNameInput='h-14  hover:transition duration-700 hover:border-blue-400 p-3 w-[18rem] outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
           placeholder='Kỹ năng chuyên môn'
           className='mt-3'
           register={register}
           classNameError='mt-1 text-red-600 min-h-[1rem] text-sm text-center'
-          errorMessage={errors.specializedSkill?.message}
+          errorMessage={errors.specializedSkills?.message}
         />
         <Button
           type='submit'
