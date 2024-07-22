@@ -1,9 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { path } from '../../constant/path'
 export default function Footer() {
   return (
-    <footer className='  bg-slate-950 mt-[1rem] rounded-2xl shadow-sm  w-full '>
+    <footer className=' min-h-96 bg-slate-950 mt-[1rem] rounded-2xl shadow-sm  w-full '>
       <div className='mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8'>
         <div className='sm:flex sm:items-center sm:justify-between pr-16'>
           <div className='text-gray-100 mx-10 text-3xl'>OTD-Learning</div>
@@ -38,17 +35,16 @@ export default function Footer() {
                 href='#'
                 rel='noreferrer'
                 target='_blank'
-                className='text-gray-50 transition hover:text-orange'
+                className='text-gray-50 transition hover:text-pink-400'
               >
                 <span className='sr-only'>Instagram</span>
-
                 <svg
                   className='h-6 w-6'
                   fill='currentColor'
                   viewBox='0 0 24 24'
                   aria-hidden='true'
                 >
-                  <path fillRule='evenodd' clipRule='evenodd' />
+                  <path d='M7.5 2.5h9A5 5 0 0121 7.5v9A5 5 0 0115.5 21h-9A5 5 0 012 16.5v-9A5 5 0 017.5 2.5zM12 5a1 1 0 100 2 1 1 0 000-2zm0 4a5 5 0 100 10 5 5 0 000-10z' />
                 </svg>
               </a>
             </li>
@@ -99,7 +95,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        <div className='grid grid-cols-1 gap-8 border-t border-gray-100 pt-8 sm:grid-cols-2 lg:grid-cols-4 lg:pt-16 pl-28 text-left'>
+        {/* <div className='grid grid-cols-1 gap-8 border-t border-gray-100 pt-8 sm:grid-cols-2 lg:grid-cols-4 lg:pt-16 pl-28 text-left'>
           <div>
             <p className='font-bold text-green-100'>Các dịch vụ</p>
 
@@ -212,10 +208,10 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
 
-        <p className='text-xs text-gray-500'>
-          &copy; 2024. OTD Learning. All rights reserved.
+        <p className='text-2xl text-gray-500 hover:text-gray-300'>
+          &copy; 2024. OTD Learn. SWP391_Group 05
         </p>
       </div>
     </footer>

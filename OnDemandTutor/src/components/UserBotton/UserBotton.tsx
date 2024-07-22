@@ -100,17 +100,18 @@ export default function UserButton({
   return (
     isAuthenticated && (
       <div className='flex ml-auto justify-end ml-90'>
-        <div className='px-auto py-auto mt-2 mr-10 rounded-md justify-center items-center flex font-medium'>
+        <div className='px-auto mb-2  mr-10 rounded-md justify-center items-center flex font-medium'>
           <Link to={path.deposit}>
-            <span>Số dư:</span> {formatCurrency(profile?.accountBalance || 0)}
+            <span>Số dư:</span>{' '}
+            {formatCurrency(Number(profile?.accountBalance) || 0)}
           </Link>
         </div>
         {profile.roles.toLowerCase() !== roles.moderator.toLowerCase() &&
           profile.roles !== roles.admin && (
-            <div className='relative ml-3'>
+            <div className='relative mx-4 mb-2'>
               <FontAwesomeIcon
                 icon={faBell}
-                className='mt-3 cursor-pointer'
+                className=' cursor-pointer'
                 onClick={toggleNotificationWindow}
               />
               {hasNotification && (

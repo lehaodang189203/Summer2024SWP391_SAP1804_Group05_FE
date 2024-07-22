@@ -1,19 +1,29 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { moderatorApi } from '../../../api/moderator.api'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
 import { roles } from '../../../constant/roles'
+import { AppContext } from '../../../context/app.context'
 import { ServiceTutor } from '../../../types/request.type'
-import { User } from '../../../types/user.type'
-import { getProfileFromLS } from '../../../utils/auth'
 import ModalChooseService from '../components/ModalChooseService'
 import ScheduleFormToChoose from '../components/ScheduleFormToChose'
-import { AppContext } from '../../../context/app.context'
 
-export default function ServiceList() {
+interface Props {
+  setRefetch?: React.Dispatch<React.SetStateAction<(() => void) | undefined>>
+}
+
+const formatCurrency = (amount: number) => {
+  return amount.toLocaleString('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  })
+}
+
+export default function ServiceList({ setRefetch }: Props) {
   const { profile } = useContext(AppContext)
+
   const [selectedClassIndex, setSelectedClassIndex] = useState<number | null>(
     null
   )
@@ -33,30 +43,18 @@ export default function ServiceList() {
     isLoading,
     isError,
     error
-  } = useQuery<ServiceTutor[], Error>({
+  } = useQuery<ServiceTutor[]>({
     queryKey: ['allServices'],
     queryFn: () =>
       studentApi.GetAllService().then((response) => response.data.data)
   })
-  useEffect(() => {
-    if (isError) {
-      setHasError(true)
-    }
-  }, [isError])
-
-  useEffect(() => {
-    if (hasError) {
-      const timeout = setTimeout(() => {
-        window.location.reload()
-      }, 3000)
-
-      return () => clearTimeout(timeout)
-    }
-  }, [hasError])
 
   useEffect(() => {
     if (classService) {
       setClassData(classService)
+      if (setRefetch) {
+        setRefetch(() => refetch)
+      }
     }
   }, [classService])
 
@@ -234,7 +232,7 @@ export default function ServiceList() {
                         Giá trên một giờ:
                       </strong>{' '}
                       <span className='text-green-700'>
-                        {item.pricePerHour} VNĐ
+                        {formatCurrency(Number(item.pricePerHour) || 0)}
                       </span>
                     </p>
                     <p>

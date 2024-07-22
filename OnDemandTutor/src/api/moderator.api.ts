@@ -88,6 +88,6 @@ export const moderatorApi = {
   //  chưa có
   deleteService: async (idService: string) =>
     await http.delete<SuccessResponse<any>>(
-      `modaretor/DeleteService?idRequest=${idService}`
+      `Service/deleteService?idService=${idService}`
     )
 }

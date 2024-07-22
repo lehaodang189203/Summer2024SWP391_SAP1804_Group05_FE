@@ -1,5 +1,5 @@
 import NavStudentRequestList from '../Nav/NavStudentRequestList'
-import RequestStudentCurrent from '../RequestStudentCurrent/RequestStudentCurrent'
+import { RequestStudentCurrent } from '../RequestStudentCurrent/RequestStudentCurrent'
 
 export default function ReStuCurrentPage() {
   return (

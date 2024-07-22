@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import aaa from '../../assets/img/BUMBUM.png'
+import moi2 from '../../assets/img/moi2.jpg'
 import { path } from '../../constant/path'
 import { roles } from '../../constant/roles'
 import { User } from '../../types/user.type'
@@ -19,14 +19,14 @@ export default function Header() {
   }, [])
 
   return (
-    <header className='container h-[8rem] bg-transparent w-full border-2 shadow-lg rounded-2xl mt-2 mb-5 hover:shadow-black hover:shadow-lg'>
+    <header className='container h-[8rem] bg-transparent w-full border-2 shadow-lg rounded-2xl mt-2 mb-5 hover:shadow-black hover:shadow-lg transition-shadow duration-300'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='grid grid-cols-12 gap-1 items-end'>
           <nav className='h-50 flex items-start col-span-12 md:col-span-3 pr-0 md:pr-20'>
             <Link to={path.home}>
               <div className='min-w-16  w-32 pt-[100%] mt-2 relative'>
-                <div className='absolute top-0 left-0 w-[250px] h-full object-cover'>
-                  <img src={aaa} alt='logo' />
+                <div className='absolute top-0 left-0 w-[180px] h-full object-cover'>
+                  <img src={moi2} alt='logo' />
                 </div>
               </div>
             </Link>
@@ -35,7 +35,7 @@ export default function Header() {
             <div className=' min-w-56 pr-0 md:pr-[50px] pt-4 md:pt-[40px] justify-around items-center flex flex-wrap'>
               <Link
                 to={path.home}
-                className='text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                className='mx-2 text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
                                     after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
               >
                 Trang chủ
@@ -44,6 +44,7 @@ export default function Header() {
                 user?.roles.toLowerCase() === roles.tutor) && (
                 <React.Fragment>
                   <Popover
+                    check={true}
                     className='flex items-center py-1 cursor-pointer'
                     renderPopover={
                       <div className='rounded-3xl shadow-black shadow-xl'>
@@ -85,15 +86,15 @@ export default function Header() {
                 <React.Fragment>
                   <Link
                     to={path.sideBarMenu}
-                    className=' text-sm font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
-                after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
+                    className='mx-2 text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
                   >
                     Danh sách lớp
                   </Link>
                   <Link
                     to={path.tutorList}
-                    className=' text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
-                after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
+                    className='mx-2 text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
+                                    after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
                   >
                     Danh sách các gia sư
                   </Link>
@@ -106,10 +107,7 @@ export default function Header() {
                 user?.roles.toLowerCase() === roles.student ||
                 user?.roles.toLowerCase() === roles.tutor
               ) && (
-                <div
-                  className=' mt-1 text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
-                                     '
-                >
+                <div className=' mt-1 text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0d'>
                   Các tính năng và hỗ trợ sẽ được kích hoạt ngay khi bạn đăng
                   nhập hoặc đăng ký
                 </div>

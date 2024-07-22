@@ -21,6 +21,7 @@ import { ErrorResponse } from '../../types/utils.type'
 import { getRefreshTokenFromLS } from '../../utils/auth'
 import { Schema, schema } from '../../utils/rules'
 import { isAxiosError } from '../../utils/utils'
+import { roles } from '../../constant/roles'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -90,6 +91,12 @@ export default function Login() {
         setProfile(data.data.data.user)
         toast.success(data.data.message)
         navigate(path.home)
+        if (data.data.data.user.roles.toLowerCase() === roles.admin) {
+          navigate(path.Admin.admin)
+        }
+        if (data.data.data.user.roles.toLowerCase() === roles.moderator) {
+          navigate(path.Moderator.mod)
+        }
       },
       onError: (error) => {
         if (

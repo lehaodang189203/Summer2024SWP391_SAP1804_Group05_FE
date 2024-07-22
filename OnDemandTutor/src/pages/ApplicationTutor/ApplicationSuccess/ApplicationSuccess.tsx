@@ -19,7 +19,7 @@ export default function ApplicationSuccess() {
   console.log('data nè', data?.data)
 
   return (
-    <div className='w-4/5'>
+    <div className='w-4/5 min-h-[24rem]'>
       <NavTutorApplication />
       <div className='border-2 shadow-xl'>
         {tutorRes?.status.toLowerCase() === statusReq.approved ? (

@@ -5,6 +5,7 @@ import http from '../utils/http'
 import { RequestModerator } from '../types/request.type'
 import { ChartData } from '../types/chart.type'
 import { complaintType } from '../types/complaint.type'
+import { TransType } from '../types/user.type'
 
 export const adminAPI = {
   async getTutorList() {
@@ -52,7 +53,7 @@ export const adminAPI = {
   async getStudentReq() {
     try {
       const response = await http.get<SuccessResponseReq<RequestModerator[]>>(
-        `/modaretor/viewRequest`
+        `Request/getAllRequestPending`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -66,7 +67,7 @@ export const adminAPI = {
   async getStudentReqApproved() {
     try {
       const response = await http.get<SuccessResponseReq<RequestModerator[]>>(
-        `/Admin/viewAllRequestApproved`
+        `Request/viewAllRequestApproved`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -80,7 +81,7 @@ export const adminAPI = {
   async getStudentReqRejected() {
     try {
       const response = await http.get<SuccessResponseReq<RequestModerator[]>>(
-        `/Admin/viewAllRequestReject`
+        `Request/viewAllRequestReject`
       )
       if (response.status === HttpStatusCode.Ok) {
         return response.data.data
@@ -178,7 +179,7 @@ export const adminAPI = {
   },
   async getTransaction() {
     try {
-      const response = await http.get<SuccessResponseReq<any>>(
+      const response = await http.get<SuccessResponseReq<TransType[]>>(
         `Transaction/ViewAllTransaction`
       )
       if (response.status === HttpStatusCode.Ok) {

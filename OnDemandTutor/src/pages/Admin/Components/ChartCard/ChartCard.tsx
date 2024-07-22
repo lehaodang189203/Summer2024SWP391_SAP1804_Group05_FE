@@ -158,7 +158,7 @@ export default function ChartCard({ dataChart }: ChartCardProps) {
           <YAxis tickFormatter={formatYAxis} />
           <Tooltip />
           <Legend />
-          <Bar dataKey='revenue' fill='#8884d8' />
+          <Bar dataKey='revenue' name='Lợi nhuận' fill='#8884d8' />
         </BarChart>
       </ResponsiveContainer>
     </div>

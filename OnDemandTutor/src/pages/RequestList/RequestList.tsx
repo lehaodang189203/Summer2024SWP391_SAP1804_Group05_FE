@@ -14,6 +14,13 @@ import { getProfileFromLS } from '../../utils/auth'
 import { path } from '../../constant/path'
 import { useNavigate } from 'react-router-dom'
 
+const formatCurrency = (amount: number) => {
+  return amount.toLocaleString('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  })
+}
+
 export default function RequestList() {
   const user: User = getProfileFromLS()
   const { profile } = useContext(AppContext)
@@ -162,9 +169,9 @@ export default function RequestList() {
                   </span>
                 </div>
                 <div className='my-1'>
-                  Mức lương:{' '}
+                  Giá tiền(1 buổi):{' '}
                   <span className='text-red-400 font-bold text-md'>
-                    {data.price}
+                    {formatCurrency(Number(data.price || 0))}
                   </span>
                 </div>
                 <div className='my-1'>

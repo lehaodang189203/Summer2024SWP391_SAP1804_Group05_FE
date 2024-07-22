@@ -78,6 +78,7 @@ export default function ServiceForm({
     handleSubmit,
     setValue,
     control,
+    setError,
     formState: { errors },
     reset
   } = useForm<FormData>({
@@ -102,10 +103,22 @@ export default function ServiceForm({
   })
 
   const onSubmit = (data: FormData) => {
+    const { pricePerHour } = data
+
     console.log('data', data)
 
-    if (idService) {
-      if (refetch) {
+    // Kiểm tra giá trị của price
+    if (pricePerHour < 20000) {
+      // Thiết lập lỗi cho trường price
+      setError('pricePerHour', {
+        type: 'manual',
+        message: 'Giá phải lớn hơn hoặc bằng 20.000 VND'
+      })
+      return
+    }
+
+    if (refetch) {
+      if (idService) {
         editServiceMutation.mutate(data, {
           onSuccess: (data) => {
             toast.success(data.data.message)
@@ -116,18 +129,19 @@ export default function ServiceForm({
             toast.error(error.message)
           }
         })
+      } else {
+        addServiceMutation.mutate(data, {
+          onSuccess: (data) => {
+            toast.success(data.data.message)
+            onClose()
+            reset()
+            refetch()
+          },
+          onError: (error) => {
+            toast.error(error.message)
+          }
+        })
       }
-    } else {
-      addServiceMutation.mutate(data, {
-        onSuccess: (data) => {
-          toast.success(data.data.message)
-          onClose()
-          reset()
-        },
-        onError: (error) => {
-          toast.error(error.message)
-        }
-      })
     }
   }
 
@@ -257,6 +271,7 @@ export default function ServiceForm({
                 render={({ field }) => (
                   <InputNumber
                     id='pricePerHour'
+                    inputType='price'
                     min={20000}
                     value={field.value}
                     onChange={field.onChange}
@@ -279,7 +294,7 @@ export default function ServiceForm({
               <textarea
                 id='description'
                 rows={4}
-                className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-2'
+                className='mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-2'
                 {...register('description')}
               ></textarea>
               {errors.description && (

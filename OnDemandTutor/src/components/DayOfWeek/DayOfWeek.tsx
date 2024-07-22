@@ -40,9 +40,6 @@ export default function DateOfWeek({
 
   return (
     <div className='container border-2 rounded-lg  flex flex-wrap flex-col'>
-      <div className='pt-3 mb-2 text-left text-gray-400 text-sm'>
-        Chọn các ngày trong tuần
-      </div>
       <div className='flex flex-wrap'>
         {daysOfWeek.map((day) => (
           <label key={day.key} className='mr-3'>

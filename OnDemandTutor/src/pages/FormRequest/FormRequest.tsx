@@ -45,6 +45,7 @@ export default function FormRequest({
     handleSubmit,
     formState: { errors },
     setValue,
+    setError,
     trigger,
     register
   } = useForm<FormData>({
@@ -75,8 +76,18 @@ export default function FormRequest({
   })
 
   const onSubmit = handleSubmit((data) => {
-    const { timeTable } = data
+    const { price, timeTable } = data
     const totalSessions = timeTable.split(',').length
+
+    // Kiểm tra giá trị của price
+    if (price < 30000) {
+      // Thiết lập lỗi cho trường price
+      setError('price', {
+        type: 'manual',
+        message: 'Giá phải lớn hơn hoặc bằng 30.000 VND'
+      })
+      return // Ngừng thực hiện submit nếu có lỗi
+    }
 
     const newData = {
       ...data,
@@ -124,7 +135,7 @@ export default function FormRequest({
           className='w-full h-auto space-y-4 border-2 rounded-xl p-4 bg-white shadow-black shadow-lg'
         >
           <div>
-            <h1 className='text-lg text-red-500'>
+            <h1 className='text-2xl text-red-500'>
               {idRequest ? 'Chỉnh sửa yêu cầu' : 'Đăng ký yêu cầu'}
             </h1>
           </div>
@@ -168,7 +179,7 @@ export default function FormRequest({
             </div>
             {/* -------------- */}
             <div className='flex flex-col'>
-              <label className='block text-lg font-medium'>
+              <label className='block text-sm font-medium'>
                 Phương thức học
               </label>
               <select
@@ -191,7 +202,7 @@ export default function FormRequest({
             </div>
             {/* ----------- */}
             <div className='flex flex-col'>
-              <label className='block text-lg font-medium'>Giá</label>
+              <label className='block text-sm font-medium'>Giá(1 buổi)</label>
               <Controller
                 control={control}
                 name='price'
@@ -208,7 +219,7 @@ export default function FormRequest({
               />
             </div>
             <div className='flex flex-col'>
-              <label className='block text-lg font-medium'>Chọn lớp</label>
+              <label className='block text-sm font-medium'>Chọn lớp</label>
               <select
                 {...register('class')}
                 className='w-full p-3 outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
@@ -225,7 +236,9 @@ export default function FormRequest({
             </div>
 
             <div className='flex flex-col'>
-              <label>Thời khóa biểu</label>
+              <label className='block text-sm font-medium'>
+                Thời khóa biểu
+              </label>
               <Controller
                 control={control}
                 name='timeTable'
@@ -239,7 +252,7 @@ export default function FormRequest({
               />
             </div>
             <div className='flex flex-col'>
-              <label className='block text-lg font-medium'>
+              <label className='block text-sm font-medium'>
                 Thời gian bắt đầu
               </label>
               <Input
@@ -255,7 +268,7 @@ export default function FormRequest({
               />
             </div>
             <div className='flex flex-col'>
-              <label className='block text-lg font-medium'>
+              <label className='block text-sm font-medium'>
                 Thời gian kết thúc
               </label>
               <Input

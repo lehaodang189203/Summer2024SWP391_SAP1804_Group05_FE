@@ -66,7 +66,7 @@ export default function NavHeader() {
   }, [profile])
 
   return (
-    <div className='hidden md:flex justify-start  gap-5'>
+    <div className='hidden md:flex my-2 justify-start b-5 gap-5'>
       <UserButton
         isAuthenticated={isAuthenticated}
         profile={profile ? profile : user}
@@ -74,9 +74,9 @@ export default function NavHeader() {
 
       {isAuthenticated && (
         <Popover
-          className='flex my-2 items-center hover:text-pink-400 cursor-pointer '
+          className='flex hover:text-pink-400 cursor-pointer '
           renderPopover={
-            <div className='shadow-md mt-2 rounded-sm border border-gray-200'>
+            <div className='ml-10 shadow-md mt-1 rounded-sm    border-gray-200'>
               <Link
                 to={path.user}
                 className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
@@ -172,7 +172,7 @@ export default function NavHeader() {
             </div>
           }
         >
-          <div className='w-6 h-6 mr-2 ml-10 flex-shink-0 '>
+          <div className='w-6 h-6 mr-2 flex-shink-0 '>
             <img
               src={profile?.avatar ? profile.avatar : userImage}
               alt='avatar'
@@ -180,7 +180,7 @@ export default function NavHeader() {
             />
           </div>
 
-          <div className='text-black hover:text-pink-400'>
+          <div className='text-black mb-3 justify-center items-center py-auto hover:text-pink-400'>
             {profile?.fullName}
           </div>
         </Popover>

@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import { path } from './constant/path'
 import { AppContext } from './context/app.context'
@@ -56,10 +56,28 @@ import TutorList from './pages/TutorList'
 import ServiceListOfTutor from './pages/TutorList/components/ServiceListOfTutor'
 import TutorListInClass from './pages/TutorListInClass'
 import ProfileTT from './pages/User/pages/ProfileTT'
+import HomeRoute from './pages/Admin/Components/HomeRoute/HomeRoute'
+import RequireLoginNotification from './components/RequireLogin'
+import { toast } from 'react-toastify'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
-  return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
+  const [hasShownToast, setHasShownToast] = useState(false)
+
+  useEffect(() => {
+    if (!isAuthenticated && !hasShownToast) {
+      toast.warning(
+        'Để sử dụng các chức năng này, bạn cần đăng nhập vào hệ thống.'
+      )
+      setHasShownToast(true)
+    }
+  }, [isAuthenticated, hasShownToast])
+
+  if (!isAuthenticated) {
+    return <Navigate to={path.login} />
+  }
+
+  return <Outlet />
 }
 
 function RejectedRoute() {
@@ -69,6 +87,11 @@ function RejectedRoute() {
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
+    {
+      path: path.home,
+      element: <HomeRoute />,
+      index: true
+    },
     {
       path: '',
       element: <RejectedRoute />,
@@ -97,15 +120,6 @@ export default function useRouteElements() {
       path: '',
       element: <ProtectedRoute />,
       children: [
-        {
-          path: path.home,
-          element: (
-            <MainLayout>
-              <Home />
-            </MainLayout>
-          ),
-          index: true
-        },
         {
           path: path.registerAsTutor, //student
           element: (

@@ -17,6 +17,7 @@ interface Props {
   as?: ElementType
   initalOpen?: boolean
   placement?: Placement
+  check?: boolean
 }
 
 export default function Popover({
@@ -25,10 +26,12 @@ export default function Popover({
   renderPopover,
   as: Element = 'div',
   initalOpen,
-  placement = 'bottom'
+  placement = 'bottom',
+  check
 }: Props) {
   //  nà
   const [isOpen, setIsOpen] = useState(initalOpen || false)
+
   const id = useId()
 
   // cái này là đảm bảo là  cái mà chúng ta tham chiếu đến là 1 HTMLElement
@@ -58,6 +61,11 @@ export default function Popover({
   const hidePopover = () => {
     setIsOpen(false)
   }
+
+  const arrowClassName = check
+    ? 'border-x-transparent border-t-transparent border-b-black border-[8px] mb-5 absolute -translate-y-full' // này pop
+    : 'border-x-transparent border-t-transparent border-b-black border-[8px] ml-5 mb-5 absolute -translate-y-full' // học sinh
+
   return (
     <Element
       className={className}
@@ -86,7 +94,10 @@ export default function Popover({
               {' '}
               <span
                 ref={arrowRef}
-                className='border-x-transparent border-t-transparent border-b-black border-[8px] absolute -translate-y-full'
+                // profile
+                //className='border-x-transparent border-t-transparent border-b-black border-[8px] ml-5 mb-5  absolute -translate-y-full'
+                // pop
+                className={arrowClassName}
                 style={{
                   left: middlewareData.arrow?.x,
                   top: middlewareData.arrow?.y

@@ -1,15 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
+import { Modal, Table, TableColumnsType } from 'antd'
 import Search from 'antd/es/transfer/search'
-
 import { useEffect, useState } from 'react'
-import { Button, Modal, Table, TableColumnsType } from 'antd'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { moderatorApi } from '../../../../api/moderator.api'
-import { toast } from 'react-toastify'
-import StudentMenu from '../AdminMenu/StudentMenu/StudentMenu'
 import { adminAPI } from '../../../../api/admin.api'
 import { RequestModerator } from '../../../../types/request.type'
-
-
+import StudentMenu from '../AdminMenu/StudentMenu/StudentMenu'
 
 export default function AdminStudentReq() {
   // Lấy danh sách yêu cầu từ API
@@ -18,43 +13,11 @@ export default function AdminStudentReq() {
     queryFn: () => adminAPI.getStudentReq()
   })
 
-  // Khởi tạo các mutation cho việc phê duyệt và từ chối yêu cầu
-  const approveMutation = useMutation({
-    mutationFn: (idReq: string) => moderatorApi.approvedRequest(idReq),
-    onSuccess: () => {
-      toast.success('Yêu cầu đã được phê duyệt')
-      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
-      setVisible(false)
-    }
-  })
-
-  const rejectMutation = useMutation({
-    mutationFn: (idReq: string) => moderatorApi.rejectRequest(idReq),
-    onSuccess: () => {
-      toast.success('Yêu cầu đã bị từ chối')
-      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
-      setVisible(false)
-    }
-  })
-
   useEffect(() => {
     if (RequestData) {
       console.log(RequestData)
     }
   }, [RequestData])
-
-  const handleApprove = () => {
-    if (selectedRecord) {
-      approveMutation.mutate(selectedRecord.idRequest)
-      console.log('id của thằng request nè ',selectedRecord.idRequest)
-    }
-  }
-
-  const handleReject = () => {
-    if (selectedRecord) {
-      rejectMutation.mutate(selectedRecord.idRequest)
-    }
-  }
 
   const columns: TableColumnsType<RequestModerator> = [
     {
@@ -65,6 +28,12 @@ export default function AdminStudentReq() {
       sorter: (a, b) => a.fullName.length - b.fullName.length,
       width: 200,
       fixed: 'left'
+    },
+    {
+      title: 'ID',
+      dataIndex: 'idRequest',
+      defaultSortOrder: 'descend',
+      width: 200
     },
     {
       title: 'Môn',
@@ -109,7 +78,7 @@ export default function AdminStudentReq() {
       fixed: 'right',
       className: 'TextAlign',
       width: 100,
-      render: ( t:string,record: RequestModerator) => (
+      render: (t: string, record: RequestModerator) => (
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
@@ -124,7 +93,9 @@ export default function AdminStudentReq() {
 
   const onChange = () => {} // Placeholder for future implementation
 
-  const [selectedRecord, setSelectedRecord] = useState<RequestModerator | null>(null)
+  const [selectedRecord, setSelectedRecord] = useState<RequestModerator | null>(
+    null
+  )
   const [visible, setVisible] = useState(false)
 
   const showDetail = (id: string) => {
@@ -141,13 +112,7 @@ export default function AdminStudentReq() {
 
   return (
     <>
-      <div className='text-left'>Yêu cầu đặt lịch</div>
-      <StudentMenu
-            list=""
-            req="req"
-            app=""
-            rej=""
-            />
+      <StudentMenu list='' req='req' app='' rej='' />
       <div className='text-left shadow-sm shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
         <div className='mb-5'>
           <Search />
@@ -164,14 +129,7 @@ export default function AdminStudentReq() {
           title='Chi tiết'
           visible={visible}
           onCancel={handleCancel}
-          footer={[
-            <Button key='approve' onClick={handleApprove}>
-              Xác nhận
-            </Button>,
-            <Button key='reject' onClick={handleReject}>
-              Từ chối
-            </Button>
-          ]}
+          footer={null}
         >
           {selectedRecord && (
             <div>

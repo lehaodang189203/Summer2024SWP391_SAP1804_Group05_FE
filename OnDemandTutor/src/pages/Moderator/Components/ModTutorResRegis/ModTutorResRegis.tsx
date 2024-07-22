@@ -165,7 +165,6 @@ export default function ModTutorResRegis() {
   return (
     <>
       <div>
-        <div className='text-left'>Yêu cầu trở thành gia sư</div>
         <ModMenu kind='tutor' style='Option1' />
         <div className='text-left shadow-2xl shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
           <div className='mb-5'>

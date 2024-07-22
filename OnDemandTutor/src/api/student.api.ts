@@ -190,9 +190,19 @@ export const studentApi = {
   },
 
   async GetAllService() {
-    return await http.get<SuccessResponseReq<ServiceTutor[]>>(
-      'Service/getAllService'
-    )
+    try {
+      const response = await http.get<SuccessResponseReq<ServiceTutor[]>>(
+        'Service/getAllService'
+      )
+      if (response.status === HttpStatusCode.Ok) {
+        return response
+      } else {
+        throw new Error('Danh sách trống')
+      }
+    } catch (error) {
+      console.error('Lỗi trong quá trình xử lý:', error)
+      throw error
+    }
   },
 
   CreateReview: async (body: ReviewType) => {

@@ -126,7 +126,7 @@ export default function ProfileTT() {
               <div className='w-1/5 text-right capitalize'>
                 Kỹ năng chuyên môn
               </div>
-              <div className='mx-2    w-4/5 rounded-xl border-2 min-h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
+              <div className='mx-2  w-4/5 rounded-xl border-2 min-h-10 text-left hover:shadow-black hover:shadow-sm pl-2'>
                 {profileTutor?.specializedSkills}
               </div>
             </div>

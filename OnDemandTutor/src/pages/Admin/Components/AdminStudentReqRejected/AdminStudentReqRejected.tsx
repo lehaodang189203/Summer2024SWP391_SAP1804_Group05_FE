@@ -26,8 +26,6 @@ export default function AdminStudentReqRejected() {
     }
   })
 
- 
-
   useEffect(() => {
     if (RequestRejData) {
       console.log(RequestRejData)
@@ -37,11 +35,9 @@ export default function AdminStudentReqRejected() {
   const handleApprove = () => {
     if (selectedRecord) {
       approveMutation.mutate(selectedRecord.idRequest)
-      console.log('id của thằng request nè ',selectedRecord.idRequest)
+      console.log('id của thằng request nè ', selectedRecord.idRequest)
     }
   }
-
-  
 
   const columns: TableColumnsType<RequestModerator> = [
     {
@@ -96,7 +92,7 @@ export default function AdminStudentReqRejected() {
       fixed: 'right',
       className: 'TextAlign',
       width: 100,
-      render: (text:string, record: RequestModerator) => (
+      render: (text: string, record: RequestModerator) => (
         <div className='flex gap-1'>
           <button
             className='p-1 border border-red-500 rounded-lg hover:bg-red-500 active:bg-red-700'
@@ -111,7 +107,9 @@ export default function AdminStudentReqRejected() {
 
   const onChange = () => {} // Placeholder for future implementation
 
-  const [selectedRecord, setSelectedRecord] = useState<RequestModerator | null>(null)
+  const [selectedRecord, setSelectedRecord] = useState<RequestModerator | null>(
+    null
+  )
   const [visible, setVisible] = useState(false)
 
   const showDetail = (id: string) => {
@@ -128,13 +126,7 @@ export default function AdminStudentReqRejected() {
 
   return (
     <>
-      <div className='text-left'>Yêu cầu đã từ chối</div>
-      <StudentMenu
-            list=""
-            req=""
-            app=""
-            rej="rej"
-            />
+      <StudentMenu list='' req='' app='' rej='rej' />
       <div className='text-left shadow-sm shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
         <div className='mb-5'>
           <Search />
@@ -184,6 +176,11 @@ export default function AdminStudentReqRejected() {
               <p className='font-medium'>
                 Học phí: {''}
                 <span className='text-red-500'>{selectedRecord.price}</span>
+              </p>
+
+              <p className='font-medium'>
+                Nguyên nhân: {''}
+                <span className='text-red-500'>{selectedRecord.reason}</span>
               </p>
             </div>
           )}

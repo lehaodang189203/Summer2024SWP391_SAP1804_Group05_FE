@@ -67,6 +67,7 @@ export interface RequestModerator {
   timeEnd: string
   status: string
   fullName: string
+  reason: string
 }
 
 export interface ClassType {

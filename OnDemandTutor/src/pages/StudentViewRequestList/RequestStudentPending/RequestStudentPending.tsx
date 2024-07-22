@@ -1,47 +1,56 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { Select } from 'antd'
-import Search from 'antd/es/transfer/search'
+import { Select, Input } from 'antd'
 import { useContext, useEffect, useState } from 'react'
-import { FaSearch } from 'react-icons/fa'
 import { studentApi } from '../../../api/student.api'
 import Pagination from '../../../components/Pagination'
 import { Request } from '../../../types/request.type'
-
 import { AppContext } from '../../../context/app.context'
 import RequestComponents from '../components/RequestComponents'
 
-const options1 = [
-  { label: 'Lọc theo thời gian' },
-  { value: 'apple', label: 'Thời gian' },
-  { value: 'banana', label: 'Môn' },
-  { value: 'cherry', label: '=))' }
-]
-const options2 = [
-  { label: 'Phương thức' },
-  { value: 'apple', label: 'Học trực tiếp' },
-  { value: 'banana', label: 'Học online' },
-  { value: 'cherry', label: 'Học theo tiếng' }
-]
-const options3 = [
-  { label: 'Môn' },
-  { value: 'apple', label: 'Toán' },
-  { value: 'banana', label: 'Tiếng Việt' },
-  { value: 'cherry', label: 'Tiếng Anh' }
-]
+const { Option } = Select
+const { Search } = Input
 
 export function RequestStudentPending() {
   const { profile } = useContext(AppContext)
 
+  // State for search filters
+  const [searchId, setSearchId] = useState('')
+  const [searchSubject, setSearchSubject] = useState<string | undefined>(
+    undefined
+  )
+  const [searchMethod, setSearchMethod] = useState<string | undefined>(
+    undefined
+  )
+  const [searchClassId, setSearchClassId] = useState<string>('')
+
+  const fetchRequests = async () => {
+    const requests = await studentApi.pendingRequest(profile?.id as string)
+
+    return requests.filter((request) => {
+      const matchesId = searchId ? request.idRequest.includes(searchId) : true
+      const matchesSubject = searchSubject
+        ? request.subject === searchSubject
+        : true
+      const matchesMethod = searchMethod
+        ? request.learningMethod === searchMethod
+        : true
+      const matchesClassId = searchClassId
+        ? request.idRequest.includes(searchClassId)
+        : true
+      return matchesId && matchesSubject && matchesMethod && matchesClassId
+    })
+  }
+
   const { data: RequestData, refetch } = useQuery<Request[]>({
-    queryKey: ['Request'],
-    queryFn: () => studentApi.pendingRequest(profile?.id as string),
+    queryKey: ['Request', searchId, searchSubject, searchMethod, searchClassId],
+    queryFn: fetchRequests,
     enabled: !!profile?.id,
     placeholderData: keepPreviousData
   })
 
   useEffect(() => {
     refetch()
-  }, [RequestData, profile])
+  }, [searchId, searchSubject, searchMethod, searchClassId, refetch])
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
@@ -54,56 +63,50 @@ export function RequestStudentPending() {
   const startIndex = (currentPage - 1) * itemsPerPage
   const currentItems = items.slice(startIndex, startIndex + itemsPerPage)
 
-  const [selectedOption1, setSelectedOption1] = useState(null)
-  const [selectedOption2, setSelectedOption2] = useState(null)
-  const [selectedOption3, setSelectedOption3] = useState(null)
-
-  const handleSelectChange = (option: any) => {
-    setSelectedOption1(option)
-  }
-  const handleSelectChange2 = (option: any) => {
-    setSelectedOption2(option)
-  }
-  const handleSelectChange3 = (option: any) => {
-    setSelectedOption3(option)
-  }
-
-  console.log('profile', profile)
-  console.log('RequestData', RequestData)
-
   return (
     <div className='bg-gray-200 w-full p-3'>
-      <div className='m-3'>
-        <Search />
-      </div>
-      <div className='flex '>
-        <div className='text-left flex justify-between p-3 w-11/12'>
-          <Select
-            value={selectedOption1}
-            onChange={handleSelectChange}
-            options={options1}
-            placeholder='Lọc theo'
-            className='w-[200px]'
+      <div className='flex px-auto justify-between mb-4  bg-slate-200'>
+        <div className='flex gap-4 mx-auto'>
+          <Input
+            placeholder='Tìm kiếm theo mã lớp'
+            value={searchClassId}
+            onChange={(e) => setSearchClassId(e.target.value)}
+            className='border border-gray-300 p-2 rounded-lg w-[20rem]'
           />
           <Select
-            value={selectedOption2}
-            onChange={handleSelectChange2}
-            options={options2}
-            placeholder='Lọc theo'
-            className='w-[200px]'
-          />
+            placeholder='Chọn môn học'
+            value={searchSubject}
+            onChange={(value) => setSearchSubject(value as string)}
+            className='border border-gray-300 p-2 h-[3rem] rounded-lg w-64'
+            style={{ width: 200 }}
+          >
+            <Option value=''>Tất cả môn học</Option>
+            {RequestData &&
+              Array.from(new Set(RequestData.map((item) => item.subject))).map(
+                (subject) => (
+                  <Option key={subject} value={subject}>
+                    {subject}
+                  </Option>
+                )
+              )}
+          </Select>
           <Select
-            value={selectedOption3}
-            onChange={handleSelectChange3}
-            options={options3}
-            placeholder='Lọc theo'
-            className='w-[200px]'
-          />
-        </div>
-        <div className=' ml-5 h-14 flex-nowrap content-center hover:scale-150 transition-transform duration-300 cursor-pointer'>
-          <div className=''>
-            <FaSearch />
-          </div>
+            placeholder='Chọn phương thức'
+            value={searchMethod}
+            onChange={(value) => setSearchMethod(value as string)}
+            className='border border-gray-300 p-2 h-[3rem] rounded-lg w-64'
+            style={{ width: 200 }}
+          >
+            <Option value=''>Tất cả phương thức</Option>
+            {RequestData &&
+              Array.from(
+                new Set(RequestData.map((item) => item.learningMethod))
+              ).map((method) => (
+                <Option key={method} value={method}>
+                  {method}
+                </Option>
+              ))}
+          </Select>
         </div>
       </div>
 
@@ -113,13 +116,17 @@ export function RequestStudentPending() {
           <div>Tình Trạng</div>
         </div>
         <div className='pt-5 bg-transparent rounded-lg around w-full'>
-          {currentItems.map((request, key) => (
-            <RequestComponents
-              key={request.idRequest}
-              request={request}
-              refetch={refetch}
-            />
-          ))}
+          {currentItems.length > 0 ? (
+            currentItems.map((request) => (
+              <RequestComponents
+                key={request.idRequest}
+                request={request}
+                refetch={refetch}
+              />
+            ))
+          ) : (
+            <div className='text-center text-gray-500'>Bạn chưa có yêu cầu</div>
+          )}
         </div>
       </div>
       <Pagination

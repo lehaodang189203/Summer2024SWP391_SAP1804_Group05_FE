@@ -11,9 +11,10 @@ import ServiceList from '../../pages/Sevice/ServiceList'
 const SidebarMenu = () => {
   const { profile } = useContext(AppContext)
   const [activePage, setActivePage] = useState('requestList')
+  const [refetch, setRefetch] = useState<(() => void) | undefined>(undefined) // Correctly typed state
 
   const [showForm, setShowForm] = useState(false)
-  const [showFormService, setShowFormSerivce] = useState(false)
+  const [showFormService, setShowFormService] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
 
   const renderContent = () => {
@@ -21,42 +22,45 @@ const SidebarMenu = () => {
       case 'requestList':
         return <RequestList />
       case 'serviceList':
-        return <ServiceList />
+        return <ServiceList setRefetch={setRefetch} />
       default:
         return <RequestList />
     }
   }
 
-  //  mở form đăng ký yêu cầu
+  // Mở form đăng ký yêu cầu
   const handleOpenPopup = () => {
     setShowOptions(false)
     setShowForm(!showForm)
   }
 
-  // các lựa chọn
+  // Các lựa chọn
   const handleOption = () => {
     setShowOptions((prev) => !prev)
   }
 
-  //  fomr mở dịch vụ
+  // Form mở dịch vụ
   const handleOpenPopupService = () => {
     setShowOptions(false)
-    setShowFormSerivce(!showFormService)
+    setShowFormService(!showFormService)
   }
 
-  //  đóng form (bấm hủy)
+  // Đóng form (bấm hủy)
   const handleCloseForm = () => {
     setShowForm(false)
-    setShowFormSerivce(false)
+    setShowFormService(false)
   }
 
+  // Kiểm tra vai trò của người dùng
+  const isTutor = profile?.roles.toLowerCase() === roles.tutor
+
   return (
-    <div className='container min-h-96  w-full flex'>
+    <div className='container min-h-[30rem] w-full flex'>
       <div className='w-[15%] justify-start p-4 bg-slate-300 rounded-lg'>
         <button
-          className={` py-2 px-4 mb-2 text-left rounded-xl transition-shadow ${
+          className={`py-2 px-4 mb-2 text-left rounded-xl transition-shadow ${
             activePage === 'requestList'
-              ? ' translate-y-1 text-pink-500 bg-white  shadow-black transition-shadow duration-300 shadow-inner '
+              ? 'translate-y-1 text-pink-500 bg-white shadow-black transition-shadow duration-300 shadow-inner'
               : 'bg-white'
           }`}
           onClick={() => setActivePage('requestList')}
@@ -65,9 +69,9 @@ const SidebarMenu = () => {
         </button>
 
         <button
-          className={`my-2 py-2 px-4 text-left  rounded-xl ${
+          className={`my-2 py-2 px-4 text-left rounded-xl ${
             activePage === 'serviceList'
-              ? ' translate-y-1 text-pink-500 bg-white  shadow-black transition-shadow duration-300 shadow-inner '
+              ? 'translate-y-1 text-pink-500 bg-white shadow-black transition-shadow duration-300 shadow-inner'
               : 'bg-white'
           }`}
           onClick={() => setActivePage('serviceList')}
@@ -83,7 +87,7 @@ const SidebarMenu = () => {
             <div className='relative'>
               <button
                 onClick={handleOption}
-                className={`mb-24 bg-slate-500 text-white rounded-full p-4 shadow-lg hover:bg-transparent hover:text-black hover:shadow-xl transition-all duration-300 group ${
+                className={`mb-24 bg-slate-500 text-white rounded-full p-4 shadow-lg shadow-black hover:bg-gray-400 hover:text-black hover:shadow-xl transition-all duration-300 group ${
                   showOptions ? 'rotate-180' : ''
                 }`}
                 style={{ boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}
@@ -91,29 +95,32 @@ const SidebarMenu = () => {
                 <FontAwesomeIcon icon={faPlus} />
               </button>
               <div
-                className={` absolute bottom-24 right-0 bg-white p-2 shadow-lg rounded-lg overflow-hidden transition-all duration-300  ${
+                className={`absolute bottom-24 right-0 bg-white p-2 shadow-lg rounded-lg overflow-hidden transition-all duration-300 ${
                   showOptions
-                    ? 'translate-x-0 opacity-100 right-16'
+                    ? 'translate-x-1 translate-y-5 opacity-100 right-16'
                     : 'translate-x-full opacity-0'
                 }`}
                 style={{ width: '200px' }}
               >
                 <div
                   onClick={handleOpenPopup}
-                  className='mb-2 p-2 transform hover:translate-y-1 hover:shadow-inner hover:shadow-black transition-shadow rounded-xl   hover:text-pink-500'
+                  className='mb-2 p-2 transform hover:translate-y-1 hover:shadow-inner hover:shadow-black transition-shadow rounded-xl hover:text-pink-500'
                 >
                   Tạo yêu cầu tìm gia sư
                 </div>
-                <div
-                  onClick={handleOpenPopupService}
-                  className='mb-2 p-2 transform hover:translate-y-1 hover:shadow-inner hover:shadow-black transition-shadow rounded-xl   hover:text-pink-500 '
-                >
-                  Tạo lớp cho gia sư
-                </div>
+                {isTutor && (
+                  <div
+                    onClick={handleOpenPopupService}
+                    className='mb-2 p-2 transform hover:translate-y-1 hover:shadow-inner hover:shadow-black transition-shadow rounded-xl hover:text-pink-500'
+                  >
+                    Tạo lớp cho gia sư
+                  </div>
+                )}
               </div>
               {showForm && <FormRequest onClose={handleCloseForm} />}
-
-              {showFormService && <CreateService onClose={handleCloseForm} />}
+              {showFormService && (
+                <CreateService onClose={handleCloseForm} refetch={refetch} />
+              )}
             </div>
           </div>
         )}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import TurorMenu from '../AdminMenu/TutorMenu'
+import TutorMenu from '../AdminMenu/TutorMenu'
 import { Button, Modal, Table, TableColumnsType } from 'antd'
-import Search from 'antd/es/transfer/search'
+import { Input } from 'antd'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AdminTutorProfile } from '../../../../types/tutor.type'
 import { toast } from 'react-toastify'
@@ -13,7 +13,20 @@ function AdminListTutor() {
     queryFn: () => adminAPI.getTutorList()
   })
 
-  console.log('TutorList', TutorList)
+  const [searchValue, setSearchValue] = useState('')
+  const [filteredTutorList, setFilteredTutorList] = useState<
+    AdminTutorProfile[]
+  >([])
+
+  useEffect(() => {
+    if (TutorList) {
+      setFilteredTutorList(
+        TutorList.filter((tutor) =>
+          tutor.fullName.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      )
+    }
+  }, [searchValue, TutorList])
 
   const removeMutation = useMutation({
     mutationFn: (idAccount: string) => adminAPI.deleteAccount(idAccount),
@@ -35,8 +48,6 @@ function AdminListTutor() {
   const [visible, setVisible] = useState(false)
   const [isDetails, setIsDetails] = useState(false)
 
-  const onChange = () => {}
-
   const showImg = (record: AdminTutorProfile) => {
     setIsDetails(false)
     setVisible(true)
@@ -57,7 +68,6 @@ function AdminListTutor() {
   const handleDelete = () => {
     if (selectedRecord) {
       removeMutation.mutate(selectedRecord.id)
-      console.log('id của thằng request nè ', selectedRecord.id)
     }
   }
 
@@ -89,7 +99,7 @@ function AdminListTutor() {
     },
     {
       title: 'Tên Môn Học',
-      dataIndex: 'subject',
+      dataIndex: 'subjects',
       defaultSortOrder: 'descend',
       width: 200
     },
@@ -142,17 +152,20 @@ function AdminListTutor() {
   return (
     <>
       <div>
-        <div className='text-left'>Quản lý gia sư</div>
-        <TurorMenu list='list' con='' rej='' />
+        <TutorMenu list='list' con='' rej='' />
         <div className='text-left shadow-sm shadow-black border-4 pt-5 h-[629px] rounded-t-xl mt-6'>
           <div className='mb-5'>
-            <Search />
+            <Input
+              placeholder='Tìm kiếm theo tên gia sư'
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
           </div>
           <Table
             columns={columns}
-            dataSource={TutorList}
+            dataSource={filteredTutorList}
             pagination={{ pageSize: 6 }}
-            onChange={onChange}
+            onChange={() => {}}
             showSorterTooltip={{ target: 'sorter-icon' }}
             scroll={{ x: 1300, y: 400 }}
           />

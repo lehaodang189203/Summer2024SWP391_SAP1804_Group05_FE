@@ -111,12 +111,12 @@ export const requestSchema = yup.object({
     .number()
     .min(30000, 'Mỗi buổi giá ít nhất là 30,000 VNĐ')
     .transform((value, originalValue) => {
-      // Ensure originalValue is a string before calling replace
       if (typeof originalValue === 'string') {
         const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
+        console.log(formattedValue) // Kiểm tra giá trị đã được chuyển đổi đúng
         return isNaN(formattedValue) ? 0 : formattedValue
       }
-      return originalValue
+      return value
     })
     .required('Giá là bắt buộc')
     .positive('Giá không thể là số âm'),
@@ -270,13 +270,12 @@ export const serviceSchema = yup.object().shape({
   pricePerHour: yup
     .number()
     .transform((value, originalValue) => {
-      // Nếu originalValue không phải là chuỗi, trả về giá trị ban đầu
       if (typeof originalValue === 'string') {
-        // Loại bỏ dấu phẩy và chuyển đổi thành số
         const formattedValue = parseFloat(originalValue.replace(/,/g, ''))
+        console.log(formattedValue) // Kiểm tra giá trị đã được chuyển đổi đúng
         return isNaN(formattedValue) ? 0 : formattedValue
       }
-      return value // Trả về giá trị nếu không phải chuỗi
+      return value
     })
     .min(20000, 'Giá mỗi giờ tối thiểu là 20,000 VND')
     .required('Giá là bắt buộc')
