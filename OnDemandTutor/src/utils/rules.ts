@@ -127,7 +127,7 @@ export const requestSchema = yup.object({
       [
         'Ngữ văn',
         'Toán học',
-        'Vật lý',
+        'Vật Lý',
         'Hóa học',
         'Sinh học',
         'Lịch sử',
@@ -203,7 +203,7 @@ export const updateTT = yup.object({
       [
         'Ngữ văn',
         'Toán học',
-        'Vật lý',
+        'Vật Lý',
         'Hóa học',
         'Sinh học',
         'Lịch sử',
@@ -245,7 +245,7 @@ export const updateMajorTT = yup.object({
       [
         'Ngữ văn',
         'Toán học',
-        'Vật lý',
+        'Vật Lý',
         'Hóa học',
         'Sinh học',
         'Lịch sử',
@@ -288,7 +288,7 @@ export const serviceSchema = yup.object().shape({
       [
         'Ngữ văn',
         'Toán học',
-        'Vật lý',
+        'Vật Lý',
         'Hóa học',
         'Sinh học',
         'Lịch sử',

@@ -13,6 +13,7 @@ import { User } from '../../types/user.type'
 import { getProfileFromLS } from '../../utils/auth'
 import { path } from '../../constant/path'
 import { useNavigate } from 'react-router-dom'
+import { TutorProfile } from '../../types/tutor.type'
 
 const formatCurrency = (amount: number) => {
   return amount.toLocaleString('vi-VN', {
@@ -23,6 +24,7 @@ const formatCurrency = (amount: number) => {
 
 export default function RequestList() {
   const user: User = getProfileFromLS()
+
   const { profile } = useContext(AppContext)
   const navigate = useNavigate()
   const [selectedClasses, setSelectedClasses] = useState<string[]>([])
@@ -38,12 +40,30 @@ export default function RequestList() {
     placeholderData: keepPreviousData
   })
 
+  const { data: profileTutor } = useQuery<TutorProfile>({
+    queryKey: ['Account', profile?.id as string],
+    queryFn: () => tutorApi.getProfileTT(profile?.id as string),
+    enabled:
+      profile?.roles.toLocaleLowerCase() === roles.tutor && !!profile?.id,
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false
+  })
+
   const tutorApprovedReMutation = useMutation({
     mutationFn: (body: JoinClassBody) => tutorApi.joinClass(body)
   })
 
   const handleAcceptClass = (requestId: string) => {
     if (!selectedClasses.includes(requestId)) {
+      const request = requestData?.find((req) => req.idRequest === requestId)
+      const tutorSubjects =
+        profileTutor?.subjects.split(';').map((subject) => subject.trim()) ?? []
+
+      if (request && !tutorSubjects.includes(request.subject)) {
+        toast.error('Bạn không dạy môn học này. Không thể nhận lớp.')
+        return
+      }
+
       const joinClass = {
         requestId: requestId,
         id: profile?.id ? profile.id : user.id

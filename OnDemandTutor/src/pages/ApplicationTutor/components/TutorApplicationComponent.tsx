@@ -178,7 +178,7 @@ export default function TutorApplicationComponent({ tutor, refetch }: Props) {
                   Ảnh (Bằng cấp/Chứng chỉ):
                 </div>
                 <img
-                  className=' mx-auto border-2 border-black '
+                  className=' mx-auto max-w-[30rem] border-2 border-black '
                   src={tutor.imageQualification}
                   alt=' Ảnh (Bằng cấp/Chứng chỉ) '
                 />
@@ -203,12 +203,8 @@ export default function TutorApplicationComponent({ tutor, refetch }: Props) {
         {/* Buttons section */}
         {showDetails && (
           <div className='flex justify-between mt-2'>
-            {tutor.status.toLowerCase() === statusReq.approved ? (
-              <button className='text-white border-2 bg-red-600 border-red-600 rounded-lg w-full h-9 flex justify-center items-center'>
-                Xóa
-              </button>
-            ) : (
-              <>
+            {tutor.status.toLowerCase() !== statusReq.approved && (
+              <div>
                 <button
                   onClick={handleEditClick} // Gọi hàm handleEditClick khi nhấn nút Chỉnh sửa
                   className='text-white text-center bg-yellow-600 border-2 rounded-lg border-yellow-600 w-[49%] h-9 flex justify-center items-center'
@@ -221,7 +217,7 @@ export default function TutorApplicationComponent({ tutor, refetch }: Props) {
                 >
                   Xóa
                 </button>
-              </>
+              </div>
             )}
           </div>
         )}

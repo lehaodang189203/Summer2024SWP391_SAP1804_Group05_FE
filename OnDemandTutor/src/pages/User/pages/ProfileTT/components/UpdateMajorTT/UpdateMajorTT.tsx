@@ -137,7 +137,7 @@ export default function UpdateMajorTT({ refetch }: Props) {
             <option value=''>Chọn môn học</option>
             <option value='Ngữ văn'>Ngữ văn</option>
             <option value='Toán học'>Toán học</option>
-            <option value='Vật lý'>Vật lý</option>
+            <option value='Vật Lý'>Vật lý</option>
             <option value='Hóa học'>Hóa học</option>
             <option value='Sinh học'>Sinh học</option>
             <option value='Lịch sử'>Lịch sử</option>
@@ -187,7 +187,7 @@ export default function UpdateMajorTT({ refetch }: Props) {
         )}
         <Button
           type='submit'
-          className='w-full rounded-xl text-center bg-pink-300 py-3 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
+          className='w-full mt-5 rounded-xl text-center bg-pink-300 py-3 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center'
         >
           Gửi
         </Button>

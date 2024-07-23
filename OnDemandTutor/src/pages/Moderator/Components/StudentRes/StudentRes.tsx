@@ -37,6 +37,14 @@ export default function StudentRes() {
     }
   })
 
+  const deleteMutation = useMutation({
+    mutationFn: (idReq: string) => moderatorApi.deleteRequest(idReq),
+    onSuccess: (data) => {
+      toast.success(data.data.message)
+      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
+    }
+  })
+
   useEffect(() => {
     if (approveMutation.isSuccess) {
       refetch()
@@ -66,14 +74,6 @@ export default function StudentRes() {
   const handleDelete = (idReq: string) => {
     deleteMutation.mutate(idReq)
   }
-
-  const deleteMutation = useMutation({
-    mutationFn: (idReq: string) => moderatorApi.deleteRequest(idReq),
-    onSuccess: (data) => {
-      toast.success(data.data.message)
-      refetch() // Gọi lại API để cập nhật lại danh sách yêu cầu
-    }
-  })
 
   const columns: {
     title: string
@@ -129,6 +129,11 @@ export default function StudentRes() {
       width: 150
     },
     {
+      title: 'Mô tả',
+      dataIndex: 'description',
+      width: 150
+    },
+    {
       title: '',
       dataIndex: 'detail',
       fixed: 'right',
@@ -159,6 +164,8 @@ export default function StudentRes() {
   }
 
   const showRejectForm = (record: RequestModerator) => {
+    // Đảm bảo rằng modal chi tiết bị đóng trước khi mở modal từ chối
+    setVisible(false)
     setSelectedRecord(record)
     setRejectVisible(true)
   }
@@ -199,11 +206,11 @@ export default function StudentRes() {
             <div className='details'>
               <p className='detail-item'>
                 <span className='font-medium text-gray-600'>Tên:</span>{' '}
-                <span className='font-bold  '>{selectedRecord.fullName}</span>
+                <span className='font-bold'>{selectedRecord.fullName}</span>
               </p>
               <p className='detail-item'>
                 <span className='font-medium text-gray-600'>Ngày học:</span>{' '}
-                <span className='font-bold  '>{selectedRecord.timeTable}</span>
+                <span className='font-bold'>{selectedRecord.timeTable}</span>
               </p>
               <p className='detail-item'>
                 <span className='font-medium text-gray-600'>Số ngày học:</span>{' '}
@@ -227,6 +234,12 @@ export default function StudentRes() {
                 <span className='font-medium text-gray-600'>Học phí:</span>{' '}
                 <span className='font-bold text-red-600'>
                   {selectedRecord.price}
+                </span>
+              </p>
+              <p className='detail-item'>
+                <span className='font-medium text-gray-600'>Mô tả:</span>{' '}
+                <span className='font-bold text-red-600'>
+                  {selectedRecord.description}
                 </span>
               </p>
             </div>

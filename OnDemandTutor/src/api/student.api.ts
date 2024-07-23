@@ -112,7 +112,7 @@ export const studentApi = {
   //  chỉnh sửa cập nhật gia sư
   reSignUpofTutor: async (body: RequestTutorBody, id: string) =>
     await http.put<SuccessResponse<any>>(
-      `/Tutor/reSignUpOfTutor?id=${id}`,
+      `Tutor/reSignUpOfTutor?id=${id}`,
       body
     ),
 

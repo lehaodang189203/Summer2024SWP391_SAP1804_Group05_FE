@@ -35,15 +35,13 @@ export default function RegisterAsTutor({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const { state } = useLocation()
-
   const { profile } = useContext(AppContext)
 
   const ReqMutation = useMutation({
     mutationFn: (body: RequestTutorBody) =>
       studentApi.registerAsTutor(body, profile?.id as string),
-    onSuccess: () => {
-      toast.success('Đăng ký thành công')
+    onSuccess: (data) => {
+      toast.success(data.data.message)
       resetForm()
     },
     onError: (error) => {
@@ -203,7 +201,7 @@ export default function RegisterAsTutor({
                 <option value=''>Chọn môn học</option>
                 <option value='Ngữ văn'>Ngữ văn</option>
                 <option value='Toán học'>Toán học</option>
-                <option value='Vật lý'>Vật lý</option>
+                <option value='Vật Lý'>Vật lý</option>
                 <option value='Hóa học'>Hóa học</option>
                 <option value='Sinh học'>Sinh học</option>
                 <option value='Lịch sử'>Lịch sử</option>

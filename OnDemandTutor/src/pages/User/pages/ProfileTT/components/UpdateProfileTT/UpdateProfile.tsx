@@ -71,7 +71,7 @@ export default function UpdateProfile({ refetch, profileTT }: Props) {
           type='text-area'
           placeholder='Giới thiệu'
           className='mt-3'
-          classNameInput='h-24 hover:transition duration-700 hover:border-blue-400 p-3 w-[18rem] outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
+          classNameInput='h-32 hover:transition duration-700 hover:border-blue-400 p-3 w-[18rem] outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
           register={register}
           classNameError='mt-1 text-red-600 min-h-[1rem] text-sm text-center'
           errorMessage={errors.introduction?.message}
@@ -97,7 +97,7 @@ export default function UpdateProfile({ refetch, profileTT }: Props) {
         <Input
           name='specializedSkills'
           type='text-area'
-          classNameInput='h-24 hover:transition duration-700 hover:border-blue-400 p-3 w-[18rem] outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
+          classNameInput='h-32 hover:transition duration-700 hover:border-blue-400 p-3 w-[18rem] outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl'
           placeholder='Kỹ năng chuyên môn'
           className='mt-3'
           register={register}
@@ -106,7 +106,7 @@ export default function UpdateProfile({ refetch, profileTT }: Props) {
         />
         <Button
           type='submit'
-          className='w-full rounded-xl text-center bg-pink-300 py-3 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center '
+          className='w-full mt-5 rounded-xl text-center bg-pink-300 py-3 px-2 uppercase text-white text-sm hover:bg-pink-600 flex justify-center items-center '
         >
           Gửi
         </Button>

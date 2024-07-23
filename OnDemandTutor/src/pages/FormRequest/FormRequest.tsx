@@ -162,7 +162,7 @@ export default function FormRequest({
                 <option value=''>Chọn môn học</option>
                 <option value='Ngữ văn'>Ngữ văn</option>
                 <option value='Toán học'>Toán học</option>
-                <option value='Vật lý'>Vật lý</option>
+                <option value='Vật Lý'>Vật lý</option>
                 <option value='Hóa học'>Hóa học</option>
                 <option value='Sinh học'>Sinh học</option>
                 <option value='Lịch sử'>Lịch sử</option>
@@ -202,7 +202,9 @@ export default function FormRequest({
             </div>
             {/* ----------- */}
             <div className='flex flex-col'>
-              <label className='block text-sm font-medium'>Giá(1 buổi)</label>
+              <label className='block text-sm font-medium'>
+                Giá tiền(1 buổi)
+              </label>
               <Controller
                 control={control}
                 name='price'

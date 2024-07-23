@@ -3,7 +3,7 @@ import { path } from '../../constant/path'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query'
 import userApi from '../../api/user.api'
 import { Notificate, User } from '../../types/user.type'
 import { notifiReq } from '../../constant/notifi.req'
@@ -27,34 +27,40 @@ export default function UserButton({
   isAuthenticated
 }: UserButtonProps) {
   const [showNotificationWindow, setShowNotificationWindow] = useState(false)
-  const [notifications, setNotifications] = useState<Notificate[]>([])
+  const [unreadNotifications, setUnreadNotifications] = useState<Notificate[]>(
+    []
+  )
   const notificationRef = useRef<HTMLDivElement>(null)
   const isFetchingRef = useRef(false)
 
-  const { data, refetch } = useQuery<Notificate[]>({
-    queryKey: ['notification'],
-    queryFn: () => userApi.getNotification(profile.id as string),
-    onSuccess: (data: Notificate[]) => {
-      setNotifications(data)
-    },
-    enabled: !!profile.id
-  })
+  const { data: notifi, refetch }: UseQueryResult<Notificate[], Error> =
+    useQuery({
+      queryKey: ['notification'],
+      queryFn: () => userApi.getNotification(profile.id as string),
+      enabled: !!profile.id
+    })
 
-  const updateNotification = useMutation({
-    mutationFn: (id: string) => userApi.updateNotification(id),
+  useEffect(() => {
+    // Filter unread notifications and update state
+    if (notifi) {
+      const filteredUnread = notifi.filter(
+        (notification) => notification.status.toLowerCase() === notifiReq.unRead
+      )
+      setUnreadNotifications(filteredUnread)
+    }
+  }, [notifi])
+
+  // Update all unread notifications for the user
+  const updateNotifications = useMutation({
+    mutationFn: (profileId: string) => userApi.updateNotification(profileId),
     onSuccess: () => {
-      if (showNotificationWindow) {
-        refetch()
-      }
+      // Trigger refetch to update the notifications
+      refetch()
     },
     onError: (error) => {
       toast.error(error.message)
     }
   })
-
-  const unreadNotifications = notifications.filter(
-    (notification) => notification.status.toLowerCase() === notifiReq.unRead
-  )
 
   const hasNotification = unreadNotifications.length > 0
 
@@ -64,6 +70,15 @@ export default function UserButton({
       !notificationRef.current.contains(event.target as Node)
     ) {
       setShowNotificationWindow(false)
+      // Update all unread notifications when clicking outside
+      if (isAuthenticated && !isFetchingRef.current) {
+        isFetchingRef.current = true
+        updateNotifications.mutate(profile.id, {
+          onSettled: () => {
+            isFetchingRef.current = false
+          }
+        })
+      }
     }
   }
 
@@ -71,7 +86,7 @@ export default function UserButton({
     if (isAuthenticated) {
       refetch()
     } else {
-      setNotifications([])
+      setUnreadNotifications([])
     }
   }, [isAuthenticated, profile.id, refetch])
 
@@ -88,19 +103,12 @@ export default function UserButton({
 
   const toggleNotificationWindow = () => {
     setShowNotificationWindow(!showNotificationWindow)
-    if (!showNotificationWindow && !isFetchingRef.current) {
-      isFetchingRef.current = true
-      unreadNotifications.forEach((notification) => {
-        updateNotification.mutate(notification.idNotification)
-      })
-      isFetchingRef.current = false
-    }
   }
 
   return (
     isAuthenticated && (
       <div className='flex ml-auto justify-end ml-90'>
-        <div className='px-auto mb-2  mr-10 rounded-md justify-center items-center flex font-medium'>
+        <div className='px-auto mb-2 mr-10 rounded-md justify-center items-center flex font-medium'>
           <Link to={path.deposit}>
             <span>Số dư:</span>{' '}
             {formatCurrency(Number(profile?.accountBalance) || 0)}
@@ -111,7 +119,9 @@ export default function UserButton({
             <div className='relative mx-4 mb-2'>
               <FontAwesomeIcon
                 icon={faBell}
-                className=' cursor-pointer'
+                className={`cursor-pointer ${
+                  hasNotification ? 'text-red-600' : ''
+                }`}
                 onClick={toggleNotificationWindow}
               />
               {hasNotification && (
@@ -120,11 +130,11 @@ export default function UserButton({
               {showNotificationWindow && (
                 <div
                   ref={notificationRef}
-                  className='absolute right-0 mt-8 w-64 bg-white shadow-lg rounded-lg border border-gray-200 z-50 overflow-y-auto max-h-72'
+                  className='absolute right-0 mt-8 w-64 bg-white shadow-lg rounded-lg border border-gray-200 z-50'
                 >
                   <div className='p-4'>
                     <h3 className='text-lg font-medium'>Thông báo</h3>
-                    <ul>
+                    <ul className='max-h-72 overflow-y-auto'>
                       {unreadNotifications.length > 0 ? (
                         unreadNotifications.map((notification, index) => (
                           <li

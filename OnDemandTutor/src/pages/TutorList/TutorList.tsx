@@ -180,9 +180,9 @@ export default function TutorList() {
                         </div>
                         <div className='text-lg justify-start flex pl-1 pt-2'>
                           <FontAwesomeIcon icon={faStar} className='pt-2 h-6' />
-                          <span className='pl-2 pt-1'>
+                          <div className='pl-2 pt-1 max-w-[40rem] overflow-hidden text-ellipsis whitespace-nowrap'>
                             Kỹ năng đặc biệt: {tutor.specializedSkills}
-                          </span>
+                          </div>
                         </div>
                       </div>
                     </div>

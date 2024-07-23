@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { ServiceTutorGet } from '../../../../types/request.type'
@@ -7,8 +7,11 @@ import ScheduleFormToChoose from '../../../Sevice/components/ScheduleFormToChose
 import ModalChooseService from '../../../Sevice/components/ModalChooseService'
 import Pagination from '../../../../components/Pagination'
 import { tutorApi } from '../../../../api/tutor.api'
+import { AppContext } from '../../../../context/app.context'
 
 export default function ServiceListOfTutor() {
+  const { profile } = useContext(AppContext)
+
   const { tutorId: idTutorParams } = useParams()
   const [selectedClassIndex, setSelectedClassIndex] = useState<number | null>(
     null
@@ -175,12 +178,18 @@ export default function ServiceListOfTutor() {
                 handleTimeSlotChange={handleTimeSlotChange}
                 getDayOfWeek={getDayOfWeek}
               />
-              <button
-                onClick={() => openModal(item)}
-                className='bg-blue-500 text-white mt-4 p-2 rounded hover:bg-blue-600'
-              >
-                Chọn dịch vụ này
-              </button>
+              {profile?.id === idTutorParams ? (
+                <button className='bg-slate-500 text-white mt-4 p-2 rounded hover:bg-slate-300'>
+                  Lớp học của bạn
+                </button>
+              ) : (
+                <button
+                  onClick={() => openModal(item)}
+                  className='bg-blue-500 text-white mt-4 p-2 rounded hover:bg-blue-600'
+                >
+                  Chọn dịch vụ này
+                </button>
+              )}
             </div>
           </div>
         ))

@@ -40,8 +40,7 @@ export default function Header() {
               >
                 Trang chủ
               </Link>
-              {(user?.roles.toLowerCase() === roles.student ||
-                user?.roles.toLowerCase() === roles.tutor) && (
+              {user?.roles.toLowerCase() === roles.student && (
                 <React.Fragment>
                   <Popover
                     check={true}
@@ -69,7 +68,7 @@ export default function Header() {
                       className='mx-2 text-base font-bold cursor-pointer hover:text-pink-600 py-1 relative after:absolute after:bottom-0 after:left-0
                                     after:bg-pink-600 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-100;'
                     >
-                      Loại dịch vụ
+                      Các loại dịch vụ
                     </div>
                   </Popover>
                   <Link
@@ -82,7 +81,8 @@ export default function Header() {
                 </React.Fragment>
               )}
               {(user?.roles.toLowerCase() === roles.moderator ||
-                user?.roles.toLowerCase() === roles.admin) && (
+                user?.roles.toLowerCase() === roles.admin ||
+                user?.roles.toLowerCase() === roles.tutor) && (
                 <React.Fragment>
                   <Link
                     to={path.sideBarMenu}

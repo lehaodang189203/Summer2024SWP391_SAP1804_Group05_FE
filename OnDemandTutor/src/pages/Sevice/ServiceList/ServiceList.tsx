@@ -117,7 +117,6 @@ export default function ServiceList({ setRefetch }: Props) {
       : `${description.slice(0, maxLength)}...`
   }
 
-  const totalItems = classData.length
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const paginatedData = classData.slice(startIndex, endIndex)
@@ -311,12 +310,12 @@ export default function ServiceList({ setRefetch }: Props) {
               selectedClassIndex !== null ? classData[selectedClassIndex] : null
             }
           />
-          <Pagination
-            totalItems={totalItems}
+          {/* <Pagination
+            totalItems={filteredData.length}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
             onPageChange={handlePageChange}
-          />
+          /> */}
         </div>
       )}
     </div>
