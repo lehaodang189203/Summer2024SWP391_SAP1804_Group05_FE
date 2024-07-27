@@ -52,3 +52,10 @@ export const getIdFromNameId = (nameId: string) => {
   const arr = nameId.split('-i-')
   return arr[arr.length - 1] //vị trí cuối
 }
+
+export const formatCurrency = (amount: number) => {
+  return amount.toLocaleString('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  })
+}

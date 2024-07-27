@@ -8,6 +8,7 @@ import { path } from '../../../../constant/path'
 import { getProfileFromLS, setProfileToLS } from '../../../../utils/auth'
 import userApi from '../../../../api/user.api'
 import { User } from '../../../../types/user.type'
+import { formatCurrency } from '../../../../utils/utils'
 
 interface Props {
   isOpen: boolean
@@ -183,7 +184,9 @@ export default function ModalChooseService({
         </div>
         <p className='mt-4 text-gray-700 '>
           <strong>Tổng tiền:</strong>{' '}
-          <span className='text-green-600'>{calculateTotalPrice()} VNĐ</span>
+          <span className='text-green-600'>
+            {formatCurrency(Number(calculateTotalPrice()))}
+          </span>
         </p>
         <div className='mt-6 flex justify-end'>
           <button

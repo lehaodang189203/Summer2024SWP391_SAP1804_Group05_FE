@@ -12,8 +12,9 @@ import { JoinClassBody } from '../../types/user.request.type'
 import { User } from '../../types/user.type'
 import { getProfileFromLS } from '../../utils/auth'
 import { path } from '../../constant/path'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { TutorProfile } from '../../types/tutor.type'
+import { Button } from 'antd'
 
 const formatCurrency = (amount: number) => {
   return amount.toLocaleString('vi-VN', {
@@ -228,7 +229,8 @@ export default function RequestList() {
               <div className='w-full items-end flex'>
                 <div className='my-4 w-full px-auto mx-auto'>
                   {user?.roles.toLowerCase() === roles.tutor &&
-                    user.id !== data.id && (
+                    user.id !== data.id &&
+                    profileTutor?.subjects === data.subject && (
                       <div
                         role='button'
                         onClick={() => handleAcceptClass(data.idRequest)}
@@ -251,16 +253,29 @@ export default function RequestList() {
                       </div>
                     )}
                   {user.id === data.id && (
-                    <div className='w-full rounded-lg h-10 bg-gray-500 mx-auto justify-center items-center flex'>
+                    <Button className='w-full rounded-lg h-10 bg-gray-500 mx-auto justify-center items-center flex'>
                       Đây là lớp của bạn
-                    </div>
+                    </Button>
                   )}
 
                   {user?.roles.toLowerCase() === roles.student &&
                     user.id !== data.id && (
-                      <div className='w-full h-10 bg-gray-300 mx-auto justify-center items-center flex rounded-lg'>
+                      <Link
+                        to={path.registerAsTutor}
+                        className='w-full h-10 bg-gray-300 mx-auto justify-center items-center flex rounded-lg'
+                      >
                         Bạn phải là gia sư
-                      </div>
+                      </Link>
+                    )}
+                  {user?.roles.toLowerCase() === roles.tutor &&
+                    user.id !== data.id &&
+                    profileTutor?.subjects !== data.subject && (
+                      <Link
+                        to={path.registerAsTutor}
+                        className='w-full h-10 bg-gray-700 mx-auto text-white justify-center items-center flex rounded-lg'
+                      >
+                        Bạn không phải là gia sư của môn học này
+                      </Link>
                     )}
                 </div>
               </div>

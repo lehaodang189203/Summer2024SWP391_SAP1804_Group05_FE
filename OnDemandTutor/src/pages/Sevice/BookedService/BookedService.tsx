@@ -275,12 +275,13 @@ export default function BookedService() {
                         )}
                       </div>
                     </div>
-                    {showReview === service.idBooking && (
-                      <ReviewService
-                        idBooking={service.idBooking}
-                        onSubmit={() => handleReviewSubmit(service.idBooking)}
-                      />
-                    )}
+                    {showReview === service.idBooking &&
+                      profile?.roles !== roles.tutor && (
+                        <ReviewService
+                          idBooking={service.idBooking}
+                          onSubmit={() => handleReviewSubmit(service.idBooking)}
+                        />
+                      )}
                     {isModalOpen && selectedService && (
                       <Modal
                         title='Chi tiết lớp học'

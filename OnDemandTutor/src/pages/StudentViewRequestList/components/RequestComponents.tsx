@@ -24,6 +24,13 @@ interface Props {
   refetch?: (() => void) | undefined
 }
 
+const formatCurrency = (amount: number) => {
+  return amount.toLocaleString('vi-VN', {
+    style: 'currency',
+    currency: 'VND'
+  })
+}
+
 export default function RequestComponents({ request, refetch }: Props) {
   const [showButtons, setShowButtons] = useState(false)
   const [showForm, setShowForm] = useState(false)
@@ -138,7 +145,7 @@ export default function RequestComponents({ request, refetch }: Props) {
             </div>
             <div className='flex flex-col'>
               <div className='font-bold text-lg'>Giá mong muốn</div>
-              <div>{request.price}</div>
+              <div>{formatCurrency(Number(request.price || 0))}</div>
             </div>
           </div>
         </div>
