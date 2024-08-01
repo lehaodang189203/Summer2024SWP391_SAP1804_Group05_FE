@@ -11,6 +11,7 @@ import { getProfileFromLS } from '../utils/auth'
 import http from '../utils/http'
 
 import { HttpStatusCode } from '../constant/HttpStatusCode.enum'
+import { DataType } from '../pages/Sevice/components/ModalChooseService/ModalChooseService'
 import {
   Classrequest,
   Request,
@@ -18,9 +19,8 @@ import {
   ReviewType,
   ServiceTutor
 } from '../types/request.type'
-import { TutorType } from '../types/tutor.type'
+import { TutorTypeInClass } from '../types/tutor.type'
 import { User } from '../types/user.type'
-import { DataType } from '../pages/Sevice/components/ModalChooseService/ModalChooseService'
 
 const user = <User>getProfileFromLS()
 
@@ -81,7 +81,7 @@ export const studentApi = {
   // Xem tất cả yêu cầu tham gia của gia sư
   viewAllTutorsJoinRequests: async (requestId: string) => {
     try {
-      const response = await http.get<SuccessResponseReq<TutorType[]>>(
+      const response = await http.get<SuccessResponseReq<TutorTypeInClass[]>>(
         `Request/getAllTutorsJoinRequest?idRequest=${requestId}`
       )
       if (response.status === HttpStatusCode.Ok) {

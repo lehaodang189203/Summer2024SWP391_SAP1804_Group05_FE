@@ -15,7 +15,7 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { studentApi } from '../../api/student.api'
 import Popup from '../../components/Popup/Popup'
-import { TutorType } from '../../types/tutor.type'
+import { TutorType, TutorTypeInClass } from '../../types/tutor.type'
 import { SelecTutorReqBody } from '../../types/user.request.type'
 
 import userAvatar from '../../assets/img/user.svg'
@@ -24,7 +24,9 @@ import Pagination from '../../components/Pagination'
 
 export default function TutorListInClass() {
   const [isPopupVisible, setIsPopupVisible] = useState(false)
-  const [currentTutor, setCurrentTutor] = useState<TutorType | null>(null)
+  const [currentTutor, setCurrentTutor] = useState<TutorTypeInClass | null>(
+    null
+  )
   const [searchText, setSearchText] = useState('')
   const [isViewFeedbackVisible, setIsViewFeedbackVisible] = useState(false)
   const [selectedTutorId, setSelectedTutorId] = useState<string | null>(null)
@@ -49,7 +51,7 @@ export default function TutorListInClass() {
     setCurrentTutor(null)
   }
 
-  const handleItemClick = (tutor: TutorType) => {
+  const handleItemClick = (tutor: TutorTypeInClass) => {
     setCurrentTutor(tutor)
     setIsPopupVisible(true)
   }
@@ -76,7 +78,7 @@ export default function TutorListInClass() {
     }
   }
 
-  const filteredTutors = TutorListProfile?.filter((tutor: TutorType) =>
+  const filteredTutors = TutorListProfile?.filter((tutor: TutorTypeInClass) =>
     tutor.fullName.toLowerCase().includes(searchText.toLowerCase())
   )
 
@@ -274,15 +276,20 @@ export default function TutorListInClass() {
                           {currentTutor.introduction}
                         </span>
                       </div>
-                      <div className='text-lg flex pl-1 pt-2'>
+                      {/* <div className='text-lg flex pl-1 pt-2'>
                         <FontAwesomeIcon icon={faBook} className='pt-2 h-6' />
-                        <span className='pl-2 pt-1'>{currentTutor.type}</span>
-                      </div>
-                      <div className='text-lg flex pl-1 pt-2'>
-                        <FontAwesomeIcon icon={faImage} className='pt-2 h-6' />
                         <span className='pl-2 pt-1'>
                           {currentTutor.qualifiCationName}
                         </span>
+                      </div> */}
+                      <div className='text-lg flex flex-wrap items-center mt-2'>
+                        <FontAwesomeIcon
+                          icon={faImage}
+                          className='h-5 text-gray-600'
+                        />
+                        <div className='pl-2 pt-1 flex flex-wrap'>
+                          <img src={currentTutor.imageQualification} alt='' />
+                        </div>
                       </div>
                       <div className='text-lg flex pl-1 pt-2'>
                         <FontAwesomeIcon icon={faStar} className='pt-2 h-6' />

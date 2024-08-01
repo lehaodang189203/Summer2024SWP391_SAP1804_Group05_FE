@@ -98,7 +98,7 @@ export default function DetailInfor({ User, Tutor }: Props) {
       </div>
       {/*  tutor */}
       <div className='w-[45%] border-2 rounded-2xl hover:shadow-black hover:shadow-2xl transition-shadow duration-700 relative'>
-        <div className='h-[7rem] pt-2 bg-black rounded-2xl'>
+        <div className='h-[7rem] pt-2  rounded-2xl'>
           <div className='py-auto h-44 w-44 mx-auto'>
             {/* ảnh đại diện */}
             <img
@@ -158,20 +158,25 @@ export default function DetailInfor({ User, Tutor }: Props) {
         </div>
         {/* Nút Report */}
         <div className='absolute top-0 right-0 m-2'>
-        {profile?.roles.toLowerCase()=== roles.student ? <>
-          <button className='relative group' onClick={() => handleOpenForm()}>
-            <FontAwesomeIcon
-              icon={faCircleExclamation}
-              className='text-red-400 cursor-pointer'
-            />
-            <div className='absolute left-8 -top-1/3 w-max opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white text-xs rounded p-2'>
-              Tố cáo
-            </div>
-          </button>
-        </>:
-        <div></div>
-        }
-          
+          {profile?.roles.toLowerCase() === roles.student ? (
+            <>
+              <button
+                className='relative group'
+                onClick={() => handleOpenForm()}
+              >
+                <FontAwesomeIcon
+                  icon={faCircleExclamation}
+                  className='text-red-400 cursor-pointer'
+                />
+                <div className='absolute left-8 -top-1/3 w-max opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gray-800 text-white text-xs rounded p-2'>
+                  Tố cáo
+                </div>
+              </button>
+            </>
+          ) : (
+            <div></div>
+          )}
+
           {/* Report Form */}
           {showForm && (
             <Report

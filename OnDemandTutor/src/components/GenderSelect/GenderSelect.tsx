@@ -7,7 +7,6 @@ interface Props {
 }
 
 export default function GenderSelect({ value, onChange, errorMessage }: Props) {
-  // Initialize gender state with 'nam'
   const [gender, setGender] = useState(value || 'nam')
 
   useEffect(() => {

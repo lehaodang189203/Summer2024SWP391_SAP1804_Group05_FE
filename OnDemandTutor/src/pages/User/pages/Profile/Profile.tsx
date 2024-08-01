@@ -53,7 +53,7 @@ export default function Profile() {
     setValue,
     register,
     control,
-    reset,
+
     formState: { errors }
   } = useForm<FormData>({
     defaultValues: {
@@ -147,7 +147,7 @@ export default function Profile() {
         fullName:
           data.fullName !== profileAPI?.fullName
             ? data.fullName
-            : profileAPI?.fullName || '',
+            : profileAPI?.fullName,
         phone:
           data.phone !== profileAPI?.phone
             ? data.phone!
@@ -169,13 +169,14 @@ export default function Profile() {
         roles: profileAPI?.roles || ''
       }
 
+      console.log(formData)
+
       const updateRes = await updateProfileMutation.mutateAsync(formData, {
         onSuccess: (data) => {
           toast.success(data.data.message)
           setProfile(data.data.data)
           setProfileToLS(data.data.data)
           refetch()
-          reset()
         },
         onError: (error) => {
           toast.error(error.message)

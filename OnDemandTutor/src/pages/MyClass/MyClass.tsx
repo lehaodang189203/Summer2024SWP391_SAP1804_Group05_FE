@@ -10,6 +10,7 @@ import DetailInfor from './Detail'
 import { TutorRep, UserRep } from '../../types/user.type'
 import { statusClass } from '../../constant/status.class'
 import Pagination from '../../components/Pagination'
+import { roles } from '../../constant/roles'
 
 export default function MyClass() {
   const { profile } = useContext(AppContext)
@@ -172,7 +173,8 @@ export default function MyClass() {
                     Chi tiết
                   </button>
                   {reviewSubmitted !== req.idClassRequest &&
-                    req.status.toLowerCase() !== statusClass.complete && (
+                    req.status.toLowerCase() !==
+                      statusClass.complete.toLowerCase() && (
                       <button
                         onClick={() => handleCompleteClass(req.idClassRequest)}
                         className='w-[49%] bg-black text-white font-bold py-2 px-4 rounded-md hover:bg-gray-400'
@@ -182,12 +184,14 @@ export default function MyClass() {
                     )}
                 </div>
               </div>
-              {showReview === req.idClassRequest && (
-                <Review
-                  idClassRequest={req.idClassRequest}
-                  onSubmit={() => handleReviewSubmit(req.idClassRequest)}
-                />
-              )}
+              {showReview === req.idClassRequest &&
+                profile?.roles.toLowerCase() ===
+                  roles.student.toLowerCase() && (
+                  <Review
+                    idClassRequest={req.idClassRequest}
+                    onSubmit={() => handleReviewSubmit(req.idClassRequest)}
+                  />
+                )}
               {selectedClass === req.idClassRequest && isModalOpen && (
                 <Modal
                   title='Chi tiết lớp học'

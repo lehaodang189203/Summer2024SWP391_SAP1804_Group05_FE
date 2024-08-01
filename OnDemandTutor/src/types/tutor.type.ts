@@ -14,6 +14,20 @@ export interface TutorType {
   rating: number
 }
 
+export interface TutorTypeInClass {
+  id: string
+  gender: string
+  introduction: string
+  avatar: string
+  subject: string
+  fullName: string
+  specializedSkills: string
+  experience: number
+  qualifiCationName: string
+  imageQualification: string
+  rating: number
+}
+
 export interface UpdateTutorProfile {
   specializedSkills: string
   experience: number

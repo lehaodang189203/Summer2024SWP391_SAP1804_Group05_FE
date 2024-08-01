@@ -14,7 +14,7 @@ import { getProfileFromLS } from '../../utils/auth'
 import { path } from '../../constant/path'
 import { Link, useNavigate } from 'react-router-dom'
 import { TutorProfile } from '../../types/tutor.type'
-import { Button } from 'antd'
+import Button from '../../components/Button'
 
 const formatCurrency = (amount: number) => {
   return amount.toLocaleString('vi-VN', {
@@ -128,6 +128,20 @@ export default function RequestList() {
     startIndex + itemsPerPage
   )
 
+  const handleCheckSubject = (subject: string) => {
+    // Tách các môn học thành mảng và chuyển thành chữ thường
+    const tutorSubjects =
+      profileTutor?.subjects
+        ?.split(';')
+        .map((subject) => subject.trim().toLowerCase()) || []
+
+    // Chuyển môn học trong data.subject về chữ thường
+    const subjectToCheck = subject.trim().toLowerCase()
+
+    // Kiểm tra xem gia sư có dạy môn học trong data.subject không
+    return tutorSubjects.includes(subjectToCheck)
+  }
+
   return (
     <div className='p-4'>
       <div className='flex justify-center mb-4'>
@@ -230,14 +244,15 @@ export default function RequestList() {
                 <div className='my-4 w-full px-auto mx-auto'>
                   {user?.roles.toLowerCase() === roles.tutor &&
                     user.id !== data.id &&
-                    profileTutor?.subjects === data.subject && (
+                    handleCheckSubject(data.subject) && (
                       <div
-                        role='button'
                         onClick={() => handleAcceptClass(data.idRequest)}
+                        role='button'
                         className={`rounded-lg w-full h-10 mx-auto justify-center items-center flex ${
                           completedClasses[data.idRequest] ||
-                          data.current?.toLowerCase() === tutorCurrent.complete
-                            ? 'bg-gray-700 cursor-not-allowed text-white'
+                          data.current?.toLowerCase() ===
+                            tutorCurrent.complete.toLowerCase()
+                            ? 'bg-gray-500 cursor-not-allowed text-white'
                             : 'bg-pink-400 hover:opacity-80'
                         }`}
                         style={{
@@ -247,13 +262,14 @@ export default function RequestList() {
                         }}
                       >
                         {completedClasses[data.idRequest] ||
-                        data.current?.toLowerCase() === tutorCurrent.complete
+                        data.current?.toLowerCase() ===
+                          tutorCurrent.complete.toLowerCase()
                           ? 'Đã nhận lớp'
                           : 'Nhận Lớp'}
                       </div>
                     )}
                   {user.id === data.id && (
-                    <Button className='w-full rounded-lg h-10 bg-gray-500 mx-auto justify-center items-center flex'>
+                    <Button className='w-full rounded-lg h-10 bg-gray-700 mx-auto text-white justify-center items-center flex'>
                       Đây là lớp của bạn
                     </Button>
                   )}
@@ -269,7 +285,7 @@ export default function RequestList() {
                     )}
                   {user?.roles.toLowerCase() === roles.tutor &&
                     user.id !== data.id &&
-                    profileTutor?.subjects !== data.subject && (
+                    !handleCheckSubject(data.subject) && (
                       <Link
                         to={path.registerAsTutor}
                         className='w-full h-10 bg-gray-700 mx-auto text-white justify-center items-center flex rounded-lg'
@@ -281,12 +297,13 @@ export default function RequestList() {
               </div>
               {user?.roles.toLowerCase() === roles.moderator && (
                 <div className='flex justify-end mt-2'>
-                  <button
+                  <div
                     onClick={() => handleDeleteRequest(data.idRequest!)}
+                    role='button'
                     className='bg-red-700 text-white px-4 py-2 rounded-md w-full hover:bg-slate-600 hover:shadow-xl hover:shadow-black mb-2'
                   >
                     Xóa
-                  </button>
+                  </div>
                 </div>
               )}
             </div>

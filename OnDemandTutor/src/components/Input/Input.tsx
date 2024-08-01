@@ -18,7 +18,7 @@ export default function Input({
   rules,
   register,
   classNameInput = 'p-3 w-[18rem] outline-none border border-gray-300 focus:border-gray-500 focus:shadow-sm rounded-xl ',
-  classNameError = 'mt-1 text-red-600 min-h-[1rem] text-sm text-left', // Reduced min-height to fit better
+  classNameError = 'mt-1 text-red-600 min-h-[1rem] text-sm text-left',
   classNameEye = 'absolute top-[10px] right-[10px] h-5 w-5 cursor-pointer',
   placeholder,
   type = 'text', // Default type is text

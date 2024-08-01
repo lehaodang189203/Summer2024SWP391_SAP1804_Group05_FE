@@ -83,10 +83,10 @@ export default function Review({ idClassRequest, onSubmit }: Props) {
     <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
       <div className='container border-2 bg-white rounded-2xl  p-3 hover:shadow-xl hover:shadow-black transition-shadow duration-700'>
         <form onSubmit={handleFormSubmit}>
-          <h2 className='mt-4'>Phản hồi giảng dạy</h2>
+          <h2 className='mt-4 text-pink-500'>Phản hồi giảng dạy</h2>
           {/*  đánh sao */}
           <div className='mt-4'>
-            <label htmlFor=''>Đánh giá</label>
+            <label>Đánh giá</label>
             <div className='flex justify-center items-center gap-1'>
               {[1, 2, 3, 4, 5].map((index) => (
                 <FontAwesomeIcon
@@ -110,10 +110,11 @@ export default function Review({ idClassRequest, onSubmit }: Props) {
             <Input
               placeholder='Phản hồi gia sư của bạn'
               name='feedback'
-              type='text'
+              type=''
               register={register}
               className='rounded-md p-2 w-full my-2'
               errorMessage={errors.feedback?.message}
+              classNameError='mt-1 text-red-600 min-h-[1rem] text-sm text-center'
             />
           </div>
 
